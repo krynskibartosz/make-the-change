@@ -11,6 +11,12 @@ import {
   getCurrentCheckoutSession,
   setCurrentCheckoutSession,
 } from '@/lib/mock/mock-checkout-session-server'
+import { addAddress } from '@/lib/mock/mock-addresses'
+import {
+  getCurrentMockAddresses,
+  setCurrentMockAddresses,
+} from '@/lib/mock/mock-addresses-server'
+import { getMockViewerSession } from '@/lib/mock/mock-session-server'
 
 export async function saveCheckoutCustomerAction(customer: MockCheckoutCustomer): Promise<void> {
   const session = await getCurrentCheckoutSession()
@@ -64,4 +70,22 @@ export async function completeCheckoutAction(
 
 export async function clearCheckoutSessionAction(): Promise<void> {
   await clearCurrentCheckoutSession()
+}
+
+export async function saveAddressAction(address: {
+  street: string
+  postalCode: string
+  city: string
+  country: string
+}): Promise<{ ok: boolean }> {
+  const viewerSession = await getMockViewerSession()
+  if (!viewerSession) return { ok: false }
+
+  const addresses = await getCurrentMockAddresses()
+  const updated = addAddress(addresses, {
+    userId: viewerSession.viewerId,
+    ...address,
+  })
+  await setCurrentMockAddresses(updated)
+  return { ok: true }
 }
