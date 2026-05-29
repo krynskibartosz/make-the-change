@@ -78,14 +78,16 @@ export function getUserAddresses(
 export function addAddress(
   addresses: MockUserAddress[],
   address: Omit<MockUserAddress, 'id' | 'createdAt' | 'isDefault'>,
+  now = new Date(),
+  id = `addr-${now.getTime()}-${Math.random().toString(36).slice(2, 7)}`,
 ): MockUserAddress[] {
   const userAddresses = addresses.filter((a) => a.userId === address.userId)
   const isFirst = userAddresses.length === 0
   const newAddress: MockUserAddress = {
     ...address,
-    id: `addr-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+    id,
     isDefault: isFirst,
-    createdAt: new Date().toISOString(),
+    createdAt: now.toISOString(),
   }
   return [...addresses, newAddress]
 }
