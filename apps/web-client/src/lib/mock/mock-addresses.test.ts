@@ -60,7 +60,7 @@ describe('getDefaultAddress', () => {
   })
 
   it('returns undefined when user has no addresses', () => {
-    expect(getDefaultAddress([BASE], 'user-b')).toBeUndefined()
+    expect(getDefaultAddress([BASE], 'user-b')).toBe(undefined)
   })
 })
 
@@ -82,7 +82,7 @@ describe('addAddress', () => {
       fixedNow,
       'addr-test-1',
     )
-    expect(result).toHaveLength(1)
+    expect(result.length).toBe(1)
     expect(result[0]?.isDefault).toBe(true)
     expect(result[0]?.id).toBe('addr-test-1')
     expect(result[0]?.createdAt).toBe('2026-05-01T00:00:00.000Z')
@@ -95,7 +95,7 @@ describe('addAddress', () => {
       fixedNow,
       'addr-test-2',
     )
-    expect(result).toHaveLength(2)
+    expect(result.length).toBe(2)
     expect(result.find((a) => a.id === 'addr-test-2')?.isDefault).toBe(false)
   })
 })
@@ -117,7 +117,7 @@ describe('setDefaultAddress', () => {
 describe('removeAddress', () => {
   it('removes the address with the given id', () => {
     const result = removeAddress([BASE, SECOND], 'addr-1', 'user-a')
-    expect(result).toHaveLength(1)
+    expect(result.length).toBe(1)
     expect(result[0]?.id).toBe('addr-2')
   })
 
@@ -130,7 +130,7 @@ describe('removeAddress', () => {
     const ownAddr: MockUserAddress = { ...BASE, id: 'addr-1', userId: 'user-a' }
     const otherAddr: MockUserAddress = { ...BASE, id: 'addr-1', userId: 'user-b' }
     const result = removeAddress([ownAddr, otherAddr], 'addr-1', 'user-a')
-    expect(result).toHaveLength(1)
+    expect(result.length).toBe(1)
     expect(result[0]?.userId).toBe('user-b')
   })
 })
