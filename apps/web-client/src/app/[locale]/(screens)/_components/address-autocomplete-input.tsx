@@ -79,6 +79,18 @@ export function AddressAutocompleteInput({
     }
   }, [isOpen])
 
+  function computePosition() {
+    const rect = containerRef.current?.getBoundingClientRect()
+    if (!rect) return
+    const spaceBelow = window.innerHeight - rect.bottom
+    const above = spaceBelow < 260
+    setDropStyle(
+      above
+        ? { position: 'fixed', bottom: window.innerHeight - rect.top + 4, left: rect.left, width: rect.width }
+        : { position: 'fixed', top: rect.bottom + 4, left: rect.left, width: rect.width },
+    )
+  }
+
   async function fetchSuggestions(query: string) {
     abortRef.current?.abort()
     const controller = new AbortController()
@@ -92,8 +104,14 @@ export function AddressAutocompleteInput({
       })
       if (!res.ok) return
       const data = (await res.json()) as AddressSuggestion[]
-      setSuggestions(data)
-      setIsOpen(data.length > 0)
+      if (data.length > 0) {
+        computePosition() // position calculée AVANT d'afficher le dropdown
+        setSuggestions(data)
+        setIsOpen(true)
+      } else {
+        setSuggestions([])
+        setIsOpen(false)
+      }
       setActiveIndex(-1)
     } catch (e) {
       if (e instanceof Error && e.name === 'AbortError') return
