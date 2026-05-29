@@ -25,6 +25,7 @@ export function AddressAutocompleteInput({
   const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([])
   const [activeIndex, setActiveIndex] = useState(-1)
   const [isOpen, setIsOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const abortRef = useRef<AbortController | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -53,6 +54,7 @@ export function AddressAutocompleteInput({
     const controller = new AbortController()
     abortRef.current = controller
 
+    setIsLoading(true)
     const params = new URLSearchParams({ q: query, country: country.toLowerCase() })
     try {
       const res = await fetch(`/api/address-autocomplete?${params.toString()}`, {
@@ -66,6 +68,8 @@ export function AddressAutocompleteInput({
     } catch (e) {
       if (e instanceof Error && e.name === 'AbortError') return
       // API unavailable — user can still type manually
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -73,11 +77,13 @@ export function AddressAutocompleteInput({
     const val = e.target.value
     onChange(val)
     if (debounceRef.current) clearTimeout(debounceRef.current)
-    if (val.trim().length < 3) {
+    if (val.trim().length < 2) {
       setSuggestions([])
       setIsOpen(false)
+      setIsLoading(false)
       return
     }
+    setIsLoading(true)
     debounceRef.current = setTimeout(() => void fetchSuggestions(val), 300)
   }
 
@@ -119,6 +125,11 @@ export function AddressAutocompleteInput({
 
   return (
     <div ref={containerRef} className="relative">
+      {isLoading && (
+        <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center">
+          <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/20 border-t-white/60" />
+        </div>
+      )}
       <input
         id={id}
         value={value}

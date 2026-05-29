@@ -7,6 +7,15 @@
 
 @source "../**/*.{ts,tsx}";
 
+/* Prevent iOS Safari from zooming on input focus (requires font-size >= 16px).
+   Unlayered rules take priority over Tailwind @layer utilities, so this safely
+   overrides text-sm/text-xs on form elements without touching other elements. */
+input,
+select,
+textarea {
+  font-size: max(1rem, 16px);
+}
+
 /* Reset styles to eliminate browser defaults */
 html,
 body {

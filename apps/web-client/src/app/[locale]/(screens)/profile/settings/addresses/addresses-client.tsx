@@ -16,7 +16,7 @@ import { AddressLine } from './address-line'
 type Props = { addresses: MockUserAddress[] }
 
 const INPUT_BASE =
-  'h-12 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm text-white placeholder:text-white/25'
+  'h-12 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25'
 const INPUT_CLASS = `${INPUT_BASE} w-full`
 
 export function AddressesClient({ addresses }: Props) {

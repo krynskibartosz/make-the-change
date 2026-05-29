@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import type { AddressSuggestion } from '@/lib/address-autocomplete'
 
-const GEOAPIFY_API_KEY = process.env.GEOAPIFY_API_KEY ?? ''
+const GEOAPIFY_API_KEY = process.env.GEOAPIFY_API_KEY ?? '76c8b6833fa94d18932e6b80cd71e4f8'
 const GEOAPIFY_URL = 'https://api.geoapify.com/v1/geocode/autocomplete'
 
 type GeoapifyFeature = {
