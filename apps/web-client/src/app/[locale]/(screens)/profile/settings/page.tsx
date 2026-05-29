@@ -6,6 +6,7 @@ import {
   Info,
   Leaf,
   Mail,
+  MapPin,
   ReceiptText,
   Shield,
   Sparkles,
@@ -187,6 +188,13 @@ export default async function SettingsPage() {
         icon: ReceiptText,
         href: '/profile/contributions',
         iconWrapperClassName: 'bg-gray-500/20',
+        iconClassName: 'text-white',
+      },
+      {
+        label: 'Mes adresses',
+        icon: MapPin,
+        href: '/profile/settings/addresses',
+        iconWrapperClassName: 'bg-blue-500',
         iconClassName: 'text-white',
       },
       {
@@ -438,6 +446,13 @@ export default async function SettingsPage() {
       icon: ReceiptText,
       href: '/profile/contributions',
       iconWrapperClassName: 'bg-gray-500/20',
+      iconClassName: 'text-white',
+    },
+    {
+      label: 'Mes adresses',
+      icon: MapPin,
+      href: '/profile/settings/addresses',
+      iconWrapperClassName: 'bg-blue-500',
       iconClassName: 'text-white',
     },
     {
