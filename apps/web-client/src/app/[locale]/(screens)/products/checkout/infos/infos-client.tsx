@@ -1,17 +1,20 @@
 'use client'
 
-import { Loader2 } from 'lucide-react'
+import { Loader2, MapPin } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
-import { saveCheckoutCustomerAction } from '@/app/[locale]/(screens)/products/checkout/_features/checkout-actions'
+import { saveCheckoutCustomerAction, saveAddressAction } from '@/app/[locale]/(screens)/products/checkout/_features/checkout-actions'
 import type { MockCheckoutCustomer } from '@/lib/mock/mock-checkout-session'
+import type { MockUserAddress } from '@/lib/mock/mock-addresses'
 import { CHECKOUT_COUNTRIES } from '@/lib/checkout-countries'
 import { AddressAutocompleteInput } from './address-autocomplete-input'
+import { SavedAddressesSheet } from './saved-addresses-sheet'
 import { CheckoutSteps } from '../_components/checkout-steps'
 
 type Props = {
   initialCustomer: MockCheckoutCustomer
   isConnected: boolean
+  savedAddresses: MockUserAddress[]
   locale: string
 }
 
@@ -24,10 +27,14 @@ const INPUT_BASE =
   'h-13 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25'
 const INPUT_CLASS = `${INPUT_BASE} w-full`
 
-export function InfosClient({ initialCustomer, isConnected, locale }: Props) {
+export function InfosClient({ initialCustomer, isConnected, savedAddresses, locale }: Props) {
   const router = useRouter()
   const [customer, setCustomer] = useState<MockCheckoutCustomer>(initialCustomer)
   const [isPending, startTransition] = useTransition()
+  const [showSheet, setShowSheet] = useState(false)
+  const [saveAddress, setSaveAddress] = useState(false)
+
+  const hasSavedAddresses = savedAddresses.length > 0
 
   const canContinue =
     isValidEmail(customer.email) &&
@@ -40,10 +47,28 @@ export function InfosClient({ initialCustomer, isConnected, locale }: Props) {
     setCustomer((v) => ({ ...v, country, street: '', postalCode: '', city: '' }))
   }
 
+  function handleAddressSelect(address: MockUserAddress) {
+    setCustomer((v) => ({
+      ...v,
+      street: address.street,
+      postalCode: address.postalCode,
+      city: address.city,
+      country: address.country,
+    }))
+  }
+
   function handleContinue() {
     if (!canContinue) return
     startTransition(async () => {
       await saveCheckoutCustomerAction(customer)
+      if (saveAddress && isConnected) {
+        await saveAddressAction({
+          street: customer.street,
+          postalCode: customer.postalCode,
+          city: customer.city,
+          country: customer.country,
+        })
+      }
       router.push(`/${locale}/products/checkout/paiement`)
     })
   }
@@ -56,6 +81,17 @@ export function InfosClient({ initialCustomer, isConnected, locale }: Props) {
       <p className="mt-1 text-sm font-medium text-white/50">
         {isConnected ? 'Commande liée à ton espace MTC' : 'Achat invité'}
       </p>
+
+      {isConnected && hasSavedAddresses && (
+        <button
+          type="button"
+          onClick={() => setShowSheet(true)}
+          className="mt-4 flex w-full items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white/70 transition-colors active:bg-white/[0.08]"
+        >
+          <MapPin className="h-4 w-4 shrink-0 text-lime-300" aria-hidden="true" />
+          <span className="flex-1 text-left">Changer d'adresse</span>
+        </button>
+      )}
 
       <div className="mt-6 space-y-4">
         <div className="space-y-1.5">
@@ -149,7 +185,29 @@ export function InfosClient({ initialCustomer, isConnected, locale }: Props) {
             />
           </div>
         </div>
+
+        {isConnected && (
+          <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3">
+            <input
+              type="checkbox"
+              checked={saveAddress}
+              onChange={(e) => setSaveAddress(e.target.checked)}
+              className="h-4 w-4 accent-lime-300"
+            />
+            <span className="text-sm font-medium text-white/70">
+              Sauvegarder cette adresse dans mon profil
+            </span>
+          </label>
+        )}
       </div>
+
+      {showSheet && (
+        <SavedAddressesSheet
+          addresses={savedAddresses}
+          onSelect={handleAddressSelect}
+          onClose={() => setShowSheet(false)}
+        />
+      )}
 
       <div className="fixed inset-x-0 bottom-0 border-t border-white/5 bg-[#0B0F15]/80 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-lg">
         <button
