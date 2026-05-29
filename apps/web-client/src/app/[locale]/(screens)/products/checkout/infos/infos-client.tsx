@@ -1,11 +1,12 @@
 'use client'
 
-import { ChevronDown, Loader2, MapPin } from 'lucide-react'
+import { AlertTriangle, CheckCircle, ChevronDown, Loader2, MapPin } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { saveCheckoutCustomerAction, saveAddressAction } from '@/app/[locale]/(screens)/products/checkout/_features/checkout-actions'
 import type { MockCheckoutCustomer } from '@/lib/mock/mock-checkout-session'
 import type { MockUserAddress } from '@/lib/mock/mock-addresses'
+import type { AddressValidationResult, ValidationSuggestion } from '@/lib/address-validation'
 import { CHECKOUT_COUNTRIES } from '@/lib/checkout-countries'
 import { AddressAutocompleteInput } from '@/app/[locale]/(screens)/_components/address-autocomplete-input'
 import { SavedAddressesSheet } from './saved-addresses-sheet'
@@ -18,6 +19,8 @@ type Props = {
   locale: string
 }
 
+type ValidationPhase = 'idle' | 'validating' | 'confirmed' | 'suggested' | 'invalid' | 'unavailable'
+
 function isValidEmail(email: string): boolean {
   const parts = email.split('@')
   return parts.length === 2 && (parts[1]?.includes('.') ?? false)
@@ -26,7 +29,6 @@ function isValidEmail(email: string): boolean {
 const INPUT_BASE =
   'h-13 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25'
 const INPUT_CLASS = `${INPUT_BASE} w-full`
-
 const ERROR_CLASS = 'mt-1 px-1 text-xs text-red-400/90'
 
 export function InfosClient({ initialCustomer, isConnected, savedAddresses, locale }: Props) {
@@ -34,10 +36,13 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
   const [customer, setCustomer] = useState<MockCheckoutCustomer>(initialCustomer)
   const [isPending, startTransition] = useTransition()
   const [showSheet, setShowSheet] = useState(false)
-  // Pre-check for first-time connected users with no saved address yet
   const [saveAddress, setSaveAddress] = useState(isConnected && savedAddresses.length === 0)
   const [addressSaveError, setAddressSaveError] = useState(false)
   const [touched, setTouched] = useState<Record<string, boolean>>({})
+
+  // Address validation state machine
+  const [validationPhase, setValidationPhase] = useState<ValidationPhase>('idle')
+  const [validationSuggestion, setValidationSuggestion] = useState<ValidationSuggestion | null>(null)
 
   const hasSavedAddresses = savedAddresses.length > 0
 
@@ -55,8 +60,14 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
     setTouched((v) => ({ ...v, [field]: true }))
   }
 
+  function resetValidation() {
+    if (validationPhase !== 'idle') setValidationPhase('idle')
+    setValidationSuggestion(null)
+  }
+
   function handleCountryChange(country: string) {
     setCustomer((v) => ({ ...v, country, street: '', postalCode: '', city: '' }))
+    resetValidation()
   }
 
   function handleAddressSelect(address: MockUserAddress) {
@@ -67,22 +78,44 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
       city: address.city,
       country: address.country,
     }))
-    // Mark address fields as touched so no stale error messages show
     setTouched((v) => ({ ...v, street: false, postalCode: false, city: false }))
+    resetValidation()
   }
 
-  function handleContinue() {
-    // Touch all fields to reveal any remaining errors
-    setTouched({ email: true, name: true, street: true, postalCode: true, city: true })
-    if (!canContinue) return
-    startTransition(async () => {
-      await saveCheckoutCustomerAction(customer)
-      if (saveAddress && isConnected) {
-        const saved = await saveAddressAction({
+  async function validateAddress(): Promise<ValidationPhase> {
+    setValidationPhase('validating')
+    try {
+      const res = await fetch('/api/address-validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
           street: customer.street,
           postalCode: customer.postalCode,
           city: customer.city,
           country: customer.country,
+        }),
+      })
+      const result = (await res.json()) as AddressValidationResult
+      if (result.status === 'suggested') {
+        setValidationSuggestion(result.suggestion)
+      }
+      setValidationPhase(result.status)
+      return result.status
+    } catch {
+      setValidationPhase('unavailable')
+      return 'unavailable'
+    }
+  }
+
+  async function proceedToPayment(withCustomer = customer) {
+    startTransition(async () => {
+      await saveCheckoutCustomerAction(withCustomer)
+      if (saveAddress && isConnected) {
+        const saved = await saveAddressAction({
+          street: withCustomer.street,
+          postalCode: withCustomer.postalCode,
+          city: withCustomer.city,
+          country: withCustomer.country,
         })
         if (!saved.ok) setAddressSaveError(true)
       }
@@ -90,8 +123,43 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
     })
   }
 
+  async function handleContinue() {
+    setTouched({ email: true, name: true, street: true, postalCode: true, city: true })
+    if (!canContinue) return
+
+    // Already validated — proceed
+    if (validationPhase === 'invalid' || validationPhase === 'unavailable') {
+      await proceedToPayment()
+      return
+    }
+
+    // Validate address first
+    const result = await validateAddress()
+    if (result === 'confirmed' || result === 'unavailable') {
+      await proceedToPayment()
+    }
+    // 'suggested' or 'invalid' → show UI, wait for user action
+  }
+
+  async function handleUseSuggestion() {
+    if (!validationSuggestion) return
+    const updated: MockCheckoutCustomer = {
+      ...customer,
+      street: validationSuggestion.street,
+      postalCode: validationSuggestion.postalCode,
+      city: validationSuggestion.city,
+    }
+    setCustomer(updated)
+    setValidationPhase('confirmed')
+    await proceedToPayment(updated)
+  }
+
+  const isValidating = validationPhase === 'validating'
+  const showSuggestion = validationPhase === 'suggested' && validationSuggestion !== null
+  const showInvalidWarning = validationPhase === 'invalid'
+
   return (
-    <div className="px-4 pb-36 pt-5">
+    <div className="px-4 pb-40 pt-5">
       <CheckoutSteps currentStep="infos" />
 
       <h1 className="mt-1 text-2xl font-black text-white">Informations</h1>
@@ -113,9 +181,7 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
       <div className="mt-6 space-y-4">
         {/* E-mail */}
         <div className="space-y-1">
-          <label htmlFor="checkout-email" className="block text-xs font-bold text-white/55">
-            E-mail
-          </label>
+          <label htmlFor="checkout-email" className="block text-xs font-bold text-white/55">E-mail</label>
           <input
             id="checkout-email"
             value={customer.email}
@@ -131,9 +197,7 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
 
         {/* Nom */}
         <div className="space-y-1">
-          <label htmlFor="checkout-name" className="block text-xs font-bold text-white/55">
-            Nom complet
-          </label>
+          <label htmlFor="checkout-name" className="block text-xs font-bold text-white/55">Nom complet</label>
           <input
             id="checkout-name"
             value={customer.name}
@@ -146,22 +210,21 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
           {touched.name && errors.name && <p className={ERROR_CLASS}>{errors.name}</p>}
         </div>
 
-        {/* Rue avec autocomplete */}
+        {/* Rue */}
         <div className="space-y-1">
-          <label htmlFor="checkout-street" className="block text-xs font-bold text-white/55">
-            Rue et numéro
-          </label>
+          <label htmlFor="checkout-street" className="block text-xs font-bold text-white/55">Rue et numéro</label>
           <AddressAutocompleteInput
             id="checkout-street"
             value={customer.street}
             country={customer.country}
             placeholder="Rue de la Paix 10"
             className={INPUT_CLASS}
-            onChange={(street) => setCustomer((v) => ({ ...v, street }))}
+            onChange={(street) => { setCustomer((v) => ({ ...v, street })); resetValidation() }}
             onBlur={() => touch('street')}
             onSelect={({ street, postalCode, city }) => {
               setCustomer((v) => ({ ...v, street, postalCode, city }))
               setTouched((v) => ({ ...v, street: false, postalCode: false, city: false }))
+              resetValidation()
             }}
           />
           {touched.street && errors.street && <p className={ERROR_CLASS}>{errors.street}</p>}
@@ -175,22 +238,20 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
               <input
                 id="checkout-postal"
                 value={customer.postalCode}
-                onChange={(e) => setCustomer((v) => ({ ...v, postalCode: e.target.value }))}
+                onChange={(e) => { setCustomer((v) => ({ ...v, postalCode: e.target.value })); resetValidation() }}
                 onBlur={() => touch('postalCode')}
                 placeholder="1000"
                 inputMode="numeric"
                 autoComplete="postal-code"
                 className={`${INPUT_BASE} w-full`}
               />
-              {touched.postalCode && errors.postalCode && (
-                <p className={ERROR_CLASS}>{errors.postalCode}</p>
-              )}
+              {touched.postalCode && errors.postalCode && <p className={ERROR_CLASS}>{errors.postalCode}</p>}
             </div>
             <div className="flex-1">
               <input
                 id="checkout-city"
                 value={customer.city}
-                onChange={(e) => setCustomer((v) => ({ ...v, city: e.target.value }))}
+                onChange={(e) => { setCustomer((v) => ({ ...v, city: e.target.value })); resetValidation() }}
                 onBlur={() => touch('city')}
                 placeholder="Bruxelles"
                 autoComplete="address-level2"
@@ -203,9 +264,7 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
 
         {/* Pays */}
         <div className="space-y-1">
-          <label htmlFor="checkout-country" className="block text-xs font-bold text-white/55">
-            Pays
-          </label>
+          <label htmlFor="checkout-country" className="block text-xs font-bold text-white/55">Pays</label>
           <div className="relative">
             <select
               id="checkout-country"
@@ -227,7 +286,7 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
           </div>
         </div>
 
-        {/* Toggle sauvegarder l'adresse */}
+        {/* Toggle sauvegarder */}
         {isConnected && (
           <div>
             <button
@@ -239,17 +298,8 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
                 <p className="text-sm font-semibold text-white">Sauvegarder cette adresse</p>
                 <p className="mt-0.5 text-xs text-white/40">Retrouve-la à ta prochaine commande</p>
               </div>
-              {/* Toggle switch */}
-              <div
-                className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${
-                  saveAddress ? 'bg-lime-300' : 'bg-white/20'
-                }`}
-              >
-                <div
-                  className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${
-                    saveAddress ? 'translate-x-[1.375rem]' : 'translate-x-0.5'
-                  }`}
-                />
+              <div className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${saveAddress ? 'bg-lime-300' : 'bg-white/20'}`}>
+                <div className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${saveAddress ? 'translate-x-[1.375rem]' : 'translate-x-0.5'}`} />
               </div>
             </button>
             {addressSaveError && (
@@ -269,16 +319,76 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
         />
       )}
 
-      <div className="fixed inset-x-0 bottom-0 border-t border-white/5 bg-[#0B0F15]/80 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-lg">
-        <button
-          type="button"
-          disabled={isPending}
-          onClick={handleContinue}
-          className="flex w-full items-center justify-center gap-2 rounded-2xl bg-lime-300 py-4 text-[15px] font-black text-[#0B0F15] disabled:opacity-60"
-        >
-          {isPending && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}
-          {isPending ? 'Enregistrement...' : 'Continuer vers le paiement'}
-        </button>
+      {/* Fixed bottom bar */}
+      <div className="fixed inset-x-0 bottom-0 border-t border-white/5 bg-[#0B0F15]/95 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 backdrop-blur-lg">
+
+        {/* Suggestion card */}
+        {showSuggestion && validationSuggestion && (
+          <div className="mb-3 rounded-xl border border-amber-400/20 bg-amber-400/5 p-3.5">
+            <div className="flex items-start gap-2">
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" aria-hidden="true" />
+              <div className="flex-1">
+                <p className="text-xs font-bold text-amber-400">Vouliez-vous dire ?</p>
+                <p className="mt-1 text-sm font-medium text-white">{validationSuggestion.label}</p>
+              </div>
+            </div>
+            <div className="mt-3 flex gap-2">
+              <button
+                type="button"
+                onClick={handleUseSuggestion}
+                disabled={isPending}
+                className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-lime-300 py-3 text-sm font-black text-[#0B0F15] disabled:opacity-60"
+              >
+                <CheckCircle className="h-4 w-4" aria-hidden="true" />
+                Utiliser cette adresse
+              </button>
+              <button
+                type="button"
+                onClick={() => proceedToPayment()}
+                disabled={isPending}
+                className="flex-1 rounded-xl border border-white/10 py-3 text-sm font-semibold text-white/60 disabled:opacity-60"
+              >
+                Garder la mienne
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Invalid warning */}
+        {showInvalidWarning && (
+          <div className="mb-3 rounded-xl border border-red-500/20 bg-red-500/5 p-3.5">
+            <div className="flex items-start gap-2">
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" aria-hidden="true" />
+              <div>
+                <p className="text-xs font-bold text-red-400">Adresse non reconnue</p>
+                <p className="mt-0.5 text-xs text-white/55">
+                  On n'a pas pu vérifier cette adresse. Vérifie qu'elle est correcte, ou continue quand même.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Main CTA — hidden when suggestion is shown (user must choose) */}
+        {!showSuggestion && (
+          <button
+            type="button"
+            disabled={isPending || isValidating}
+            onClick={handleContinue}
+            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-lime-300 py-4 text-[15px] font-black text-[#0B0F15] disabled:opacity-60"
+          >
+            {(isPending || isValidating) && (
+              <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+            )}
+            {isValidating
+              ? "Vérification de l'adresse…"
+              : isPending
+                ? 'Enregistrement…'
+                : showInvalidWarning
+                  ? 'Continuer quand même'
+                  : 'Continuer vers le paiement'}
+          </button>
+        )}
       </div>
     </div>
   )
