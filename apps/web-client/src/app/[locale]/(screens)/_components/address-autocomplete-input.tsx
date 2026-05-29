@@ -28,7 +28,7 @@ export function AddressAutocompleteInput({
   const [activeIndex, setActiveIndex] = useState(-1)
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [dropAbove, setDropAbove] = useState(false)
+  const [dropStyle, setDropStyle] = useState<React.CSSProperties>({})
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const abortRef = useRef<AbortController | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -53,22 +53,31 @@ export function AddressAutocompleteInput({
     setIsLoading(false)
   }, [country])
 
-  // Recompute direction when viewport resizes (mobile keyboard open/close)
+  // Keep dropdown aligned to input when open (handles scroll + keyboard resize)
   useEffect(() => {
     if (!isOpen) return
-    function updateDirection() {
-      const rect = containerRef.current?.getBoundingClientRect()
-      if (rect) setDropAbove(window.innerHeight - rect.bottom < 260)
-    }
-    updateDirection()
-    window.addEventListener('resize', updateDirection)
-    return () => window.removeEventListener('resize', updateDirection)
-  }, [isOpen])
 
-  function computeDropDirection() {
-    const rect = containerRef.current?.getBoundingClientRect()
-    if (rect) setDropAbove(window.innerHeight - rect.bottom < 260)
-  }
+    function syncPosition() {
+      const rect = containerRef.current?.getBoundingClientRect()
+      if (!rect) return
+      const spaceBelow = window.innerHeight - rect.bottom
+      const above = spaceBelow < 260
+      setDropStyle(
+        above
+          ? { position: 'fixed', bottom: window.innerHeight - rect.top + 4, left: rect.left, width: rect.width }
+          : { position: 'fixed', top: rect.bottom + 4, left: rect.left, width: rect.width },
+      )
+    }
+
+    syncPosition()
+    // Use capture:true to catch scrolls inside overflow-auto containers
+    window.addEventListener('scroll', syncPosition, true)
+    window.addEventListener('resize', syncPosition)
+    return () => {
+      window.removeEventListener('scroll', syncPosition, true)
+      window.removeEventListener('resize', syncPosition)
+    }
+  }, [isOpen])
 
   async function fetchSuggestions(query: string) {
     abortRef.current?.abort()
@@ -105,7 +114,6 @@ export function AddressAutocompleteInput({
       return
     }
     setIsLoading(true)
-    computeDropDirection()
     debounceRef.current = setTimeout(() => void fetchSuggestions(val), 300)
   }
 
@@ -145,10 +153,6 @@ export function AddressAutocompleteInput({
     }, 150)
   }
 
-  const dropClass = dropAbove
-    ? 'bottom-full mb-1'
-    : 'top-full mt-1'
-
   return (
     <div ref={containerRef} className="relative">
       {isLoading && (
@@ -176,7 +180,8 @@ export function AddressAutocompleteInput({
         <ul
           id={listboxId}
           role="listbox"
-          className={`absolute left-0 right-0 z-50 max-h-52 overflow-y-auto rounded-xl border border-white/10 bg-[#0B0F15] shadow-2xl ${dropClass}`}
+          style={{ ...dropStyle, zIndex: 9999 }}
+          className="max-h-52 overflow-y-auto rounded-xl border border-white/10 bg-[#0B0F15] shadow-2xl"
         >
           {suggestions.map((suggestion, index) => (
             <li
