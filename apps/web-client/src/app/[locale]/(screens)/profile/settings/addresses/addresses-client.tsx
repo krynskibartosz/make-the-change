@@ -1,10 +1,10 @@
 'use client'
 
-import { ChevronDown, ChevronLeft, Pencil, Plus, Trash2 } from 'lucide-react'
+import { ChevronDown, Pencil, Plus, Trash2 } from 'lucide-react'
 import { useState, useTransition } from 'react'
-import { useRouter } from '@/i18n/navigation'
 import type { MockUserAddress } from '@/lib/mock/mock-addresses'
 import { AddressAutocompleteInput } from '@/app/[locale]/(screens)/_components/address-autocomplete-input'
+import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import { CHECKOUT_COUNTRIES } from '@/lib/checkout-countries'
 import {
   addAddressAction,
@@ -38,8 +38,7 @@ function AddressFields({
   onSelect: (f: AddressForm) => void
 }) {
   return (
-    <div className="space-y-4">
-      {/* Pays */}
+    <div className="space-y-4 px-4 pt-4">
       <div className="space-y-1.5">
         <label className="block text-xs font-bold text-white/55">Pays</label>
         <div className="relative">
@@ -56,7 +55,6 @@ function AddressFields({
         </div>
       </div>
 
-      {/* Rue avec autocomplete */}
       <div className="space-y-1.5">
         <label className="block text-xs font-bold text-white/55">Rue et numéro</label>
         <AddressAutocompleteInput
@@ -70,7 +68,6 @@ function AddressFields({
         />
       </div>
 
-      {/* CP + Ville */}
       <div className="space-y-1.5">
         <label className="block text-xs font-bold text-white/55">Code postal et ville</label>
         <div className="flex gap-3">
@@ -94,7 +91,6 @@ function AddressFields({
 }
 
 export function AddressesClient({ addresses }: Props) {
-  const router = useRouter()
   const [, startTransition] = useTransition()
   const [mode, setMode] = useState<Mode>({ type: 'list' })
   const [form, setForm] = useState<AddressForm>(EMPTY_FORM)
@@ -104,7 +100,13 @@ export function AddressesClient({ addresses }: Props) {
   const [formError, setFormError] = useState<string | null>(null)
   const [actionError, setActionError] = useState<string | null>(null)
 
+  const isFormMode = mode.type === 'add' || mode.type === 'edit'
   const canSave = form.street.length > 0 && form.postalCode.length > 0 && form.city.length > 0
+
+  const modalTitle =
+    mode.type === 'edit' ? "Modifier l'adresse" :
+    mode.type === 'add' ? 'Nouvelle adresse' :
+    'Mes adresses'
 
   function openAdd() {
     setForm(EMPTY_FORM)
@@ -113,12 +115,7 @@ export function AddressesClient({ addresses }: Props) {
   }
 
   function openEdit(address: MockUserAddress) {
-    setForm({
-      street: address.street,
-      postalCode: address.postalCode,
-      city: address.city,
-      country: address.country,
-    })
+    setForm({ street: address.street, postalCode: address.postalCode, city: address.city, country: address.country })
     setFormError(null)
     setConfirmDeleteId(null)
     setMode({ type: 'edit', address })
@@ -136,20 +133,16 @@ export function AddressesClient({ addresses }: Props) {
 
     startTransition(async () => {
       try {
-        if (mode.type === 'add') {
-          const result = await addAddressAction(form)
-          if (!result.ok) {
-            setFormError("L'adresse n'a pas pu être sauvegardée. Reconnecte-toi et réessaie.")
-            setIsSaving(false)
-            return
-          }
-        } else if (mode.type === 'edit') {
-          const result = await updateAddressAction(mode.address.id, form)
-          if (!result.ok) {
-            setFormError("L'adresse n'a pas pu être modifiée. Reconnecte-toi et réessaie.")
-            setIsSaving(false)
-            return
-          }
+        const result = mode.type === 'add'
+          ? await addAddressAction(form)
+          : await updateAddressAction((mode as { type: 'edit'; address: MockUserAddress }).address.id, form)
+
+        if (!result.ok) {
+          setFormError(mode.type === 'add'
+            ? "L'adresse n'a pas pu être sauvegardée. Reconnecte-toi et réessaie."
+            : "L'adresse n'a pas pu être modifiée. Reconnecte-toi et réessaie.")
+          setIsSaving(false)
+          return
         }
         setMode({ type: 'list' })
       } catch {
@@ -161,10 +154,7 @@ export function AddressesClient({ addresses }: Props) {
   }
 
   function handleRemove(id: string) {
-    if (confirmDeleteId !== id) {
-      setConfirmDeleteId(id)
-      return
-    }
+    if (confirmDeleteId !== id) { setConfirmDeleteId(id); return }
     setConfirmDeleteId(null)
     setPendingId(id)
     setActionError(null)
@@ -185,140 +175,118 @@ export function AddressesClient({ addresses }: Props) {
     })
   }
 
-  const isFormMode = mode.type === 'add' || mode.type === 'edit'
-  const headerTitle = mode.type === 'edit' ? "Modifier l'adresse" : mode.type === 'add' ? 'Nouvelle adresse' : 'Mes adresses'
-
   return (
-    <div className={`fixed inset-0 z-40 flex h-[100dvh] w-full flex-col overflow-x-hidden overflow-y-auto overscroll-y-contain bg-[#0B0F15] text-white ${isFormMode ? 'pb-36' : 'pb-8'}`}>
-      {/* Header */}
-      <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/5 bg-[#0B0F15]/80 px-4 pt-[max(0.75rem,env(safe-area-inset-top))] pb-3 backdrop-blur-xl">
-        <div className="relative flex h-12 items-center">
-          <button
-            type="button"
-            onClick={isFormMode ? closeForm : () => router.back()}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20 active:scale-95"
-            aria-label="Retour"
-          >
-            <ChevronLeft className="h-5 w-5 text-white" />
-          </button>
-          <span className="absolute left-1/2 -translate-x-1/2 text-sm font-semibold text-white">
-            {headerTitle}
-          </span>
-        </div>
-      </header>
+    <FullScreenSlideModal
+      title={modalTitle}
+      fallbackHref="/profile/settings"
+      headerMode="back"
+      onClose={isFormMode ? closeForm : undefined}
+      className="bg-[#0B0F15]"
+      contentClassName={`overflow-y-auto overscroll-contain ${isFormMode ? 'pb-36' : 'pb-8'}`}
+    >
+      {/* Mode liste */}
+      {mode.type === 'list' && (
+        <div className="px-4">
+          {actionError && (
+            <p className="mt-4 rounded-xl bg-red-500/10 px-4 py-3 text-xs font-medium text-red-400">
+              {actionError}
+            </p>
+          )}
 
-      <main className="mt-[calc(env(safe-area-inset-top)+4rem)] flex-1 px-4">
+          {addresses.length === 0 && (
+            <p className="mt-8 text-center text-sm text-white/40">Aucune adresse sauvegardée.</p>
+          )}
 
-        {/* Mode liste */}
-        {mode.type === 'list' && (
-          <>
-            {actionError && (
-              <p className="mt-4 rounded-xl bg-red-500/10 px-4 py-3 text-xs font-medium text-red-400">
-                {actionError}
-              </p>
-            )}
+          <ul className="mt-4 space-y-3">
+            {addresses.map((address) => {
+              const rowPending = pendingId === address.id
+              const isConfirmingDelete = confirmDeleteId === address.id
 
-            {addresses.length === 0 && (
-              <p className="mt-8 text-center text-sm text-white/40">Aucune adresse sauvegardée.</p>
-            )}
+              return (
+                <li key={address.id} className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
+                  <AddressLine address={address} showIcon />
 
-            <ul className="mt-4 space-y-3">
-              {addresses.map((address) => {
-                const rowPending = pendingId === address.id
-                const isConfirmingDelete = confirmDeleteId === address.id
+                  <div className="mt-3 flex items-center gap-3">
+                    {!address.isDefault && (
+                      <button
+                        type="button"
+                        onClick={() => handleSetDefault(address.id)}
+                        disabled={rowPending}
+                        className="text-xs font-semibold text-white/50 hover:text-white/80 disabled:opacity-40"
+                      >
+                        Définir par défaut
+                      </button>
+                    )}
 
-                return (
-                  <li key={address.id} className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
-                    <AddressLine address={address} showIcon />
+                    <div className="ml-auto flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => openEdit(address)}
+                        disabled={rowPending}
+                        className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 transition hover:bg-white/10 active:scale-95 disabled:opacity-40"
+                        aria-label="Modifier"
+                      >
+                        <Pencil className="h-3.5 w-3.5 text-white/50" aria-hidden="true" />
+                      </button>
 
-                    <div className="mt-3 flex items-center gap-3">
-                      {!address.isDefault && (
-                        <button
-                          type="button"
-                          onClick={() => handleSetDefault(address.id)}
-                          disabled={rowPending}
-                          className="text-xs font-semibold text-white/50 hover:text-white/80 disabled:opacity-40"
-                        >
-                          Définir par défaut
-                        </button>
-                      )}
-
-                      <div className="ml-auto flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() => openEdit(address)}
-                          disabled={rowPending}
-                          className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 transition-colors active:bg-white/10 disabled:opacity-40"
-                          aria-label="Modifier"
-                        >
-                          <Pencil className="h-3.5 w-3.5 text-white/50" aria-hidden="true" />
-                        </button>
-
-                        {isConfirmingDelete ? (
-                          <div className="flex items-center gap-2">
-                            <button
-                              type="button"
-                              onClick={() => setConfirmDeleteId(null)}
-                              className="rounded-lg border border-white/10 px-3 py-1.5 text-xs font-semibold text-white/60 active:bg-white/5"
-                            >
-                              Annuler
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => handleRemove(address.id)}
-                              disabled={rowPending}
-                              className="rounded-lg border border-red-500/30 bg-red-500/15 px-3 py-1.5 text-xs font-bold text-red-400 active:bg-red-500/25 disabled:opacity-40"
-                            >
-                              Confirmer
-                            </button>
-                          </div>
-                        ) : (
+                      {isConfirmingDelete ? (
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setConfirmDeleteId(null)}
+                            className="rounded-lg border border-white/10 px-3 py-1.5 text-xs font-semibold text-white/60 active:bg-white/5"
+                          >
+                            Annuler
+                          </button>
                           <button
                             type="button"
                             onClick={() => handleRemove(address.id)}
                             disabled={rowPending}
-                            className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 transition-colors active:bg-red-500/20 disabled:opacity-40"
-                            aria-label="Supprimer"
+                            className="rounded-lg border border-red-500/30 bg-red-500/15 px-3 py-1.5 text-xs font-bold text-red-400 active:bg-red-500/25 disabled:opacity-40"
                           >
-                            <Trash2 className="h-3.5 w-3.5 text-red-400/70" aria-hidden="true" />
+                            Confirmer
                           </button>
-                        )}
-                      </div>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => handleRemove(address.id)}
+                          disabled={rowPending}
+                          className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 transition active:bg-red-500/20 disabled:opacity-40"
+                          aria-label="Supprimer"
+                        >
+                          <Trash2 className="h-3.5 w-3.5 text-red-400/70" aria-hidden="true" />
+                        </button>
+                      )}
                     </div>
-                  </li>
-                )
-              })}
-            </ul>
+                  </div>
+                </li>
+              )
+            })}
+          </ul>
 
-            <button
-              type="button"
-              onClick={openAdd}
-              className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-white/20 py-4 text-sm font-semibold text-white/50 transition-colors active:bg-white/5"
-            >
-              <Plus className="h-4 w-4" aria-hidden="true" />
-              Ajouter une adresse
-            </button>
-          </>
-        )}
+          <button
+            type="button"
+            onClick={openAdd}
+            className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-white/20 py-4 text-sm font-semibold text-white/50 transition active:bg-white/5"
+          >
+            <Plus className="h-4 w-4" aria-hidden="true" />
+            Ajouter une adresse
+          </button>
+        </div>
+      )}
 
-        {/* Mode formulaire (add ou edit) */}
-        {isFormMode && (
-          <>
-            <div className="mt-2">
-              <AddressFields
-                form={form}
-                onChange={setForm}
-                onSelect={setForm}
-              />
-              {formError && (
-                <p className="mt-3 text-xs text-red-400/80">{formError}</p>
-              )}
-            </div>
-          </>
-        )}
-      </main>
+      {/* Mode formulaire */}
+      {isFormMode && (
+        <>
+          <AddressFields form={form} onChange={setForm} onSelect={setForm} />
+          {formError && (
+            <p className="mt-3 px-4 text-xs text-red-400/80">{formError}</p>
+          )}
+        </>
+      )}
 
-      {/* Barre fixe en bas — uniquement en mode formulaire */}
+      {/* Barre fixe bas — mode formulaire uniquement */}
       {isFormMode && (
         <div className="fixed inset-x-0 bottom-0 z-50 flex flex-col">
           <div className="h-8 w-full bg-gradient-to-t from-[#0B0F15] to-transparent pointer-events-none" />
@@ -345,6 +313,6 @@ export function AddressesClient({ addresses }: Props) {
           </div>
         </div>
       )}
-    </div>
+    </FullScreenSlideModal>
   )
 }
