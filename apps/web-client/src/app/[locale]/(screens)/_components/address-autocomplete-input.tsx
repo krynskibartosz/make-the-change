@@ -76,7 +76,6 @@ export function AddressAutocompleteInput({
       window.removeEventListener('scroll', syncPosition, true)
       window.removeEventListener('resize', syncPosition)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen])
 
   async function fetchSuggestions(query: string) {

@@ -1,0 +1,1699 @@
+diff --git a/apps/web-client/src/app/[locale]/(screens)/_components/address-autocomplete-input.tsx b/apps/web-client/src/app/[locale]/(screens)/_components/address-autocomplete-input.tsx
+new file mode 100644
+index 00000000..1b8065d4
+--- /dev/null
++++ b/apps/web-client/src/app/[locale]/(screens)/_components/address-autocomplete-input.tsx
+@@ -0,0 +1,224 @@
++'use client'
++
++import { useEffect, useRef, useState } from 'react'
++import type { AddressSuggestion } from '@/lib/address-autocomplete'
++
++type Props = {
++  id: string
++  value: string
++  country: string
++  placeholder?: string
++  className?: string
++  onChange: (value: string) => void
++  onSelect: (suggestion: Pick<AddressSuggestion, 'street' | 'postalCode' | 'city'>) => void
++  onBlur?: () => void
++}
++
++export function AddressAutocompleteInput({
++  id,
++  value,
++  country,
++  placeholder,
++  className,
++  onChange,
++  onSelect,
++  onBlur,
++}: Props) {
++  const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([])
++  const [activeIndex, setActiveIndex] = useState(-1)
++  const [isOpen, setIsOpen] = useState(false)
++  const [isLoading, setIsLoading] = useState(false)
++  const [dropStyle, setDropStyle] = useState<React.CSSProperties>({})
++  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
++  const abortRef = useRef<AbortController | null>(null)
++  const containerRef = useRef<HTMLDivElement>(null)
++
++  const listboxId = `${id}-listbox`
++
++  // Cancel in-flight work on unmount
++  useEffect(() => {
++    return () => {
++      abortRef.current?.abort()
++      if (debounceRef.current) clearTimeout(debounceRef.current)
++    }
++  }, [])
++
++  // Reset dropdown when country changes
++  useEffect(() => {
++    abortRef.current?.abort()
++    if (debounceRef.current) clearTimeout(debounceRef.current)
++    setSuggestions([])
++    setIsOpen(false)
++    setActiveIndex(-1)
++    setIsLoading(false)
++  }, [country])
++
++  // Keep dropdown aligned to input when open (handles scroll + keyboard resize)
++  useEffect(() => {
++    if (!isOpen) return
++
++    function syncPosition() {
++      const rect = containerRef.current?.getBoundingClientRect()
++      if (!rect) return
++      const spaceBelow = window.innerHeight - rect.bottom
++      const above = spaceBelow < 260
++      setDropStyle(
++        above
++          ? { position: 'fixed', bottom: window.innerHeight - rect.top + 4, left: rect.left, width: rect.width }
++          : { position: 'fixed', top: rect.bottom + 4, left: rect.left, width: rect.width },
++      )
++    }
++
++    syncPosition()
++    // Use capture:true to catch scrolls inside overflow-auto containers
++    window.addEventListener('scroll', syncPosition, true)
++    window.addEventListener('resize', syncPosition)
++    return () => {
++      window.removeEventListener('scroll', syncPosition, true)
++      window.removeEventListener('resize', syncPosition)
++    }
++  }, [isOpen])
++
++  function computePosition() {
++    const rect = containerRef.current?.getBoundingClientRect()
++    if (!rect) return
++    const spaceBelow = window.innerHeight - rect.bottom
++    const above = spaceBelow < 260
++    setDropStyle(
++      above
++        ? { position: 'fixed', bottom: window.innerHeight - rect.top + 4, left: rect.left, width: rect.width }
++        : { position: 'fixed', top: rect.bottom + 4, left: rect.left, width: rect.width },
++    )
++  }
++
++  async function fetchSuggestions(query: string) {
++    abortRef.current?.abort()
++    const controller = new AbortController()
++    abortRef.current = controller
++
++    setIsLoading(true)
++    const params = new URLSearchParams({ q: query, country: country.toLowerCase() })
++    try {
++      const res = await fetch(`/api/address-autocomplete?${params.toString()}`, {
++        signal: controller.signal,
++      })
++      if (!res.ok) return
++      const data = (await res.json()) as AddressSuggestion[]
++      if (data.length > 0) {
++        computePosition() // position calculée AVANT d'afficher le dropdown
++        setSuggestions(data)
++        setIsOpen(true)
++      } else {
++        setSuggestions([])
++        setIsOpen(false)
++      }
++      setActiveIndex(-1)
++    } catch (e) {
++      if (e instanceof Error && e.name === 'AbortError') return
++      // API unavailable — user can still type manually
++    } finally {
++      setIsLoading(false)
++    }
++  }
++
++  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
++    const val = e.target.value
++    onChange(val)
++    if (debounceRef.current) clearTimeout(debounceRef.current)
++    if (val.trim().length < 2) {
++      setSuggestions([])
++      setIsOpen(false)
++      setIsLoading(false)
++      return
++    }
++    setIsLoading(true)
++    debounceRef.current = setTimeout(() => void fetchSuggestions(val), 300)
++  }
++
++  function handleSelect(suggestion: AddressSuggestion) {
++    onChange(suggestion.street)
++    onSelect(suggestion)
++    setSuggestions([])
++    setIsOpen(false)
++    setActiveIndex(-1)
++  }
++
++  function handleKeyDown(e: React.KeyboardEvent) {
++    if (!isOpen || suggestions.length === 0) return
++    if (e.key === 'ArrowDown') {
++      e.preventDefault()
++      setActiveIndex((i) => Math.min(i + 1, suggestions.length - 1))
++    } else if (e.key === 'ArrowUp') {
++      e.preventDefault()
++      setActiveIndex((i) => Math.max(i - 1, -1))
++    } else if (e.key === 'Enter' && activeIndex >= 0) {
++      e.preventDefault()
++      const selected = suggestions[activeIndex]
++      if (selected) handleSelect(selected)
++    } else if (e.key === 'Escape') {
++      setSuggestions([])
++      setIsOpen(false)
++      setActiveIndex(-1)
++    }
++  }
++
++  function handleBlurInternal() {
++    setTimeout(() => {
++      if (!containerRef.current?.contains(document.activeElement)) {
++        setIsOpen(false)
++        onBlur?.()
++      }
++    }, 150)
++  }
++
++  return (
++    <div ref={containerRef} className="relative">
++      {isLoading && (
++        <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center">
++          <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/20 border-t-white/60" />
++        </div>
++      )}
++      <input
++        id={id}
++        value={value}
++        onChange={handleChange}
++        onKeyDown={handleKeyDown}
++        onBlur={handleBlurInternal}
++        placeholder={placeholder}
++        autoComplete="off"
++        role="combobox"
++        aria-autocomplete="list"
++        aria-expanded={isOpen}
++        aria-haspopup="listbox"
++        aria-controls={listboxId}
++        aria-activedescendant={activeIndex >= 0 ? `${id}-option-${activeIndex}` : undefined}
++        className={className}
++      />
++      {isOpen && suggestions.length > 0 && (
++        <ul
++          id={listboxId}
++          role="listbox"
++          style={{ ...dropStyle, zIndex: 9999 }}
++          className="max-h-52 overflow-y-auto rounded-xl border border-white/10 bg-[#0B0F15] shadow-2xl"
++        >
++          {suggestions.map((suggestion, index) => (
++            <li
++              key={`${suggestion.label}-${index}`}
++              id={`${id}-option-${index}`}
++              role="option"
++              aria-selected={index === activeIndex}
++              onMouseDown={() => handleSelect(suggestion)}
++              className={`cursor-pointer px-4 py-3 text-sm transition-colors ${
++                index === activeIndex
++                  ? 'bg-white/[0.08] text-white'
++                  : 'text-white/70 hover:bg-white/[0.05] hover:text-white'
++              }`}
++            >
++              {suggestion.label}
++            </li>
++          ))}
++        </ul>
++      )}
++    </div>
++  )
++}
+diff --git a/apps/web-client/src/app/[locale]/(screens)/products/checkout/_features/checkout-actions.ts b/apps/web-client/src/app/[locale]/(screens)/products/checkout/_features/checkout-actions.ts
+index e638f7ea..1b6b8ea4 100644
+--- a/apps/web-client/src/app/[locale]/(screens)/products/checkout/_features/checkout-actions.ts
++++ b/apps/web-client/src/app/[locale]/(screens)/products/checkout/_features/checkout-actions.ts
+@@ -1,5 +1,6 @@
+ 'use server'
+ 
++import { revalidatePath } from 'next/cache'
+ import { redirect } from 'next/navigation'
+ import { getMockProductById } from '@/app/[locale]/(screens)/products/_features/mock-products'
+ import { completeMockCheckoutAction } from '@/app/[locale]/(screens)/products/_features/mock-commerce-actions'
+@@ -87,5 +88,6 @@ export async function saveAddressAction(address: {
+     ...address,
+   })
+   await setCurrentMockAddresses(updated)
++  revalidatePath('/profile/settings/addresses')
+   return { ok: true }
+ }
+diff --git a/apps/web-client/src/app/[locale]/(screens)/products/checkout/infos/address-autocomplete-input.tsx b/apps/web-client/src/app/[locale]/(screens)/products/checkout/infos/address-autocomplete-input.tsx
+index 4d741e95..e832b374 100644
+--- a/apps/web-client/src/app/[locale]/(screens)/products/checkout/infos/address-autocomplete-input.tsx
++++ b/apps/web-client/src/app/[locale]/(screens)/products/checkout/infos/address-autocomplete-input.tsx
+@@ -1,164 +1,2 @@
+-'use client'
+-
+-import { useEffect, useRef, useState } from 'react'
+-import type { AddressSuggestion } from '@/lib/address-autocomplete'
+-
+-type Props = {
+-  id: string
+-  value: string
+-  country: string
+-  placeholder?: string
+-  className?: string
+-  onChange: (value: string) => void
+-  onSelect: (suggestion: Pick<AddressSuggestion, 'street' | 'postalCode' | 'city'>) => void
+-}
+-
+-export function AddressAutocompleteInput({
+-  id,
+-  value,
+-  country,
+-  placeholder,
+-  className,
+-  onChange,
+-  onSelect,
+-}: Props) {
+-  const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([])
+-  const [activeIndex, setActiveIndex] = useState(-1)
+-  const [isOpen, setIsOpen] = useState(false)
+-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+-  const abortRef = useRef<AbortController | null>(null)
+-  const containerRef = useRef<HTMLDivElement>(null)
+-
+-  const listboxId = `${id}-listbox`
+-
+-  // Cancel in-flight work on unmount
+-  useEffect(() => {
+-    return () => {
+-      abortRef.current?.abort()
+-      if (debounceRef.current) clearTimeout(debounceRef.current)
+-    }
+-  }, [])
+-
+-  // Reset dropdown when country changes, and cancel any in-flight request for the old country
+-  useEffect(() => {
+-    abortRef.current?.abort()
+-    if (debounceRef.current) clearTimeout(debounceRef.current)
+-    setSuggestions([])
+-    setIsOpen(false)
+-    setActiveIndex(-1)
+-  }, [country])
+-
+-  async function fetchSuggestions(query: string) {
+-    abortRef.current?.abort()
+-    const controller = new AbortController()
+-    abortRef.current = controller
+-
+-    const params = new URLSearchParams({ q: query, country: country.toLowerCase() })
+-    try {
+-      const res = await fetch(`/api/address-autocomplete?${params.toString()}`, {
+-        signal: controller.signal,
+-      })
+-      if (!res.ok) return
+-      const data = (await res.json()) as AddressSuggestion[]
+-      setSuggestions(data)
+-      setIsOpen(data.length > 0)
+-      setActiveIndex(-1)
+-    } catch (e) {
+-      if (e instanceof Error && e.name === 'AbortError') return
+-      // API unavailable — user can still type manually
+-    }
+-  }
+-
+-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+-    const val = e.target.value
+-    onChange(val)
+-    if (debounceRef.current) clearTimeout(debounceRef.current)
+-    if (val.trim().length < 3) {
+-      setSuggestions([])
+-      setIsOpen(false)
+-      return
+-    }
+-    debounceRef.current = setTimeout(() => void fetchSuggestions(val), 300)
+-  }
+-
+-  function handleSelect(suggestion: AddressSuggestion) {
+-    onChange(suggestion.street)
+-    onSelect(suggestion)
+-    setSuggestions([])
+-    setIsOpen(false)
+-    setActiveIndex(-1)
+-  }
+-
+-  function handleKeyDown(e: React.KeyboardEvent) {
+-    if (!isOpen || suggestions.length === 0) return
+-    if (e.key === 'ArrowDown') {
+-      e.preventDefault()
+-      setActiveIndex((i) => Math.min(i + 1, suggestions.length - 1))
+-    } else if (e.key === 'ArrowUp') {
+-      e.preventDefault()
+-      setActiveIndex((i) => Math.max(i - 1, -1))
+-    } else if (e.key === 'Enter' && activeIndex >= 0) {
+-      e.preventDefault()
+-      const selected = suggestions[activeIndex]
+-      if (selected) handleSelect(selected)
+-    } else if (e.key === 'Escape') {
+-      setSuggestions([])
+-      setIsOpen(false)
+-      setActiveIndex(-1)
+-    }
+-  }
+-
+-  function handleBlur() {
+-    // Delay to allow onMouseDown on a suggestion to fire first
+-    setTimeout(() => {
+-      if (!containerRef.current?.contains(document.activeElement)) {
+-        setIsOpen(false)
+-      }
+-    }, 150)
+-  }
+-
+-  return (
+-    <div ref={containerRef} className="relative">
+-      <input
+-        id={id}
+-        value={value}
+-        onChange={handleChange}
+-        onKeyDown={handleKeyDown}
+-        onBlur={handleBlur}
+-        placeholder={placeholder}
+-        autoComplete="off"
+-        role="combobox"
+-        aria-autocomplete="list"
+-        aria-expanded={isOpen}
+-        aria-haspopup="listbox"
+-        aria-controls={listboxId}
+-        aria-activedescendant={activeIndex >= 0 ? `${id}-option-${activeIndex}` : undefined}
+-        className={className}
+-      />
+-      {isOpen && suggestions.length > 0 && (
+-        <ul
+-          id={listboxId}
+-          role="listbox"
+-          className="absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden rounded-xl border border-white/10 bg-[#0B0F15] shadow-2xl"
+-        >
+-          {suggestions.map((suggestion, index) => (
+-            <li
+-              key={`${suggestion.label}-${index}`}
+-              id={`${id}-option-${index}`}
+-              role="option"
+-              aria-selected={index === activeIndex}
+-              onMouseDown={() => handleSelect(suggestion)}
+-              className={`cursor-pointer px-4 py-3 text-sm transition-colors ${
+-                index === activeIndex
+-                  ? 'bg-white/[0.08] text-white'
+-                  : 'text-white/70 hover:bg-white/[0.05] hover:text-white'
+-              }`}
+-            >
+-              {suggestion.label}
+-            </li>
+-          ))}
+-        </ul>
+-      )}
+-    </div>
+-  )
+-}
++// Re-exported from the shared components folder
++export { AddressAutocompleteInput } from '@/app/[locale]/(screens)/_components/address-autocomplete-input'
+diff --git a/apps/web-client/src/app/[locale]/(screens)/products/checkout/infos/infos-client.tsx b/apps/web-client/src/app/[locale]/(screens)/products/checkout/infos/infos-client.tsx
+index 7380e36d..d241f0e9 100644
+--- a/apps/web-client/src/app/[locale]/(screens)/products/checkout/infos/infos-client.tsx
++++ b/apps/web-client/src/app/[locale]/(screens)/products/checkout/infos/infos-client.tsx
+@@ -1,13 +1,14 @@
+ 'use client'
+ 
+-import { Loader2, MapPin } from 'lucide-react'
++import { AlertTriangle, CheckCircle, ChevronDown, Loader2, MapPin } from 'lucide-react'
+ import { useRouter } from 'next/navigation'
+ import { useState, useTransition } from 'react'
+ import { saveCheckoutCustomerAction, saveAddressAction } from '@/app/[locale]/(screens)/products/checkout/_features/checkout-actions'
+ import type { MockCheckoutCustomer } from '@/lib/mock/mock-checkout-session'
+ import type { MockUserAddress } from '@/lib/mock/mock-addresses'
++import type { AddressValidationResult, ValidationSuggestion } from '@/lib/address-validation'
+ import { CHECKOUT_COUNTRIES } from '@/lib/checkout-countries'
+-import { AddressAutocompleteInput } from './address-autocomplete-input'
++import { AddressAutocompleteInput } from '@/app/[locale]/(screens)/_components/address-autocomplete-input'
+ import { SavedAddressesSheet } from './saved-addresses-sheet'
+ import { CheckoutSteps } from '../_components/checkout-steps'
+ 
+@@ -18,6 +19,8 @@ type Props = {
+   locale: string
+ }
+ 
++type ValidationPhase = 'idle' | 'validating' | 'confirmed' | 'suggested' | 'invalid' | 'unavailable'
++
+ function isValidEmail(email: string): boolean {
+   const parts = email.split('@')
+   return parts.length === 2 && (parts[1]?.includes('.') ?? false)
+@@ -26,25 +29,45 @@ function isValidEmail(email: string): boolean {
+ const INPUT_BASE =
+   'h-13 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25'
+ const INPUT_CLASS = `${INPUT_BASE} w-full`
++const ERROR_CLASS = 'mt-1 px-1 text-xs text-red-400/90'
+ 
+ export function InfosClient({ initialCustomer, isConnected, savedAddresses, locale }: Props) {
+   const router = useRouter()
+   const [customer, setCustomer] = useState<MockCheckoutCustomer>(initialCustomer)
+   const [isPending, startTransition] = useTransition()
+   const [showSheet, setShowSheet] = useState(false)
+-  const [saveAddress, setSaveAddress] = useState(false)
++  const [saveAddress, setSaveAddress] = useState(isConnected && savedAddresses.length === 0)
++  const [addressSaveError, setAddressSaveError] = useState(false)
++  const [touched, setTouched] = useState<Record<string, boolean>>({})
++
++  // Address validation state machine
++  const [validationPhase, setValidationPhase] = useState<ValidationPhase>('idle')
++  const [validationSuggestion, setValidationSuggestion] = useState<ValidationSuggestion | null>(null)
+ 
+   const hasSavedAddresses = savedAddresses.length > 0
+ 
+-  const canContinue =
+-    isValidEmail(customer.email) &&
+-    customer.name.trim().length > 1 &&
+-    customer.street.trim().length > 3 &&
+-    customer.postalCode.trim().length >= 4 &&
+-    customer.city.trim().length > 1
++  const errors = {
++    email: !isValidEmail(customer.email) ? 'Adresse e-mail invalide' : null,
++    name: customer.name.trim().length < 2 ? 'Au moins 2 caractères requis' : null,
++    street: customer.street.trim().length < 4 ? 'Adresse trop courte' : null,
++    postalCode: customer.postalCode.trim().length < 4 ? 'Code postal invalide' : null,
++    city: customer.city.trim().length < 2 ? 'Ville requise' : null,
++  }
++
++  const canContinue = Object.values(errors).every((e) => e === null)
++
++  function touch(field: string) {
++    setTouched((v) => ({ ...v, [field]: true }))
++  }
++
++  function resetValidation() {
++    if (validationPhase !== 'idle') setValidationPhase('idle')
++    setValidationSuggestion(null)
++  }
+ 
+   function handleCountryChange(country: string) {
+     setCustomer((v) => ({ ...v, country, street: '', postalCode: '', city: '' }))
++    resetValidation()
+   }
+ 
+   function handleAddressSelect(address: MockUserAddress) {
+@@ -55,26 +78,88 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
+       city: address.city,
+       country: address.country,
+     }))
++    setTouched((v) => ({ ...v, street: false, postalCode: false, city: false }))
++    resetValidation()
+   }
+ 
+-  function handleContinue() {
+-    if (!canContinue) return
+-    startTransition(async () => {
+-      await saveCheckoutCustomerAction(customer)
+-      if (saveAddress && isConnected) {
+-        await saveAddressAction({
++  async function validateAddress(): Promise<ValidationPhase> {
++    setValidationPhase('validating')
++    try {
++      const res = await fetch('/api/address-validate', {
++        method: 'POST',
++        headers: { 'Content-Type': 'application/json' },
++        body: JSON.stringify({
+           street: customer.street,
+           postalCode: customer.postalCode,
+           city: customer.city,
+           country: customer.country,
++        }),
++      })
++      const result = (await res.json()) as AddressValidationResult
++      if (result.status === 'suggested') {
++        setValidationSuggestion(result.suggestion)
++      }
++      setValidationPhase(result.status)
++      return result.status
++    } catch {
++      setValidationPhase('unavailable')
++      return 'unavailable'
++    }
++  }
++
++  async function proceedToPayment(withCustomer = customer) {
++    startTransition(async () => {
++      await saveCheckoutCustomerAction(withCustomer)
++      if (saveAddress && isConnected) {
++        const saved = await saveAddressAction({
++          street: withCustomer.street,
++          postalCode: withCustomer.postalCode,
++          city: withCustomer.city,
++          country: withCustomer.country,
+         })
++        if (!saved.ok) setAddressSaveError(true)
+       }
+       router.push(`/${locale}/products/checkout/paiement`)
+     })
+   }
+ 
++  async function handleContinue() {
++    setTouched({ email: true, name: true, street: true, postalCode: true, city: true })
++    if (!canContinue) return
++
++    // Already validated — proceed
++    if (validationPhase === 'invalid' || validationPhase === 'unavailable') {
++      await proceedToPayment()
++      return
++    }
++
++    // Validate address first
++    const result = await validateAddress()
++    if (result === 'confirmed' || result === 'unavailable') {
++      await proceedToPayment()
++    }
++    // 'suggested' or 'invalid' → show UI, wait for user action
++  }
++
++  async function handleUseSuggestion() {
++    if (!validationSuggestion) return
++    const updated: MockCheckoutCustomer = {
++      ...customer,
++      street: validationSuggestion.street,
++      postalCode: validationSuggestion.postalCode,
++      city: validationSuggestion.city,
++    }
++    setCustomer(updated)
++    setValidationPhase('confirmed')
++    await proceedToPayment(updated)
++  }
++
++  const isValidating = validationPhase === 'validating'
++  const showSuggestion = validationPhase === 'suggested' && validationSuggestion !== null
++  const showInvalidWarning = validationPhase === 'invalid'
++
+   return (
+-    <div className="px-4 pb-28 pt-5">
++    <div className="px-4 pb-40 pt-5">
+       <CheckoutSteps currentStep="infos" />
+ 
+       <h1 className="mt-1 text-2xl font-black text-white">Informations</h1>
+@@ -86,118 +171,143 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
+         <button
+           type="button"
+           onClick={() => setShowSheet(true)}
+-          className="mt-4 flex w-full items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white/70 transition-colors active:bg-white/[0.08]"
++          className="mt-4 flex w-full items-center gap-2 rounded-xl border border-lime-300/30 bg-lime-300/5 px-4 py-3 text-sm font-medium text-lime-300 transition-colors active:bg-lime-300/10"
+         >
+-          <MapPin className="h-4 w-4 shrink-0 text-lime-300" aria-hidden="true" />
+-          <span className="flex-1 text-left">Changer d'adresse</span>
++          <MapPin className="h-4 w-4 shrink-0" aria-hidden="true" />
++          <span className="flex-1 text-left">Utiliser une adresse sauvegardée</span>
+         </button>
+       )}
+ 
+       <div className="mt-6 space-y-4">
+-        <div className="space-y-1.5">
+-          <label htmlFor="checkout-email" className="block text-xs font-bold text-white/55">
+-            E-mail
+-          </label>
++        {/* E-mail */}
++        <div className="space-y-1">
++          <label htmlFor="checkout-email" className="block text-xs font-bold text-white/55">E-mail</label>
+           <input
+             id="checkout-email"
+-            required
+             value={customer.email}
+             onChange={(e) => setCustomer((v) => ({ ...v, email: e.target.value }))}
++            onBlur={() => touch('email')}
+             placeholder="votre@email.com"
+             type="email"
+             autoComplete="email"
+             className={INPUT_CLASS}
+           />
++          {touched.email && errors.email && <p className={ERROR_CLASS}>{errors.email}</p>}
+         </div>
+ 
+-        <div className="space-y-1.5">
+-          <label htmlFor="checkout-name" className="block text-xs font-bold text-white/55">
+-            Nom complet
+-          </label>
++        {/* Nom */}
++        <div className="space-y-1">
++          <label htmlFor="checkout-name" className="block text-xs font-bold text-white/55">Nom complet</label>
+           <input
+             id="checkout-name"
+-            required
+             value={customer.name}
+             onChange={(e) => setCustomer((v) => ({ ...v, name: e.target.value }))}
++            onBlur={() => touch('name')}
+             placeholder="Prénom Nom"
+             autoComplete="name"
+             className={INPUT_CLASS}
+           />
++          {touched.name && errors.name && <p className={ERROR_CLASS}>{errors.name}</p>}
+         </div>
+ 
+-        <div className="space-y-1.5">
+-          <label htmlFor="checkout-country" className="block text-xs font-bold text-white/55">
+-            Pays
+-          </label>
+-          <select
+-            id="checkout-country"
+-            value={customer.country}
+-            onChange={(e) => handleCountryChange(e.target.value)}
+-            autoComplete="country"
+-            className={`${INPUT_CLASS} appearance-none`}
+-          >
+-            {CHECKOUT_COUNTRIES.map((c) => (
+-              <option key={c.code} value={c.code} className="bg-[#0B0F15] text-white">
+-                {c.label}
+-              </option>
+-            ))}
+-          </select>
+-        </div>
+-
+-        <div className="space-y-1.5">
+-          <label htmlFor="checkout-street" className="block text-xs font-bold text-white/55">
+-            Rue et numéro
+-          </label>
++        {/* Rue */}
++        <div className="space-y-1">
++          <label htmlFor="checkout-street" className="block text-xs font-bold text-white/55">Rue et numéro</label>
+           <AddressAutocompleteInput
+             id="checkout-street"
+             value={customer.street}
+             country={customer.country}
+             placeholder="Rue de la Paix 10"
+             className={INPUT_CLASS}
+-            onChange={(street) => setCustomer((v) => ({ ...v, street }))}
+-            onSelect={({ street, postalCode, city }) =>
++            onChange={(street) => { setCustomer((v) => ({ ...v, street })); resetValidation() }}
++            onBlur={() => touch('street')}
++            onSelect={({ street, postalCode, city }) => {
+               setCustomer((v) => ({ ...v, street, postalCode, city }))
+-            }
++              setTouched((v) => ({ ...v, street: false, postalCode: false, city: false }))
++              resetValidation()
++            }}
+           />
++          {touched.street && errors.street && <p className={ERROR_CLASS}>{errors.street}</p>}
+         </div>
+ 
+-        <div className="space-y-1.5">
++        {/* Code postal + Ville */}
++        <div className="space-y-1">
+           <label className="block text-xs font-bold text-white/55">Code postal et ville</label>
+           <div className="flex gap-3">
+-            <input
+-              id="checkout-postal"
+-              required
+-              value={customer.postalCode}
+-              onChange={(e) => setCustomer((v) => ({ ...v, postalCode: e.target.value }))}
+-              placeholder="1000"
+-              inputMode="numeric"
+-              autoComplete="postal-code"
+-              className={`${INPUT_BASE} w-[38%]`}
+-            />
+-            <input
+-              id="checkout-city"
+-              required
+-              value={customer.city}
+-              onChange={(e) => setCustomer((v) => ({ ...v, city: e.target.value }))}
+-              placeholder="Bruxelles"
+-              autoComplete="address-level2"
+-              className={`${INPUT_BASE} flex-1`}
++            <div className="w-[38%]">
++              <input
++                id="checkout-postal"
++                value={customer.postalCode}
++                onChange={(e) => { setCustomer((v) => ({ ...v, postalCode: e.target.value })); resetValidation() }}
++                onBlur={() => touch('postalCode')}
++                placeholder="1000"
++                inputMode="numeric"
++                autoComplete="postal-code"
++                className={`${INPUT_BASE} w-full`}
++              />
++              {touched.postalCode && errors.postalCode && <p className={ERROR_CLASS}>{errors.postalCode}</p>}
++            </div>
++            <div className="flex-1">
++              <input
++                id="checkout-city"
++                value={customer.city}
++                onChange={(e) => { setCustomer((v) => ({ ...v, city: e.target.value })); resetValidation() }}
++                onBlur={() => touch('city')}
++                placeholder="Bruxelles"
++                autoComplete="address-level2"
++                className={`${INPUT_BASE} w-full`}
++              />
++              {touched.city && errors.city && <p className={ERROR_CLASS}>{errors.city}</p>}
++            </div>
++          </div>
++        </div>
++
++        {/* Pays */}
++        <div className="space-y-1">
++          <label htmlFor="checkout-country" className="block text-xs font-bold text-white/55">Pays</label>
++          <div className="relative">
++            <select
++              id="checkout-country"
++              value={customer.country}
++              onChange={(e) => handleCountryChange(e.target.value)}
++              autoComplete="country"
++              className={`${INPUT_CLASS} appearance-none pr-10`}
++            >
++              {CHECKOUT_COUNTRIES.map((c) => (
++                <option key={c.code} value={c.code} className="bg-[#0B0F15] text-white">
++                  {c.label}
++                </option>
++              ))}
++            </select>
++            <ChevronDown
++              className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40"
++              aria-hidden="true"
+             />
+           </div>
+         </div>
+ 
++        {/* Toggle sauvegarder */}
+         {isConnected && (
+-          <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3">
+-            <input
+-              type="checkbox"
+-              checked={saveAddress}
+-              onChange={(e) => setSaveAddress(e.target.checked)}
+-              className="h-4 w-4 accent-lime-300"
+-            />
+-            <span className="text-sm font-medium text-white/70">
+-              Sauvegarder cette adresse dans mon profil
+-            </span>
+-          </label>
++          <div>
++            <button
++              type="button"
++              onClick={() => setSaveAddress((v) => !v)}
++              className="flex w-full items-center justify-between rounded-xl border border-white/10 bg-white/[0.04] px-4 py-4 text-left transition-colors active:bg-white/[0.07]"
++            >
++              <div>
++                <p className="text-sm font-semibold text-white">Sauvegarder cette adresse</p>
++                <p className="mt-0.5 text-xs text-white/40">Retrouve-la à ta prochaine commande</p>
++              </div>
++              <div className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${saveAddress ? 'bg-lime-300' : 'bg-white/20'}`}>
++                <div className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${saveAddress ? 'translate-x-[1.375rem]' : 'translate-x-0.5'}`} />
++              </div>
++            </button>
++            {addressSaveError && (
++              <p className="mt-1 px-1 text-xs text-red-400/80">
++                L'adresse n'a pas pu être sauvegardée — ajoute-la depuis ton profil.
++              </p>
++            )}
++          </div>
+         )}
+       </div>
+ 
+@@ -209,16 +319,76 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
+         />
+       )}
+ 
+-      <div className="fixed inset-x-0 bottom-0 border-t border-white/5 bg-[#0B0F15]/80 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-lg">
+-        <button
+-          type="button"
+-          disabled={isPending || !canContinue}
+-          onClick={handleContinue}
+-          className="flex w-full items-center justify-center gap-2 rounded-2xl bg-lime-300 py-4 text-[15px] font-black text-[#0B0F15] disabled:opacity-60"
+-        >
+-          {isPending && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}
+-          {isPending ? 'Enregistrement...' : 'Continuer vers le paiement'}
+-        </button>
++      {/* Fixed bottom bar */}
++      <div className="fixed inset-x-0 bottom-0 border-t border-white/5 bg-[#0B0F15]/95 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 backdrop-blur-lg">
++
++        {/* Suggestion card */}
++        {showSuggestion && validationSuggestion && (
++          <div className="mb-3 rounded-xl border border-amber-400/20 bg-amber-400/5 p-3.5">
++            <div className="flex items-start gap-2">
++              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" aria-hidden="true" />
++              <div className="flex-1">
++                <p className="text-xs font-bold text-amber-400">Vouliez-vous dire ?</p>
++                <p className="mt-1 text-sm font-medium text-white">{validationSuggestion.label}</p>
++              </div>
++            </div>
++            <div className="mt-3 flex gap-2">
++              <button
++                type="button"
++                onClick={handleUseSuggestion}
++                disabled={isPending}
++                className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-lime-300 py-3 text-sm font-black text-[#0B0F15] disabled:opacity-60"
++              >
++                <CheckCircle className="h-4 w-4" aria-hidden="true" />
++                Utiliser cette adresse
++              </button>
++              <button
++                type="button"
++                onClick={() => proceedToPayment()}
++                disabled={isPending}
++                className="flex-1 rounded-xl border border-white/10 py-3 text-sm font-semibold text-white/60 disabled:opacity-60"
++              >
++                Garder la mienne
++              </button>
++            </div>
++          </div>
++        )}
++
++        {/* Invalid warning */}
++        {showInvalidWarning && (
++          <div className="mb-3 rounded-xl border border-red-500/20 bg-red-500/5 p-3.5">
++            <div className="flex items-start gap-2">
++              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" aria-hidden="true" />
++              <div>
++                <p className="text-xs font-bold text-red-400">Adresse non reconnue</p>
++                <p className="mt-0.5 text-xs text-white/55">
++                  On n'a pas pu vérifier cette adresse. Vérifie qu'elle est correcte, ou continue quand même.
++                </p>
++              </div>
++            </div>
++          </div>
++        )}
++
++        {/* Main CTA — hidden when suggestion is shown (user must choose) */}
++        {!showSuggestion && (
++          <button
++            type="button"
++            disabled={isPending || isValidating}
++            onClick={handleContinue}
++            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-lime-300 py-4 text-[15px] font-black text-[#0B0F15] disabled:opacity-60"
++          >
++            {(isPending || isValidating) && (
++              <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
++            )}
++            {isValidating
++              ? "Vérification de l'adresse…"
++              : isPending
++                ? 'Enregistrement…'
++                : showInvalidWarning
++                  ? 'Continuer quand même'
++                  : 'Continuer vers le paiement'}
++          </button>
++        )}
+       </div>
+     </div>
+   )
+diff --git a/apps/web-client/src/app/[locale]/(screens)/products/checkout/infos/saved-addresses-sheet.tsx b/apps/web-client/src/app/[locale]/(screens)/products/checkout/infos/saved-addresses-sheet.tsx
+index de594366..d3e1f0df 100644
+--- a/apps/web-client/src/app/[locale]/(screens)/products/checkout/infos/saved-addresses-sheet.tsx
++++ b/apps/web-client/src/app/[locale]/(screens)/products/checkout/infos/saved-addresses-sheet.tsx
+@@ -1,10 +1,9 @@
+-// saved-addresses-sheet.tsx
+ 'use client'
+ 
+ import { X } from 'lucide-react'
+ import { useEffect } from 'react'
+ import type { MockUserAddress } from '@/lib/mock/mock-addresses'
+-import { getCountryLabel } from '@/lib/checkout-countries'
++import { AddressLine } from '@/app/[locale]/(screens)/profile/settings/addresses/address-line'
+ 
+ type Props = {
+   addresses: MockUserAddress[]
+@@ -47,7 +46,7 @@ export function SavedAddressesSheet({ addresses, onSelect, onClose }: Props) {
+           </button>
+         </div>
+ 
+-        <ul className="max-h-72 overflow-y-auto px-4 space-y-2">
++        <ul className="max-h-72 overflow-y-auto space-y-2 px-4">
+           {addresses.map((address) => (
+             <li key={address.id}>
+               <button
+@@ -55,17 +54,7 @@ export function SavedAddressesSheet({ addresses, onSelect, onClose }: Props) {
+                 onClick={() => { onSelect(address); onClose() }}
+                 className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-left transition-colors active:bg-white/[0.08]"
+               >
+-                <div className="flex items-center justify-between">
+-                  <span className="text-sm font-semibold text-white">{address.street}</span>
+-                  {address.isDefault && (
+-                    <span className="rounded-full bg-lime-300/10 px-2 py-0.5 text-[10px] font-bold text-lime-300">
+-                      Par défaut
+-                    </span>
+-                  )}
+-                </div>
+-                <p className="mt-0.5 text-xs text-white/50">
+-                  {address.postalCode} {address.city} · {getCountryLabel(address.country)}
+-                </p>
++                <AddressLine address={address} />
+               </button>
+             </li>
+           ))}
+diff --git a/apps/web-client/src/app/[locale]/(screens)/profile/settings/addresses/address-actions.ts b/apps/web-client/src/app/[locale]/(screens)/profile/settings/addresses/address-actions.ts
+index 548ad325..d9b74720 100644
+--- a/apps/web-client/src/app/[locale]/(screens)/profile/settings/addresses/address-actions.ts
++++ b/apps/web-client/src/app/[locale]/(screens)/profile/settings/addresses/address-actions.ts
+@@ -5,6 +5,7 @@ import {
+   addAddress,
+   removeAddress,
+   setDefaultAddress,
++  updateAddress,
+ } from '@/lib/mock/mock-addresses'
+ import {
+   getCurrentMockAddresses,
+@@ -12,20 +13,22 @@ import {
+ } from '@/lib/mock/mock-addresses-server'
+ import { getMockViewerSession } from '@/lib/mock/mock-session-server'
+ 
+-export async function removeAddressAction(id: string): Promise<void> {
++export async function removeAddressAction(id: string): Promise<{ ok: boolean }> {
+   const session = await getMockViewerSession()
+-  if (!session) return
++  if (!session) return { ok: false }
+   const addresses = await getCurrentMockAddresses()
+   await setCurrentMockAddresses(removeAddress(addresses, id, session.viewerId))
+   revalidatePath('/profile/settings/addresses')
++  return { ok: true }
+ }
+ 
+-export async function setDefaultAddressAction(id: string): Promise<void> {
++export async function setDefaultAddressAction(id: string): Promise<{ ok: boolean }> {
+   const session = await getMockViewerSession()
+-  if (!session) return
++  if (!session) return { ok: false }
+   const addresses = await getCurrentMockAddresses()
+   await setCurrentMockAddresses(setDefaultAddress(addresses, id, session.viewerId))
+   revalidatePath('/profile/settings/addresses')
++  return { ok: true }
+ }
+ 
+ export async function addAddressAction(address: {
+@@ -33,10 +36,23 @@ export async function addAddressAction(address: {
+   postalCode: string
+   city: string
+   country: string
+-}): Promise<void> {
++}): Promise<{ ok: boolean }> {
+   const session = await getMockViewerSession()
+-  if (!session) return
++  if (!session) return { ok: false }
+   const addresses = await getCurrentMockAddresses()
+   await setCurrentMockAddresses(addAddress(addresses, { userId: session.viewerId, ...address }))
+   revalidatePath('/profile/settings/addresses')
++  return { ok: true }
++}
++
++export async function updateAddressAction(
++  id: string,
++  address: { street: string; postalCode: string; city: string; country: string },
++): Promise<{ ok: boolean }> {
++  const session = await getMockViewerSession()
++  if (!session) return { ok: false }
++  const addresses = await getCurrentMockAddresses()
++  await setCurrentMockAddresses(updateAddress(addresses, id, session.viewerId, address))
++  revalidatePath('/profile/settings/addresses')
++  return { ok: true }
+ }
+diff --git a/apps/web-client/src/app/[locale]/(screens)/profile/settings/addresses/address-line.tsx b/apps/web-client/src/app/[locale]/(screens)/profile/settings/addresses/address-line.tsx
+new file mode 100644
+index 00000000..749aa721
+--- /dev/null
++++ b/apps/web-client/src/app/[locale]/(screens)/profile/settings/addresses/address-line.tsx
+@@ -0,0 +1,27 @@
++import { MapPin } from 'lucide-react'
++import type { MockUserAddress } from '@/lib/mock/mock-addresses'
++import { getCountryLabel } from '@/lib/checkout-countries'
++
++type Props = {
++  address: Pick<MockUserAddress, 'street' | 'postalCode' | 'city' | 'country' | 'isDefault'>
++  showIcon?: boolean
++}
++
++export function AddressLine({ address, showIcon = false }: Props) {
++  return (
++    <div className="flex items-start gap-3">
++      {showIcon && <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-white/40" aria-hidden="true" />}
++      <div>
++        <p className="text-sm font-semibold text-white">{address.street}</p>
++        <p className="mt-0.5 text-xs text-white/50">
++          {address.postalCode} {address.city} · {getCountryLabel(address.country)}
++        </p>
++        {address.isDefault && (
++          <span className="mt-1.5 inline-block rounded-full bg-lime-300/10 px-2 py-0.5 text-[10px] font-bold text-lime-300">
++            Par défaut
++          </span>
++        )}
++      </div>
++    </div>
++  )
++}
+diff --git a/apps/web-client/src/app/[locale]/(screens)/profile/settings/addresses/addresses-client.tsx b/apps/web-client/src/app/[locale]/(screens)/profile/settings/addresses/addresses-client.tsx
+index dc7b0f0d..8e79ad7f 100644
+--- a/apps/web-client/src/app/[locale]/(screens)/profile/settings/addresses/addresses-client.tsx
++++ b/apps/web-client/src/app/[locale]/(screens)/profile/settings/addresses/addresses-client.tsx
+@@ -1,44 +1,206 @@
+ 'use client'
+ 
+-import { ChevronLeft, MapPin, Plus, Star, Trash2 } from 'lucide-react'
++import { ChevronDown, ChevronLeft, Pencil, Plus, Trash2 } from 'lucide-react'
+ import { useState, useTransition } from 'react'
+ import { useRouter } from '@/i18n/navigation'
+ import type { MockUserAddress } from '@/lib/mock/mock-addresses'
+-import { getCountryLabel } from '@/lib/checkout-countries'
+-import { AddressAutocompleteInput } from '@/app/[locale]/(screens)/products/checkout/infos/address-autocomplete-input'
++import { AddressAutocompleteInput } from '@/app/[locale]/(screens)/_components/address-autocomplete-input'
+ import { CHECKOUT_COUNTRIES } from '@/lib/checkout-countries'
+ import {
+   addAddressAction,
+   removeAddressAction,
+   setDefaultAddressAction,
++  updateAddressAction,
+ } from './address-actions'
++import { AddressLine } from './address-line'
+ 
+ type Props = { addresses: MockUserAddress[] }
+ 
++type AddressForm = { street: string; postalCode: string; city: string; country: string }
++
++const EMPTY_FORM: AddressForm = { street: '', postalCode: '', city: '', country: 'BE' }
++
+ const INPUT_BASE =
+-  'h-12 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-sm text-white placeholder:text-white/25'
++  'h-12 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25'
+ const INPUT_CLASS = `${INPUT_BASE} w-full`
+ 
++function AddressForm({
++  form,
++  onChange,
++  onSelect,
++  isLoading,
++  error,
++  onCancel,
++  onSubmit,
++  submitLabel,
++}: {
++  form: AddressForm
++  onChange: (f: AddressForm) => void
++  onSelect: (f: AddressForm) => void
++  isLoading: boolean
++  error: string | null
++  onCancel: () => void
++  onSubmit: () => void
++  submitLabel: string
++}) {
++  const canSubmit = !isLoading && form.street.length > 0 && form.postalCode.length > 0 && form.city.length > 0
++
++  return (
++    <div className="space-y-3">
++      {/* Pays */}
++      <div className="relative">
++        <select
++          value={form.country}
++          onChange={(e) => onChange({ ...form, country: e.target.value, street: '', postalCode: '', city: '' })}
++          className={`${INPUT_CLASS} appearance-none pr-10`}
++        >
++          {CHECKOUT_COUNTRIES.map((c) => (
++            <option key={c.code} value={c.code} className="bg-[#0B0F15]">{c.label}</option>
++          ))}
++        </select>
++        <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" aria-hidden="true" />
++      </div>
++
++      {/* Rue avec autocomplete */}
++      <AddressAutocompleteInput
++        id={`address-street-${form.country}`}
++        value={form.street}
++        country={form.country}
++        placeholder="Rue et numéro"
++        className={INPUT_CLASS}
++        onChange={(street) => onChange({ ...form, street })}
++        onSelect={({ street, postalCode, city }) => onSelect({ ...form, street, postalCode, city })}
++      />
++
++      {/* CP + Ville */}
++      <div className="flex gap-2">
++        <input
++          value={form.postalCode}
++          onChange={(e) => onChange({ ...form, postalCode: e.target.value })}
++          placeholder="Code postal"
++          className={`${INPUT_BASE} w-[38%]`}
++        />
++        <input
++          value={form.city}
++          onChange={(e) => onChange({ ...form, city: e.target.value })}
++          placeholder="Ville"
++          className={`${INPUT_BASE} flex-1`}
++        />
++      </div>
++
++      {error && <p className="text-xs text-red-400/80">{error}</p>}
++
++      <div className="flex gap-2 pt-1">
++        <button
++          type="button"
++          onClick={onCancel}
++          className="flex-1 rounded-xl border border-white/10 py-3 text-sm font-semibold text-white/60 active:bg-white/5"
++        >
++          Annuler
++        </button>
++        <button
++          type="button"
++          onClick={onSubmit}
++          disabled={!canSubmit}
++          className="flex-1 rounded-xl bg-lime-300 py-3 text-sm font-black text-[#0B0F15] disabled:opacity-50"
++        >
++          {isLoading ? 'Sauvegarde…' : submitLabel}
++        </button>
++      </div>
++    </div>
++  )
++}
++
+ export function AddressesClient({ addresses }: Props) {
+   const router = useRouter()
+-  const [isPending, startTransition] = useTransition()
++  const [, startTransition] = useTransition()
++  const [pendingId, setPendingId] = useState<string | null>(null)
++  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
++  const [editingId, setEditingId] = useState<string | null>(null)
++  const [editForm, setEditForm] = useState<AddressForm>(EMPTY_FORM)
++  const [isEditing, setIsEditing] = useState(false)
++  const [editError, setEditError] = useState<string | null>(null)
+   const [showAddForm, setShowAddForm] = useState(false)
+-  const [form, setForm] = useState({ street: '', postalCode: '', city: '', country: 'BE' })
++  const [addForm, setAddForm] = useState<AddressForm>(EMPTY_FORM)
++  const [isAdding, setIsAdding] = useState(false)
++  const [addError, setAddError] = useState<string | null>(null)
++  const [actionError, setActionError] = useState<string | null>(null)
+ 
+   function handleRemove(id: string) {
+-    startTransition(async () => { await removeAddressAction(id) })
++    if (confirmDeleteId !== id) {
++      setConfirmDeleteId(id)
++      return
++    }
++    setConfirmDeleteId(null)
++    setPendingId(id)
++    setActionError(null)
++    startTransition(async () => {
++      const result = await removeAddressAction(id)
++      if (!result.ok) setActionError('La suppression a échoué. Reconnecte-toi et réessaie.')
++      setPendingId(null)
++    })
+   }
+ 
+   function handleSetDefault(id: string) {
+-    startTransition(async () => { await setDefaultAddressAction(id) })
++    setPendingId(id)
++    setActionError(null)
++    startTransition(async () => {
++      const result = await setDefaultAddressAction(id)
++      if (!result.ok) setActionError('La modification a échoué. Reconnecte-toi et réessaie.')
++      setPendingId(null)
++    })
++  }
++
++  function startEdit(address: MockUserAddress) {
++    setEditingId(address.id)
++    setEditForm({
++      street: address.street,
++      postalCode: address.postalCode,
++      city: address.city,
++      country: address.country,
++    })
++    setEditError(null)
++  }
++
++  function handleEdit() {
++    if (!editingId) return
++    setIsEditing(true)
++    setEditError(null)
++    startTransition(async () => {
++      try {
++        const result = await updateAddressAction(editingId, editForm)
++        if (!result.ok) {
++          setEditError("L'adresse n'a pas pu être modifiée. Reconnecte-toi et réessaie.")
++          setIsEditing(false)
++          return
++        }
++        setEditingId(null)
++      } catch {
++        setEditError('Une erreur est survenue. Vérifie ta connexion et réessaie.')
++      } finally {
++        setIsEditing(false)
++      }
++    })
+   }
+ 
+   function handleAdd() {
+-    if (!form.street || !form.postalCode || !form.city) return
++    setIsAdding(true)
++    setAddError(null)
+     startTransition(async () => {
+-      await addAddressAction(form)
+-      setForm({ street: '', postalCode: '', city: '', country: 'BE' })
+-      setShowAddForm(false)
++      try {
++        const result = await addAddressAction(addForm)
++        if (!result.ok) {
++          setAddError("L'adresse n'a pas pu être sauvegardée. Reconnecte-toi et réessaie.")
++          setIsAdding(false)
++          return
++        }
++        setAddForm(EMPTY_FORM)
++        setShowAddForm(false)
++      } catch {
++        setAddError('Une erreur est survenue. Vérifie ta connexion et réessaie.')
++      } finally {
++        setIsAdding(false)
++      }
+     })
+   }
+ 
+@@ -62,126 +224,128 @@ export function AddressesClient({ addresses }: Props) {
+       </header>
+ 
+       <main className="mt-[calc(env(safe-area-inset-top)+4rem)] flex-1 px-4">
+-        {addresses.length === 0 && !showAddForm && (
+-          <p className="mt-8 text-center text-sm text-white/40">
+-            Aucune adresse sauvegardée.
++        {actionError && (
++          <p className="mt-4 rounded-xl bg-red-500/10 px-4 py-3 text-xs font-medium text-red-400">
++            {actionError}
+           </p>
+         )}
+ 
++        {addresses.length === 0 && !showAddForm && (
++          <p className="mt-8 text-center text-sm text-white/40">Aucune adresse sauvegardée.</p>
++        )}
++
+         <ul className="mt-4 space-y-3">
+-          {addresses.map((address) => (
+-            <li
+-              key={address.id}
+-              className="rounded-2xl border border-white/8 bg-white/[0.03] p-4"
+-            >
+-              <div className="flex items-start justify-between gap-3">
+-                <div className="flex items-start gap-3">
+-                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-white/40" aria-hidden="true" />
+-                  <div>
+-                    <p className="text-sm font-semibold text-white">{address.street}</p>
+-                    <p className="mt-0.5 text-xs text-white/50">
+-                      {address.postalCode} {address.city} · {getCountryLabel(address.country)}
++          {addresses.map((address) => {
++            const rowPending = pendingId === address.id
++            const isEditingThis = editingId === address.id
++            const isConfirmingDelete = confirmDeleteId === address.id
++
++            return (
++              <li key={address.id} className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
++                {isEditingThis ? (
++                  <>
++                    <p className="mb-3 text-xs font-bold uppercase tracking-widest text-white/40">
++                      Modifier l'adresse
+                     </p>
+-                    {address.isDefault && (
+-                      <span className="mt-1.5 inline-block rounded-full bg-lime-300/10 px-2 py-0.5 text-[10px] font-bold text-lime-300">
+-                        Par défaut
+-                      </span>
+-                    )}
+-                  </div>
+-                </div>
+-
+-                <div className="flex shrink-0 gap-2">
+-                  {!address.isDefault && (
+-                    <button
+-                      type="button"
+-                      onClick={() => handleSetDefault(address.id)}
+-                      disabled={isPending}
+-                      className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 transition-colors active:bg-white/10"
+-                      aria-label="Définir par défaut"
+-                    >
+-                      <Star className="h-3.5 w-3.5 text-white/50" aria-hidden="true" />
+-                    </button>
+-                  )}
+-                  <button
+-                    type="button"
+-                    onClick={() => handleRemove(address.id)}
+-                    disabled={isPending}
+-                    className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 transition-colors active:bg-red-500/20"
+-                    aria-label="Supprimer"
+-                  >
+-                    <Trash2 className="h-3.5 w-3.5 text-red-400/70" aria-hidden="true" />
+-                  </button>
+-                </div>
+-              </div>
+-            </li>
+-          ))}
++                    <AddressForm
++                      form={editForm}
++                      onChange={setEditForm}
++                      onSelect={setEditForm}
++                      isLoading={isEditing}
++                      error={editError}
++                      onCancel={() => setEditingId(null)}
++                      onSubmit={handleEdit}
++                      submitLabel="Enregistrer"
++                    />
++                  </>
++                ) : (
++                  <>
++                    <AddressLine address={address} showIcon />
++
++                    <div className="mt-3 flex items-center gap-3">
++                      {/* Définir par défaut */}
++                      {!address.isDefault && (
++                        <button
++                          type="button"
++                          onClick={() => handleSetDefault(address.id)}
++                          disabled={rowPending}
++                          className="text-xs font-semibold text-white/50 underline-offset-2 hover:text-white/80 disabled:opacity-40"
++                        >
++                          Définir par défaut
++                        </button>
++                      )}
++
++                      <div className="ml-auto flex items-center gap-2">
++                        {/* Modifier */}
++                        <button
++                          type="button"
++                          onClick={() => { setConfirmDeleteId(null); startEdit(address) }}
++                          disabled={rowPending}
++                          className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 transition-colors active:bg-white/10 disabled:opacity-40"
++                          aria-label="Modifier"
++                        >
++                          <Pencil className="h-3.5 w-3.5 text-white/50" aria-hidden="true" />
++                        </button>
++
++                        {/* Supprimer */}
++                        {isConfirmingDelete ? (
++                          <div className="flex items-center gap-2">
++                            <button
++                              type="button"
++                              onClick={() => setConfirmDeleteId(null)}
++                              className="rounded-lg border border-white/10 px-3 py-1.5 text-xs font-semibold text-white/60 active:bg-white/5"
++                            >
++                              Annuler
++                            </button>
++                            <button
++                              type="button"
++                              onClick={() => handleRemove(address.id)}
++                              disabled={rowPending}
++                              className="rounded-lg bg-red-500/15 border border-red-500/30 px-3 py-1.5 text-xs font-bold text-red-400 active:bg-red-500/25 disabled:opacity-40"
++                            >
++                              Confirmer
++                            </button>
++                          </div>
++                        ) : (
++                          <button
++                            type="button"
++                            onClick={() => handleRemove(address.id)}
++                            disabled={rowPending}
++                            className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 transition-colors active:bg-red-500/20 disabled:opacity-40"
++                            aria-label="Supprimer"
++                          >
++                            <Trash2 className="h-3.5 w-3.5 text-red-400/70" aria-hidden="true" />
++                          </button>
++                        )}
++                      </div>
++                    </div>
++                  </>
++                )}
++              </li>
++            )
++          })}
+         </ul>
+ 
+-        {showAddForm && (
+-          <div className="mt-4 space-y-3 rounded-2xl border border-white/8 bg-white/[0.03] p-4">
+-            <p className="text-xs font-bold uppercase tracking-widest text-white/40">Nouvelle adresse</p>
+-
+-            <select
+-              value={form.country}
+-              onChange={(e) => setForm((v) => ({ ...v, country: e.target.value, street: '', postalCode: '', city: '' }))}
+-              className={`${INPUT_CLASS} appearance-none`}
+-            >
+-              {CHECKOUT_COUNTRIES.map((c) => (
+-                <option key={c.code} value={c.code} className="bg-[#0B0F15]">{c.label}</option>
+-              ))}
+-            </select>
+-
+-            <AddressAutocompleteInput
+-              id="new-address-street"
+-              value={form.street}
+-              country={form.country}
+-              placeholder="Rue et numéro"
+-              className={INPUT_CLASS}
+-              onChange={(street) => setForm((v) => ({ ...v, street }))}
+-              onSelect={({ street, postalCode, city }) =>
+-                setForm((v) => ({ ...v, street, postalCode, city }))
+-              }
++        {showAddForm ? (
++          <div className="mt-4 rounded-2xl border border-white/8 bg-white/[0.03] p-4">
++            <p className="mb-3 text-xs font-bold uppercase tracking-widest text-white/40">
++              Nouvelle adresse
++            </p>
++            <AddressForm
++              form={addForm}
++              onChange={setAddForm}
++              onSelect={setAddForm}
++              isLoading={isAdding}
++              error={addError}
++              onCancel={() => { setShowAddForm(false); setAddError(null) }}
++              onSubmit={handleAdd}
++              submitLabel="Sauvegarder"
+             />
+-
+-            <div className="flex gap-2">
+-              <input
+-                value={form.postalCode}
+-                onChange={(e) => setForm((v) => ({ ...v, postalCode: e.target.value }))}
+-                placeholder="Code postal"
+-                className={`${INPUT_BASE} w-[38%]`}
+-              />
+-              <input
+-                value={form.city}
+-                onChange={(e) => setForm((v) => ({ ...v, city: e.target.value }))}
+-                placeholder="Ville"
+-                className={`${INPUT_BASE} flex-1`}
+-              />
+-            </div>
+-
+-            <div className="flex gap-2 pt-1">
+-              <button
+-                type="button"
+-                onClick={() => setShowAddForm(false)}
+-                className="flex-1 rounded-xl border border-white/10 py-3 text-sm font-semibold text-white/60"
+-              >
+-                Annuler
+-              </button>
+-              <button
+-                type="button"
+-                onClick={handleAdd}
+-                disabled={isPending || !form.street || !form.postalCode || !form.city}
+-                className="flex-1 rounded-xl bg-lime-300 py-3 text-sm font-black text-[#0B0F15] disabled:opacity-50"
+-              >
+-                {isPending ? 'Sauvegarde…' : 'Sauvegarder'}
+-              </button>
+-            </div>
+           </div>
+-        )}
+-
+-        {!showAddForm && (
++        ) : (
+           <button
+             type="button"
+-            onClick={() => setShowAddForm(true)}
++            onClick={() => { setEditingId(null); setShowAddForm(true) }}
+             className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-white/20 py-4 text-sm font-semibold text-white/50 transition-colors active:bg-white/5"
+           >
+             <Plus className="h-4 w-4" aria-hidden="true" />
+diff --git a/apps/web-client/src/app/api/address-autocomplete/route.ts b/apps/web-client/src/app/api/address-autocomplete/route.ts
+index e7bedb09..44a821c6 100644
+--- a/apps/web-client/src/app/api/address-autocomplete/route.ts
++++ b/apps/web-client/src/app/api/address-autocomplete/route.ts
+@@ -1,7 +1,7 @@
+ import { NextRequest, NextResponse } from 'next/server'
+ import type { AddressSuggestion } from '@/lib/address-autocomplete'
+ 
+-const GEOAPIFY_API_KEY = process.env.GEOAPIFY_API_KEY ?? ''
++const GEOAPIFY_API_KEY = process.env.GEOAPIFY_API_KEY ?? '76c8b6833fa94d18932e6b80cd71e4f8'
+ const GEOAPIFY_URL = 'https://api.geoapify.com/v1/geocode/autocomplete'
+ 
+ type GeoapifyFeature = {
+diff --git a/apps/web-client/src/app/api/address-validate/route.ts b/apps/web-client/src/app/api/address-validate/route.ts
+new file mode 100644
+index 00000000..32627d3d
+--- /dev/null
++++ b/apps/web-client/src/app/api/address-validate/route.ts
+@@ -0,0 +1,70 @@
++import { NextRequest, NextResponse } from 'next/server'
++import type { AddressValidationResult } from '@/lib/address-validation'
++
++const GEOAPIFY_API_KEY = process.env.GEOAPIFY_API_KEY ?? '76c8b6833fa94d18932e6b80cd71e4f8'
++const GEOAPIFY_SEARCH_URL = 'https://api.geoapify.com/v1/geocode/search'
++
++type GeoapifyFeature = {
++  properties: {
++    formatted?: string
++    address_line1?: string
++    postcode?: string
++    city?: string
++    rank?: { confidence?: number }
++  }
++}
++
++export async function POST(request: NextRequest) {
++  let body: { street?: string; postalCode?: string; city?: string; country?: string }
++  try {
++    body = (await request.json()) as typeof body
++  } catch {
++    return NextResponse.json<AddressValidationResult>({ status: 'invalid' })
++  }
++
++  const { street = '', postalCode = '', city = '', country = 'be' } = body
++  if (!street || !postalCode || !city) {
++    return NextResponse.json<AddressValidationResult>({ status: 'invalid' })
++  }
++
++  const text = `${street}, ${postalCode} ${city}`
++  const url = new URL(GEOAPIFY_SEARCH_URL)
++  url.searchParams.set('text', text)
++  url.searchParams.set('filter', `countrycode:${country.toLowerCase()}`)
++  url.searchParams.set('limit', '1')
++  url.searchParams.set('apiKey', GEOAPIFY_API_KEY)
++
++  try {
++    const res = await fetch(url.toString())
++    if (!res.ok) return NextResponse.json<AddressValidationResult>({ status: 'unavailable' })
++
++    const data = (await res.json()) as { features?: GeoapifyFeature[] }
++    const feature = data.features?.[0]
++
++    if (!feature) return NextResponse.json<AddressValidationResult>({ status: 'invalid' })
++
++    const p = feature.properties
++    const confidence = p.rank?.confidence ?? 0
++
++    if (confidence >= 0.75) {
++      return NextResponse.json<AddressValidationResult>({ status: 'confirmed' })
++    }
++
++    if (confidence >= 0.4 && p.address_line1 && p.postcode && p.city) {
++      return NextResponse.json<AddressValidationResult>({
++        status: 'suggested',
++        suggestion: {
++          street: p.address_line1,
++          postalCode: p.postcode,
++          city: p.city,
++          label: p.formatted ?? `${p.address_line1}, ${p.postcode} ${p.city}`,
++        },
++      })
++    }
++
++    return NextResponse.json<AddressValidationResult>({ status: 'invalid' })
++  } catch {
++    // Network error — let the user proceed rather than block checkout
++    return NextResponse.json<AddressValidationResult>({ status: 'unavailable' })
++  }
++}
+diff --git a/apps/web-client/src/app/globals.css b/apps/web-client/src/app/globals.css
+index f438f8c7..3e606d64 100644
+--- a/apps/web-client/src/app/globals.css
++++ b/apps/web-client/src/app/globals.css
+@@ -7,6 +7,15 @@
+ 
+ @source "../**/*.{ts,tsx}";
+ 
++/* Prevent iOS Safari from zooming on input focus (requires font-size >= 16px).
++   Unlayered rules take priority over Tailwind @layer utilities, so this safely
++   overrides text-sm/text-xs on form elements without touching other elements. */
++input,
++select,
++textarea {
++  font-size: max(1rem, 16px);
++}
++
+ /* Reset styles to eliminate browser defaults */
+ html,
+ body {
+diff --git a/apps/web-client/src/lib/address-validation.ts b/apps/web-client/src/lib/address-validation.ts
+new file mode 100644
+index 00000000..64aaf4a3
+--- /dev/null
++++ b/apps/web-client/src/lib/address-validation.ts
+@@ -0,0 +1,12 @@
++export type ValidationSuggestion = {
++  street: string
++  postalCode: string
++  city: string
++  label: string
++}
++
++export type AddressValidationResult =
++  | { status: 'confirmed' }
++  | { status: 'suggested'; suggestion: ValidationSuggestion }
++  | { status: 'invalid' }
++  | { status: 'unavailable' }
+diff --git a/apps/web-client/src/lib/mock/mock-addresses.test.ts b/apps/web-client/src/lib/mock/mock-addresses.test.ts
+index be3b38e5..8c64a773 100644
+--- a/apps/web-client/src/lib/mock/mock-addresses.test.ts
++++ b/apps/web-client/src/lib/mock/mock-addresses.test.ts
+@@ -60,7 +60,7 @@ describe('getDefaultAddress', () => {
+   })
+ 
+   it('returns undefined when user has no addresses', () => {
+-    expect(getDefaultAddress([BASE], 'user-b')).toBeUndefined()
++    expect(getDefaultAddress([BASE], 'user-b')).toBe(undefined)
+   })
+ })
+ 
+@@ -82,7 +82,7 @@ describe('addAddress', () => {
+       fixedNow,
+       'addr-test-1',
+     )
+-    expect(result).toHaveLength(1)
++    expect(result.length).toBe(1)
+     expect(result[0]?.isDefault).toBe(true)
+     expect(result[0]?.id).toBe('addr-test-1')
+     expect(result[0]?.createdAt).toBe('2026-05-01T00:00:00.000Z')
+@@ -95,7 +95,7 @@ describe('addAddress', () => {
+       fixedNow,
+       'addr-test-2',
+     )
+-    expect(result).toHaveLength(2)
++    expect(result.length).toBe(2)
+     expect(result.find((a) => a.id === 'addr-test-2')?.isDefault).toBe(false)
+   })
+ })
+@@ -117,7 +117,7 @@ describe('setDefaultAddress', () => {
+ describe('removeAddress', () => {
+   it('removes the address with the given id', () => {
+     const result = removeAddress([BASE, SECOND], 'addr-1', 'user-a')
+-    expect(result).toHaveLength(1)
++    expect(result.length).toBe(1)
+     expect(result[0]?.id).toBe('addr-2')
+   })
+ 
+@@ -130,7 +130,7 @@ describe('removeAddress', () => {
+     const ownAddr: MockUserAddress = { ...BASE, id: 'addr-1', userId: 'user-a' }
+     const otherAddr: MockUserAddress = { ...BASE, id: 'addr-1', userId: 'user-b' }
+     const result = removeAddress([ownAddr, otherAddr], 'addr-1', 'user-a')
+-    expect(result).toHaveLength(1)
++    expect(result.length).toBe(1)
+     expect(result[0]?.userId).toBe('user-b')
+   })
+ })
+diff --git a/apps/web-client/src/lib/mock/mock-addresses.ts b/apps/web-client/src/lib/mock/mock-addresses.ts
+index 529d11e9..2e89b3a6 100644
+--- a/apps/web-client/src/lib/mock/mock-addresses.ts
++++ b/apps/web-client/src/lib/mock/mock-addresses.ts
+@@ -102,6 +102,17 @@ export function setDefaultAddress(
+   )
+ }
+ 
++export function updateAddress(
++  addresses: MockUserAddress[],
++  id: string,
++  userId: string,
++  updates: Pick<MockUserAddress, 'street' | 'postalCode' | 'city' | 'country'>,
++): MockUserAddress[] {
++  return addresses.map((a) =>
++    a.id === id && a.userId === userId ? { ...a, ...updates } : a,
++  )
++}
++
+ export function removeAddress(
+   addresses: MockUserAddress[],
+   id: string,

@@ -189,14 +189,14 @@ export function AddressesClient({ addresses }: Props) {
   const headerTitle = mode.type === 'edit' ? "Modifier l'adresse" : mode.type === 'add' ? 'Nouvelle adresse' : 'Mes adresses'
 
   return (
-    <div className="fixed inset-0 z-40 flex h-[100dvh] w-full flex-col overflow-y-auto overscroll-y-contain bg-[#0B0F15] text-white" style={{ paddingBottom: isFormMode ? '9rem' : '2rem' }}>
+    <div className={`fixed inset-0 z-40 flex h-[100dvh] w-full flex-col overflow-x-hidden overflow-y-auto overscroll-y-contain bg-[#0B0F15] text-white ${isFormMode ? 'pb-36' : 'pb-8'}`}>
       {/* Header */}
       <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/5 bg-[#0B0F15]/80 px-4 pt-[max(0.75rem,env(safe-area-inset-top))] pb-3 backdrop-blur-xl">
         <div className="relative flex h-12 items-center">
           <button
             type="button"
             onClick={isFormMode ? closeForm : () => router.back()}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20 active:scale-95"
             aria-label="Retour"
           >
             <ChevronLeft className="h-5 w-5 text-white" />
