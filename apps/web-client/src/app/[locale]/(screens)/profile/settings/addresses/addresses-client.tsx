@@ -17,6 +17,10 @@ import { AddressLine } from './address-line'
 type Props = { addresses: MockUserAddress[] }
 
 type AddressForm = { street: string; postalCode: string; city: string; country: string }
+type Mode =
+  | { type: 'list' }
+  | { type: 'add' }
+  | { type: 'edit'; address: MockUserAddress }
 
 const EMPTY_FORM: AddressForm = { street: '', postalCode: '', city: '', country: 'BE' }
 
@@ -24,88 +28,66 @@ const INPUT_BASE =
   'h-12 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25'
 const INPUT_CLASS = `${INPUT_BASE} w-full`
 
-function AddressForm({
+function AddressFields({
   form,
   onChange,
   onSelect,
-  isLoading,
-  error,
-  onCancel,
-  onSubmit,
-  submitLabel,
 }: {
   form: AddressForm
   onChange: (f: AddressForm) => void
   onSelect: (f: AddressForm) => void
-  isLoading: boolean
-  error: string | null
-  onCancel: () => void
-  onSubmit: () => void
-  submitLabel: string
 }) {
-  const canSubmit = !isLoading && form.street.length > 0 && form.postalCode.length > 0 && form.city.length > 0
-
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       {/* Pays */}
-      <div className="relative">
-        <select
-          value={form.country}
-          onChange={(e) => onChange({ ...form, country: e.target.value, street: '', postalCode: '', city: '' })}
-          className={`${INPUT_CLASS} appearance-none pr-10`}
-        >
-          {CHECKOUT_COUNTRIES.map((c) => (
-            <option key={c.code} value={c.code} className="bg-[#0B0F15]">{c.label}</option>
-          ))}
-        </select>
-        <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" aria-hidden="true" />
+      <div className="space-y-1.5">
+        <label className="block text-xs font-bold text-white/55">Pays</label>
+        <div className="relative">
+          <select
+            value={form.country}
+            onChange={(e) => onChange({ ...form, country: e.target.value, street: '', postalCode: '', city: '' })}
+            className={`${INPUT_CLASS} appearance-none pr-10`}
+          >
+            {CHECKOUT_COUNTRIES.map((c) => (
+              <option key={c.code} value={c.code} className="bg-[#0B0F15]">{c.label}</option>
+            ))}
+          </select>
+          <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" aria-hidden="true" />
+        </div>
       </div>
 
       {/* Rue avec autocomplete */}
-      <AddressAutocompleteInput
-        id={`address-street-${form.country}`}
-        value={form.street}
-        country={form.country}
-        placeholder="Rue et numéro"
-        className={INPUT_CLASS}
-        onChange={(street) => onChange({ ...form, street })}
-        onSelect={({ street, postalCode, city }) => onSelect({ ...form, street, postalCode, city })}
-      />
-
-      {/* CP + Ville */}
-      <div className="flex gap-2">
-        <input
-          value={form.postalCode}
-          onChange={(e) => onChange({ ...form, postalCode: e.target.value })}
-          placeholder="Code postal"
-          className={`${INPUT_BASE} w-[38%]`}
-        />
-        <input
-          value={form.city}
-          onChange={(e) => onChange({ ...form, city: e.target.value })}
-          placeholder="Ville"
-          className={`${INPUT_BASE} flex-1`}
+      <div className="space-y-1.5">
+        <label className="block text-xs font-bold text-white/55">Rue et numéro</label>
+        <AddressAutocompleteInput
+          id={`address-street-${form.country}`}
+          value={form.street}
+          country={form.country}
+          placeholder="Rue de la Paix 10"
+          className={INPUT_CLASS}
+          onChange={(street) => onChange({ ...form, street })}
+          onSelect={({ street, postalCode, city }) => onSelect({ ...form, street, postalCode, city })}
         />
       </div>
 
-      {error && <p className="text-xs text-red-400/80">{error}</p>}
-
-      <div className="flex gap-2 pt-1">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="flex-1 rounded-xl border border-white/10 py-3 text-sm font-semibold text-white/60 active:bg-white/5"
-        >
-          Annuler
-        </button>
-        <button
-          type="button"
-          onClick={onSubmit}
-          disabled={!canSubmit}
-          className="flex-1 rounded-xl bg-lime-300 py-3 text-sm font-black text-[#0B0F15] disabled:opacity-50"
-        >
-          {isLoading ? 'Sauvegarde…' : submitLabel}
-        </button>
+      {/* CP + Ville */}
+      <div className="space-y-1.5">
+        <label className="block text-xs font-bold text-white/55">Code postal et ville</label>
+        <div className="flex gap-3">
+          <input
+            value={form.postalCode}
+            onChange={(e) => onChange({ ...form, postalCode: e.target.value })}
+            placeholder="1000"
+            inputMode="numeric"
+            className={`${INPUT_BASE} w-[38%]`}
+          />
+          <input
+            value={form.city}
+            onChange={(e) => onChange({ ...form, city: e.target.value })}
+            placeholder="Bruxelles"
+            className={`${INPUT_BASE} flex-1`}
+          />
+        </div>
       </div>
     </div>
   )
@@ -114,17 +96,69 @@ function AddressForm({
 export function AddressesClient({ addresses }: Props) {
   const router = useRouter()
   const [, startTransition] = useTransition()
+  const [mode, setMode] = useState<Mode>({ type: 'list' })
+  const [form, setForm] = useState<AddressForm>(EMPTY_FORM)
   const [pendingId, setPendingId] = useState<string | null>(null)
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
-  const [editingId, setEditingId] = useState<string | null>(null)
-  const [editForm, setEditForm] = useState<AddressForm>(EMPTY_FORM)
-  const [savingEditId, setSavingEditId] = useState<string | null>(null)
-  const [editError, setEditError] = useState<string | null>(null)
-  const [showAddForm, setShowAddForm] = useState(false)
-  const [addForm, setAddForm] = useState<AddressForm>(EMPTY_FORM)
-  const [isAdding, setIsAdding] = useState(false)
-  const [addError, setAddError] = useState<string | null>(null)
+  const [isSaving, setIsSaving] = useState(false)
+  const [formError, setFormError] = useState<string | null>(null)
   const [actionError, setActionError] = useState<string | null>(null)
+
+  const canSave = form.street.length > 0 && form.postalCode.length > 0 && form.city.length > 0
+
+  function openAdd() {
+    setForm(EMPTY_FORM)
+    setFormError(null)
+    setMode({ type: 'add' })
+  }
+
+  function openEdit(address: MockUserAddress) {
+    setForm({
+      street: address.street,
+      postalCode: address.postalCode,
+      city: address.city,
+      country: address.country,
+    })
+    setFormError(null)
+    setConfirmDeleteId(null)
+    setMode({ type: 'edit', address })
+  }
+
+  function closeForm() {
+    setMode({ type: 'list' })
+    setFormError(null)
+  }
+
+  function handleSave() {
+    if (!canSave || isSaving) return
+    setIsSaving(true)
+    setFormError(null)
+
+    startTransition(async () => {
+      try {
+        if (mode.type === 'add') {
+          const result = await addAddressAction(form)
+          if (!result.ok) {
+            setFormError("L'adresse n'a pas pu être sauvegardée. Reconnecte-toi et réessaie.")
+            setIsSaving(false)
+            return
+          }
+        } else if (mode.type === 'edit') {
+          const result = await updateAddressAction(mode.address.id, form)
+          if (!result.ok) {
+            setFormError("L'adresse n'a pas pu être modifiée. Reconnecte-toi et réessaie.")
+            setIsSaving(false)
+            return
+          }
+        }
+        setMode({ type: 'list' })
+      } catch {
+        setFormError('Une erreur est survenue. Vérifie ta connexion et réessaie.')
+      } finally {
+        setIsSaving(false)
+      }
+    })
+  }
 
   function handleRemove(id: string) {
     if (confirmDeleteId !== id) {
@@ -151,135 +185,68 @@ export function AddressesClient({ addresses }: Props) {
     })
   }
 
-  function startEdit(address: MockUserAddress) {
-    setEditingId(address.id)
-    setEditForm({
-      street: address.street,
-      postalCode: address.postalCode,
-      city: address.city,
-      country: address.country,
-    })
-    setEditError(null)
-  }
-
-  function handleEdit() {
-    if (!editingId) return
-    const currentEditingId = editingId
-    setSavingEditId(currentEditingId)
-    setEditError(null)
-    startTransition(async () => {
-      try {
-        const result = await updateAddressAction(currentEditingId, editForm)
-        if (!result.ok) {
-          setEditError("L'adresse n'a pas pu être modifiée. Reconnecte-toi et réessaie.")
-          return
-        }
-        setEditingId(null)
-      } catch {
-        setEditError('Une erreur est survenue. Vérifie ta connexion et réessaie.')
-      } finally {
-        setSavingEditId(null)
-      }
-    })
-  }
-
-  function handleAdd() {
-    setIsAdding(true)
-    setAddError(null)
-    startTransition(async () => {
-      try {
-        const result = await addAddressAction(addForm)
-        if (!result.ok) {
-          setAddError("L'adresse n'a pas pu être sauvegardée. Reconnecte-toi et réessaie.")
-          setIsAdding(false)
-          return
-        }
-        setAddForm(EMPTY_FORM)
-        setShowAddForm(false)
-      } catch {
-        setAddError('Une erreur est survenue. Vérifie ta connexion et réessaie.')
-      } finally {
-        setIsAdding(false)
-      }
-    })
-  }
+  const isFormMode = mode.type === 'add' || mode.type === 'edit'
+  const headerTitle = mode.type === 'edit' ? "Modifier l'adresse" : mode.type === 'add' ? 'Nouvelle adresse' : 'Mes adresses'
 
   return (
-    <div className="fixed inset-0 z-40 flex h-[100dvh] w-full flex-col overflow-y-auto overscroll-y-contain bg-[#0B0F15] pb-10 text-white">
+    <div className="fixed inset-0 z-40 flex h-[100dvh] w-full flex-col overflow-y-auto overscroll-y-contain bg-[#0B0F15] text-white" style={{ paddingBottom: isFormMode ? '9rem' : '2rem' }}>
       {/* Header */}
       <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/5 bg-[#0B0F15]/80 px-4 pt-[max(0.75rem,env(safe-area-inset-top))] pb-3 backdrop-blur-xl">
         <div className="relative flex h-12 items-center">
           <button
             type="button"
-            onClick={() => router.back()}
+            onClick={isFormMode ? closeForm : () => router.back()}
             className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10"
             aria-label="Retour"
           >
             <ChevronLeft className="h-5 w-5 text-white" />
           </button>
           <span className="absolute left-1/2 -translate-x-1/2 text-sm font-semibold text-white">
-            Mes adresses
+            {headerTitle}
           </span>
         </div>
       </header>
 
       <main className="mt-[calc(env(safe-area-inset-top)+4rem)] flex-1 px-4">
-        {actionError && (
-          <p className="mt-4 rounded-xl bg-red-500/10 px-4 py-3 text-xs font-medium text-red-400">
-            {actionError}
-          </p>
-        )}
 
-        {addresses.length === 0 && !showAddForm && (
-          <p className="mt-8 text-center text-sm text-white/40">Aucune adresse sauvegardée.</p>
-        )}
+        {/* Mode liste */}
+        {mode.type === 'list' && (
+          <>
+            {actionError && (
+              <p className="mt-4 rounded-xl bg-red-500/10 px-4 py-3 text-xs font-medium text-red-400">
+                {actionError}
+              </p>
+            )}
 
-        <ul className="mt-4 space-y-3">
-          {addresses.map((address) => {
-            const rowPending = pendingId === address.id
-            const isEditingThis = editingId === address.id
-            const isConfirmingDelete = confirmDeleteId === address.id
+            {addresses.length === 0 && (
+              <p className="mt-8 text-center text-sm text-white/40">Aucune adresse sauvegardée.</p>
+            )}
 
-            return (
-              <li key={address.id} className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
-                {isEditingThis ? (
-                  <>
-                    <p className="mb-3 text-xs font-bold uppercase tracking-widest text-white/40">
-                      Modifier l'adresse
-                    </p>
-                    <AddressForm
-                      form={editForm}
-                      onChange={setEditForm}
-                      onSelect={setEditForm}
-                      isLoading={savingEditId === address.id}
-                      error={editError}
-                      onCancel={() => setEditingId(null)}
-                      onSubmit={handleEdit}
-                      submitLabel="Enregistrer"
-                    />
-                  </>
-                ) : (
-                  <>
+            <ul className="mt-4 space-y-3">
+              {addresses.map((address) => {
+                const rowPending = pendingId === address.id
+                const isConfirmingDelete = confirmDeleteId === address.id
+
+                return (
+                  <li key={address.id} className="rounded-2xl border border-white/8 bg-white/[0.03] p-4">
                     <AddressLine address={address} showIcon />
 
                     <div className="mt-3 flex items-center gap-3">
-                      {/* Définir par défaut */}
                       {!address.isDefault && (
                         <button
                           type="button"
                           onClick={() => handleSetDefault(address.id)}
                           disabled={rowPending}
-                          className="text-xs font-semibold text-white/50 underline-offset-2 hover:text-white/80 disabled:opacity-40"
+                          className="text-xs font-semibold text-white/50 hover:text-white/80 disabled:opacity-40"
                         >
                           Définir par défaut
                         </button>
                       )}
 
                       <div className="ml-auto flex items-center gap-2">
-                        {/* Modifier */}
                         <button
                           type="button"
-                          onClick={() => { setConfirmDeleteId(null); startEdit(address) }}
+                          onClick={() => openEdit(address)}
                           disabled={rowPending}
                           className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 transition-colors active:bg-white/10 disabled:opacity-40"
                           aria-label="Modifier"
@@ -287,7 +254,6 @@ export function AddressesClient({ addresses }: Props) {
                           <Pencil className="h-3.5 w-3.5 text-white/50" aria-hidden="true" />
                         </button>
 
-                        {/* Supprimer */}
                         {isConfirmingDelete ? (
                           <div className="flex items-center gap-2">
                             <button
@@ -301,7 +267,7 @@ export function AddressesClient({ addresses }: Props) {
                               type="button"
                               onClick={() => handleRemove(address.id)}
                               disabled={rowPending}
-                              className="rounded-lg bg-red-500/15 border border-red-500/30 px-3 py-1.5 text-xs font-bold text-red-400 active:bg-red-500/25 disabled:opacity-40"
+                              className="rounded-lg border border-red-500/30 bg-red-500/15 px-3 py-1.5 text-xs font-bold text-red-400 active:bg-red-500/25 disabled:opacity-40"
                             >
                               Confirmer
                             </button>
@@ -319,40 +285,66 @@ export function AddressesClient({ addresses }: Props) {
                         )}
                       </div>
                     </div>
-                  </>
-                )}
-              </li>
-            )
-          })}
-        </ul>
+                  </li>
+                )
+              })}
+            </ul>
 
-        {showAddForm ? (
-          <div className="mt-4 rounded-2xl border border-white/8 bg-white/[0.03] p-4">
-            <p className="mb-3 text-xs font-bold uppercase tracking-widest text-white/40">
-              Nouvelle adresse
-            </p>
-            <AddressForm
-              form={addForm}
-              onChange={setAddForm}
-              onSelect={setAddForm}
-              isLoading={isAdding}
-              error={addError}
-              onCancel={() => { setShowAddForm(false); setAddError(null) }}
-              onSubmit={handleAdd}
-              submitLabel="Sauvegarder"
-            />
-          </div>
-        ) : (
-          <button
-            type="button"
-            onClick={() => { setEditingId(null); setShowAddForm(true) }}
-            className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-white/20 py-4 text-sm font-semibold text-white/50 transition-colors active:bg-white/5"
-          >
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            Ajouter une adresse
-          </button>
+            <button
+              type="button"
+              onClick={openAdd}
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-white/20 py-4 text-sm font-semibold text-white/50 transition-colors active:bg-white/5"
+            >
+              <Plus className="h-4 w-4" aria-hidden="true" />
+              Ajouter une adresse
+            </button>
+          </>
+        )}
+
+        {/* Mode formulaire (add ou edit) */}
+        {isFormMode && (
+          <>
+            <div className="mt-2">
+              <AddressFields
+                form={form}
+                onChange={setForm}
+                onSelect={setForm}
+              />
+              {formError && (
+                <p className="mt-3 text-xs text-red-400/80">{formError}</p>
+              )}
+            </div>
+          </>
         )}
       </main>
+
+      {/* Barre fixe en bas — uniquement en mode formulaire */}
+      {isFormMode && (
+        <div className="fixed inset-x-0 bottom-0 z-50 flex flex-col">
+          <div className="h-8 w-full bg-gradient-to-t from-[#0B0F15] to-transparent pointer-events-none" />
+          <div className="border-t border-white/5 bg-[#0B0F15] px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-3">
+            <button
+              type="button"
+              onClick={handleSave}
+              disabled={!canSave || isSaving}
+              className={`flex h-14 w-full items-center justify-center rounded-2xl text-[15px] font-black transition-all active:scale-[0.98] disabled:cursor-not-allowed ${
+                canSave && !isSaving
+                  ? 'bg-lime-300 text-[#0B0F15] shadow-[0_0_20px_rgba(163,230,53,0.15)]'
+                  : 'bg-white/5 text-white/30'
+              }`}
+            >
+              {isSaving ? 'Sauvegarde…' : mode.type === 'edit' ? 'Enregistrer' : 'Sauvegarder'}
+            </button>
+            <button
+              type="button"
+              onClick={closeForm}
+              className="mt-2 h-11 w-full text-sm font-semibold text-white/40 active:text-white/60"
+            >
+              Annuler
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
