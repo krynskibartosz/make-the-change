@@ -31,9 +31,16 @@ export async function GET(request: NextRequest) {
 
   try {
     const res = await fetch(url.toString())
-    if (!res.ok) return NextResponse.json([])
+    console.log('[autocomplete] geoapify status:', res.status, 'q:', q)
+    if (!res.ok) {
+      const errText = await res.text()
+      console.log('[autocomplete] geoapify error body:', errText.slice(0, 200))
+      return NextResponse.json([])
+    }
 
     const data = (await res.json()) as { features?: GeoapifyFeature[] }
+    console.log('[autocomplete] features received:', data.features?.length ?? 0)
+
     const suggestions: AddressSuggestion[] = (data.features ?? []).flatMap((feature) => {
       const p = feature.properties
       if (!p.address_line1 || !p.postcode || !p.city) return []
@@ -48,8 +55,10 @@ export async function GET(request: NextRequest) {
       ]
     })
 
+    console.log('[autocomplete] suggestions returned:', suggestions.length)
     return NextResponse.json(suggestions)
-  } catch {
+  } catch (e) {
+    console.log('[autocomplete] fetch threw:', String(e))
     return NextResponse.json([])
   }
 }
