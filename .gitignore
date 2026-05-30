@@ -209,3 +209,4 @@ pk_test_*
 .cursor/mcp.json
 .mcp.local.json
 C\xef\x80\xbaUsersutilisateurAppDataLocalTempreview_diff.txt
+*.txt
