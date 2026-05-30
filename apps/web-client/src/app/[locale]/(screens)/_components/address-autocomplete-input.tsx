@@ -1,5 +1,6 @@
 'use client'
 
+import { createPortal } from 'react-dom'
 import { useEffect, useRef, useState } from 'react'
 import type { AddressSuggestion } from '@/lib/address-autocomplete'
 
@@ -65,11 +66,10 @@ export function AddressAutocompleteInput({
     )
   }
 
-  // Keep dropdown aligned to input when open (handles scroll + keyboard resize)
+  // Keep dropdown aligned to input on scroll/resize
   useEffect(() => {
     if (!isOpen) return
     syncPosition()
-    // Use capture:true to catch scrolls inside overflow-auto containers
     window.addEventListener('scroll', syncPosition, true)
     window.addEventListener('resize', syncPosition)
     return () => {
@@ -92,7 +92,7 @@ export function AddressAutocompleteInput({
       if (!res.ok) return
       const data = (await res.json()) as AddressSuggestion[]
       if (data.length > 0) {
-        syncPosition() // position calculée AVANT d'afficher le dropdown
+        syncPosition()
         setSuggestions(data)
         setIsOpen(true)
       } else {
@@ -158,6 +158,32 @@ export function AddressAutocompleteInput({
     }, 150)
   }
 
+  const dropdown = isOpen && suggestions.length > 0 ? (
+    <ul
+      id={listboxId}
+      role="listbox"
+      style={{ ...dropStyle, zIndex: 9999 }}
+      className="max-h-52 overflow-y-auto rounded-xl border border-white/10 bg-[#0B0F15] shadow-2xl"
+    >
+      {suggestions.map((suggestion, index) => (
+        <li
+          key={`${suggestion.label}-${index}`}
+          id={`${id}-option-${index}`}
+          role="option"
+          aria-selected={index === activeIndex}
+          onMouseDown={() => handleSelect(suggestion)}
+          className={`cursor-pointer px-4 py-3 text-sm transition-colors ${
+            index === activeIndex
+              ? 'bg-white/[0.08] text-white'
+              : 'text-white/70 hover:bg-white/[0.05] hover:text-white'
+          }`}
+        >
+          {suggestion.label}
+        </li>
+      ))}
+    </ul>
+  ) : null
+
   return (
     <div ref={containerRef} className="relative">
       {isLoading && (
@@ -181,31 +207,10 @@ export function AddressAutocompleteInput({
         aria-activedescendant={activeIndex >= 0 ? `${id}-option-${activeIndex}` : undefined}
         className={className}
       />
-      {isOpen && suggestions.length > 0 && (
-        <ul
-          id={listboxId}
-          role="listbox"
-          style={{ ...dropStyle, zIndex: 9999 }}
-          className="max-h-52 overflow-y-auto rounded-xl border border-white/10 bg-[#0B0F15] shadow-2xl"
-        >
-          {suggestions.map((suggestion, index) => (
-            <li
-              key={`${suggestion.label}-${index}`}
-              id={`${id}-option-${index}`}
-              role="option"
-              aria-selected={index === activeIndex}
-              onMouseDown={() => handleSelect(suggestion)}
-              className={`cursor-pointer px-4 py-3 text-sm transition-colors ${
-                index === activeIndex
-                  ? 'bg-white/[0.08] text-white'
-                  : 'text-white/70 hover:bg-white/[0.05] hover:text-white'
-              }`}
-            >
-              {suggestion.label}
-            </li>
-          ))}
-        </ul>
-      )}
+      {/* Portal: renders in document.body to escape parent transforms/overflow/stacking */}
+      {typeof document !== 'undefined' && dropdown !== null
+        ? createPortal(dropdown, document.body)
+        : null}
     </div>
   )
 }
