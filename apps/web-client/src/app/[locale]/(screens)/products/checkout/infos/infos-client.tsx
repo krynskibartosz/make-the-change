@@ -8,6 +8,7 @@ import type { MockCheckoutCustomer } from '@/lib/mock/mock-checkout-session'
 import type { MockUserAddress } from '@/lib/mock/mock-addresses'
 import type { AddressValidationResult, ValidationSuggestion } from '@/lib/address-validation'
 import { CHECKOUT_COUNTRIES } from '@/lib/checkout-countries'
+import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
 import { AddressAutocompleteInput } from '@/app/[locale]/(screens)/_components/address-autocomplete-input'
 import { SavedAddressesSheet } from './saved-addresses-sheet'
 import { CheckoutSteps } from '../_components/checkout-steps'
@@ -327,7 +328,7 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
       )}
 
       {/* Fixed bottom bar */}
-      <div className="fixed inset-x-0 bottom-0 border-t border-white/5 bg-[#0B0F15]/95 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 backdrop-blur-lg">
+      <BottomActionBar className="fixed inset-x-0 bottom-0 z-40">
 
         {/* Suggestion card */}
         {showSuggestion && validationSuggestion && (
@@ -396,7 +397,7 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
                   : 'Continuer vers le paiement'}
           </button>
         )}
-      </div>
+      </BottomActionBar>
     </div>
   )
 }

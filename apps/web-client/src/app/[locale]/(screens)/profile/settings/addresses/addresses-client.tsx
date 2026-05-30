@@ -5,6 +5,7 @@ import { useState, useTransition } from 'react'
 import type { MockUserAddress } from '@/lib/mock/mock-addresses'
 import { AddressAutocompleteInput } from '@/app/[locale]/(screens)/_components/address-autocomplete-input'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
+import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
 import { CHECKOUT_COUNTRIES } from '@/lib/checkout-countries'
 import {
   addAddressAction,
@@ -290,7 +291,7 @@ export function AddressesClient({ addresses }: Props) {
       {isFormMode && (
         <div className="fixed inset-x-0 bottom-0 z-50 flex flex-col">
           <div className="h-8 w-full bg-gradient-to-t from-[#0B0F15] to-transparent pointer-events-none" />
-          <div className="border-t border-white/5 bg-[#0B0F15] px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-3">
+          <BottomActionBar>
             <button
               type="button"
               onClick={handleSave}
@@ -310,7 +311,7 @@ export function AddressesClient({ addresses }: Props) {
             >
               Annuler
             </button>
-          </div>
+          </BottomActionBar>
         </div>
       )}
     </FullScreenSlideModal>
