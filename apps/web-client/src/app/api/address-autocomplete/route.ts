@@ -18,6 +18,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const q = searchParams.get('q')?.trim() ?? ''
   const country = (searchParams.get('country') ?? 'be').toLowerCase()
+  const debug = searchParams.get('debug') === '1'
 
   if (q.length < 3) {
     return NextResponse.json([])
@@ -30,18 +31,19 @@ export async function GET(request: NextRequest) {
   url.searchParams.set('apiKey', GEOAPIFY_API_KEY)
 
   try {
-    const res = await fetch(url.toString())
-    console.log('[autocomplete] geoapify status:', res.status, 'q:', q)
+    // cache: 'no-store' prevents Next.js data cache from serving stale empty results
+    const res = await fetch(url.toString(), { cache: 'no-store' })
+
     if (!res.ok) {
-      const errText = await res.text()
-      console.log('[autocomplete] geoapify error body:', errText.slice(0, 200))
+      const body = await res.text()
+      if (debug) return NextResponse.json({ error: res.status, body: body.slice(0, 500) })
       return NextResponse.json([])
     }
 
     const data = (await res.json()) as { features?: GeoapifyFeature[] }
-    console.log('[autocomplete] features received:', data.features?.length ?? 0)
+    const features = data.features ?? []
 
-    const suggestions: AddressSuggestion[] = (data.features ?? []).flatMap((feature) => {
+    const suggestions: AddressSuggestion[] = features.flatMap((feature) => {
       const p = feature.properties
       if (!p.address_line1 || !p.postcode || !p.city) return []
       return [
@@ -55,10 +57,19 @@ export async function GET(request: NextRequest) {
       ]
     })
 
-    console.log('[autocomplete] suggestions returned:', suggestions.length)
+    if (debug) {
+      return NextResponse.json({
+        geoapifyStatus: res.status,
+        featuresCount: features.length,
+        suggestionsCount: suggestions.length,
+        firstFeatureProps: features[0]?.properties ?? null,
+        suggestions,
+      })
+    }
+
     return NextResponse.json(suggestions)
   } catch (e) {
-    console.log('[autocomplete] fetch threw:', String(e))
+    if (debug) return NextResponse.json({ error: 'fetch_threw', message: String(e) })
     return NextResponse.json([])
   }
 }
