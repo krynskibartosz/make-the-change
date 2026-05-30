@@ -118,7 +118,7 @@ export function AddressesClient({ addresses }: Props) {
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editForm, setEditForm] = useState<AddressForm>(EMPTY_FORM)
-  const [isEditing, setIsEditing] = useState(false)
+  const [savingEditId, setSavingEditId] = useState<string | null>(null)
   const [editError, setEditError] = useState<string | null>(null)
   const [showAddForm, setShowAddForm] = useState(false)
   const [addForm, setAddForm] = useState<AddressForm>(EMPTY_FORM)
@@ -164,21 +164,21 @@ export function AddressesClient({ addresses }: Props) {
 
   function handleEdit() {
     if (!editingId) return
-    setIsEditing(true)
+    const currentEditingId = editingId
+    setSavingEditId(currentEditingId)
     setEditError(null)
     startTransition(async () => {
       try {
-        const result = await updateAddressAction(editingId, editForm)
+        const result = await updateAddressAction(currentEditingId, editForm)
         if (!result.ok) {
           setEditError("L'adresse n'a pas pu être modifiée. Reconnecte-toi et réessaie.")
-          setIsEditing(false)
           return
         }
         setEditingId(null)
       } catch {
         setEditError('Une erreur est survenue. Vérifie ta connexion et réessaie.')
       } finally {
-        setIsEditing(false)
+        setSavingEditId(null)
       }
     })
   }
@@ -251,7 +251,7 @@ export function AddressesClient({ addresses }: Props) {
                       form={editForm}
                       onChange={setEditForm}
                       onSelect={setEditForm}
-                      isLoading={isEditing}
+                      isLoading={savingEditId === address.id}
                       error={editError}
                       onCancel={() => setEditingId(null)}
                       onSubmit={handleEdit}

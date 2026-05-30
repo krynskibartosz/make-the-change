@@ -2,7 +2,7 @@
 
 import { AlertTriangle, CheckCircle, ChevronDown, Loader2, MapPin } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useState, useTransition } from 'react'
+import { useRef, useState, useTransition } from 'react'
 import { saveCheckoutCustomerAction, saveAddressAction } from '@/app/[locale]/(screens)/products/checkout/_features/checkout-actions'
 import type { MockCheckoutCustomer } from '@/lib/mock/mock-checkout-session'
 import type { MockUserAddress } from '@/lib/mock/mock-addresses'
@@ -35,6 +35,7 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
   const router = useRouter()
   const [customer, setCustomer] = useState<MockCheckoutCustomer>(initialCustomer)
   const [isPending, startTransition] = useTransition()
+  const isProcessingRef = useRef(false)
   const [showSheet, setShowSheet] = useState(false)
   const [saveAddress, setSaveAddress] = useState(isConnected && savedAddresses.length === 0)
   const [addressSaveError, setAddressSaveError] = useState(false)
@@ -124,21 +125,27 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
   }
 
   async function handleContinue() {
+    if (isProcessingRef.current) return
     setTouched({ email: true, name: true, street: true, postalCode: true, city: true })
     if (!canContinue) return
 
-    // Already validated — proceed
-    if (validationPhase === 'invalid' || validationPhase === 'unavailable') {
-      await proceedToPayment()
-      return
-    }
+    isProcessingRef.current = true
+    try {
+      // Already validated — proceed
+      if (validationPhase === 'invalid' || validationPhase === 'unavailable') {
+        await proceedToPayment()
+        return
+      }
 
-    // Validate address first
-    const result = await validateAddress()
-    if (result === 'confirmed' || result === 'unavailable') {
-      await proceedToPayment()
+      // Validate address first
+      const result = await validateAddress()
+      if (result === 'confirmed' || result === 'unavailable') {
+        await proceedToPayment()
+      }
+      // 'suggested' or 'invalid' → show UI, wait for user action
+    } finally {
+      isProcessingRef.current = false
     }
-    // 'suggested' or 'invalid' → show UI, wait for user action
   }
 
   async function handleUseSuggestion() {
@@ -373,7 +380,7 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
         {!showSuggestion && (
           <button
             type="button"
-            disabled={isPending || isValidating}
+            disabled={isPending || isValidating || !canContinue}
             onClick={handleContinue}
             className="flex w-full items-center justify-center gap-2 rounded-2xl bg-lime-300 py-4 text-[15px] font-black text-[#0B0F15] disabled:opacity-60"
           >

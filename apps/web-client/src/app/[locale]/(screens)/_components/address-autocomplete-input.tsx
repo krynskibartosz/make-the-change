@@ -53,33 +53,7 @@ export function AddressAutocompleteInput({
     setIsLoading(false)
   }, [country])
 
-  // Keep dropdown aligned to input when open (handles scroll + keyboard resize)
-  useEffect(() => {
-    if (!isOpen) return
-
-    function syncPosition() {
-      const rect = containerRef.current?.getBoundingClientRect()
-      if (!rect) return
-      const spaceBelow = window.innerHeight - rect.bottom
-      const above = spaceBelow < 260
-      setDropStyle(
-        above
-          ? { position: 'fixed', bottom: window.innerHeight - rect.top + 4, left: rect.left, width: rect.width }
-          : { position: 'fixed', top: rect.bottom + 4, left: rect.left, width: rect.width },
-      )
-    }
-
-    syncPosition()
-    // Use capture:true to catch scrolls inside overflow-auto containers
-    window.addEventListener('scroll', syncPosition, true)
-    window.addEventListener('resize', syncPosition)
-    return () => {
-      window.removeEventListener('scroll', syncPosition, true)
-      window.removeEventListener('resize', syncPosition)
-    }
-  }, [isOpen])
-
-  function computePosition() {
+  function syncPosition() {
     const rect = containerRef.current?.getBoundingClientRect()
     if (!rect) return
     const spaceBelow = window.innerHeight - rect.bottom
@@ -90,6 +64,20 @@ export function AddressAutocompleteInput({
         : { position: 'fixed', top: rect.bottom + 4, left: rect.left, width: rect.width },
     )
   }
+
+  // Keep dropdown aligned to input when open (handles scroll + keyboard resize)
+  useEffect(() => {
+    if (!isOpen) return
+    syncPosition()
+    // Use capture:true to catch scrolls inside overflow-auto containers
+    window.addEventListener('scroll', syncPosition, true)
+    window.addEventListener('resize', syncPosition)
+    return () => {
+      window.removeEventListener('scroll', syncPosition, true)
+      window.removeEventListener('resize', syncPosition)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen])
 
   async function fetchSuggestions(query: string) {
     abortRef.current?.abort()
@@ -105,7 +93,7 @@ export function AddressAutocompleteInput({
       if (!res.ok) return
       const data = (await res.json()) as AddressSuggestion[]
       if (data.length > 0) {
-        computePosition() // position calculée AVANT d'afficher le dropdown
+        syncPosition() // position calculée AVANT d'afficher le dropdown
         setSuggestions(data)
         setIsOpen(true)
       } else {

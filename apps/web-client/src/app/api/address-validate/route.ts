@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import type { AddressValidationResult } from '@/lib/address-validation'
+import { GEOAPIFY_API_KEY } from '@/lib/geoapify'
 
-const GEOAPIFY_API_KEY = process.env.GEOAPIFY_API_KEY ?? '76c8b6833fa94d18932e6b80cd71e4f8'
 const GEOAPIFY_SEARCH_URL = 'https://api.geoapify.com/v1/geocode/search'
 
 type GeoapifyFeature = {

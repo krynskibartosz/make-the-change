@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import type { AddressSuggestion } from '@/lib/address-autocomplete'
+import { GEOAPIFY_API_KEY } from '@/lib/geoapify'
 
-const GEOAPIFY_API_KEY = process.env.GEOAPIFY_API_KEY ?? '76c8b6833fa94d18932e6b80cd71e4f8'
 const GEOAPIFY_URL = 'https://api.geoapify.com/v1/geocode/autocomplete'
 
 type GeoapifyFeature = {
@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
   const q = searchParams.get('q')?.trim() ?? ''
   const country = (searchParams.get('country') ?? 'be').toLowerCase()
 
-  if (q.length < 3 || !GEOAPIFY_API_KEY) {
+  if (q.length < 3) {
     return NextResponse.json([])
   }
 
