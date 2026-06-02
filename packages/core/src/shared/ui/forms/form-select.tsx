@@ -70,7 +70,12 @@ export const FormSelect = <TFieldValues extends FieldValues>({
         </FieldLabel>
       )}
       {description && (
-        <FieldDescription className="text-sm text-muted-foreground">{description}</FieldDescription>
+        <FieldDescription
+          id={`${fieldId}-description`}
+          className="text-sm text-muted-foreground"
+        >
+          {description}
+        </FieldDescription>
       )}
       <div className="relative">
         <Select
@@ -86,6 +91,11 @@ export const FormSelect = <TFieldValues extends FieldValues>({
           <SelectTrigger
             aria-invalid={errorMessage ? 'true' : undefined}
             aria-required={required ? 'true' : undefined}
+            aria-describedby={
+              [errorMessage && `${fieldId}-error`, description && `${fieldId}-description`]
+                .filter(Boolean)
+                .join(' ') || undefined
+            }
             id={fieldId}
             name={field.name}
           >
@@ -101,7 +111,11 @@ export const FormSelect = <TFieldValues extends FieldValues>({
         </Select>
       </div>
       {errorMessage && (
-        <FieldError className="text-sm text-destructive" match={true}>
+        <FieldError
+          id={`${fieldId}-error`}
+          className="text-sm text-destructive"
+          match={true}
+        >
           {errorMessage}
         </FieldError>
       )}
