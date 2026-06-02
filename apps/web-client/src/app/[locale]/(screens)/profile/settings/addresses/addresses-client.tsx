@@ -1,5 +1,6 @@
 'use client'
 
+import { Input } from '@make-the-change/core/ui'
 import { ChevronDown, Pencil, Plus, Trash2 } from 'lucide-react'
 import { useState, useTransition } from 'react'
 import type { MockUserAddress } from '@/lib/mock/mock-addresses'
@@ -25,10 +26,6 @@ type Mode =
 
 const EMPTY_FORM: AddressForm = { street: '', postalCode: '', city: '', country: 'BE' }
 
-const INPUT_BASE =
-  'h-12 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25'
-const INPUT_CLASS = `${INPUT_BASE} w-full`
-
 function AddressFields({
   form,
   onChange,
@@ -46,7 +43,7 @@ function AddressFields({
           <select
             value={form.country}
             onChange={(e) => onChange({ ...form, country: e.target.value, street: '', postalCode: '', city: '' })}
-            className={`${INPUT_CLASS} appearance-none pr-10`}
+            className="h-12 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25 w-full appearance-none pr-10"
           >
             {CHECKOUT_COUNTRIES.map((c) => (
               <option key={c.code} value={c.code} className="bg-[#0B0F15]">{c.label}</option>
@@ -63,27 +60,32 @@ function AddressFields({
           value={form.street}
           country={form.country}
           placeholder="Rue de la Paix 10"
-          className={INPUT_CLASS}
+          className="h-12 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25 w-full"
           onChange={(street) => onChange({ ...form, street })}
           onSelect={({ street, postalCode, city }) => onSelect({ ...form, street, postalCode, city })}
         />
       </div>
 
-      <div className="space-y-1.5">
-        <label className="block text-xs font-bold text-white/55">Code postal et ville</label>
-        <div className="flex gap-3">
-          <input
+      <div className="flex gap-3">
+        <div className="w-[38%]">
+          <Input
+            label="Code postal"
+            variant="ghost"
+            size="lg"
             value={form.postalCode}
             onChange={(e) => onChange({ ...form, postalCode: e.target.value })}
             placeholder="1000"
             inputMode="numeric"
-            className={`${INPUT_BASE} w-[38%]`}
           />
-          <input
+        </div>
+        <div className="flex-1">
+          <Input
+            label="Ville"
+            variant="ghost"
+            size="lg"
             value={form.city}
             onChange={(e) => onChange({ ...form, city: e.target.value })}
             placeholder="Bruxelles"
-            className={`${INPUT_BASE} flex-1`}
           />
         </div>
       </div>
