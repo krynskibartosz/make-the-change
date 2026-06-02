@@ -54,6 +54,29 @@ Input.displayName = 'Input'
 
 Plus de label, error, helpText, leadingIcon, trailingIcon, showPasswordToggle, shake, WebkitTextFillColor variant-aware. Ces responsabilités migrent vers la composition.
 
+#### Stratégie de coexistence — pas de breaking change intermédiaire
+
+Si on remplaçait `Input` directement, les 4 fichiers qui utilisent l'API monolithique aujourd'hui (`login-form.tsx`, `register-form.tsx`, `forgot-password-form.tsx`, `theme-selection.tsx`) casseraient le type-check entre P0 et leur migration respective.
+
+**Pattern adopté :** le même fichier `input.tsx` exporte les deux composants pendant la transition :
+
+```tsx
+// P0 — input.tsx contient :
+// 1. Le NOUVEAU Input (minimaliste, code ci-dessus)
+export const Input = forwardRef<HTMLInputElement, InputProps>(...)
+
+// 2. L'ANCIEN Input renommé LegacyInput (code actuel inchangé)
+export const LegacyInput = forwardRef<HTMLInputElement, LegacyInputProps>(...)
+// Avec label, error, helpText, leadingIcon, showPasswordToggle, WebkitTextFillColor, etc.
+
+// 3. PasswordInput legacy reste (utilise LegacyInput en interne)
+export const LegacyPasswordInput = ...
+```
+
+Au moment de chaque migration `Pn`, l'`import { Input }` du fichier devient `import { LegacyInput as Input }` **avant** la migration, puis on remplace progressivement par la nouvelle composition Field + nouveau `Input`. Dernière étape **P9 (cleanup)** : supprime `LegacyInput` et `LegacyPasswordInput`.
+
+Cette stratégie garantit que `pnpm type-check` passe à chaque étape.
+
 ### 2.2 `inputVariants` / `textareaVariants` — fonctions cva
 
 ```tsx
@@ -97,6 +120,14 @@ data-[invalid]:border-destructive data-[invalid]:ring-destructive/30
 
 Pas besoin de prop `error` sur `Input` — Field décore automatiquement.
 
+**Autofill Safari/Chrome pour ghost.** L'autofill repeint le glyphe via `-webkit-text-fill-color`. Plutôt qu'un hack JS, on règle ça dans la cva via un sélecteur arbitrary Tailwind 4 directement dans la variant `ghost` :
+
+```
+[&:-webkit-autofill]:[-webkit-text-fill-color:white] [&:-webkit-autofill]:[transition:background-color_5000s_ease-in-out_0s]
+```
+
+À ajouter dans la chaîne de la variant `ghost` de `inputVariants`. Les autres variants gardent `var(--foreground)` via un sélecteur équivalent. Pas de prop `style` runtime, pas de prop `variant` à propager par les composants consommateurs.
+
 ### 2.3 `PasswordInput` — petit composable
 
 ```tsx
@@ -129,11 +160,17 @@ PasswordInput.displayName = 'PasswordInput'
 
 ### 2.4 Composition côté consommateur
 
+**Pattern canonique — Field.Control est le contrôle déclaré.** Base UI suit la doc 1.5 : `Field.Control` (par défaut un `<input>`) est l'élément que Field surveille pour appliquer `data-touched`, `data-invalid`, `data-filled`, `aria-describedby`. On le remplace par notre `<Input>` styled via la prop `render` :
+
 ```tsx
 <Form action={formAction} errors={state.errors}>
   <Field.Root name="email">
     <Field.Label className="text-xs font-bold text-white/55">Email</Field.Label>
-    <Input type="email" variant="ghost" size="lg" required />
+    <Field.Control
+      render={<Input variant="ghost" size="lg" />}
+      type="email"
+      required
+    />
     <Field.Error className="text-xs text-red-400/90" match="valueMissing">
       Email requis
     </Field.Error>
@@ -141,10 +178,46 @@ PasswordInput.displayName = 'PasswordInput'
       Format invalide
     </Field.Error>
     <Field.Error className="text-xs text-red-400/90" />
-    {/* ↑ catch-all pour les erreurs serveur (Form.errors[name]) */}
+    {/* ↑ catch-all : affiche Form.errors[name] s'il existe (server error) */}
   </Field.Root>
 </Form>
 ```
+
+Pourquoi `render={<Input />}` et pas `<Input>` à côté de `<Field.Label>` :
+- Sans `Field.Control`, Field ne sait pas quel élément DOM décorer avec les data-attributes — l'`aria-describedby` ne pointe sur rien, l'`aria-invalid` n'est pas posé sur l'input, la border `data-[invalid]:` ne réagit pas.
+- `Field.Control render={<Input />}` fusionne les props : notre `<Input>` reçoit `id`, `aria-describedby`, `aria-invalid`, `data-*` automatiquement.
+- Les attributs `type`, `required`, `pattern`, `minLength` sont placés sur `Field.Control` (pas sur `<Input>`) pour que la validation HTML soit pilotée par Field.
+
+**TextArea suit le même pattern** avec `Field.Control render={<TextArea variant="ghost" rows={4} />}`.
+
+### 2.5 Validation custom asynchrone — `validate` prop
+
+Pour les champs qui nécessitent une validation au-delà des contraintes HTML (par exemple l'autocomplete d'adresse du checkout qui appelle `/api/address-validate`), on utilise `validate` sur `Field.Root` :
+
+```tsx
+<Field.Root
+  name="street"
+  validationMode="onBlur"
+  validate={async (value) => {
+    if (typeof value !== 'string' || value.trim().length < 4) {
+      return 'Adresse trop courte'
+    }
+    const result = await fetch('/api/address-validate', {
+      method: 'POST',
+      body: JSON.stringify({ street: value, country, postalCode, city }),
+    }).then((r) => r.json())
+    return result.status === 'invalid' ? 'Adresse non reconnue' : null
+  }}
+>
+  <Field.Label>Rue et numéro</Field.Label>
+  <Field.Control render={<Input variant="ghost" />} />
+  <Field.Error /> {/* affiche la string retournée par validate */}
+</Field.Root>
+```
+
+- Retourner `null` ou `undefined` = champ valide.
+- Retourner une `string` = message d'erreur affiché dans `Field.Error`.
+- `validationMode="onBlur"` évite de spammer l'API à chaque keystroke. `"onSubmit"` valide seulement au submit.
 
 ---
 
@@ -210,23 +283,31 @@ const [state, formAction, isPending] = useActionState<ServerActionState, FormDat
 
 ## 4. Fichiers touchés
 
-### 4.1 `packages/core`
+### 4.1 `packages/core` — au moment de P0
 
 | Fichier | Action |
 |---|---|
-| `packages/core/src/shared/ui/base/input.tsx` | Réécriture complète (~40 lignes) |
-| `packages/core/src/shared/ui/base/textarea.tsx` | Réécriture complète |
-| `packages/core/src/shared/ui/base/input-variants.ts` | **Nouveau** — cva variants |
-| `packages/core/src/shared/ui/base/password-input.tsx` | **Nouveau** — composable |
-| `packages/core/src/shared/ui/base/__tests__/input.test.tsx` | Réécriture — tests des variants + composition Field |
-| `packages/core/src/shared/ui/forms/form-input.tsx` | **Supprimé** |
-| `packages/core/src/shared/ui/forms/field-shell.tsx` | **Supprimé** |
-| `packages/core/src/shared/ui/forms/__tests__/field-shell.test.tsx` | **Supprimé** |
-| `packages/core/src/shared/ui/forms/index.ts` | Retirer exports `FormInput`, `FieldShell` |
-| `packages/core/src/shared/ui/index.ts` | Ajouter exports `inputVariants`, `textareaVariants`, `PasswordInput` |
-| `packages/core/package.json` | Retirer `react-hook-form` |
+| `packages/core/src/shared/ui/base/input.tsx` | **Modifié** — l'ancien `Input` est renommé `LegacyInput`, ses exports `PasswordInput` deviennent `LegacyPasswordInput`. Le nouveau `Input` minimaliste est ajouté dans le même fichier. |
+| `packages/core/src/shared/ui/base/textarea.tsx` | **Modifié** — `TextArea` renommé `LegacyTextArea`, nouveau `TextArea` minimaliste ajouté. |
+| `packages/core/src/shared/ui/base/input-variants.ts` | **Nouveau** — cva `inputVariants`, `textareaVariants`, et leurs types `InputVariantProps`/`TextAreaVariantProps`. |
+| `packages/core/src/shared/ui/base/password-input.tsx` | **Nouveau** — composable basé sur le nouveau `Input`. |
+| `packages/core/src/shared/ui/base/__tests__/input.test.tsx` | **Réécrit** — voir section 4.4 Tests. |
+| `packages/core/src/shared/ui/forms/form-input.tsx` | **Supprimé** (RHF retiré). |
+| `packages/core/src/shared/ui/forms/field-shell.tsx` | **Supprimé** (composition Field directement utilisée). |
+| `packages/core/src/shared/ui/forms/__tests__/field-shell.test.tsx` | **Supprimé**. |
+| `packages/core/src/shared/ui/forms/index.ts` | Retirer exports `FormInput`, `FieldShell`. |
+| `packages/core/src/shared/ui/index.ts` | Ajouter exports `Input`, `TextArea`, `PasswordInput`, `LegacyInput`, `LegacyTextArea`, `LegacyPasswordInput`, `inputVariants`, `textareaVariants`. |
+| `packages/core/package.json` | Retirer `react-hook-form` des dependencies. |
 
-### 4.2 `apps/web-client` — Server Actions
+### 4.2 `packages/core` — au moment de P9 (cleanup final)
+
+| Fichier | Action |
+|---|---|
+| `packages/core/src/shared/ui/base/input.tsx` | Supprimer `LegacyInput` et `LegacyPasswordInput`. |
+| `packages/core/src/shared/ui/base/textarea.tsx` | Supprimer `LegacyTextArea`. |
+| `packages/core/src/shared/ui/index.ts` | Retirer exports `LegacyInput`, `LegacyTextArea`, `LegacyPasswordInput`. |
+
+### 4.3 `apps/web-client` — Server Actions
 
 | Fichier | Action |
 |---|---|
@@ -235,45 +316,80 @@ const [state, formAction, isPending] = useActionState<ServerActionState, FormDat
 | `apps/web-client/src/app/[locale]/(auth)/actions.ts` | Adapter login/register/forgot |
 | `apps/web-client/src/app/[locale]/(screens)/products/checkout/_features/checkout-actions.ts` | À vérifier |
 
-### 4.3 `apps/web-client` — formulaires
+### 4.4 `apps/web-client` — formulaires
 
 | Fichier | Action |
 |---|---|
-| `(site)/contact/page.tsx` | Recomposer avec Field.Root + Input + Field.Error |
+| `(site)/contact/page.tsx` | Recomposer avec Field.Root + Field.Control render={<Input/>} + Field.Error |
 | `(auth)/_components/forgot-password-form.tsx` | Idem |
 | `(auth)/_components/login-form.tsx` | Idem + PasswordInput |
 | `(screens)/profile/settings/addresses/addresses-client.tsx` | Idem |
 | `(screens)/profile/account/_features/account-client.tsx` | Idem |
-| `(screens)/products/checkout/infos/infos-client.tsx` | Idem — validation custom passe sur `validate` de Field ou reste en server action |
-| `(auth)/_components/register-form.tsx` | Idem (wizard 3-steps, sessionStorage et popstate conservés) |
+| `(screens)/products/checkout/infos/infos-client.tsx` | Idem — validation custom via `validate` prop de Field (section 2.5) |
+| `(auth)/_components/register-form.tsx` | Idem — wizard 3-steps conservé (voir 4.6 ci-dessous) |
 | `(screens)/projects/[slug]/contribute/_components/project-contribute-one-flow.tsx` | Guest email uniquement |
 | `(screens)/projects/[slug]/support/_components/project-support-one-flow.tsx` | Guest email uniquement |
 
+### 4.5 Documentation
+
+| Fichier | Action |
+|---|---|
+| `docs/02-product/design-system/forms.md` | **Nouveau** — guide du pattern `<Form errors><Field.Root><Field.Label><Field.Control render={<Input/>}/><Field.Error/></Field.Root></Form>` avec exemples (server action shape, validation custom, password input, autofill). Écrit dans P0. |
+
+### 4.6 Wizard register — décision architecturale
+
+Le `register-form.tsx` actuel a 3 steps. Décision retenue : **un seul `<Form action={formAction}>` enveloppant les 3 steps**.
+
+- Les boutons "Suivant" des steps 1 et 2 sont `<button type="button" onClick={() => goToStep(step+1)}>`. Ils ne soumettent pas le form.
+- Le bouton "S'inscrire" du step 3 est `<button type="submit">`. Il déclenche `formAction`.
+- Tous les `<Field.Root name="...">` sont présents dans le DOM aux 3 steps (steps 1-2 cachés visuellement avec `hidden` ou rendu conditionnel avec `display: none` pour conserver le state).
+- `canProceed` local valide les contraintes minimales avant `goToStep(step+1)` — Field native validation gère le reste au submit final.
+- `sessionStorage` persistance et `popstate` listener restent inchangés.
+
+Cette stratégie évite 3 `<form>` séparés qui exigeraient 3 server actions distinctes.
+
+### 4.7 Tests à livrer en P0
+
+`packages/core/src/shared/ui/base/__tests__/input.test.tsx` couvre 5 scénarios :
+
+1. **Variants produisent les bonnes classes** : `inputVariants({ variant: 'ghost' })` contient `bg-white/[0.04]`, `text-white`.
+2. **Composition Field passe data-attributes** : rendu `<Field.Root name="x"><Field.Control render={<Input/>} required /></Field.Root>`, blur sans valeur → l'input reçoit `data-touched` et `data-invalid`, et `aria-invalid="true"`.
+3. **Field.Label associe correctement** : `<Field.Label>` rendu avec `for` correspondant à `id` de l'input.
+4. **Form errors câble Field.Error** : rendu `<Form errors={{ email: 'X' }}><Field.Root name="email"><Field.Control /><Field.Error /></Field.Root></Form>` affiche "X".
+5. **`validate` async retourne string → Field.Error affiche** : rendu avec `validate={async () => 'nope'}`, blur du champ, attendre, vérifier que "nope" est rendu.
+
+Tests réécrits, pas migrés de l'ancien `input.test.tsx` (qui testait l'API monolithique label/error/helpText).
+
 ---
 
-## 5. Ordre des étapes (P0 → P8)
+## 5. Ordre des étapes (P0 → P9)
 
-Petit → gros pour valider le pattern sur du simple avant d'attaquer le complexe.
+Petit → gros pour valider le pattern sur du simple avant d'attaquer le complexe. Coexistence `LegacyInput` + `Input` pendant P1-P8, cleanup en P9.
 
 | # | Étape | Fichier(s) clé | Pourquoi à ce moment |
 |---|---|---|---|
-| **P0** | Foundations core | `input.tsx`, `textarea.tsx`, `input-variants.ts`, `password-input.tsx`, suppression `form-input.tsx` + `field-shell.tsx`, retrait RHF | Bloque tout le reste |
+| **P0** | Foundations core | `input.tsx` (split Legacy/new), `textarea.tsx` (split), `input-variants.ts`, `password-input.tsx`, suppression `form-input.tsx` + `field-shell.tsx`, retrait RHF, doc `forms.md` | Bloque tout le reste. `LegacyInput` reste exporté pour ne pas casser P1-P8. |
 | **P1** | Contact | `contact/page.tsx` + `contact/actions.ts` | POC du pattern complet (1 input + 1 textarea + server action errors) |
-| **P2** | Forgot password | `forgot-password-form.tsx` | 1 input email |
-| **P3** | Login | `login-form.tsx` + auth action | 2 inputs + PasswordInput |
+| **P2** | Forgot password | `forgot-password-form.tsx` + auth action partie forgot | 1 input email. Premier formulaire auth migré. |
+| **P3** | Login | `login-form.tsx` + auth action partie login | 2 inputs + PasswordInput |
 | **P4** | Addresses | `addresses-client.tsx` | Plusieurs inputs sans flow particulier |
 | **P5** | Account | `account-client.tsx` | Pattern "iOS-settings" particulier — bord transparent dans card |
-| **P6** | Checkout infos | `infos-client.tsx` | 5 fields + validation custom (street/postal/city + autocomplete address validation API) |
-| **P7** | Register wizard | `register-form.tsx` + auth action | Wizard 3 steps + sessionStorage + popstate à préserver |
+| **P6** | Checkout infos | `infos-client.tsx` | 5 fields + validation custom (street/postal/city + autocomplete address validation API via `validate` prop) |
+| **P7** | Register wizard | `register-form.tsx` + auth action partie register | Wizard 3 steps + sessionStorage + popstate (voir section 4.6) |
 | **P8** | Contribute + Support | Les deux `*-one-flow.tsx` | Petit changement (guest email) dans gros fichiers — on profite des patterns rodés |
+| **P9** | Cleanup Legacy | Suppression `LegacyInput`, `LegacyTextArea`, `LegacyPasswordInput` du core + exports | Aucun usage restant — verrouille la migration. |
 
 Chaque étape :
-1. Implémentation par subagent
-2. Tests passent (`pnpm --filter @make-the-change/core test`)
-3. Type-check passe (`pnpm --filter @make-the-change/web-client type-check`)
-4. Spec compliance review (subagent)
-5. Code quality review (subagent)
-6. Commit
+1. **Avant** : `git fetch origin && git rebase origin/main` (sync avec autre IA)
+2. Implémentation par subagent
+3. Tests passent : `pnpm --filter @make-the-change/core test`
+4. Type-check passe : `pnpm --filter @make-the-change/web-client type-check`
+5. Spec compliance review (subagent)
+6. Code quality review (subagent)
+7. Commit
+8. Verify manuel (`verify` skill) pour P1, P3, P6, P7
+
+**Critère d'entrée pour P9** : `grep -r "Legacy\(Input\|TextArea\|PasswordInput\)" apps/` retourne zéro résultat.
 
 ---
 
@@ -341,15 +457,16 @@ Le plan utilise `superpowers:subagent-driven-development` pour orchestrer. Chaqu
 
 | Étape | Implémenteur | Spec reviewer | Code quality reviewer | Justification |
 |---|---|---|---|---|
-| P0 Foundations | **sonnet** | sonnet | sonnet | Refacto multi-fichiers, suppression de modules, cohérence type cross-package |
-| P1 Contact | **sonnet** | haiku | haiku | POC du pattern — investir sur l'implémenteur, reviews simples ensuite |
+| P0 Foundations | **sonnet** | sonnet | sonnet | Refacto multi-fichiers, split Legacy/new, suppression modules RHF, doc à écrire, tests à réécrire |
+| P1 Contact | **sonnet** | haiku | haiku | POC du pattern complet — investir sur l'implémenteur, reviews simples ensuite |
 | P2 Forgot password | **haiku** | haiku | haiku | Mécanique pure, 1 input |
-| P3 Login | **sonnet** | haiku | haiku | Auth action à adapter (login part) + PasswordInput |
+| P3 Login | **sonnet** | haiku | haiku | Auth action à adapter (login part) + PasswordInput + autofill à vérifier |
 | P4 Addresses | **haiku** | haiku | haiku | Mécanique |
 | P5 Account | **haiku** | haiku | haiku | Mécanique mais style particulier — vérifier visuellement après |
-| P6 Checkout infos | **sonnet** | sonnet | sonnet | Validation custom + autocomplete API + 5 fields couplés |
-| P7 Register wizard | **sonnet** | sonnet | sonnet | sessionStorage + popstate + 3 steps — préserver le state machine |
+| P6 Checkout infos | **sonnet** | sonnet | **opus** | Validation custom async via `validate` prop + autocomplete API + 5 fields couplés. Opus en code-review pour traquer les régressions sur la state machine ValidationPhase. |
+| P7 Register wizard | **sonnet** | sonnet | sonnet | sessionStorage + popstate + 3 steps — préserver le state machine. Décision archi en 4.6 est explicite. |
 | P8 Contribute + Support | **haiku** | haiku | haiku | Petit changement dans gros fichier |
+| P9 Cleanup Legacy | **haiku** | haiku | haiku | Suppression mécanique. Test : `pnpm type-check` doit passer après suppression. |
 
 ### 7.2 Outils
 
@@ -371,26 +488,30 @@ Le plan utilise `superpowers:subagent-driven-development` pour orchestrer. Chaqu
 
 | Risque | Mitigation |
 |---|---|
-| Autofill Safari/Chrome casse le texte blanc en ghost (perte du hack `WebkitTextFillColor`) | Test manuel explicite en P3 (login) — si problème, ajouter une CSS rule globale `input:-webkit-autofill { -webkit-text-fill-color: white }` ciblée sur `.input-ghost` |
-| `register-form` wizard : la migration peut casser sessionStorage / popstate | P7 inclut un test manuel : remplir step 1, recharger, vérifier que step 1 est restauré. Faire avant et après. |
-| Le pattern Field + native validation perd la validation custom de `infos-client` (validation d'adresse server-side via API) | P6 conserve la validation custom en utilisant `validate` prop de `Field.Root` côté async, OU laisse la logique custom au-dessus du Form (state machine `ValidationPhase` reste) |
-| Une autre IA push sur main pendant qu'on travaille | Worktree isolé + rebase systématique avant chaque étape (section 6.2) |
-| Les tests `field-shell.test.tsx` disparaissent — perte de couverture | Le nouveau test `input.test.tsx` couvre les variants + un test de composition avec Field couvre le câblage |
-| Les tests `theme-builder.snapshot.test.tsx` peuvent re-bouger | Mettre à jour le snapshot dans le même commit que P0 |
+| Autofill Safari/Chrome casse le texte blanc en ghost (perte du hack `WebkitTextFillColor`) | Sélecteur arbitrary Tailwind 4 dans la variant ghost de `inputVariants` (section 2.2). Test manuel explicite en P3 (login) sur Chrome + Safari avec un compte sauvegardé. |
+| `register-form` wizard : la migration peut casser sessionStorage / popstate | Décision architecturale tranchée (section 4.6) : un seul `<Form>` enveloppant les 3 steps. P7 inclut un test manuel : remplir step 1, recharger, vérifier que step 1 est restauré. Faire avant et après. |
+| Validation custom de `infos-client` (validation d'adresse server-side via API) ne s'adapte pas naturellement à `validate` prop | Pattern documenté en section 2.5 avec exemple async. La state machine `ValidationPhase` actuelle disparait — `validate` + `Field.Error` la remplacent. P6 spec reviewer doit confirmer parité fonctionnelle. |
+| Une autre IA push sur main pendant qu'on travaille | Worktree isolé + rebase systématique avant chaque étape (section 6.2). Découpage des étapes par fichier minimise les conflits (section 6.3). |
+| Les tests `field-shell.test.tsx` disparaissent — perte de couverture | Le nouveau `input.test.tsx` couvre 5 scénarios incluant la composition Field (section 4.7). FieldShell n'a plus de raison d'être. |
+| Les tests `theme-builder.snapshot.test.tsx` peuvent re-bouger | Mettre à jour le snapshot dans le même commit que P0 si besoin. |
+| Migration partielle entre P0 et P9 — code mixte avec `Input` et `LegacyInput` côte à côte | Critère d'entrée P9 (`grep "Legacy" apps/` = 0) verrouille la complétude. Pendant la transition, ESLint peut warn sur imports `LegacyInput` (optionnel). |
+| Le pattern `Field.Control render={<Input/>}` propage `id`/`aria-*` mais l'`<Input>` doit forward `ref` et tous les props sans filtre | Le nouveau `Input` utilise `forwardRef` et `{...props}` strict. Test #2 de section 4.7 vérifie le câblage `aria-invalid` automatique. |
 
 ---
 
 ## 9. Critères de succès
 
-À la fin du plan :
+À la fin du plan (après P9) :
 
 1. **Zéro `<input>` ou `<textarea>` HTML brut comme champ de formulaire dans `apps/web-client`** (sauf inputs hidden et l'amount input custom du contribute/support).
-2. **Zéro usage de la prop `label`/`error`/`helpText` sur `Input`** dans `apps/web-client` — la composition Field est utilisée partout.
-3. **`react-hook-form` n'est plus une dépendance de `packages/core`** (`grep -r "react-hook-form" packages/core/package.json` → vide).
-4. **Tous les tests passent** : `pnpm --filter @make-the-change/core test` (36+ tests) et `pnpm --filter @make-the-change/web-client type-check`.
-5. **Le formulaire de contact envoie un vrai message** (à wirer dans P1 — pas juste console.log, mais via Resend ou équivalent. Si l'intégration email n'est pas dispo, on garde le TODO mais le shape `errors` est correct).
+2. **Zéro usage des composants `LegacyInput`/`LegacyTextArea`/`LegacyPasswordInput`** anywhere — `grep -r "Legacy\(Input\|TextArea\|PasswordInput\)"` retourne 0.
+3. **`react-hook-form` n'est plus une dépendance de `packages/core`** (`grep "react-hook-form" packages/core/package.json` → vide).
+4. **Tous les tests passent** : `pnpm --filter @make-the-change/core test` (36+ tests, dont 5 nouveaux pour Input/Field/Form composition) et `pnpm --filter @make-the-change/web-client type-check`.
+5. **Le formulaire de contact envoie un vrai message** (à wirer dans P1 — pas juste console.log, mais via Resend ou équivalent. Si l'intégration email n'est pas dispo en P1, on garde le TODO mais le shape `errors` est correct).
 6. **Le wizard register fonctionne identique à avant** (sessionStorage + popstate préservés, 3 steps validables).
-7. **Les erreurs serveur s'affichent automatiquement sous les champs concernés** sans code de câblage explicite côté composant.
+7. **Les erreurs serveur s'affichent automatiquement sous les champs concernés** via `<Form errors={state.errors}>` sans code de câblage explicite côté composant.
+8. **Le pattern est documenté** : `docs/02-product/design-system/forms.md` existe et couvre composition Field, server action shape, validation custom, password input, gestion autofill.
+9. **L'accessibilité est confirmée** : sur un formulaire migré (login ou contact), `axe-core` (ou inspection manuelle) montre `aria-invalid`, `aria-describedby`, `aria-required` correctement câblés sans code applicatif explicite — c'est Field qui les pose.
 
 ---
 
