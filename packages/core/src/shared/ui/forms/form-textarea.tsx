@@ -11,18 +11,18 @@ import {
   useFormContext,
 } from 'react-hook-form'
 
-import { TextArea, type TextAreaProps } from '../base/textarea'
+import { LegacyTextArea as TextArea, type LegacyTextAreaProps } from '../base/textarea'
 
 export type FormTextAreaProps<TFieldValues extends FieldValues> = Omit<
-  TextAreaProps,
+  LegacyTextAreaProps,
   'value' | 'onChange' | 'onBlur' | 'name' | 'defaultValue'
 > & {
   name: FieldPath<TFieldValues>
   control?: Control<TFieldValues>
   rules?: RegisterOptions<TFieldValues>
   description?: string
-  onBlur?: TextAreaProps['onBlur']
-  onChange?: TextAreaProps['onChange']
+  onBlur?: LegacyTextAreaProps['onBlur']
+  onChange?: LegacyTextAreaProps['onChange']
 }
 
 const FormTextAreaComponent = <TFieldValues extends FieldValues>(

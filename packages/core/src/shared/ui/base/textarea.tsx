@@ -1,24 +1,47 @@
 'use client'
 
-import type { InputHTMLAttributes, ReactNode } from 'react'
+import type { ForwardedRef, InputHTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useId, useState } from 'react'
 
 import { cn } from '../utils'
+import { textareaVariants, type TextAreaVariantProps } from './input-variants'
 
-export type TextAreaVariant = 'default' | 'outlined' | 'filled' | 'ghost'
+/* ============================================================================
+ * NEW API
+ * ========================================================================= */
 
-export type TextAreaProps = {
+export type TextAreaProps = Omit<InputHTMLAttributes<HTMLTextAreaElement>, 'size'> &
+  TextAreaVariantProps
+
+export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
+  ({ className, variant, size, ...props }, ref) => (
+    <textarea
+      ref={ref}
+      className={cn(textareaVariants({ variant, size }), className)}
+      {...props}
+    />
+  ),
+)
+TextArea.displayName = 'TextArea'
+
+/* ============================================================================
+ * LEGACY API
+ * ========================================================================= */
+
+export type LegacyTextAreaVariant = 'default' | 'outlined' | 'filled' | 'ghost'
+
+export type LegacyTextAreaProps = {
   label?: string
   error?: string
   helpText?: string
   leadingIcon?: ReactNode
   trailingIcon?: ReactNode
-  variant?: TextAreaVariant
+  variant?: LegacyTextAreaVariant
   size?: 'sm' | 'md' | 'lg'
   rows?: number
 } & Omit<InputHTMLAttributes<HTMLTextAreaElement>, 'size'>
 
-export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
+export const LegacyTextArea = forwardRef<HTMLTextAreaElement, LegacyTextAreaProps>(
   (
     {
       className,
@@ -33,7 +56,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       id,
       ...props
     },
-    ref,
+    ref: ForwardedRef<HTMLTextAreaElement>,
   ) => {
     const [isFocused, setIsFocused] = useState(false)
     const [shakeAnimation, setShakeAnimation] = useState('')
@@ -150,5 +173,4 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     )
   },
 )
-
-TextArea.displayName = 'TextArea'
+LegacyTextArea.displayName = 'LegacyTextArea'

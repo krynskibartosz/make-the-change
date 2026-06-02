@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
   Form,
-  Input,
+  LegacyInput as Input,
 } from '@make-the-change/core/ui'
 import { FormErrorAlert } from '@/app/[locale]/(auth)/_components/form-error-alert'
 import {

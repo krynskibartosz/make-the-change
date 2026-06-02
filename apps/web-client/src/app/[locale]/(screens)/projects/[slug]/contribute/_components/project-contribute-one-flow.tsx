@@ -4,7 +4,7 @@ import {
   Button,
   Card,
   CardContent,
-  Input,
+  LegacyInput as Input,
 } from '@make-the-change/core/ui'
 import { ArrowLeft, Camera, CheckCircle2, ChevronRight, Leaf, Loader2, Lock, Mail } from 'lucide-react'
 import { formatAmountPlain, formatAmountNumber } from '@/lib/formatters'

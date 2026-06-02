@@ -117,7 +117,14 @@ export {
 } from './base/field'
 export { Fieldset, FieldsetLegend } from './base/fieldset'
 export { Form } from './base/form'
-export { Input, PasswordInput } from './base/input'
+export { Input, LegacyInput, LegacyPasswordInput, type InputProps, type LegacyInputProps } from './base/input'
+export { PasswordInput, type PasswordInputProps } from './base/password-input'
+export {
+  inputVariants,
+  textareaVariants,
+  type InputVariantProps,
+  type TextAreaVariantProps,
+} from './base/input-variants'
 export { Label } from './base/label'
 export {
   Menu,
@@ -222,7 +229,13 @@ export {
 export { Switch, SwitchThumb } from './base/switch'
 export { Tabs, TabsContent, TabsIndicator, TabsList, TabsTrigger } from './base/tabs'
 // Backward compatibility aliases (deprecated)
-export { TextArea, TextArea as Textarea } from './base/textarea'
+export {
+  TextArea,
+  TextArea as Textarea,
+  LegacyTextArea,
+  type TextAreaProps,
+  type LegacyTextAreaProps,
+} from './base/textarea'
 export {
   createToastManager,
   Toast,

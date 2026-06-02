@@ -17,7 +17,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogTitle,
-  Input,
+  LegacyInput as Input,
   Toggle,
   ToggleGroup,
 } from '@make-the-change/core/ui'

@@ -9,7 +9,7 @@ import { RefreshCw, Sparkles, Sliders, Eye, Check } from 'lucide-react'
 import { Badge } from './base/badge'
 import { Button } from './base/button'
 import { Field, FieldLabel } from './base/field'
-import { Input } from './base/input'
+import { LegacyInput as Input } from './base/input'
 
 const EDITABLE_VARS = [
   { label: 'Primaire', variable: '--primary', default: '221 83% 53%', category: 'Brand' },

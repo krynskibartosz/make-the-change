@@ -11,7 +11,7 @@ import {
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useActionState, useState } from 'react'
-import { Input, TextArea } from '@make-the-change/core/ui'
+import { LegacyInput as Input, LegacyTextArea as TextArea } from '@make-the-change/core/ui'
 import { sendContactMessage, type ContactActionState } from './actions'
 
 type Subject = 'bug' | 'partnership' | 'other' | 'order'

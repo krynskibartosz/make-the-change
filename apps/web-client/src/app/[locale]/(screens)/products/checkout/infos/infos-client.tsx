@@ -3,7 +3,7 @@
 import { AlertTriangle, CheckCircle, ChevronDown, Loader2, MapPin } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useRef, useState, useTransition } from 'react'
-import { Input } from '@make-the-change/core/ui'
+import { LegacyInput as Input } from '@make-the-change/core/ui'
 import { saveCheckoutCustomerAction, saveAddressAction } from '@/app/[locale]/(screens)/products/checkout/_features/checkout-actions'
 import type { MockCheckoutCustomer } from '@/lib/mock/mock-checkout-session'
 import type { MockUserAddress } from '@/lib/mock/mock-addresses'

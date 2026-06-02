@@ -10,7 +10,7 @@ import {
   CardTitle,
   Field,
   Form,
-  Input,
+  LegacyInput as Input,
 } from '@make-the-change/core/ui'
 import { ArrowLeft, Mail, Sparkles } from 'lucide-react'
 import { AuthSubmitButton } from '@/app/[locale]/(auth)/_components/auth-submit-button'

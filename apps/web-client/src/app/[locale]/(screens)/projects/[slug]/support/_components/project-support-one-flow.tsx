@@ -5,7 +5,7 @@ import {
   Button,
   Card,
   CardContent,
-  Input,
+  LegacyInput as Input,
 } from '@make-the-change/core/ui'
 import { Activity, ArrowLeft, Bug, Camera, CheckCircle2, ChevronRight, Cloud, Droplet, Droplets, Fish, Flower2, Grid3X3, Leaf, Loader2, Lock, Mail, TreePine, Waves } from 'lucide-react'
 import { MobileSheet } from '../../_components/shared/mobile-sheet'

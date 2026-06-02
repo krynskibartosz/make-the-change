@@ -1,6 +1,6 @@
 'use client'
 
-import { Input } from '@make-the-change/core/ui'
+import { LegacyInput as Input } from '@make-the-change/core/ui'
 import { ChevronDown, Pencil, Plus, Trash2 } from 'lucide-react'
 import { useState, useTransition } from 'react'
 import type { MockUserAddress } from '@/lib/mock/mock-addresses'
