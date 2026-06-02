@@ -3,6 +3,7 @@
 import { AlertTriangle, CheckCircle, ChevronDown, Loader2, MapPin } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useRef, useState, useTransition } from 'react'
+import { Input } from '@make-the-change/core/ui'
 import { saveCheckoutCustomerAction, saveAddressAction } from '@/app/[locale]/(screens)/products/checkout/_features/checkout-actions'
 import type { MockCheckoutCustomer } from '@/lib/mock/mock-checkout-session'
 import type { MockUserAddress } from '@/lib/mock/mock-addresses'
@@ -27,10 +28,6 @@ function isValidEmail(email: string): boolean {
   return parts.length === 2 && (parts[1]?.includes('.') ?? false)
 }
 
-const INPUT_BASE =
-  'h-13 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25'
-const INPUT_CLASS = `${INPUT_BASE} w-full`
-const ERROR_CLASS = 'mt-1 px-1 text-xs text-red-400/90'
 
 export function InfosClient({ initialCustomer, isConnected, savedAddresses, locale }: Props) {
   const router = useRouter()
@@ -188,35 +185,33 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
 
       <div className="mt-6 space-y-4">
         {/* E-mail */}
-        <div className="space-y-1">
-          <label htmlFor="checkout-email" className="block text-xs font-bold text-white/55">E-mail</label>
-          <input
-            id="checkout-email"
-            value={customer.email}
-            onChange={(e) => setCustomer((v) => ({ ...v, email: e.target.value }))}
-            onBlur={() => touch('email')}
-            placeholder="votre@email.com"
-            type="email"
-            autoComplete="email"
-            className={INPUT_CLASS}
-          />
-          {touched.email && errors.email && <p className={ERROR_CLASS}>{errors.email}</p>}
-        </div>
+        <Input
+          id="checkout-email"
+          label="E-mail"
+          variant="ghost"
+          size="lg"
+          value={customer.email}
+          onChange={(e) => setCustomer((v) => ({ ...v, email: e.target.value }))}
+          onBlur={() => touch('email')}
+          placeholder="votre@email.com"
+          type="email"
+          autoComplete="email"
+          error={touched.email && errors.email ? errors.email : undefined}
+        />
 
         {/* Nom */}
-        <div className="space-y-1">
-          <label htmlFor="checkout-name" className="block text-xs font-bold text-white/55">Nom complet</label>
-          <input
-            id="checkout-name"
-            value={customer.name}
-            onChange={(e) => setCustomer((v) => ({ ...v, name: e.target.value }))}
-            onBlur={() => touch('name')}
-            placeholder="Prénom Nom"
-            autoComplete="name"
-            className={INPUT_CLASS}
-          />
-          {touched.name && errors.name && <p className={ERROR_CLASS}>{errors.name}</p>}
-        </div>
+        <Input
+          id="checkout-name"
+          label="Nom complet"
+          variant="ghost"
+          size="lg"
+          value={customer.name}
+          onChange={(e) => setCustomer((v) => ({ ...v, name: e.target.value }))}
+          onBlur={() => touch('name')}
+          placeholder="Prénom Nom"
+          autoComplete="name"
+          error={touched.name && errors.name ? errors.name : undefined}
+        />
 
         {/* Rue */}
         <div className="space-y-1">
@@ -226,7 +221,7 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
             value={customer.street}
             country={customer.country}
             placeholder="Rue de la Paix 10"
-            className={INPUT_CLASS}
+            className="h-13 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25 w-full"
             onChange={(street) => { setCustomer((v) => ({ ...v, street })); resetValidation() }}
             onBlur={() => touch('street')}
             onSelect={({ street, postalCode, city }) => {
@@ -235,38 +230,39 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
               resetValidation()
             }}
           />
-          {touched.street && errors.street && <p className={ERROR_CLASS}>{errors.street}</p>}
+          {touched.street && errors.street && <p className="mt-1 px-1 text-xs text-red-400/90">{errors.street}</p>}
         </div>
 
         {/* Code postal + Ville */}
-        <div className="space-y-1">
-          <label className="block text-xs font-bold text-white/55">Code postal et ville</label>
-          <div className="flex gap-3">
-            <div className="w-[38%]">
-              <input
-                id="checkout-postal"
-                value={customer.postalCode}
-                onChange={(e) => { setCustomer((v) => ({ ...v, postalCode: e.target.value })); resetValidation() }}
-                onBlur={() => touch('postalCode')}
-                placeholder="1000"
-                inputMode="numeric"
-                autoComplete="postal-code"
-                className={`${INPUT_BASE} w-full`}
-              />
-              {touched.postalCode && errors.postalCode && <p className={ERROR_CLASS}>{errors.postalCode}</p>}
-            </div>
-            <div className="flex-1">
-              <input
-                id="checkout-city"
-                value={customer.city}
-                onChange={(e) => { setCustomer((v) => ({ ...v, city: e.target.value })); resetValidation() }}
-                onBlur={() => touch('city')}
-                placeholder="Bruxelles"
-                autoComplete="address-level2"
-                className={`${INPUT_BASE} w-full`}
-              />
-              {touched.city && errors.city && <p className={ERROR_CLASS}>{errors.city}</p>}
-            </div>
+        <div className="flex gap-3">
+          <div className="w-[38%]">
+            <Input
+              id="checkout-postal"
+              label="Code postal"
+              variant="ghost"
+              size="lg"
+              value={customer.postalCode}
+              onChange={(e) => { setCustomer((v) => ({ ...v, postalCode: e.target.value })); resetValidation() }}
+              onBlur={() => touch('postalCode')}
+              placeholder="1000"
+              inputMode="numeric"
+              autoComplete="postal-code"
+              error={touched.postalCode && errors.postalCode ? errors.postalCode : undefined}
+            />
+          </div>
+          <div className="flex-1">
+            <Input
+              id="checkout-city"
+              label="Ville"
+              variant="ghost"
+              size="lg"
+              value={customer.city}
+              onChange={(e) => { setCustomer((v) => ({ ...v, city: e.target.value })); resetValidation() }}
+              onBlur={() => touch('city')}
+              placeholder="Bruxelles"
+              autoComplete="address-level2"
+              error={touched.city && errors.city ? errors.city : undefined}
+            />
           </div>
         </div>
 
@@ -279,7 +275,7 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
               value={customer.country}
               onChange={(e) => handleCountryChange(e.target.value)}
               autoComplete="country"
-              className={`${INPUT_CLASS} appearance-none pr-10`}
+              className="h-13 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25 w-full appearance-none pr-10"
             >
               {CHECKOUT_COUNTRIES.map((c) => (
                 <option key={c.code} value={c.code} className="bg-[#0B0F15] text-white">
