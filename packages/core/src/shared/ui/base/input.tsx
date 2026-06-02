@@ -143,7 +143,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               className,
             )}
             style={{
-              WebkitTextFillColor: 'var(--foreground)',
+              WebkitTextFillColor: variant === 'ghost' ? 'white' : 'var(--foreground)',
               transition: 'background-color 5000s ease-in-out 0s',
             }}
             onBlur={() => setIsFocused(false)}
