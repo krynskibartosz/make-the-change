@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   CardContent,
+  Input,
 } from '@make-the-change/core/ui'
 import { ArrowLeft, Camera, CheckCircle2, ChevronRight, Leaf, Loader2, Lock, Mail } from 'lucide-react'
 import { formatAmountPlain, formatAmountNumber } from '@/lib/formatters'
@@ -634,23 +635,18 @@ export function ProjectContributeOneFlow({
 
               {/* Email de confirmation */}
               <div className="w-full">
-                <label className="mb-1.5 block text-xs font-bold text-white/60">
-                  Email de confirmation
-                </label>
-                <input
+                <Input
+                  label="Email de confirmation"
                   type="email"
+                  variant="ghost"
+                  size="lg"
                   value={guestEmail}
                   onChange={(event) => setGuestEmail(event.target.value)}
                   placeholder="vous@email.com"
-                  className="w-full rounded-xl border border-white/10 bg-white/5 p-4 text-base text-white outline-none placeholder:text-white/35 focus:border-lime-400/50 focus:ring-0"
                   required
+                  helpText="Reçu de contribution et suivi du projet. Ce reçu n'est pas un reçu fiscal déductible."
+                  labelClassName="text-xs font-bold text-white/60"
                 />
-                <p className="mt-1.5 text-[11px] text-white/35">
-                  Reçu de contribution et suivi du projet. Ce reçu n&apos;est pas un reçu fiscal déductible.
-                </p>
-                {guestEmailError ? (
-                  <p className="mt-1.5 text-xs font-semibold text-destructive">{guestEmailError}</p>
-                ) : null}
               </div>
 
               {/* Module paiement prototype */}
