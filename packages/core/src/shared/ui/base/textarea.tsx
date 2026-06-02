@@ -5,7 +5,7 @@ import { forwardRef, useId, useState } from 'react'
 
 import { cn } from '../utils'
 
-export type TextAreaVariant = 'default' | 'outlined' | 'filled'
+export type TextAreaVariant = 'default' | 'outlined' | 'filled' | 'ghost'
 
 export type TextAreaProps = {
   label?: string
@@ -60,9 +60,14 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     }
 
     const variantClasses = {
-      default: 'bg-background/70 backdrop-blur-sm border shadow-sm',
-      outlined: 'bg-transparent border-2 border-[hsl(var(--border))]',
-      filled: 'bg-muted/70 backdrop-blur-sm border border-[hsl(var(--border)/0.7)] shadow-sm',
+      default:
+        'bg-background/70 backdrop-blur-sm border shadow-sm text-foreground placeholder:text-muted-foreground/60',
+      outlined:
+        'bg-transparent border-2 border-[hsl(var(--border))] text-foreground placeholder:text-muted-foreground/60',
+      filled:
+        'bg-muted/70 backdrop-blur-sm border border-[hsl(var(--border)/0.7)] shadow-sm text-foreground placeholder:text-muted-foreground/60',
+      ghost:
+        'bg-white/[0.04] border border-white/10 text-white placeholder:text-white/25',
     }
 
     const hasTrailingAffordance = Boolean(trailingIcon) || Boolean(error)
@@ -104,7 +109,6 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
               'flex w-full rounded-xl resize-y transition-all duration-300',
               variantClasses[variant],
               sizeClasses[size],
-              'text-foreground placeholder:text-muted-foreground/60',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-1',
               'focus-visible:border-primary/70 focus-visible:shadow-md',
               'disabled:cursor-not-allowed disabled:opacity-50',
