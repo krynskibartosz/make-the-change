@@ -36,6 +36,17 @@ export function FullScreenSlideModal({
   const [isHeaderElevated, setIsHeaderElevated] = useState(false)
 
   useEffect(() => {
+    if (!title) return
+
+    const previousTitle = document.title
+    document.title = `${title} | Make the Change`
+
+    return () => {
+      document.title = previousTitle
+    }
+  }, [title])
+
+  useEffect(() => {
     if (asPage) return
 
     const html = document.documentElement

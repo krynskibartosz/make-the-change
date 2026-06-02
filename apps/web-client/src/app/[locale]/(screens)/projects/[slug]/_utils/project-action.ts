@@ -19,7 +19,7 @@ export function getProjectPrimaryAction(
 ): ProjectPrimaryAction {
   const hasDonationOptions = Array.isArray(project.donation_options) && project.donation_options.length > 0
   const isContribution = Boolean(project.is_donation_project || hasDonationOptions || project.type === 'reef' || project.type === 'coral')
-  const baseHref = `/projects/${project.slug}/${isContribution ? 'donate' : 'support'}`
+  const baseHref = `/projects/${project.slug}/${isContribution ? 'contribute' : 'support'}`
   const href = source ? `${baseHref}?source=${encodeURIComponent(source)}` : baseHref
 
   return {
