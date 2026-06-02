@@ -6,7 +6,7 @@ import type { ForwardedRef, InputHTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useId, useState } from 'react'
 import { cn } from '../utils'
 
-export type InputVariant = 'default' | 'outlined' | 'filled'
+export type InputVariant = 'default' | 'outlined' | 'filled' | 'ghost'
 
 export type InputProps = {
   label?: string
@@ -81,10 +81,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
     const variantClasses = {
       default:
-        'bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] shadow-sm dark:dark:bg-background/90',
-      outlined: 'bg-transparent border-2 dark:border-[hsl(var(--border)/0.8)]',
+        'bg-background/70 backdrop-blur-sm border border-[hsl(var(--border)/0.8)] shadow-sm dark:bg-background/90 text-foreground placeholder:text-muted-foreground/60',
+      outlined:
+        'bg-transparent border-2 dark:border-[hsl(var(--border)/0.8)] text-foreground placeholder:text-muted-foreground/60',
       filled:
-        'bg-muted/70 backdrop-blur-sm border border-[hsl(var(--border)/0.7)] shadow-sm dark:bg-muted/50 dark:border-[hsl(var(--border))]',
+        'bg-muted/70 backdrop-blur-sm border border-[hsl(var(--border)/0.7)] shadow-sm dark:bg-muted/50 dark:border-[hsl(var(--border))] text-foreground placeholder:text-muted-foreground/60',
+      ghost:
+        'bg-white/[0.04] border border-white/10 text-white placeholder:text-white/25',
     }
 
     return (
@@ -129,7 +132,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               'flex w-full rounded-2xl transition-all duration-300',
               variantClasses[variant],
               sizeClasses[size],
-              'text-foreground placeholder:text-muted-foreground/60',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-1',
               'focus-visible:border-primary/70 focus-visible:shadow-md',
               'disabled:cursor-not-allowed disabled:opacity-50',
