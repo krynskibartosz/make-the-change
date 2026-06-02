@@ -10,10 +10,8 @@ import {
   Mail,
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useActionState } from 'react'
-import { useState } from 'react'
-import { Input } from '@make-the-change/core/ui'
-import { TextArea } from '@make-the-change/core/ui'
+import { useActionState, useState } from 'react'
+import { Input, TextArea } from '@make-the-change/core/ui'
 import { sendContactMessage, type ContactActionState } from './actions'
 
 type Subject = 'bug' | 'partnership' | 'other' | 'order'
