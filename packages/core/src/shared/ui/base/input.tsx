@@ -139,7 +139,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               hasTrailingAffordance && 'pr-12',
               error
                 ? 'border-destructive bg-destructive/5 focus-visible:ring-destructive/30 focus-visible:border-destructive dark:bg-destructive/10'
-                : 'hover:hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95',
+                : 'hover:shadow-sm dark:hover:border-[hsl(var(--border)/0.9)] dark:hover:bg-background/95',
               className,
             )}
             style={{

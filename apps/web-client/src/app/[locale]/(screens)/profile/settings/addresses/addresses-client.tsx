@@ -43,7 +43,7 @@ function AddressFields({
           <select
             value={form.country}
             onChange={(e) => onChange({ ...form, country: e.target.value, street: '', postalCode: '', city: '' })}
-            className="h-12 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25 w-full appearance-none pr-10"
+            className="h-13 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25 w-full appearance-none pr-10"
           >
             {CHECKOUT_COUNTRIES.map((c) => (
               <option key={c.code} value={c.code} className="bg-[#0B0F15]">{c.label}</option>
@@ -60,7 +60,7 @@ function AddressFields({
           value={form.street}
           country={form.country}
           placeholder="Rue de la Paix 10"
-          className="h-12 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25 w-full"
+          className="h-13 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25 w-full"
           onChange={(street) => onChange({ ...form, street })}
           onSelect={({ street, postalCode, city }) => onSelect({ ...form, street, postalCode, city })}
         />

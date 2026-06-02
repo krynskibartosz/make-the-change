@@ -644,6 +644,7 @@ export function ProjectContributeOneFlow({
                   onChange={(event) => setGuestEmail(event.target.value)}
                   placeholder="vous@email.com"
                   required
+                  error={guestEmailError || undefined}
                   helpText="Reçu de contribution et suivi du projet. Ce reçu n'est pas un reçu fiscal déductible."
                   labelClassName="text-xs font-bold text-white/60"
                 />
