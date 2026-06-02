@@ -10,13 +10,21 @@ import {
   Mail,
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useActionState } from 'react'
 import { useState } from 'react'
+import { Input } from '@make-the-change/core/ui'
+import { TextArea } from '@make-the-change/core/ui'
+import { sendContactMessage, type ContactActionState } from './actions'
 
 type Subject = 'bug' | 'partnership' | 'other' | 'order'
 
 export default function ContactPage() {
   const [selectedSubject, setSelectedSubject] = useState<Subject>('bug')
-  const [isSent, setIsSent] = useState(false)
+  const [state, formAction, isPending] = useActionState<ContactActionState, FormData>(
+    sendContactMessage,
+    {},
+  )
+  const isSent = state.success === true
   const router = useRouter()
 
   return (
@@ -43,14 +51,14 @@ export default function ContactPage() {
           Gardons le lien
         </span>
         <h1 className="text-4xl font-black text-white hyphens-none tracking-tighter text-balance leading-tight mb-3">
-          Comment pouvons-nous vous aider ?
+          Comment pouvons-nous vous aider ?
         </h1>
         <p className="text-gray-400 text-sm text-pretty leading-relaxed mb-6">
           Une idée, un partenariat ou un retour sur l'application ? L'équipe lit chaque message avec attention.
         </p>
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-lime-400 animate-pulse shrink-0" />
-          <span className="text-xs text-gray-500 font-medium">Temps de réponse estimé : 24 à 48h</span>
+          <span className="text-xs text-gray-500 font-medium">Temps de réponse estimé : 24 à 48h</span>
         </div>
       </div>
 
@@ -110,8 +118,8 @@ export default function ContactPage() {
       </div>
 
       {/* 3. FORMULAIRE - Flat, intégré au fond */}
-      <form 
-        onSubmit={(e) => { e.preventDefault(); setIsSent(true); }}
+      <form
+        action={formAction}
         className="relative z-10 px-6 mb-20 flex flex-col gap-6"
       >
         {isSent ? (
@@ -154,32 +162,43 @@ export default function ContactPage() {
 
             {/* Inset grouped fields */}
             <div className="bg-[#1A1F26] rounded-2xl border border-white/5 overflow-hidden flex flex-col">
-              <div className="px-4 py-3 border-b border-white/5 focus-within:bg-white/[0.02] transition-colors">
-                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest block mb-1">Votre email</label>
-                <input
+              <input type="hidden" name="subject" value={selectedSubject} />
+              <div className="px-4 py-3 border-b border-white/5">
+                <Input
+                  name="email"
                   type="email"
-                  required
+                  label="Votre email"
+                  variant="ghost"
                   placeholder="Pour vous recontacter..."
-                  className="w-full bg-transparent text-white text-base focus:outline-none placeholder:text-gray-600 font-medium"
+                  required
+                  labelClassName="text-[10px] font-bold text-gray-500 uppercase tracking-widest block mb-1"
+                  className="bg-transparent border-0 shadow-none focus-visible:ring-0 px-0 text-base font-medium rounded-none"
                 />
               </div>
-              <div className="px-4 py-3 focus-within:bg-white/[0.02] transition-colors">
-                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest block mb-1">Votre message</label>
-                <textarea
+              <div className="px-4 py-3">
+                <TextArea
+                  name="message"
+                  label="Votre message"
+                  variant="ghost"
                   rows={4}
                   required
                   placeholder="Décrivez votre demande en détail..."
-                  className="w-full bg-transparent text-white text-base focus:outline-none placeholder:text-gray-600 font-medium resize-none"
+                  className="bg-transparent border-0 shadow-none focus-visible:ring-0 px-0 text-base font-medium resize-none rounded-none"
                 />
               </div>
             </div>
 
+            {state.error && (
+              <p className="text-sm font-medium text-red-400">{state.error}</p>
+            )}
+
             {/* Submit */}
             <button
               type="submit"
-              className="w-full bg-lime-400 text-[#0B0F15] font-black text-lg h-14 rounded-2xl active:scale-[0.98] transition-all shadow-[0_0_20px_rgba(132,204,22,0.15)] flex items-center justify-center"
+              disabled={isPending}
+              className="w-full bg-lime-400 text-[#0B0F15] font-black text-lg h-14 rounded-2xl active:scale-[0.98] transition-all shadow-[0_0_20px_rgba(132,204,22,0.15)] flex items-center justify-center disabled:opacity-60"
             >
-              Envoyer le message
+              {isPending ? 'Envoi…' : 'Envoyer le message'}
             </button>
           </>
         )}
