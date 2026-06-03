@@ -32,9 +32,10 @@ export async function login(_prevState: AuthState, formData: FormData): Promise<
   const password = getFormDataString(formData, 'password')
   const returnToRaw = getFormDataString(formData, 'returnTo')
 
-  if (!email || !password) {
-    return { error: 'Email and password are required' }
-  }
+  const errors: Record<string, string> = {}
+  if (!email) errors.email = 'Email is required'
+  if (!password) errors.password = 'Password is required'
+  if (Object.keys(errors).length > 0) return { errors }
 
   if (isMockDataSource) {
     await setMockViewerSession(getMockExistingViewerSession(email))
@@ -53,7 +54,7 @@ export async function login(_prevState: AuthState, formData: FormData): Promise<
   })
 
   if (error) {
-    return { error: error.message }
+    return { formError: error.message }
   }
 
   revalidatePath('/', 'layout')

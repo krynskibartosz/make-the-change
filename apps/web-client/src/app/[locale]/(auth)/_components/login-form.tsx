@@ -8,8 +8,12 @@ import {
   CardHeader,
   CardTitle,
   Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
   Form,
-  LegacyInput as Input,
+  Input,
+  PasswordInput,
 } from '@make-the-change/core/ui'
 import { Lock, Mail } from 'lucide-react'
 import { AuthSubmitButton } from '@/app/[locale]/(auth)/_components/auth-submit-button'
@@ -62,37 +66,50 @@ export function LoginForm({ modal = false }: LoginFormProps) {
           modal ? 'min-h-0 flex-1 overflow-y-auto p-6 pt-4 sm:p-8 sm:pt-4' : 'p-8 pt-4',
         )}
       >
-        <Form action={formAction} className="space-y-6">
+        <Form action={formAction} errors={state.errors} className="space-y-6">
           <input type="hidden" name="returnTo" value={returnTo} />
-          <FormErrorAlert error={state.error} />
+          <FormErrorAlert error={state.formError ?? state.error} />
 
           <div className="space-y-4">
-            <Field className="relative group">
-              <Mail className="absolute left-4 top-9.5 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                label={t('email')}
-                placeholder={t('email_placeholder')}
-                className="pl-12 h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20"
-                required
-                autoComplete="email"
-              />
+            <Field name="email" className="relative group">
+              <FieldLabel className="block text-sm font-medium text-muted-foreground mb-1.5">
+                {t('email')}
+              </FieldLabel>
+              <div className="relative">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary z-10 pointer-events-none" />
+                <FieldControl
+                  render={
+                    <Input
+                      className="pl-12 h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20"
+                    />
+                  }
+                  type="email"
+                  required
+                  placeholder={t('email_placeholder')}
+                  autoComplete="email"
+                />
+              </div>
+              <FieldError className="mt-1.5 text-sm text-destructive" />
             </Field>
 
-            <Field className="relative group">
-              <Lock className="absolute left-4 top-9.5 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                label={t('password')}
-                placeholder="••••••••"
-                className="pl-12 h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20"
-                required
-                autoComplete="current-password"
-              />
+            <Field name="password" className="relative group">
+              <FieldLabel className="block text-sm font-medium text-muted-foreground mb-1.5">
+                {t('password')}
+              </FieldLabel>
+              <div className="relative">
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary z-10 pointer-events-none" />
+                <FieldControl
+                  render={
+                    <PasswordInput
+                      className="pl-12 h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20"
+                    />
+                  }
+                  required
+                  placeholder="••••••••"
+                  autoComplete="current-password"
+                />
+              </div>
+              <FieldError className="mt-1.5 text-sm text-destructive" />
             </Field>
           </div>
 
