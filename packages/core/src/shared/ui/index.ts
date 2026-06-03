@@ -118,7 +118,13 @@ export {
 export { Fieldset, FieldsetLegend } from './base/fieldset'
 export { Form } from './base/form'
 export { Input, LegacyInput, LegacyPasswordInput, type InputProps, type LegacyInputProps } from './base/input'
-export { PasswordInput, type PasswordInputProps } from './base/password-input'
+export {
+  PasswordInput,
+  PasswordInputField,
+  PasswordVisibilityToggle,
+  type PasswordInputProps,
+  type PasswordInputFieldProps,
+} from './base/password-input'
 export {
   inputVariants,
   textareaVariants,

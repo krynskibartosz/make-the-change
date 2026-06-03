@@ -63,14 +63,17 @@ Retourner `{ errors: { email: 'X' } }` depuis un Server Action affiche automatiq
 
 ## Password
 
-Utiliser `PasswordInput` (toggle eye/eyeOff inclus) :
+Utiliser `PasswordInputField` + `PasswordInput` + `PasswordVisibilityToggle` (toggle eye/eyeOff). Le `PasswordInputField` gère le state de visibilité et le positionnement, `PasswordInput` reçoit les props Field correctement sur l'input lui-même :
 
 ```tsx
-import { PasswordInput } from '@make-the-change/core/ui'
+import { PasswordInput, PasswordInputField, PasswordVisibilityToggle } from '@make-the-change/core/ui'
 
 <Field name="password">
   <FieldLabel>Mot de passe</FieldLabel>
-  <FieldControl render={<PasswordInput variant="ghost" />} required minLength={8} />
+  <PasswordInputField>
+    <FieldControl render={<PasswordInput />} required minLength={8} />
+    <PasswordVisibilityToggle />
+  </PasswordInputField>
   <FieldError match="valueMissing">Requis</FieldError>
   <FieldError match="tooShort">8 caractères minimum</FieldError>
 </Field>

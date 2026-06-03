@@ -14,6 +14,8 @@ import {
   Form,
   Input,
   PasswordInput,
+  PasswordInputField,
+  PasswordVisibilityToggle,
 } from '@make-the-change/core/ui'
 import { Lock, Mail } from 'lucide-react'
 import { AuthSubmitButton } from '@/app/[locale]/(auth)/_components/auth-submit-button'
@@ -96,7 +98,7 @@ export function LoginForm({ modal = false }: LoginFormProps) {
               <FieldLabel className="block text-sm font-medium text-muted-foreground mb-1.5">
                 {t('password')}
               </FieldLabel>
-              <div className="relative">
+              <PasswordInputField>
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary z-10 pointer-events-none" />
                 <FieldControl
                   render={
@@ -108,7 +110,8 @@ export function LoginForm({ modal = false }: LoginFormProps) {
                   placeholder="••••••••"
                   autoComplete="current-password"
                 />
-              </div>
+                <PasswordVisibilityToggle />
+              </PasswordInputField>
               <FieldError className="mt-1.5 text-sm text-destructive" />
             </Field>
           </div>

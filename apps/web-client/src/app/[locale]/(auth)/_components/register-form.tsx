@@ -15,6 +15,8 @@ import {
   Form,
   Input,
   PasswordInput,
+  PasswordInputField,
+  PasswordVisibilityToggle,
 } from '@make-the-change/core/ui'
 import { FormErrorAlert } from '@/app/[locale]/(auth)/_components/form-error-alert'
 import {
@@ -413,19 +415,22 @@ export function RegisterForm({ modal = false }: RegisterFormProps) {
                   <FieldLabel className="block text-sm font-medium text-muted-foreground mb-1.5">
                     {t('password')}
                   </FieldLabel>
-                  <FieldControl
-                    render={
-                      <PasswordInput className="h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20" />
-                    }
-                    required
-                    minLength={8}
-                    placeholder="••••••••"
-                    autoComplete="new-password"
-                    value={formValues.password}
-                    onChange={(event) =>
-                      setFormValues((prev) => ({ ...prev, password: (event.target as HTMLInputElement).value }))
-                    }
-                  />
+                  <PasswordInputField>
+                    <FieldControl
+                      render={
+                        <PasswordInput className="h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20" />
+                      }
+                      required
+                      minLength={8}
+                      placeholder="••••••••"
+                      autoComplete="new-password"
+                      value={formValues.password}
+                      onChange={(event) =>
+                        setFormValues((prev) => ({ ...prev, password: (event.target as HTMLInputElement).value }))
+                      }
+                    />
+                    <PasswordVisibilityToggle />
+                  </PasswordInputField>
                   <FieldError className="mt-1.5 text-sm text-destructive" match="valueMissing">
                     Requis
                   </FieldError>
@@ -444,18 +449,21 @@ export function RegisterForm({ modal = false }: RegisterFormProps) {
                   <FieldLabel className="block text-sm font-medium text-muted-foreground mb-1.5">
                     {t('confirm_password')}
                   </FieldLabel>
-                  <FieldControl
-                    render={
-                      <PasswordInput className="h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20" />
-                    }
-                    required
-                    placeholder="••••••••"
-                    autoComplete="new-password"
-                    value={formValues.confirmPassword}
-                    onChange={(event) =>
-                      setFormValues((prev) => ({ ...prev, confirmPassword: (event.target as HTMLInputElement).value }))
-                    }
-                  />
+                  <PasswordInputField>
+                    <FieldControl
+                      render={
+                        <PasswordInput className="h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20" />
+                      }
+                      required
+                      placeholder="••••••••"
+                      autoComplete="new-password"
+                      value={formValues.confirmPassword}
+                      onChange={(event) =>
+                        setFormValues((prev) => ({ ...prev, confirmPassword: (event.target as HTMLInputElement).value }))
+                      }
+                    />
+                    <PasswordVisibilityToggle />
+                  </PasswordInputField>
                   <FieldError className="mt-1.5 text-sm text-destructive" />
                 </Field>
               </div>
