@@ -1,6 +1,6 @@
 'use client'
 
-import { AlertTriangle, CheckCircle, ChevronDown, Loader2, MapPin } from 'lucide-react'
+import { AlertTriangle, CheckCircle, Loader2, MapPin } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useRef, useState, useTransition } from 'react'
 import {
@@ -9,6 +9,11 @@ import {
   FieldError,
   FieldLabel,
   Input,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTriggerBare,
+  SelectValue,
 } from '@make-the-change/core/ui'
 import { saveCheckoutCustomerAction, saveAddressAction } from '@/app/[locale]/(screens)/products/checkout/_features/checkout-actions'
 import type { MockCheckoutCustomer } from '@/lib/mock/mock-checkout-session'
@@ -288,26 +293,28 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
 
         {/* Pays */}
         <div className="space-y-1">
-          <label htmlFor="checkout-country" className="block text-xs font-bold text-white/55">Pays</label>
-          <div className="relative">
-            <select
+          <label className="block text-xs font-bold text-white/55">Pays</label>
+          <Select
+            value={customer.country}
+            onValueChange={(value) => {
+              const next = typeof value === 'string' ? value : String(value)
+              handleCountryChange(next)
+            }}
+          >
+            <SelectTriggerBare
               id="checkout-country"
-              value={customer.country}
-              onChange={(e) => handleCountryChange(e.target.value)}
-              autoComplete="country"
-              className="h-13 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25 w-full appearance-none pr-10"
+              className="h-13 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white w-full"
             >
+              <SelectValue placeholder="Pays" />
+            </SelectTriggerBare>
+            <SelectContent>
               {CHECKOUT_COUNTRIES.map((c) => (
-                <option key={c.code} value={c.code} className="bg-[#0B0F15] text-white">
+                <SelectItem key={c.code} value={c.code}>
                   {c.label}
-                </option>
+                </SelectItem>
               ))}
-            </select>
-            <ChevronDown
-              className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40"
-              aria-hidden="true"
-            />
-          </div>
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Toggle sauvegarder */}
