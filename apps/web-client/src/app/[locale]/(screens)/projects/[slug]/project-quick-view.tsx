@@ -23,7 +23,6 @@ import { ProjectCountrySheet } from './_components/quick-view/country-sheet'
 import { ProjectFundingSheet } from './_components/quick-view/funding-sheet'
 import { ProjectQuickViewHero } from './_components/quick-view/hero'
 import { ProjectImpactPreview } from './_components/quick-view/impact-preview'
-import { ProjectLearningLinks } from './_components/shared/learning-links'
 import { ProjectPartnerAdvantagesSection } from './_components/shared/partner-advantages'
 import { ProjectProducerProductsSection } from './_components/shared/producer-products'
 import { SimilarProjectsCarousel } from './_components/shared/similar-projects-carousel'
@@ -553,9 +552,6 @@ export async function ProjectQuickView({
             />
           </div>
           <div className="mt-10">{fundingPanel}</div>
-          <div className="mt-10 px-4 sm:px-5">
-            <ProjectLearningLinks projectSlug={project.slug} />
-          </div>
           <div className="mt-12 w-full max-w-full overflow-hidden px-4 sm:px-5">
             <SimilarProjectsCarousel
               locale={locale}
