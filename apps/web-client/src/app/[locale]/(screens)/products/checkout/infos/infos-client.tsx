@@ -3,7 +3,13 @@
 import { AlertTriangle, CheckCircle, ChevronDown, Loader2, MapPin } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useRef, useState, useTransition } from 'react'
-import { Input } from '@make-the-change/core/ui'
+import {
+  Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
+  Input,
+} from '@make-the-change/core/ui'
 import { saveCheckoutCustomerAction, saveAddressAction } from '@/app/[locale]/(screens)/products/checkout/_features/checkout-actions'
 import type { MockCheckoutCustomer } from '@/lib/mock/mock-checkout-session'
 import type { MockUserAddress } from '@/lib/mock/mock-addresses'
@@ -37,27 +43,18 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
   const [showSheet, setShowSheet] = useState(false)
   const [saveAddress, setSaveAddress] = useState(isConnected && savedAddresses.length === 0)
   const [addressSaveError, setAddressSaveError] = useState(false)
-  const [touched, setTouched] = useState<Record<string, boolean>>({})
-
-  // Address validation state machine
+  // Address validation state machine (kept — async API validation)
   const [validationPhase, setValidationPhase] = useState<ValidationPhase>('idle')
   const [validationSuggestion, setValidationSuggestion] = useState<ValidationSuggestion | null>(null)
 
   const hasSavedAddresses = savedAddresses.length > 0
 
-  const errors = {
-    email: !isValidEmail(customer.email) ? 'Adresse e-mail invalide' : null,
-    name: customer.name.trim().length < 2 ? 'Au moins 2 caractères requis' : null,
-    street: customer.street.trim().length < 4 ? 'Adresse trop courte' : null,
-    postalCode: customer.postalCode.trim().length < 4 ? 'Code postal invalide' : null,
-    city: customer.city.trim().length < 2 ? 'Ville requise' : null,
-  }
-
-  const canContinue = Object.values(errors).every((e) => e === null)
-
-  function touch(field: string) {
-    setTouched((v) => ({ ...v, [field]: true }))
-  }
+  const canContinue =
+    isValidEmail(customer.email) &&
+    customer.name.trim().length >= 2 &&
+    customer.street.trim().length >= 4 &&
+    customer.postalCode.trim().length >= 4 &&
+    customer.city.trim().length >= 2
 
   function resetValidation() {
     if (validationPhase !== 'idle') setValidationPhase('idle')
@@ -77,7 +74,6 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
       city: address.city,
       country: address.country,
     }))
-    setTouched((v) => ({ ...v, street: false, postalCode: false, city: false }))
     resetValidation()
   }
 
@@ -124,7 +120,6 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
 
   async function handleContinue() {
     if (isProcessingRef.current) return
-    setTouched({ email: true, name: true, street: true, postalCode: true, city: true })
     if (!canContinue) return
 
     isProcessingRef.current = true
@@ -185,37 +180,50 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
 
       <div className="mt-6 space-y-4">
         {/* E-mail */}
-        <Input
-          id="checkout-email"
-          label="E-mail"
-          variant="ghost"
-          size="lg"
-          value={customer.email}
-          onChange={(e) => setCustomer((v) => ({ ...v, email: e.target.value }))}
-          onBlur={() => touch('email')}
-          placeholder="votre@email.com"
-          type="email"
-          autoComplete="email"
-          error={touched.email && errors.email ? errors.email : undefined}
-        />
+        <Field name="email">
+          <FieldLabel className="block text-xs font-bold text-white/55 mb-1.5">E-mail</FieldLabel>
+          <FieldControl
+            render={<Input variant="ghost" size="lg" />}
+            type="email"
+            required
+            value={customer.email}
+            onChange={(e) => setCustomer((v) => ({ ...v, email: (e.target as HTMLInputElement).value }))}
+            placeholder="votre@email.com"
+            autoComplete="email"
+          />
+          <FieldError className="mt-1 text-xs text-red-400" match="valueMissing">
+            E-mail requis
+          </FieldError>
+          <FieldError className="mt-1 text-xs text-red-400" match="typeMismatch">
+            Format e-mail invalide
+          </FieldError>
+        </Field>
 
         {/* Nom */}
-        <Input
-          id="checkout-name"
-          label="Nom complet"
-          variant="ghost"
-          size="lg"
-          value={customer.name}
-          onChange={(e) => setCustomer((v) => ({ ...v, name: e.target.value }))}
-          onBlur={() => touch('name')}
-          placeholder="Prénom Nom"
-          autoComplete="name"
-          error={touched.name && errors.name ? errors.name : undefined}
-        />
+        <Field name="name">
+          <FieldLabel className="block text-xs font-bold text-white/55 mb-1.5">Nom complet</FieldLabel>
+          <FieldControl
+            render={<Input variant="ghost" size="lg" />}
+            required
+            minLength={2}
+            value={customer.name}
+            onChange={(e) => setCustomer((v) => ({ ...v, name: (e.target as HTMLInputElement).value }))}
+            placeholder="Prénom Nom"
+            autoComplete="name"
+          />
+          <FieldError className="mt-1 text-xs text-red-400" match="valueMissing">
+            Nom requis
+          </FieldError>
+          <FieldError className="mt-1 text-xs text-red-400" match="tooShort">
+            Au moins 2 caractères requis
+          </FieldError>
+        </Field>
 
         {/* Rue */}
-        <div className="space-y-1">
-          <label htmlFor="checkout-street" className="block text-xs font-bold text-white/55">Rue et numéro</label>
+        <Field name="street">
+          <FieldLabel className="block text-xs font-bold text-white/55 mb-1.5">
+            Rue et numéro
+          </FieldLabel>
           <AddressAutocompleteInput
             id="checkout-street"
             value={customer.street}
@@ -223,47 +231,59 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
             placeholder="Rue de la Paix 10"
             className="h-13 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25 w-full"
             onChange={(street) => { setCustomer((v) => ({ ...v, street })); resetValidation() }}
-            onBlur={() => touch('street')}
             onSelect={({ street, postalCode, city }) => {
               setCustomer((v) => ({ ...v, street, postalCode, city }))
-              setTouched((v) => ({ ...v, street: false, postalCode: false, city: false }))
               resetValidation()
             }}
           />
-          {touched.street && errors.street && <p className="mt-1 px-1 text-xs text-red-400/90">{errors.street}</p>}
-        </div>
+        </Field>
 
         {/* Code postal + Ville */}
         <div className="flex gap-3">
-          <div className="w-[38%]">
-            <Input
-              id="checkout-postal"
-              label="Code postal"
-              variant="ghost"
-              size="lg"
+          <Field name="postalCode" className="w-[38%]">
+            <FieldLabel className="block text-xs font-bold text-white/55 mb-1.5">
+              Code postal
+            </FieldLabel>
+            <FieldControl
+              render={<Input variant="ghost" size="lg" />}
+              required
+              minLength={4}
               value={customer.postalCode}
-              onChange={(e) => { setCustomer((v) => ({ ...v, postalCode: e.target.value })); resetValidation() }}
-              onBlur={() => touch('postalCode')}
+              onChange={(e) => {
+                setCustomer((v) => ({ ...v, postalCode: (e.target as HTMLInputElement).value }))
+                resetValidation()
+              }}
               placeholder="1000"
               inputMode="numeric"
               autoComplete="postal-code"
-              error={touched.postalCode && errors.postalCode ? errors.postalCode : undefined}
             />
-          </div>
-          <div className="flex-1">
-            <Input
-              id="checkout-city"
-              label="Ville"
-              variant="ghost"
-              size="lg"
+            <FieldError className="mt-1 text-xs text-red-400" match="valueMissing">
+              Requis
+            </FieldError>
+            <FieldError className="mt-1 text-xs text-red-400" match="tooShort">
+              Code postal invalide
+            </FieldError>
+          </Field>
+          <Field name="city" className="flex-1">
+            <FieldLabel className="block text-xs font-bold text-white/55 mb-1.5">
+              Ville
+            </FieldLabel>
+            <FieldControl
+              render={<Input variant="ghost" size="lg" />}
+              required
+              minLength={2}
               value={customer.city}
-              onChange={(e) => { setCustomer((v) => ({ ...v, city: e.target.value })); resetValidation() }}
-              onBlur={() => touch('city')}
+              onChange={(e) => {
+                setCustomer((v) => ({ ...v, city: (e.target as HTMLInputElement).value }))
+                resetValidation()
+              }}
               placeholder="Bruxelles"
               autoComplete="address-level2"
-              error={touched.city && errors.city ? errors.city : undefined}
             />
-          </div>
+            <FieldError className="mt-1 text-xs text-red-400" match="valueMissing">
+              Ville requise
+            </FieldError>
+          </Field>
         </div>
 
         {/* Pays */}

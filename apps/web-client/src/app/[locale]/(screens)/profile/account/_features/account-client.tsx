@@ -3,6 +3,7 @@
 import { ChevronLeft, ChevronRight, Lock } from 'lucide-react'
 import { useState, useTransition } from 'react'
 import { useRouter } from '@/i18n/navigation'
+import { Field, FieldControl, FieldError, FieldLabel, Input } from '@make-the-change/core/ui'
 import { updateAccount } from './actions'
 
 type AccountClientProps = {
@@ -75,38 +76,40 @@ export function AccountClient({ firstName, lastName, username, email }: AccountC
           </div>
 
           {/* Prénom */}
-          <div className="px-4 py-3.5 border-b border-white/5 focus-within:bg-white/[0.02] transition-colors">
-            <label
-              htmlFor="firstName"
-              className="text-[10px] font-bold text-white/50 uppercase tracking-widest block mb-0.5"
-            >
+          <Field name="firstName" className="px-4 py-3.5 border-b border-white/5 focus-within:bg-white/[0.02] transition-colors">
+            <FieldLabel className="text-[10px] font-bold text-white/50 uppercase tracking-widest block mb-0.5">
               Prénom
-            </label>
-            <input
-              id="firstName"
-              type="text"
+            </FieldLabel>
+            <FieldControl
+              render={
+                <Input
+                  variant="ghost"
+                  className="w-full bg-transparent border-0 shadow-none focus-visible:ring-0 px-0 text-base font-medium h-auto rounded-none"
+                />
+              }
               value={form.firstName}
-              onChange={(e) => setForm((prev) => ({ ...prev, firstName: e.target.value }))}
-              className="w-full bg-transparent text-white text-base focus:outline-none font-medium"
+              onChange={(e) => setForm((prev) => ({ ...prev, firstName: (e.target as HTMLInputElement).value }))}
             />
-          </div>
+            <FieldError className="mt-1 text-xs text-red-400" />
+          </Field>
 
           {/* Nom */}
-          <div className="px-4 py-3.5 focus-within:bg-white/[0.02] transition-colors">
-            <label
-              htmlFor="lastName"
-              className="text-[10px] font-bold text-white/50 uppercase tracking-widest block mb-0.5"
-            >
+          <Field name="lastName" className="px-4 py-3.5 focus-within:bg-white/[0.02] transition-colors">
+            <FieldLabel className="text-[10px] font-bold text-white/50 uppercase tracking-widest block mb-0.5">
               Nom
-            </label>
-            <input
-              id="lastName"
-              type="text"
+            </FieldLabel>
+            <FieldControl
+              render={
+                <Input
+                  variant="ghost"
+                  className="w-full bg-transparent border-0 shadow-none focus-visible:ring-0 px-0 text-base font-medium h-auto rounded-none"
+                />
+              }
               value={form.lastName}
-              onChange={(e) => setForm((prev) => ({ ...prev, lastName: e.target.value }))}
-              className="w-full bg-transparent text-white text-base focus:outline-none font-medium"
+              onChange={(e) => setForm((prev) => ({ ...prev, lastName: (e.target as HTMLInputElement).value }))}
             />
-          </div>
+            <FieldError className="mt-1 text-xs text-red-400" />
+          </Field>
         </div>
 
         {/* Section: Sécurité */}

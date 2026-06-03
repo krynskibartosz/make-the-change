@@ -5,6 +5,10 @@ import {
   Button,
   Card,
   CardContent,
+  Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
   Input,
 } from '@make-the-change/core/ui'
 import { Activity, ArrowLeft, Bug, Camera, CheckCircle2, ChevronRight, Cloud, Droplet, Droplets, Fish, Flower2, Grid3X3, Leaf, Loader2, Lock, Mail, TreePine, Waves } from 'lucide-react'
@@ -962,21 +966,26 @@ export function ProjectSupportOneFlow({
               <PaymentBreakdown amount={amountEur} mode="support" />
 
               {/* Email de confirmation */}
-              <div className="w-full">
-                <Input
-                  label="Email de confirmation"
+              <Field name="guestEmail" className="w-full">
+                <FieldLabel className="mb-1.5 block text-xs font-bold text-white/60">
+                  Email de confirmation
+                </FieldLabel>
+                <FieldControl
+                  render={<Input variant="ghost" size="lg" />}
                   type="email"
-                  variant="ghost"
-                  size="lg"
-                  value={guestEmail}
-                  onChange={(event) => setGuestEmail(event.target.value)}
-                  placeholder="vous@email.com"
                   required
-                  error={guestEmailError || undefined}
-                  helpText="Reçu de contribution et suivi du projet. Ce reçu n'est pas un reçu fiscal déductible."
-                  labelClassName="text-xs font-bold text-white/60"
+                  value={guestEmail}
+                  onChange={(event) => setGuestEmail((event.target as HTMLInputElement).value)}
+                  placeholder="vous@email.com"
                 />
-              </div>
+                <p className="mt-1.5 text-[11px] text-white/35">
+                  Reçu de contribution et suivi du projet. Ce reçu n&apos;est pas un reçu fiscal déductible.
+                </p>
+                {guestEmailError && (
+                  <p className="mt-1.5 text-xs font-semibold text-destructive">{guestEmailError}</p>
+                )}
+                <FieldError className="mt-1.5 text-xs font-semibold text-destructive" />
+              </Field>
 
               {/* Module paiement */}
               <div className="flex flex-col gap-3">

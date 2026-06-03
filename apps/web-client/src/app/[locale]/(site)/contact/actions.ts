@@ -1,23 +1,24 @@
 'use server'
 
-export type ContactActionState = {
-  success?: boolean
-  error?: string
+import type { ServerActionState } from '@/lib/server-actions'
+
+function isValidEmail(email: string): boolean {
+  const parts = email.split('@')
+  return parts.length === 2 && (parts[1]?.includes('.') ?? false)
 }
 
 export async function sendContactMessage(
-  _prev: ContactActionState,
+  _prev: ServerActionState,
   formData: FormData,
-): Promise<ContactActionState> {
+): Promise<ServerActionState> {
   const email = String(formData.get('email') ?? '').trim()
   const message = String(formData.get('message') ?? '').trim()
 
-  if (!email.includes('@') || !email.split('@')[1]?.includes('.')) {
-    return { error: 'Adresse e-mail invalide.' }
-  }
-  if (message.length < 10) {
-    return { error: 'Le message est trop court (10 caractères minimum).' }
-  }
+  const errors: Record<string, string> = {}
+  if (!isValidEmail(email)) errors.email = 'Adresse e-mail invalide.'
+  if (message.length < 10) errors.message = 'Message trop court (10 caractères minimum).'
+
+  if (Object.keys(errors).length > 0) return { errors }
 
   // TODO: wire to email service (Resend or similar)
   console.log('[contact] new message from', email)

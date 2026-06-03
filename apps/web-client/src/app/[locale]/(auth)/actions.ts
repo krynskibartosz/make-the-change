@@ -18,6 +18,8 @@ export type AuthState = {
   error?: string
   success?: string
   redirectUrl?: string
+  errors?: Record<string, string>
+  formError?: string
 }
 
 function getFormDataString(formData: FormData, key: string): string {
@@ -30,9 +32,10 @@ export async function login(_prevState: AuthState, formData: FormData): Promise<
   const password = getFormDataString(formData, 'password')
   const returnToRaw = getFormDataString(formData, 'returnTo')
 
-  if (!email || !password) {
-    return { error: 'Email and password are required' }
-  }
+  const errors: Record<string, string> = {}
+  if (!email) errors.email = 'Email is required'
+  if (!password) errors.password = 'Password is required'
+  if (Object.keys(errors).length > 0) return { errors }
 
   if (isMockDataSource) {
     await setMockViewerSession(getMockExistingViewerSession(email))
@@ -51,7 +54,7 @@ export async function login(_prevState: AuthState, formData: FormData): Promise<
   })
 
   if (error) {
-    return { error: error.message }
+    return { formError: error.message }
   }
 
   revalidatePath('/', 'layout')
@@ -71,17 +74,14 @@ export async function register(_prevState: AuthState, formData: FormData): Promi
   const lastName = getFormDataString(formData, 'lastName')
   const returnToRaw = getFormDataString(formData, 'returnTo')
 
-  if (!email || !password) {
-    return { error: 'Email and password are required' }
-  }
-
-  if (password !== confirmPassword) {
-    return { error: 'Passwords do not match' }
-  }
-
-  if (password.length < 8) {
-    return { error: 'Password must be at least 8 characters' }
-  }
+  const errors: Record<string, string> = {}
+  if (!firstName) errors.firstName = 'Prénom requis'
+  if (!lastName) errors.lastName = 'Nom requis'
+  if (!email) errors.email = 'Email requis'
+  if (!password) errors.password = 'Mot de passe requis'
+  if (password && password.length < 8) errors.password = '8 caractères minimum'
+  if (password && password !== confirmPassword) errors.confirmPassword = 'Les mots de passe ne correspondent pas'
+  if (Object.keys(errors).length > 0) return { errors }
 
   if (isMockDataSource) {
     const displayName = [firstName, lastName].filter(Boolean).join(' ').trim() || 'Nouveau membre'
@@ -115,11 +115,11 @@ export async function register(_prevState: AuthState, formData: FormData): Promi
   })
 
   if (error) {
-    return { error: error.message }
+    return { formError: error.message }
   }
 
   if (data.user?.identities?.length === 0) {
-    return { error: 'An account with this email already exists' }
+    return { errors: { email: 'Un compte avec cet email existe déjà' } }
   }
 
   // Record consents
@@ -169,7 +169,7 @@ export async function forgotPassword(
   const email = getFormDataString(formData, 'email')
 
   if (!email) {
-    return { error: 'Email is required' }
+    return { errors: { email: 'Email is required' } }
   }
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -177,7 +177,7 @@ export async function forgotPassword(
   })
 
   if (error) {
-    return { error: error.message }
+    return { formError: error.message }
   }
 
   return { success: 'Check your email for a password reset link' }

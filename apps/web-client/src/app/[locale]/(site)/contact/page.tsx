@@ -1,6 +1,15 @@
 'use client'
 
 import {
+  Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
+  Form,
+  Input,
+  TextArea,
+} from '@make-the-change/core/ui'
+import {
   ArrowRight,
   ArrowUpRight,
   ChevronLeft,
@@ -11,14 +20,14 @@ import {
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useActionState, useState } from 'react'
-import { Input, TextArea } from '@make-the-change/core/ui'
-import { sendContactMessage, type ContactActionState } from './actions'
+import { sendContactMessage } from './actions'
+import type { ServerActionState } from '@/lib/server-actions'
 
 type Subject = 'bug' | 'partnership' | 'other' | 'order'
 
 export default function ContactPage() {
   const [selectedSubject, setSelectedSubject] = useState<Subject>('bug')
-  const [state, formAction, isPending] = useActionState<ContactActionState, FormData>(
+  const [state, formAction, isPending] = useActionState<ServerActionState, FormData>(
     sendContactMessage,
     {},
   )
@@ -116,8 +125,9 @@ export default function ContactPage() {
       </div>
 
       {/* 3. FORMULAIRE - Flat, intégré au fond */}
-      <form
+      <Form
         action={formAction}
+        errors={state.errors}
         className="relative z-10 px-6 mb-20 flex flex-col gap-6"
       >
         {isSent ? (
@@ -161,33 +171,47 @@ export default function ContactPage() {
             {/* Inset grouped fields */}
             <div className="bg-[#1A1F26] rounded-2xl border border-white/5 overflow-hidden flex flex-col">
               <input type="hidden" name="subject" value={selectedSubject} />
-              <div className="px-4 py-3 border-b border-white/5">
-                <Input
-                  name="email"
+              <Field name="email" className="px-4 py-3 border-b border-white/5">
+                <FieldLabel className="text-[10px] font-bold text-gray-500 uppercase tracking-widest block mb-1">
+                  Votre email
+                </FieldLabel>
+                <FieldControl
+                  render={
+                    <Input
+                      variant="ghost"
+                      className="bg-transparent border-0 shadow-none focus-visible:ring-0 px-0 text-base font-medium h-auto"
+                    />
+                  }
                   type="email"
-                  label="Votre email"
-                  variant="ghost"
+                  required
                   placeholder="Pour vous recontacter..."
-                  required
-                  labelClassName="text-[10px] font-bold text-gray-500 uppercase tracking-widest block mb-1"
-                  className="bg-transparent border-0 shadow-none focus-visible:ring-0 px-0 text-base font-medium rounded-none"
                 />
-              </div>
-              <div className="px-4 py-3">
-                <TextArea
-                  name="message"
-                  label="Votre message"
-                  variant="ghost"
-                  rows={4}
+                <FieldError className="mt-1 text-xs text-red-400" />
+              </Field>
+              <Field name="message" className="px-4 py-3">
+                <FieldLabel className="text-[10px] font-bold text-gray-500 uppercase tracking-widest block mb-1">
+                  Votre message
+                </FieldLabel>
+                <FieldControl
+                  render={
+                    <TextArea
+                      variant="ghost"
+                      className="bg-transparent border-0 shadow-none focus-visible:ring-0 px-0 text-base font-medium resize-none min-h-0"
+                      rows={4}
+                    />
+                  }
                   required
+                  minLength={10}
                   placeholder="Décrivez votre demande en détail..."
-                  className="bg-transparent border-0 shadow-none focus-visible:ring-0 px-0 text-base font-medium resize-none rounded-none"
                 />
-              </div>
+                <FieldError className="mt-1 text-xs text-red-400" />
+              </Field>
             </div>
 
-            {state.error && (
-              <p className="text-sm font-medium text-red-400">{state.error}</p>
+            {state.formError && (
+              <p className="text-sm font-medium text-red-400" role="alert">
+                {state.formError}
+              </p>
             )}
 
             {/* Submit */}
@@ -200,7 +224,7 @@ export default function ContactPage() {
             </button>
           </>
         )}
-      </form>
+      </Form>
     </div>
   )
 }

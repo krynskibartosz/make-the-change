@@ -1,24 +1,52 @@
 'use client'
 
-import type { InputHTMLAttributes, ReactNode } from 'react'
+import type { ForwardedRef, InputHTMLAttributes, ReactNode, TextareaHTMLAttributes } from 'react'
 import { forwardRef, useId, useState } from 'react'
 
 import { cn } from '../utils'
+import { textareaVariants, type TextAreaVariantProps } from './input-variants'
 
-export type TextAreaVariant = 'default' | 'outlined' | 'filled' | 'ghost'
+/* ============================================================================
+ * NEW API
+ * ========================================================================= */
 
-export type TextAreaProps = {
+export type TextAreaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'size'> &
+  TextAreaVariantProps
+
+export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
+  ({ className, variant, size, ...props }, ref) => (
+    <textarea
+      ref={ref}
+      className={cn(textareaVariants({ variant, size }), className)}
+      {...props}
+    />
+  ),
+)
+TextArea.displayName = 'TextArea'
+
+/* ============================================================================
+ * LEGACY API — @deprecated, use composable TextArea + Field pattern instead
+ *
+ * Still used by: packages/core/src/shared/ui/forms/form-textarea.tsx.
+ * Do not introduce new usages.
+ * ========================================================================= */
+
+export type LegacyTextAreaVariant = 'default' | 'outlined' | 'filled' | 'ghost'
+
+/** @deprecated Use the new composable `TextArea` + `Field` pattern. */
+export type LegacyTextAreaProps = {
   label?: string
   error?: string
   helpText?: string
   leadingIcon?: ReactNode
   trailingIcon?: ReactNode
-  variant?: TextAreaVariant
+  variant?: LegacyTextAreaVariant
   size?: 'sm' | 'md' | 'lg'
   rows?: number
 } & Omit<InputHTMLAttributes<HTMLTextAreaElement>, 'size'>
 
-export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
+/** @deprecated Use the new composable `TextArea` + `Field` pattern. */
+export const LegacyTextArea = forwardRef<HTMLTextAreaElement, LegacyTextAreaProps>(
   (
     {
       className,
@@ -33,7 +61,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       id,
       ...props
     },
-    ref,
+    ref: ForwardedRef<HTMLTextAreaElement>,
   ) => {
     const [isFocused, setIsFocused] = useState(false)
     const [shakeAnimation, setShakeAnimation] = useState('')
@@ -150,5 +178,4 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     )
   },
 )
-
-TextArea.displayName = 'TextArea'
+LegacyTextArea.displayName = 'LegacyTextArea'

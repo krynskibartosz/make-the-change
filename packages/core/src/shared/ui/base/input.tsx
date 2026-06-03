@@ -5,10 +5,37 @@ import { Eye, EyeOff } from 'lucide-react'
 import type { ForwardedRef, InputHTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useId, useState } from 'react'
 import { cn } from '../utils'
+import { inputVariants, type InputVariantProps } from './input-variants'
 
-export type InputVariant = 'default' | 'outlined' | 'filled' | 'ghost'
+/* ============================================================================
+ * NEW API — composable, Field-aware
+ * ========================================================================= */
 
-export type InputProps = {
+export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> &
+  InputVariantProps
+
+export const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ className, variant, size, ...props }, ref) => (
+    <InputPrimitive
+      ref={ref}
+      className={cn(inputVariants({ variant, size }), className)}
+      {...props}
+    />
+  ),
+)
+Input.displayName = 'Input'
+
+/* ============================================================================
+ * LEGACY API — @deprecated, use composable Input + Field pattern instead
+ *
+ * Still used by: packages/core/src/shared/ui/theme-builder.tsx, apps/web/admin/*.
+ * Do not introduce new usages. See docs/02-product/design-system/forms.md.
+ * ========================================================================= */
+
+export type LegacyInputVariant = 'default' | 'outlined' | 'filled' | 'ghost'
+
+/** @deprecated Use the new composable `Input` + `Field` pattern. See docs/02-product/design-system/forms.md */
+export type LegacyInputProps = {
   label?: string
   error?: string
   helpText?: string
@@ -16,7 +43,7 @@ export type InputProps = {
   leadingIcon?: ReactNode
   trailingIcon?: ReactNode
   showPasswordToggle?: boolean
-  variant?: InputVariant
+  variant?: LegacyInputVariant
   size?: 'sm' | 'md' | 'lg'
   containerClassName?: string
   inputWrapperClassName?: string
@@ -24,7 +51,8 @@ export type InputProps = {
   messageClassName?: string
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'size'>
 
-const Input = forwardRef<HTMLInputElement, InputProps>(
+/** @deprecated Use the new composable `Input` + `Field` pattern. See docs/02-product/design-system/forms.md */
+export const LegacyInput = forwardRef<HTMLInputElement, LegacyInputProps>(
   (
     {
       className,
@@ -73,7 +101,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     }
 
     const sizeClasses = {
-      // Keep input text at 16px on touch devices to prevent iOS zoom-on-focus.
       sm: 'h-9 px-3 text-base sm:text-sm',
       md: 'h-11 px-4 text-base sm:text-sm',
       lg: 'h-13 px-4 text-base',
@@ -187,14 +214,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     )
   },
 )
+LegacyInput.displayName = 'LegacyInput'
 
-const PasswordInput = forwardRef<HTMLInputElement, Omit<InputProps, 'type' | 'showPasswordToggle'>>(
-  (props, ref: ForwardedRef<HTMLInputElement>) => (
-    <Input showPasswordToggle type="password" {...props} ref={ref} />
-  ),
-)
-
-PasswordInput.displayName = 'PasswordInput'
-Input.displayName = 'Input'
-
-export { Input, PasswordInput }
+/** @deprecated Use the new `PasswordInput` from `./password-input.tsx`. */
+export const LegacyPasswordInput = forwardRef<
+  HTMLInputElement,
+  Omit<LegacyInputProps, 'type' | 'showPasswordToggle'>
+>((props, ref: ForwardedRef<HTMLInputElement>) => (
+  <LegacyInput showPasswordToggle type="password" {...props} ref={ref} />
+))
+LegacyPasswordInput.displayName = 'LegacyPasswordInput'
