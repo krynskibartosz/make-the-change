@@ -1,6 +1,5 @@
 'use client'
 
-import { AnimatePresence, motion } from 'framer-motion'
 import {
   Anchor,
   Bug,
@@ -13,7 +12,14 @@ import {
   Sparkles,
   type LucideIcon,
 } from 'lucide-react'
-import { Button } from '@make-the-change/core/ui'
+import {
+  Button,
+  Dialog,
+  DialogBackdrop,
+  DialogPopup,
+  DialogPortal,
+  DialogTitle,
+} from '@make-the-change/core/ui'
 import { type KinnuNode, type KinnuNodeType } from '@/app/[locale]/(lab)/kinnu/_lib/graph'
 import { type KinnuNodeStatus, KINNU_SCORE_PER_NODE } from '@/app/[locale]/(lab)/kinnu/_lib/bridge'
 import { cn } from '@/lib/utils'
@@ -60,33 +66,22 @@ export function KinnuBottomSheet({ node, status, health, onMaster, onClose }: Ki
   const isMastered = status === 'mastered'
 
   return (
-    <AnimatePresence>
-      {node && status && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            key="backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-30 bg-black/40 backdrop-blur-[2px]"
-            onClick={onClose}
-          />
+    <Dialog open={!!node && !!status} onOpenChange={(v: boolean) => !v && onClose()}>
+      <DialogPortal>
+        <DialogBackdrop className="fixed inset-0 z-40 bg-black/40 backdrop-blur-[2px] transition-opacity duration-200 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0" />
+        <DialogPopup
+          className={cn(
+            'fixed inset-x-0 bottom-0 z-50 mx-auto max-w-xl overflow-hidden rounded-t-[2rem] border border-white/10 bg-[#08080F]/95 shadow-[0_-20px_80px_rgba(0,0,0,0.6)] backdrop-blur-xl outline-none',
+            'transition-transform duration-[320ms] ease-[cubic-bezier(0.22,1,0.36,1)]',
+            'data-[ending-style]:translate-y-full data-[starting-style]:translate-y-full',
+          )}
+        >
+          {/* Drag handle */}
+          <div className="flex justify-center pt-3">
+            <div className="h-1 w-10 rounded-full bg-white/20" aria-hidden="true" />
+          </div>
 
-          {/* Sheet */}
-          <motion.aside
-            key="sheet"
-            initial={{ y: '100%' }}
-            animate={{ y: 0 }}
-            exit={{ y: '100%' }}
-            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-x-0 bottom-0 z-40 mx-auto max-w-xl overflow-hidden rounded-t-[2rem] border border-white/10 bg-[#08080F]/95 shadow-[0_-20px_80px_rgba(0,0,0,0.6)] backdrop-blur-xl"
-          >
-            {/* Drag handle */}
-            <div className="flex justify-center pt-3">
-              <div className="h-1 w-10 rounded-full bg-white/20" />
-            </div>
-
+          {node && status && (
             <div className="px-6 pb-[max(2rem,env(safe-area-inset-bottom))] pt-4">
               {/* Header */}
               <div className="flex items-start gap-4">
@@ -117,7 +112,9 @@ export function KinnuBottomSheet({ node, status, health, onMaster, onClose }: Ki
                               ? 'Base'
                               : 'Faune'}
                   </p>
-                  <h2 className="mt-1 text-xl font-black leading-tight text-white">{node.name}</h2>
+                  <DialogTitle className="mt-1 text-xl font-black leading-tight text-white">
+                    {node.name}
+                  </DialogTitle>
                   {isMastered && (
                     <p className={cn("mt-1 text-[0.65rem] font-black uppercase tracking-[0.14em]", health === 0 ? "text-red-400" : "text-amber-300")}>
                       {health === 0 ? '! Révision requise' : '✦ Concept maîtrisé'}
@@ -160,7 +157,7 @@ export function KinnuBottomSheet({ node, status, health, onMaster, onClose }: Ki
                     </span>
                   </div>
                   <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
-                    <div 
+                    <div
                       className={cn("h-full rounded-full transition-all duration-1000", health > 0.5 ? "bg-amber-400" : health > 0 ? "bg-orange-400" : "bg-red-500")}
                       style={{ width: `${health * 100}%` }}
                     />
@@ -211,9 +208,9 @@ export function KinnuBottomSheet({ node, status, health, onMaster, onClose }: Ki
                 )}
               </div>
             </div>
-          </motion.aside>
-        </>
-      )}
-    </AnimatePresence>
+          )}
+        </DialogPopup>
+      </DialogPortal>
+    </Dialog>
   )
 }
