@@ -18,6 +18,8 @@ export type AuthState = {
   error?: string
   success?: string
   redirectUrl?: string
+  errors?: Record<string, string>
+  formError?: string
 }
 
 function getFormDataString(formData: FormData, key: string): string {
@@ -169,7 +171,7 @@ export async function forgotPassword(
   const email = getFormDataString(formData, 'email')
 
   if (!email) {
-    return { error: 'Email is required' }
+    return { errors: { email: 'Email is required' } }
   }
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -177,7 +179,7 @@ export async function forgotPassword(
   })
 
   if (error) {
-    return { error: error.message }
+    return { formError: error.message }
   }
 
   return { success: 'Check your email for a password reset link' }

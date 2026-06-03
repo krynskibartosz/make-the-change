@@ -9,8 +9,11 @@ import {
   CardHeader,
   CardTitle,
   Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
   Form,
-  LegacyInput as Input,
+  Input,
 } from '@make-the-change/core/ui'
 import { ArrowLeft, Mail, Sparkles } from 'lucide-react'
 import { AuthSubmitButton } from '@/app/[locale]/(auth)/_components/auth-submit-button'
@@ -64,21 +67,28 @@ export function ForgotPasswordForm() {
         <CardDescription className="text-sm font-medium">{t('forgot_help_text')}</CardDescription>
       </CardHeader>
       <CardContent className="p-8 pt-4">
-        <Form action={formAction} className="space-y-6">
-          <FormErrorAlert error={state.error} />
+        <Form action={formAction} errors={state.errors} className="space-y-6">
+          <FormErrorAlert error={state.formError ?? state.error} />
 
-          <Field className="relative group">
-            <Mail className="absolute left-4 top-[38px] h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              label={t('email')}
-              placeholder={t('email_placeholder')}
-              className="pl-12 h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20"
-              required
-              autoComplete="email"
-            />
+          <Field name="email" className="relative group">
+            <FieldLabel className="block text-sm font-medium text-muted-foreground mb-1.5">
+              {t('email')}
+            </FieldLabel>
+            <div className="relative">
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary z-10 pointer-events-none" />
+              <FieldControl
+                render={
+                  <Input
+                    className="pl-12 h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20"
+                  />
+                }
+                type="email"
+                required
+                placeholder={t('email_placeholder')}
+                autoComplete="email"
+              />
+            </div>
+            <FieldError className="mt-1.5 text-sm text-destructive" />
           </Field>
 
           <AuthSubmitButton loading={isPending}>{t('reset_password_button')}</AuthSubmitButton>
