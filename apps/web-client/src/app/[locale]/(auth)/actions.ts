@@ -74,17 +74,14 @@ export async function register(_prevState: AuthState, formData: FormData): Promi
   const lastName = getFormDataString(formData, 'lastName')
   const returnToRaw = getFormDataString(formData, 'returnTo')
 
-  if (!email || !password) {
-    return { error: 'Email and password are required' }
-  }
-
-  if (password !== confirmPassword) {
-    return { error: 'Passwords do not match' }
-  }
-
-  if (password.length < 8) {
-    return { error: 'Password must be at least 8 characters' }
-  }
+  const errors: Record<string, string> = {}
+  if (!firstName) errors.firstName = 'Prénom requis'
+  if (!lastName) errors.lastName = 'Nom requis'
+  if (!email) errors.email = 'Email requis'
+  if (!password) errors.password = 'Mot de passe requis'
+  if (password && password.length < 8) errors.password = '8 caractères minimum'
+  if (password && password !== confirmPassword) errors.confirmPassword = 'Les mots de passe ne correspondent pas'
+  if (Object.keys(errors).length > 0) return { errors }
 
   if (isMockDataSource) {
     const displayName = [firstName, lastName].filter(Boolean).join(' ').trim() || 'Nouveau membre'
@@ -118,11 +115,11 @@ export async function register(_prevState: AuthState, formData: FormData): Promi
   })
 
   if (error) {
-    return { error: error.message }
+    return { formError: error.message }
   }
 
   if (data.user?.identities?.length === 0) {
-    return { error: 'An account with this email already exists' }
+    return { errors: { email: 'Un compte avec cet email existe déjà' } }
   }
 
   // Record consents

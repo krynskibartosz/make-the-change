@@ -8,8 +8,13 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
+  Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
   Form,
-  LegacyInput as Input,
+  Input,
+  PasswordInput,
 } from '@make-the-change/core/ui'
 import { FormErrorAlert } from '@/app/[locale]/(auth)/_components/form-error-alert'
 import {
@@ -201,11 +206,6 @@ export function RegisterForm({ modal = false }: RegisterFormProps) {
     return formValues.terms
   }, [formValues, step])
 
-  const showPasswordMismatch =
-    step === 2 &&
-    formValues.confirmPassword.length > 0 &&
-    formValues.password !== formValues.confirmPassword
-
   const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
     if (step < totalSteps) {
       event.preventDefault()
@@ -307,9 +307,9 @@ export function RegisterForm({ modal = false }: RegisterFormProps) {
           modal ? 'min-h-0 flex-1 overflow-y-auto p-6 pt-4 sm:p-8 sm:pt-4' : 'p-8 pt-4',
         )}
       >
-        <Form action={formAction} onSubmit={handleFormSubmit} className="space-y-8">
+        <Form action={formAction} errors={state.errors} onSubmit={handleFormSubmit} className="space-y-8">
           <input type="hidden" name="returnTo" value={returnTo} />
-          <FormErrorAlert error={state.error} />
+          <FormErrorAlert error={state.formError ?? state.error} />
 
           {/* Stepper Progress */}
           <div className="relative flex items-center justify-between px-2">
@@ -340,90 +340,124 @@ export function RegisterForm({ modal = false }: RegisterFormProps) {
           <div className="space-y-6">
             {step === 1 && (
               <div className="grid gap-6 animate-in fade-in slide-in-from-right-4 duration-500">
-                <div className="relative group">
-                  <User className="absolute left-4 top-[38px] h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
-                  <Input
-                    id="firstName"
-                    name="firstName"
-                    type="text"
-                    label={t('first_name')}
-                    placeholder={t('first_name_placeholder')}
-                    className="pl-12 h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20"
-                    required
-                    autoComplete="given-name"
-                    value={formValues.firstName}
-                    onChange={(event) =>
-                      setFormValues((prev) => ({ ...prev, firstName: event.target.value }))
-                    }
-                  />
-                </div>
-                <div className="relative group">
-                  <User className="absolute left-4 top-[38px] h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary" />
-                  <Input
-                    id="lastName"
-                    name="lastName"
-                    type="text"
-                    label={t('last_name')}
-                    placeholder={t('last_name_placeholder')}
-                    className="pl-12 h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20"
-                    required
-                    autoComplete="family-name"
-                    value={formValues.lastName}
-                    onChange={(event) =>
-                      setFormValues((prev) => ({ ...prev, lastName: event.target.value }))
-                    }
-                  />
-                </div>
+                <Field name="firstName" className="relative group">
+                  <FieldLabel className="block text-sm font-medium text-muted-foreground mb-1.5">
+                    {t('first_name')}
+                  </FieldLabel>
+                  <div className="relative">
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary z-10 pointer-events-none" />
+                    <FieldControl
+                      render={
+                        <Input className="pl-12 h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20" />
+                      }
+                      type="text"
+                      required
+                      placeholder={t('first_name_placeholder')}
+                      autoComplete="given-name"
+                      value={formValues.firstName}
+                      onChange={(event) =>
+                        setFormValues((prev) => ({ ...prev, firstName: (event.target as HTMLInputElement).value }))
+                      }
+                    />
+                  </div>
+                  <FieldError className="mt-1.5 text-sm text-destructive" />
+                </Field>
+                <Field name="lastName" className="relative group">
+                  <FieldLabel className="block text-sm font-medium text-muted-foreground mb-1.5">
+                    {t('last_name')}
+                  </FieldLabel>
+                  <div className="relative">
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground transition-colors group-focus-within:text-primary z-10 pointer-events-none" />
+                    <FieldControl
+                      render={
+                        <Input className="pl-12 h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20" />
+                      }
+                      type="text"
+                      required
+                      placeholder={t('last_name_placeholder')}
+                      autoComplete="family-name"
+                      value={formValues.lastName}
+                      onChange={(event) =>
+                        setFormValues((prev) => ({ ...prev, lastName: (event.target as HTMLInputElement).value }))
+                      }
+                    />
+                  </div>
+                  <FieldError className="mt-1.5 text-sm text-destructive" />
+                </Field>
               </div>
             )}
 
             {step === 2 && (
               <div className="grid gap-4 animate-in fade-in slide-in-from-right-4 duration-500">
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  label={t('email')}
-                  placeholder={t('email_placeholder')}
-                  className="h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20"
-                  required
-                  autoComplete="email"
-                  value={formValues.email}
-                  onChange={(event) =>
-                    setFormValues((prev) => ({ ...prev, email: event.target.value }))
-                  }
-                />
+                <Field name="email">
+                  <FieldLabel className="block text-sm font-medium text-muted-foreground mb-1.5">
+                    {t('email')}
+                  </FieldLabel>
+                  <FieldControl
+                    render={
+                      <Input className="h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20" />
+                    }
+                    type="email"
+                    required
+                    placeholder={t('email_placeholder')}
+                    autoComplete="email"
+                    value={formValues.email}
+                    onChange={(event) =>
+                      setFormValues((prev) => ({ ...prev, email: (event.target as HTMLInputElement).value }))
+                    }
+                  />
+                  <FieldError className="mt-1.5 text-sm text-destructive" />
+                </Field>
 
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  label={t('password')}
-                  placeholder="••••••••"
-                  className="h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20"
-                  required
-                  autoComplete="new-password"
-                  value={formValues.password}
-                  onChange={(event) =>
-                    setFormValues((prev) => ({ ...prev, password: event.target.value }))
-                  }
-                />
+                <Field name="password">
+                  <FieldLabel className="block text-sm font-medium text-muted-foreground mb-1.5">
+                    {t('password')}
+                  </FieldLabel>
+                  <FieldControl
+                    render={
+                      <PasswordInput className="h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20" />
+                    }
+                    required
+                    minLength={8}
+                    placeholder="••••••••"
+                    autoComplete="new-password"
+                    value={formValues.password}
+                    onChange={(event) =>
+                      setFormValues((prev) => ({ ...prev, password: (event.target as HTMLInputElement).value }))
+                    }
+                  />
+                  <FieldError className="mt-1.5 text-sm text-destructive" match="valueMissing">
+                    Requis
+                  </FieldError>
+                  <FieldError className="mt-1.5 text-sm text-destructive" match="tooShort">
+                    8 caractères minimum
+                  </FieldError>
+                </Field>
 
-                <Input
-                  id="confirmPassword"
+                <Field
                   name="confirmPassword"
-                  type="password"
-                  label={t('confirm_password')}
-                  placeholder="••••••••"
-                  className="h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20"
-                  required
-                  autoComplete="new-password"
-                  value={formValues.confirmPassword}
-                  onChange={(event) =>
-                    setFormValues((prev) => ({ ...prev, confirmPassword: event.target.value }))
+                  validationMode="onBlur"
+                  validate={(value) =>
+                    typeof value === 'string' && value !== formValues.password ? t('passwords_mismatch') : null
                   }
-                  error={showPasswordMismatch ? t('passwords_mismatch') : undefined}
-                />
+                >
+                  <FieldLabel className="block text-sm font-medium text-muted-foreground mb-1.5">
+                    {t('confirm_password')}
+                  </FieldLabel>
+                  <FieldControl
+                    render={
+                      <PasswordInput className="h-14 rounded-2xl bg-muted/30 border-none focus-visible:ring-primary/20" />
+                    }
+                    required
+                    placeholder="••••••••"
+                    autoComplete="new-password"
+                    value={formValues.confirmPassword}
+                    onChange={(event) =>
+                      setFormValues((prev) => ({ ...prev, confirmPassword: (event.target as HTMLInputElement).value }))
+                    }
+                  />
+                  <FieldError className="mt-1.5 text-sm text-destructive" />
+                </Field>
               </div>
             )}
 
