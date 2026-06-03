@@ -1,6 +1,6 @@
 'use client'
 
-import { LegacyInput as Input } from '@make-the-change/core/ui'
+import { Field, FieldControl, FieldError, FieldLabel, Input } from '@make-the-change/core/ui'
 import { ChevronDown, Pencil, Plus, Trash2 } from 'lucide-react'
 import { useState, useTransition } from 'react'
 import type { MockUserAddress } from '@/lib/mock/mock-addresses'
@@ -67,27 +67,31 @@ function AddressFields({
       </div>
 
       <div className="flex gap-3">
-        <div className="w-[38%]">
-          <Input
-            label="Code postal"
-            variant="ghost"
-            size="lg"
+        <Field name="postalCode" className="w-[38%]">
+          <FieldLabel className="block text-xs font-bold text-white/55 mb-1.5">
+            Code postal
+          </FieldLabel>
+          <FieldControl
+            render={<Input variant="ghost" size="lg" />}
             value={form.postalCode}
-            onChange={(e) => onChange({ ...form, postalCode: e.target.value })}
+            onChange={(e) => onChange({ ...form, postalCode: (e.target as HTMLInputElement).value })}
             placeholder="1000"
             inputMode="numeric"
           />
-        </div>
-        <div className="flex-1">
-          <Input
-            label="Ville"
-            variant="ghost"
-            size="lg"
+          <FieldError className="mt-1 text-xs text-red-400" />
+        </Field>
+        <Field name="city" className="flex-1">
+          <FieldLabel className="block text-xs font-bold text-white/55 mb-1.5">
+            Ville
+          </FieldLabel>
+          <FieldControl
+            render={<Input variant="ghost" size="lg" />}
             value={form.city}
-            onChange={(e) => onChange({ ...form, city: e.target.value })}
+            onChange={(e) => onChange({ ...form, city: (e.target as HTMLInputElement).value })}
             placeholder="Bruxelles"
           />
-        </div>
+          <FieldError className="mt-1 text-xs text-red-400" />
+        </Field>
       </div>
     </div>
   )
