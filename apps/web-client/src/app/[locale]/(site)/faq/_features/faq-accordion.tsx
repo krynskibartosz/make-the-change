@@ -41,7 +41,7 @@ export function FaqAccordion({
             value={item.id}
             className="overflow-hidden rounded-2xl border border-white/5 bg-[#1A1F26] data-[open]:border-white/10"
           >
-            <AccordionTrigger className="flex w-full items-center justify-between gap-4 p-5 text-left text-[15px] font-semibold text-white text-pretty leading-snug hover:no-underline [&>svg]:h-5 [&>svg]:w-5 [&>svg]:flex-shrink-0 [&>svg]:text-gray-500 data-[open]:[&>svg]:text-white/80">
+            <AccordionTrigger className="flex w-full items-center justify-between gap-4 p-5 text-left text-[15px] font-semibold text-white text-pretty leading-snug hover:no-underline [&>svg]:h-5 [&>svg]:w-5 [&>svg]:flex-shrink-0 [&>svg]:text-gray-500 data-[panel-open]:[&>svg]:text-white/80">
               {item.q}
             </AccordionTrigger>
             <AccordionContent className="px-5 [&>div]:pt-2 [&>div]:pb-5">
