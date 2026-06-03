@@ -6,7 +6,7 @@
 import { z } from 'zod'
 
 // Project Types
-export const ProjectTypeEnum = z.enum(['beehive', 'olive_tree', 'vineyard', 'forest', 'marine'])
+export const ProjectTypeEnum = z.enum(['beehive', 'olive_tree', 'orchard', 'vineyard', 'forest', 'marine'])
 export type ProjectType = z.infer<typeof ProjectTypeEnum>
 
 // Project Status
@@ -96,7 +96,7 @@ export const PartnerSchema = z.object({
 export type Partner = z.infer<typeof PartnerSchema>
 
 // Support Type (for points calculation)
-export type SupportType = 'beehive' | 'olive_tree' | 'vineyard'
+export type SupportType = 'beehive' | 'olive_tree' | 'orchard' | 'vineyard'
 
 export type ProducerSupport = {
   type: SupportType

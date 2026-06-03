@@ -10,6 +10,7 @@ import type {
   AssociatedProducer,
   AssociatedProject,
   SpeciesContext,
+  SpeciesFaction,
   SpeciesFilters,
   UserSpeciesStatus,
 } from '@/types/species'
@@ -26,6 +27,10 @@ function toNullableString(value: unknown): string | null {
   if (value === null || value === undefined) return null
   const str = asString(value)
   return str === '' ? null : str
+}
+
+function asSpeciesFaction(value: unknown): SpeciesFaction {
+  return value === 'sylva' || value === 'ondine' || value === 'melli' ? value : 'melli'
 }
 
 const PROTOTYPE_UNLOCK_SOURCE = 'prototype_checkout_unlock'
@@ -138,6 +143,7 @@ function mapSpeciesContext(data: unknown): SpeciesContext | null {
     description_default: asString(data.description_default),
     conservation_status: asString(data.conservation_status),
     image_url: toTransparentDioramaImageUrl(toNullableString(data.image_url)),
+    faction: asSpeciesFaction(data.faction),
     associated_projects: mapArray(data.associated_projects, mapAssociatedProject),
     associated_producers: mapArray(data.associated_producers, mapAssociatedProducer),
     associated_challenges: mapArray(data.associated_challenges, mapAssociatedChallenge),

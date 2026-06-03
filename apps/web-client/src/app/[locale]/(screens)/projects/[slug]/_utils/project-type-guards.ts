@@ -1,5 +1,5 @@
-export function isSupportType(value: unknown): value is 'beehive' | 'olive_tree' | 'vineyard' {
-  return value === 'beehive' || value === 'olive_tree' || value === 'vineyard'
+export function isSupportType(value: unknown): value is 'beehive' | 'olive_tree' | 'orchard' | 'vineyard' {
+  return value === 'beehive' || value === 'olive_tree' || value === 'orchard' || value === 'vineyard'
 }
 
 export function isContributionType(value: unknown): value is 'reef' | 'coral' {

@@ -5,7 +5,7 @@ import { getPublicProjectBySlug } from '@/app/[locale]/(screens)/projects/[slug]
 import { getSpeciesForProject } from '@/app/[locale]/(screens)/projects/_api/project-species.service'
 import { getUser } from '@/app/[locale]/(auth)/_features/auth-guards'
 import { getLocalizedContent } from '@/lib/utils'
-import { isSupportType } from '@/app/[locale]/(screens)/projects/[slug]/_utils/project-type-guards'
+import { isSupportType, toOptionalString } from '@/app/[locale]/(screens)/projects/[slug]/_utils/project-type-guards'
 
 const toOptionalAmount = (value: string | string[] | undefined): number | undefined => {
   if (typeof value !== 'string') {
@@ -23,6 +23,7 @@ interface SupportPageProps {
   searchParams: Promise<{
     source?: string | string[]
     amount?: string | string[]
+    tier?: string | string[]
   }>
 }
 
@@ -53,10 +54,12 @@ export default async function SupportPage({ params, searchParams }: SupportPageP
         currentFunding: project.current_funding,
         targetBudget: project.target_budget,
         expectedImpact: project.expected_impact,
+        supportRewardTiers: project.support_reward_tiers,
       }}
       presentation="page"
       isAuthenticated={user !== null}
       initialAmount={toOptionalAmount(query.amount)}
+      initialTierId={toOptionalString(query.tier)}
       discoveredSpeciesId={projectSpecies[0]?.id ?? null}
       species={projectSpecies ?? undefined}
     />

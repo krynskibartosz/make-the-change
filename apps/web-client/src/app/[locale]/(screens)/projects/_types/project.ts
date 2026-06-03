@@ -7,6 +7,7 @@ export type {
   DonationReward,
   DonationImpact,
   DonationOption,
+  SupportRewardTier,
 } from '@/types/project'
 
 import type { ProjectSpecies, ProjectChallenge, ProducerProduct, ProjectImpact } from '@/types/project'

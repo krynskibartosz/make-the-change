@@ -11,9 +11,8 @@ import {
   FieldLabel,
   Input,
 } from '@make-the-change/core/ui'
-import { Activity, ArrowLeft, Bug, Camera, CheckCircle2, ChevronRight, Cloud, Droplet, Droplets, Fish, Flower2, Grid3X3, Leaf, Loader2, Lock, Mail, TreePine, Waves } from 'lucide-react'
+import { Activity, ArrowLeft, Bug, Camera, CheckCircle2, ChevronRight, Cloud, Droplet, Droplets, Fish, Flower2, Gift, Grid3X3, Leaf, Loader2, Lock, Mail, MapPin, PackageCheck, TreePine, Waves } from 'lucide-react'
 import { MobileSheet } from '../../_components/shared/mobile-sheet'
-import { CurrencyIcon } from '@/components/currency'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
@@ -27,11 +26,16 @@ import type { ProjectImpactItem, ImpactIconKey } from '@/app/[locale]/(screens)/
 import { getMockSpeciesContextClient } from '@/lib/mock/mock-biodex'
 import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
 import { formatAmountPlain, formatAmountNumber } from '@/lib/formatters'
-import type { ProjectImpact, ProjectSpecies } from '@/app/[locale]/(screens)/projects/_types/project'
+import type { ProjectImpact, ProjectSpecies, SupportRewardTier } from '@/app/[locale]/(screens)/projects/_types/project'
 import { sanitizeImageUrl } from '@/lib/image-url'
 import { makeProjectGlowRgba } from '@/app/[locale]/(screens)/projects/[slug]/_utils/project-glow'
 import { PaymentBreakdown } from '@/app/[locale]/(screens)/projects/[slug]/_components/shared/payment-breakdown'
 import { claimGuestSupport } from '@/app/[locale]/(screens)/projects/_actions/claim'
+import {
+  getSupportCheckoutSummary,
+  getSupportTierById,
+  type SupportCheckoutSummary,
+} from '@/app/[locale]/(screens)/projects/[slug]/_utils/support-reward-selection'
 
 const SPECIES_THUMBNAILS: Record<string, string> = {
   'species-abeille-noire': '/images/species-thumbnails/abeille-noire.png',
@@ -87,6 +91,7 @@ const IMPACT_ICON_MAP: Record<ImpactIconKey, React.ComponentType<{ className?: s
 const FLOW_STEPS: FlowStep[] = ['impact', 'payment', 'success']
 const QUICK_AMOUNTS = [20, 50, 100]
 const REWARD_PREVIEW_IMAGE = '/images/dioramas/transparent/abeille-noire.png' // Image générique de fallback
+const EMPTY_SUPPORT_REWARD_TIERS: SupportRewardTier[] = []
 type ProjectSupportOneFlowProps = {
   project: {
     id: string
@@ -97,16 +102,14 @@ type ProjectSupportOneFlowProps = {
     currentFunding?: number | null
     targetBudget?: number | null
     expectedImpact?: ProjectImpact | null
+    supportRewardTiers?: SupportRewardTier[] | null
   }
   presentation?: 'modal' | 'page'
   isAuthenticated: boolean
   initialAmount?: number
+  initialTierId?: string | null
   discoveredSpeciesId?: string | null
   species?: ProjectSpecies[]
-}
-
-function CreditsIcon({ className }: { className?: string }) {
-  return <CurrencyIcon kind="impactCredits" className={className} />
 }
 
 function NextStepLine({
@@ -133,12 +136,14 @@ function NextStepLine({
 
 
 function AfterSupportBlock({
-  credits,
+  summary,
+  selectedTier,
   species,
   onOpenRewards,
   onOpenTracking,
 }: {
-  credits: number
+  summary: SupportCheckoutSummary
+  selectedTier: SupportRewardTier | null
   species: ProjectSpecies[]
   onOpenRewards: () => void
   onOpenTracking: () => void
@@ -171,16 +176,34 @@ function AfterSupportBlock({
           className="flex w-full items-center gap-3 border-b border-white/[0.06] px-4 py-3.5 text-left active:bg-white/[0.03]"
         >
           <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-amber-300/16 bg-amber-300/10 text-amber-300">
-            <CurrencyIcon kind="impactCredits" className="h-4 w-4" />
+            <Gift className="h-4 w-4" />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-[13px] font-black text-white">{credits} Crédits Impact</p>
+            <p className="text-[13px] font-black text-white">{summary.unlockedAdvantageLabel}</p>
             <p className="mt-0.5 text-[11px] leading-snug text-white/40">
-              Utilisables dans les avantages partenaires.
+              Avantage partenaire debloque, sans valeur de paiement.
             </p>
           </div>
           <ChevronRight className="h-4 w-4 shrink-0 text-white/25" />
         </button>
+        {selectedTier?.rewardLabel ? (
+          <button
+            type="button"
+            onClick={onOpenRewards}
+            className="flex w-full items-center gap-3 border-b border-white/[0.06] px-4 py-3.5 text-left active:bg-white/[0.03]"
+          >
+            <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white/[0.055] text-lime-300">
+              <PackageCheck className="h-4 w-4" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-[13px] font-black text-white">{summary.rewardStatusLabel}</p>
+              <p className="mt-0.5 text-[11px] leading-snug text-white/40">
+                {summary.rewardLabel ?? `${selectedTier.rewardLabel} laisse 100 % au projet.`}
+              </p>
+            </div>
+            <ChevronRight className="h-4 w-4 shrink-0 text-white/25" />
+          </button>
+        ) : null}
         <button
           type="button"
           onClick={onOpenTracking}
@@ -250,11 +273,13 @@ function AfterSupportBlock({
 }
 
 function IncludedSummary({
-  credits,
+  summary,
+  selectedTier,
   species,
   onOpen,
 }: {
-  credits: number
+  summary: SupportCheckoutSummary
+  selectedTier: SupportRewardTier | null
   species: ProjectSpecies[]
   onOpen: () => void
 }) {
@@ -266,13 +291,26 @@ function IncludedSummary({
       <div className="space-y-3.5">
         <div className="flex items-start gap-3">
           <div className="grid h-8 w-8 shrink-0 place-items-center rounded-xl border border-amber-300/16 bg-amber-300/10 text-amber-300">
-            <CurrencyIcon kind="impactCredits" className="h-3.5 w-3.5" />
+            <Gift className="h-3.5 w-3.5" />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-[13px] font-black text-white">{credits} Crédits Impact</p>
-            <p className="text-[11px] leading-snug text-white/40">Utilisables dans les avantages partenaires.</p>
+            <p className="text-[13px] font-black text-white">{summary.unlockedAdvantageLabel}</p>
+            <p className="text-[11px] leading-snug text-white/40">Avantage partenaire rattache a ce soutien.</p>
           </div>
         </div>
+        {selectedTier?.rewardLabel ? (
+          <div className="flex items-start gap-3">
+            <div className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-white/[0.055] text-lime-300">
+              <PackageCheck className="h-3.5 w-3.5" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-[13px] font-black text-white">{summary.rewardStatusLabel}</p>
+              <p className="text-[11px] leading-snug text-white/40">
+                {summary.rewardLabel ?? 'Vous renoncez a la contrepartie pour laisser plus au projet.'}
+              </p>
+            </div>
+          </div>
+        ) : null}
         <div className="flex items-start gap-3">
           <div className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-white/[0.055] text-lime-300">
             <Camera className="h-3.5 w-3.5" />
@@ -313,37 +351,59 @@ function IncludedSummary({
 function RewardsSheet({
   isOpen,
   onClose,
-  credits,
+  summary,
+  selectedTier,
   species,
   amount,
 }: {
   isOpen: boolean
   onClose: () => void
-  credits: number
+  summary: SupportCheckoutSummary
+  selectedTier: SupportRewardTier | null
   species: ProjectSpecies[]
   amount: number
 }) {
   const primary = species.find((sp) => isKeyRole(sp.role)) ?? species[0]
 
   return (
-    <MobileSheet isOpen={isOpen} onClose={onClose} title="Crédits Impact">
+    <MobileSheet isOpen={isOpen} onClose={onClose} title="Avantages et contrepartie">
       <p className="mt-1 text-sm leading-relaxed text-white/50">
-        Votre soutien de {amount}&nbsp;€ reste rattaché à ce projet. Les Crédits Impact servent à débloquer des avantages partenaires.
+        Votre soutien de {amount}&nbsp;€ reste rattaché à ce projet. Il peut débloquer un avantage partenaire et, selon le palier choisi, une contrepartie optionnelle.
       </p>
 
-      {/* Crédits Impact */}
+      {/* Avantage partenaire */}
       <div className="mt-5">
         <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/25">
-          Crédits Impact
+          Avantage débloqué
         </p>
         <div className="mt-2 flex items-center gap-2.5">
-          <CurrencyIcon kind="impactCredits" className="h-5 w-5 text-amber-300" />
-          <p className="text-[15px] font-black text-white">{credits} Crédits</p>
+          <Gift className="h-5 w-5 text-amber-300" />
+          <p className="text-[15px] font-black text-white">{summary.unlockedAdvantageLabel}</p>
         </div>
         <p className="mt-1 text-sm leading-relaxed text-white/50">
-          Crédits d&apos;usage interne, utilisables dans les avantages partenaires sélectionnés. Non échangeables contre de l&apos;argent, non transférables.
+          Il s&apos;agit d&apos;un avantage de fidélité ou partenaire, pas d&apos;une monnaie, pas d&apos;un solde de paiement et pas d&apos;un droit échangeable contre de l&apos;argent.
         </p>
       </div>
+
+      {selectedTier?.rewardLabel ? (
+        <div className="mt-5">
+          <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/25">
+            Contrepartie
+          </p>
+          <div className="mt-2 flex items-center gap-2.5">
+            <PackageCheck className="h-5 w-5 text-lime-300" />
+            <p className="text-[15px] font-black text-white">{summary.rewardStatusLabel}</p>
+          </div>
+          <p className="mt-1 text-sm leading-relaxed text-white/50">
+            {summary.rewardLabel ?? 'Vous renoncez à la contrepartie : la valeur reste affectée au projet.'}
+          </p>
+          {selectedTier.requiresShipping ? (
+            <p className="mt-2 text-xs leading-relaxed text-white/35">
+              Une adresse de livraison est demandée uniquement si vous recevez cette contrepartie.
+            </p>
+          ) : null}
+        </div>
+      ) : null}
 
       {/* BioDex */}
       {species.length > 0 ? (
@@ -404,7 +464,7 @@ function RewardsSheet({
           À ne pas confondre
         </p>
         <p className="mt-2 text-sm leading-relaxed text-white/50">
-          Les Crédits Impact ne sont pas un cashback, pas un rendement financier, pas une part de projet et pas un achat produit automatique. Ils n&apos;ont pas de valeur monétaire publique.
+          Les avantages débloqués ne sont pas un cashback, pas un rendement financier, pas une part de projet et pas un moyen de paiement. Les produits partenaires restent vendus séparément.
         </p>
       </div>
 
@@ -545,6 +605,7 @@ export function ProjectSupportOneFlow({
   presentation = 'page',
   isAuthenticated,
   initialAmount,
+  initialTierId = null,
   discoveredSpeciesId = null,
   species = [],
 }: ProjectSupportOneFlowProps) {
@@ -577,13 +638,25 @@ export function ProjectSupportOneFlow({
 
   const min = rules.min_amount
   const max = rules.max_amount
-  const defaultAmount = clampAmount(initialAmount ?? 50, min, max)
+  const supportRewardTiers = project.supportRewardTiers ?? EMPTY_SUPPORT_REWARD_TIERS
+  const initialTier = getSupportTierById(supportRewardTiers, initialTierId)
+  const defaultAmount = clampAmount(initialAmount ?? initialTier?.amount ?? 50, min, max)
 
   const [step, setStep] = useState<FlowStep>('impact')
   const [amountEur, setAmountEur] = useState(defaultAmount)
   const [amountInput, setAmountInput] = useState(String(defaultAmount))
+  const [selectedTierId, setSelectedTierId] = useState<string | null>(initialTier?.id ?? null)
+  const [renounceReward, setRenounceReward] = useState(false)
   const [guestEmail, setGuestEmail] = useState('')
   const [guestEmailError, setGuestEmailError] = useState<string | null>(null)
+  const [shippingAddress, setShippingAddress] = useState({
+    name: '',
+    street: '',
+    postalCode: '',
+    city: '',
+    country: 'Belgique',
+  })
+  const [shippingError, setShippingError] = useState<string | null>(null)
   const [claimSaved, setClaimSaved] = useState(false)
   const [isSendingMagicLink, setIsSendingMagicLink] = useState(false)
   const [phase, setPhase] = useState<LootPhase>('tension')
@@ -593,13 +666,18 @@ export function ProjectSupportOneFlow({
 
   const stepIndex = FLOW_STEPS.indexOf(step)
 
-  const points = useMemo(() => {
-    return support.calculateSupportPoints({
-      type: project.type,
-      amount_eur: amountEur,
-      bonus_percentage: 0,
-    })
-  }, [amountEur, project.type])
+  const selectedTier = useMemo(
+    () => getSupportTierById(supportRewardTiers, selectedTierId),
+    [selectedTierId, supportRewardTiers],
+  )
+  const checkoutSummary = useMemo(
+    () => getSupportCheckoutSummary({
+      amount: amountEur,
+      selectedTier,
+      renounceReward,
+    }),
+    [amountEur, selectedTier, renounceReward],
+  )
   const checkoutSpecies: ProjectSpecies[] = []
 
   const impactItems = useMemo(() => buildProjectImpactItems({
@@ -699,7 +777,31 @@ export function ProjectSupportOneFlow({
     setAmountInput(String(amountEur))
   }, [amountEur])
 
+  useEffect(() => {
+    if (selectedTier?.rewardType !== 'physical') {
+      setRenounceReward(false)
+    }
+  }, [selectedTier])
+
+  const selectRewardTier = (tier: SupportRewardTier | null) => {
+    setSelectedTierId(tier?.id ?? null)
+    setRenounceReward(false)
+    if (tier) {
+      const nextAmount = clampAmount(tier.amount, min, max)
+      setAmountEur(nextAmount)
+      setAmountInput(String(nextAmount))
+    }
+  }
+
+  const clearRewardTierSelection = () => {
+    if (selectedTierId !== null) {
+      setSelectedTierId(null)
+      setRenounceReward(false)
+    }
+  }
+
   const handleAmountInput = (value: string) => {
+    clearRewardTierSelection()
     const digitsOnly = value.replace(/[^\d]/g, '')
     setAmountInput(digitsOnly)
     if (digitsOnly.length === 0) {
@@ -727,18 +829,31 @@ export function ProjectSupportOneFlow({
   const goToPayment = () => {
     haptic.heartbeat()
     setGuestEmailError(null)
+    setShippingError(null)
     setStep('payment')
   }
 
   const goToSuccess = () => {
-    if (!isAuthenticated) {
-      if (!isValidEmail(guestEmail)) {
-        setGuestEmailError('Ajoutez un email valide pour continuer.')
+    if (!isValidEmail(guestEmail)) {
+      setGuestEmailError('Ajoutez un email valide pour continuer.')
+      return
+    }
+    if (checkoutSummary.requiresShippingAddress) {
+      const requiredAddressValues = [
+        shippingAddress.name,
+        shippingAddress.street,
+        shippingAddress.postalCode,
+        shippingAddress.city,
+        shippingAddress.country,
+      ]
+      if (requiredAddressValues.some((value) => value.trim().length === 0)) {
+        setShippingError('Ajoutez une adresse de livraison complete pour recevoir la contrepartie.')
         return
       }
     }
 
     setGuestEmailError(null)
+    setShippingError(null)
     setIsProcessing(true)
     setTimeout(() => {
       setIsProcessing(false)
@@ -872,6 +987,7 @@ export function ProjectSupportOneFlow({
                     key={boundedValue}
                     type="button"
                     onClick={() => {
+                      clearRewardTierSelection()
                       setAmountEur(boundedValue)
                       setAmountInput(String(boundedValue))
                     }}
@@ -886,6 +1002,116 @@ export function ProjectSupportOneFlow({
                   </button>
                 ))}
               </div>
+
+              {supportRewardTiers.length > 0 ? (
+                <section className="w-full">
+                  <div className="mb-3 flex items-end justify-between gap-3">
+                    <div>
+                      <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/35">
+                        Contreparties
+                      </p>
+                      <p className="mt-1 text-[11px] text-white/30">
+                        Choisissez un palier ou gardez un soutien libre.
+                      </p>
+                    </div>
+                    {selectedTier ? (
+                      <button
+                        type="button"
+                        onClick={() => selectRewardTier(null)}
+                        className="text-[11px] font-black text-white/40 active:text-white/65"
+                      >
+                        Soutien libre
+                      </button>
+                    ) : null}
+                  </div>
+                  <div className="space-y-2.5">
+                    <button
+                      type="button"
+                      onClick={() => selectRewardTier(null)}
+                      className={cn(
+                        'w-full rounded-2xl border p-4 text-left transition-all active:scale-[0.99]',
+                        selectedTierId === null
+                          ? 'border-lime-300/45 bg-lime-300/10'
+                          : 'border-white/[0.08] bg-white/[0.035]',
+                      )}
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-black text-white">Soutien libre</p>
+                          <p className="mt-1 text-[12px] leading-relaxed text-white/45">
+                            Montant au choix, suivi terrain et avantages debloques selon le montant.
+                          </p>
+                        </div>
+                        <span className="shrink-0 text-[11px] font-black text-lime-300">Libre</span>
+                      </div>
+                    </button>
+                    {supportRewardTiers.map((tier) => {
+                      const isSelected = selectedTierId === tier.id
+                      return (
+                        <button
+                          key={tier.id}
+                          type="button"
+                          onClick={() => selectRewardTier(tier)}
+                          className={cn(
+                            'w-full rounded-2xl border p-4 text-left transition-all active:scale-[0.99]',
+                            isSelected
+                              ? 'border-lime-300/45 bg-lime-300/10'
+                              : 'border-white/[0.08] bg-white/[0.035]',
+                          )}
+                        >
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="min-w-0">
+                              <p className="text-sm font-black text-white">{tier.title}</p>
+                              <p className="mt-1 text-[12px] leading-relaxed text-white/45">{tier.description}</p>
+                            </div>
+                            <span className="shrink-0 text-base font-black tabular-nums text-lime-300">
+                              {formatAmountNumber(tier.amount)} €
+                            </span>
+                          </div>
+                          <div className="mt-3 space-y-1.5 text-[11px] leading-relaxed text-white/45">
+                            <p>{tier.impactSummary}</p>
+                            <p>
+                              {tier.rewardLabel
+                                ? `Contrepartie: ${tier.rewardLabel}`
+                                : 'Sans contrepartie produit'}
+                            </p>
+                            {tier.unlockedAdvantageLabel ? (
+                              <p className="font-black text-amber-300/80">{tier.unlockedAdvantageLabel}</p>
+                            ) : null}
+                          </div>
+                        </button>
+                      )
+                    })}
+                  </div>
+                  {selectedTier?.rewardLabel ? (
+                    <div className="mt-3 rounded-2xl border border-white/[0.08] bg-white/[0.035] p-4">
+                      <label className="flex cursor-pointer items-start gap-3">
+                        <input
+                          type="checkbox"
+                          checked={!renounceReward}
+                          onChange={(event) => setRenounceReward(!event.target.checked)}
+                          className="mt-1 h-4 w-4 rounded border-white/20 bg-white/10 text-lime-400"
+                        />
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-sm font-black text-white">Recevoir la contrepartie</span>
+                          <span className="mt-1 block text-[12px] leading-relaxed text-white/45">
+                            {renounceReward
+                              ? 'Vous renoncez a la contrepartie et laissez 100 % au projet.'
+                              : selectedTier.rewardLabel}
+                          </span>
+                        </span>
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => setRenounceReward(true)}
+                        className="mt-3 text-left text-[12px] font-black text-white/45 underline underline-offset-4 active:text-white/70"
+                      >
+                        Je renonce a la contrepartie et je laisse 100 % au projet
+                      </button>
+                    </div>
+                  ) : null}
+                </section>
+              ) : null}
 
               <p className="text-center text-[13px] text-white/45">
                 Vous soutenez{' '}
@@ -925,7 +1151,8 @@ export function ProjectSupportOneFlow({
               </section>
 
               <AfterSupportBlock
-                credits={points.total_points}
+                summary={checkoutSummary}
+                selectedTier={selectedTier}
                 species={checkoutSpecies}
                 onOpenRewards={() => setSheet('rewards')}
                 onOpenTracking={() => setSheet('tracking')}
@@ -957,7 +1184,8 @@ export function ProjectSupportOneFlow({
 
               {/* Ce qui est inclus — liste plate */}
               <IncludedSummary
-                credits={points.total_points}
+                summary={checkoutSummary}
+                selectedTier={selectedTier}
                 species={checkoutSpecies}
                 onOpen={() => setSheet('rewards')}
               />
@@ -986,6 +1214,109 @@ export function ProjectSupportOneFlow({
                 )}
                 <FieldError className="mt-1.5 text-xs font-semibold text-destructive" />
               </Field>
+
+              {checkoutSummary.requiresShippingAddress ? (
+                <div className="rounded-2xl border border-white/[0.08] bg-white/[0.035] p-4">
+                  <div className="mb-3 flex items-start gap-3">
+                    <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white/[0.055] text-lime-300">
+                      <MapPin className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-black text-white">Adresse de livraison</p>
+                      <p className="mt-1 text-[12px] leading-relaxed text-white/45">
+                        Requise uniquement pour recevoir la contrepartie physique.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <Field name="shippingName" className="w-full">
+                      <FieldLabel className="mb-1.5 block text-xs font-bold text-white/60">
+                        Nom complet
+                      </FieldLabel>
+                      <FieldControl
+                        render={<Input variant="ghost" size="lg" />}
+                        value={shippingAddress.name}
+                        onChange={(event) =>
+                          setShippingAddress((value) => ({
+                            ...value,
+                            name: (event.target as HTMLInputElement).value,
+                          }))
+                        }
+                        required
+                      />
+                    </Field>
+                    <Field name="shippingStreet" className="w-full">
+                      <FieldLabel className="mb-1.5 block text-xs font-bold text-white/60">
+                        Rue et numero
+                      </FieldLabel>
+                      <FieldControl
+                        render={<Input variant="ghost" size="lg" />}
+                        value={shippingAddress.street}
+                        onChange={(event) =>
+                          setShippingAddress((value) => ({
+                            ...value,
+                            street: (event.target as HTMLInputElement).value,
+                          }))
+                        }
+                        required
+                      />
+                    </Field>
+                    <Field name="shippingPostalCode" className="w-full">
+                      <FieldLabel className="mb-1.5 block text-xs font-bold text-white/60">
+                        Code postal
+                      </FieldLabel>
+                      <FieldControl
+                        render={<Input variant="ghost" size="lg" />}
+                        value={shippingAddress.postalCode}
+                        onChange={(event) =>
+                          setShippingAddress((value) => ({
+                            ...value,
+                            postalCode: (event.target as HTMLInputElement).value,
+                          }))
+                        }
+                        required
+                      />
+                    </Field>
+                    <Field name="shippingCity" className="w-full">
+                      <FieldLabel className="mb-1.5 block text-xs font-bold text-white/60">
+                        Ville
+                      </FieldLabel>
+                      <FieldControl
+                        render={<Input variant="ghost" size="lg" />}
+                        value={shippingAddress.city}
+                        onChange={(event) =>
+                          setShippingAddress((value) => ({
+                            ...value,
+                            city: (event.target as HTMLInputElement).value,
+                          }))
+                        }
+                        required
+                      />
+                    </Field>
+                    <div className="sm:col-span-2">
+                      <Field name="shippingCountry" className="w-full">
+                        <FieldLabel className="mb-1.5 block text-xs font-bold text-white/60">
+                          Pays
+                        </FieldLabel>
+                        <FieldControl
+                          render={<Input variant="ghost" size="lg" />}
+                          value={shippingAddress.country}
+                          onChange={(event) =>
+                            setShippingAddress((value) => ({
+                              ...value,
+                              country: (event.target as HTMLInputElement).value,
+                            }))
+                          }
+                          required
+                        />
+                      </Field>
+                    </div>
+                  </div>
+                  {shippingError ? (
+                    <p className="mt-3 text-[12px] font-bold text-red-300">{shippingError}</p>
+                  ) : null}
+                </div>
+              ) : null}
 
               {/* Module paiement */}
               <div className="flex flex-col gap-3">
@@ -1088,7 +1419,7 @@ export function ProjectSupportOneFlow({
                 </div>
               </motion.div>
 
-              {/* Suivi + crédits — apparaissent après la révélation, dans le bon ordre */}
+              {/* Suivi + avantages — apparaissent après la révélation, dans le bon ordre */}
               {phase === 'euphoria' || phase === 'resolved' ? (
                 <motion.div
                   initial={{ opacity: 0, y: 8 }}
@@ -1100,12 +1431,19 @@ export function ProjectSupportOneFlow({
                     <Camera className="h-4 w-4 shrink-0 text-lime-300" />
                     <p className="text-[13px] font-black text-white">Suivi du projet activé</p>
                   </div>
+                  {checkoutSummary.rewardLabel ? (
+                    <div className="flex items-center gap-3 rounded-xl bg-white/[0.04] px-3.5 py-2.5">
+                      <PackageCheck className="h-4 w-4 shrink-0 text-lime-300" />
+                      <p className="text-[13px] font-black text-white">Contrepartie en préparation</p>
+                      <p className="ml-auto text-[10.5px] text-white/35">{checkoutSummary.rewardLabel}</p>
+                    </div>
+                  ) : null}
                   <div className="flex items-center gap-3 rounded-xl bg-white/[0.04] px-3.5 py-2.5">
-                    <CurrencyIcon kind="impactCredits" className="h-4 w-4 shrink-0 text-amber-300" />
+                    <Gift className="h-4 w-4 shrink-0 text-amber-300" />
                     <p className="text-[13px] font-black text-white">
-                      {points.total_points} Crédits Impact ajoutés
+                      Avantage partenaire débloqué
                     </p>
-                    <p className="ml-auto text-[10.5px] text-white/35">Avantages partenaires</p>
+                    <p className="ml-auto text-[10.5px] text-white/35">{checkoutSummary.unlockedAdvantageLabel}</p>
                   </div>
                 </motion.div>
               ) : null}
@@ -1146,7 +1484,7 @@ export function ProjectSupportOneFlow({
                     Sauvegardez votre soutien
                   </p>
                   <p className="mt-1 text-[13px] leading-snug text-white/50">
-                    Créez votre profil pour retrouver votre soutien, suivre les nouvelles du terrain et utiliser vos Crédits Impact.
+                    Créez votre profil pour retrouver votre soutien, suivre les nouvelles du terrain et retrouver vos avantages débloqués.
                   </p>
                   <div className="mt-3 flex items-center gap-2 text-[13px] text-white/38">
                     <Mail className="h-3.5 w-3.5 shrink-0" />
@@ -1181,7 +1519,8 @@ export function ProjectSupportOneFlow({
       <RewardsSheet
         isOpen={sheet === 'rewards'}
         onClose={() => setSheet(null)}
-        credits={points.total_points}
+        summary={checkoutSummary}
+        selectedTier={selectedTier}
         species={checkoutSpecies}
         amount={amountEur}
       />
@@ -1197,7 +1536,7 @@ export function ProjectSupportOneFlow({
               <p className="mb-3 text-center text-[12px] font-semibold text-white/50">
                 Suivi terrain
                 <span className="mx-1.5 opacity-40">·</span>
-                <span className="font-black text-amber-300">{points.total_points} Crédits Impact</span>
+                <span className="font-black text-amber-300">{checkoutSummary.unlockedAdvantageLabel}</span>
               </p>
               <Button
                 type="button"

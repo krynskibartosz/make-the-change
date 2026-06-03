@@ -22,6 +22,7 @@ const SUPPORT_RULES: Record<
 > = {
   beehive: { min_amount: 50, max_amount: 200, expected_bonus: 30 },
   olive_tree: { min_amount: 80, max_amount: 300, expected_bonus: 40 },
+  orchard: { min_amount: 50, max_amount: 300, expected_bonus: 40 },
   vineyard: { min_amount: 150, max_amount: 500, expected_bonus: 50 },
 }
 

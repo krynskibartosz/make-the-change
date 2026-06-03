@@ -10,6 +10,7 @@ function createSpecies(scientificName: string): SpeciesContext {
     description_default: '',
     conservation_status: 'LC',
     image_url: null,
+    faction: 'melli',
     associated_projects: null,
     associated_producers: null,
     associated_challenges: null,

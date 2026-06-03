@@ -90,6 +90,19 @@ export type DonationOption = {
   impact: DonationImpact
 }
 
+export type SupportRewardTier = {
+  id: string
+  amount: number
+  title: string
+  description: string
+  rewardType: 'none' | 'physical' | 'digital' | 'experience'
+  rewardLabel?: string
+  requiresShipping: boolean
+  limitedQuantity?: number
+  impactSummary: string
+  unlockedAdvantageLabel?: string
+}
+
 /**
  * Flux terrain — nouvelles d'un projet, postées par le producteur/partenaire.
  * C'est le mécanisme principal de rétention : "votre rucher a produit X kg ce mois"

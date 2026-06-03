@@ -176,7 +176,7 @@ export function PaymentBreakdown({
                   Ce soutien producteur ne constitue pas un investissement et ne garantit ni rendement ni remboursement.
                 </p>
                 <p>
-                  En cas de remboursement accepté, les Crédits Impact associés sont annulés ou ajustés.
+                  En cas de remboursement accepté, les avantages associés sont annulés ou ajustés.
                 </p>
               </>
             )}

@@ -57,7 +57,7 @@ import {
   MOCK_SPECIES_OSMIA_ID,
   MOCK_SPECIES_SYRPHID_ID,
 } from '@/lib/mock/mock-ids'
-import type { DonationOption, ProducerProduct, ProjectChallenge, ProjectImpact, ProjectSpecies } from '@/types/project'
+import type { DonationOption, ProducerProduct, ProjectChallenge, ProjectImpact, ProjectSpecies, SupportRewardTier } from '@/types/project'
 import { ILANGA_PATHS } from '@/lib/media/ilanga'
 import { HABEEBEE_PATHS } from '@/lib/media/habeebee'
 import { TRILOGY_PATHS } from '@/lib/media/trilogy'
@@ -105,6 +105,7 @@ export type MockProjectSeed = {
   species?: ProjectSpecies[] | null
   challenges?: ProjectChallenge[] | null
   producer_products?: ProducerProduct[] | null
+  support_reward_tiers?: SupportRewardTier[] | null
   donation_options?: DonationOption[] | null
   expected_impact?: ProjectImpact | null
 }
@@ -577,6 +578,117 @@ const sardiniaProducts: ProducerProduct[] = [
   },
 ]
 
+const ilangaHoneySupportTiers: SupportRewardTier[] = [
+  {
+    id: 'support-libre',
+    amount: 30,
+    title: 'Soutien libre',
+    description: 'Vous choisissez le montant et recevez le suivi terrain du projet.',
+    rewardType: 'none',
+    requiresShipping: false,
+    impactSummary: 'Finance le suivi terrain et l accompagnement des apiculteurs.',
+    unlockedAdvantageLabel: 'Avantages partenaires niveau 1 debloques',
+  },
+  {
+    id: 'box-miel',
+    amount: 60,
+    title: 'Box miel',
+    description: 'Une box de miels partenaire, avec suivi terrain du projet.',
+    rewardType: 'physical',
+    rewardLabel: 'Box miel Ilanga',
+    requiresShipping: true,
+    limitedQuantity: 80,
+    impactSummary: 'Accompagne une ruche et valorise le miel du partenaire.',
+    unlockedAdvantageLabel: 'Avantage partenaire -10 % debloque',
+  },
+  {
+    id: 'pack-producteur',
+    amount: 120,
+    title: 'Pack producteur',
+    description: 'Un pack miel et produits artisanaux, plus les nouvelles du terrain.',
+    rewardType: 'physical',
+    rewardLabel: 'Pack producteur Ilanga',
+    requiresShipping: true,
+    limitedQuantity: 40,
+    impactSummary: 'Finance l equipement, le suivi et la valorisation de la filiere.',
+    unlockedAdvantageLabel: 'Avantage partenaire -15 % debloque',
+  },
+]
+
+const habeebeeSupportTiers: SupportRewardTier[] = [
+  {
+    id: 'soutien-pollinisateurs',
+    amount: 30,
+    title: 'Coup de pouce pollinisateurs',
+    description: 'Un soutien simple avec suivi terrain des ruches urbaines.',
+    rewardType: 'none',
+    requiresShipping: false,
+    impactSummary: 'Finance les observations et la sensibilisation locale.',
+    unlockedAdvantageLabel: 'Avantages partenaires niveau 1 debloques',
+  },
+  {
+    id: 'box-habeebee',
+    amount: 65,
+    title: 'Box Habeebee',
+    description: 'Une selection de produits Habeebee, avec suivi du projet.',
+    rewardType: 'physical',
+    rewardLabel: 'Box Habeebee',
+    requiresShipping: true,
+    limitedQuantity: 60,
+    impactSummary: 'Soutient les ruches urbaines et leurs espaces verts.',
+    unlockedAdvantageLabel: 'Avantage partenaire -10 % debloque',
+  },
+  {
+    id: 'atelier-digital',
+    amount: 110,
+    title: 'Atelier pollinisateurs',
+    description: 'Un atelier digital avec l equipe, sans livraison physique.',
+    rewardType: 'experience',
+    rewardLabel: 'Atelier digital pollinisateurs',
+    requiresShipping: false,
+    limitedQuantity: 25,
+    impactSummary: 'Finance le suivi, la pedagogie et les actions locales.',
+    unlockedAdvantageLabel: 'Acces prioritaire aux avantages Habeebee',
+  },
+]
+
+const sardiniaSupportTiers: SupportRewardTier[] = [
+  {
+    id: 'soutien-oliveraie',
+    amount: 40,
+    title: 'Soutien oliveraie',
+    description: 'Un soutien libre pour l entretien et le suivi de l oliveraie.',
+    rewardType: 'none',
+    requiresShipping: false,
+    impactSummary: 'Finance le soin des arbres et les nouvelles du terrain.',
+    unlockedAdvantageLabel: 'Avantages partenaires niveau 1 debloques',
+  },
+  {
+    id: 'huile-olive',
+    amount: 80,
+    title: 'Bouteille d huile',
+    description: 'Une bouteille d huile partenaire, avec suivi du projet.',
+    rewardType: 'physical',
+    rewardLabel: 'Bouteille d huile d olive',
+    requiresShipping: true,
+    limitedQuantity: 70,
+    impactSummary: 'Contribue a l entretien des oliviers et a la valorisation de la recolte.',
+    unlockedAdvantageLabel: 'Avantage partenaire -10 % debloque',
+  },
+  {
+    id: 'pack-oliveraie',
+    amount: 150,
+    title: 'Pack oliveraie',
+    description: 'Un pack huile et suivi enrichi de l oliveraie.',
+    rewardType: 'physical',
+    rewardLabel: 'Pack oliveraie',
+    requiresShipping: true,
+    limitedQuantity: 35,
+    impactSummary: 'Finance l entretien, la recolte et la valorisation equitable.',
+    unlockedAdvantageLabel: 'Avantage partenaire -15 % debloque',
+  },
+]
+
 const coralSpecies: ProjectSpecies[] = [
   {
     id: MOCK_SPECIES_CORAL_ID,
@@ -792,6 +904,7 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
     species: antsirabeSpecies,
     challenges: [],
     producer_products: antsirabeProducts,
+    support_reward_tiers: ilangaHoneySupportTiers,
     expected_impact: {
       // real — source: PDF cadrage MTC (Ilanga Nature, données terrain)
       jobsCreated: 2,
@@ -852,6 +965,7 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
     species: manakaraSpecies,
     challenges: [],
     producer_products: manakaraProducts,
+    support_reward_tiers: ilangaHoneySupportTiers,
     expected_impact: {
       co2Absorbed: 42,
       biodiversityGain: 28,
@@ -971,6 +1085,7 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
     species: sardiniaSpecies,
     challenges: [],
     producer_products: sardiniaProducts,
+    support_reward_tiers: sardiniaSupportTiers,
     expected_impact: {
       co2Absorbed: 50,
       biodiversityGain: 60,
@@ -1103,6 +1218,7 @@ export const MOCK_PROJECTS: MockProjectSeed[] = [
     species: habeebeeSpecies,
     challenges: [],
     producer_products: habeebeeProducts,
+    support_reward_tiers: habeebeeSupportTiers,
     expected_impact: {
       co2Absorbed: 25,
       biodiversityGain: 40,

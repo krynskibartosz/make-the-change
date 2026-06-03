@@ -5,6 +5,7 @@ import type {
   ProjectChallenge,
   ProjectImpact,
   ProjectSpecies,
+  SupportRewardTier,
 } from '@/app/[locale]/(screens)/projects/_types/project'
 import {
   getMockProjectBySlug,
@@ -55,6 +56,7 @@ export type PublicProject = {
   species?: ProjectSpecies[] | null
   challenges?: ProjectChallenge[] | null
   producer_products?: ProducerProduct[] | null
+  support_reward_tiers?: SupportRewardTier[] | null
   donation_options?: DonationOption[] | null
   is_donation_project?: boolean
   expected_impact?: ProjectImpact | null
@@ -155,6 +157,7 @@ function toPublicProjectFromMock(
     species: project.species || null,
     challenges: project.challenges || null,
     producer_products: project.producer_products || null,
+    support_reward_tiers: project.support_reward_tiers || null,
     donation_options: project.donation_options || null,
     is_donation_project: isContributionType(project.type),
     expected_impact: project.expected_impact || null,
