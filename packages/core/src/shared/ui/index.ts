@@ -220,6 +220,7 @@ export {
   SelectScrollUpButton,
   SelectSeparator,
   SelectTrigger,
+  SelectTriggerBare,
   SelectValue,
   SimpleSelect,
 } from './base/select'
