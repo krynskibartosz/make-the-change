@@ -37,8 +37,10 @@ export function AddressAutocompleteInput({
 }: Props) {
   const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [hasSearched, setHasSearched] = useState(false)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const abortRef = useRef<AbortController | null>(null)
+  const isSelectingRef = useRef(false)
 
   // Cancel in-flight work on unmount
   useEffect(() => {
@@ -54,6 +56,7 @@ export function AddressAutocompleteInput({
     if (debounceRef.current) clearTimeout(debounceRef.current)
     setSuggestions([])
     setIsLoading(false)
+    setHasSearched(false)
   }, [country])
 
   function handleInputChange(next: string) {
@@ -62,6 +65,7 @@ export function AddressAutocompleteInput({
     if (next.trim().length < 2) {
       setSuggestions([])
       setIsLoading(false)
+      setHasSearched(false)
       return
     }
     setIsLoading(true)
@@ -76,13 +80,16 @@ export function AddressAutocompleteInput({
         })
         if (!res.ok) {
           setSuggestions([])
+          setHasSearched(true)
           return
         }
         const data = (await res.json()) as AddressSuggestion[]
         setSuggestions(data)
+        setHasSearched(true)
       } catch (e) {
         if (e instanceof Error && e.name === 'AbortError') return
         setSuggestions([])
+        setHasSearched(true)
       } finally {
         setIsLoading(false)
       }
@@ -94,7 +101,13 @@ export function AddressAutocompleteInput({
       <Autocomplete
         items={suggestions}
         value={value}
-        onValueChange={(next: string) => handleInputChange(next)}
+        onValueChange={(next: string) => {
+          if (isSelectingRef.current) {
+            isSelectingRef.current = false
+            return
+          }
+          handleInputChange(String(next))
+        }}
         // mode="none" disables internal filtering — we handle it server-side
         mode="none"
         // itemToStringValue fills the input with street after selection
@@ -125,6 +138,7 @@ export function AddressAutocompleteInput({
                       key={`${item.label}-${index}`}
                       value={item}
                       onClick={() => {
+                        isSelectingRef.current = true
                         onChange(item.street)
                         onSelect({ street: item.street, postalCode: item.postalCode, city: item.city })
                       }}
@@ -135,7 +149,7 @@ export function AddressAutocompleteInput({
                   )}
                 </AutocompleteCollection>
                 <AutocompleteEmpty className="px-4 py-3 text-sm text-white/40">
-                  Aucune adresse trouvée
+                  {hasSearched ? 'Aucune adresse trouvée' : null}
                 </AutocompleteEmpty>
               </AutocompleteList>
             </AutocompletePopup>
