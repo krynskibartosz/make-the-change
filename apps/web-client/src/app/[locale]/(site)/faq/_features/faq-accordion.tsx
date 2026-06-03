@@ -1,10 +1,12 @@
 'use client'
 
-import { AnimatePresence, motion } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
-import { useState } from 'react'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@make-the-change/core/ui'
 import { Link } from '@/i18n/navigation'
-import { cn } from '@/lib/utils'
 import type { FaqViewModel } from './faq.types'
 
 type FaqAccordionProps = Pick<
@@ -18,8 +20,6 @@ export function FaqAccordion({
   footerDescription,
   footerCta,
 }: FaqAccordionProps) {
-  const [activeId, setActiveId] = useState<string | null>(null)
-
   return (
     <>
       <script type="application/ld+json">
@@ -34,59 +34,22 @@ export function FaqAccordion({
         })}
       </script>
 
-      <ul className="relative z-10 flex flex-col gap-3 px-6 mb-12 m-0 list-none p-0">
-        {items.map((item) => {
-          const isOpen = activeId === item.id
-          return (
-            <li
-              key={item.id}
-              className={cn(
-                'overflow-hidden rounded-2xl border bg-[#1A1F26] transition-all duration-300',
-                isOpen ? 'border-white/10' : 'border-white/5',
-              )}
-            >
-              <button
-                type="button"
-                id={`faq-button-${item.id}`}
-                onClick={() => setActiveId(isOpen ? null : item.id)}
-                aria-expanded={isOpen}
-                aria-controls={`faq-panel-${item.id}`}
-                className="flex w-full items-center justify-between gap-4 p-5 text-left"
-              >
-                <span className="text-[15px] font-semibold text-white text-pretty leading-snug">
-                  {item.q}
-                </span>
-                <ChevronDown
-                  className={cn(
-                    'h-5 w-5 flex-shrink-0 text-gray-500 transition-transform duration-300',
-                    isOpen && 'rotate-180 text-white/80',
-                  )}
-                  aria-hidden="true"
-                />
-              </button>
-
-              <AnimatePresence initial={false}>
-                {isOpen && (
-                  <motion.div
-                    id={`faq-panel-${item.id}`}
-                    role="region"
-                    aria-labelledby={`faq-button-${item.id}`}
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.25, ease: 'easeOut' }}
-                    className="overflow-hidden"
-                  >
-                    <p className="px-5 pt-2 pb-5 text-sm leading-relaxed text-gray-400 text-pretty">
-                      {item.a}
-                    </p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </li>
-          )
-        })}
-      </ul>
+      <Accordion type="single" collapsible className="relative z-10 flex flex-col gap-3 px-6 mb-12">
+        {items.map((item) => (
+          <AccordionItem
+            key={item.id}
+            value={item.id}
+            className="overflow-hidden rounded-2xl border border-white/5 bg-[#1A1F26] data-[open]:border-white/10"
+          >
+            <AccordionTrigger className="flex w-full items-center justify-between gap-4 p-5 text-left text-[15px] font-semibold text-white text-pretty leading-snug hover:no-underline [&>svg]:h-5 [&>svg]:w-5 [&>svg]:flex-shrink-0 [&>svg]:text-gray-500 data-[open]:[&>svg]:text-white/80">
+              {item.q}
+            </AccordionTrigger>
+            <AccordionContent className="px-5 [&>div]:pt-2 [&>div]:pb-5">
+              <span className="text-sm leading-relaxed text-gray-400 text-pretty">{item.a}</span>
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
 
       <aside aria-labelledby="faq-footer-title" className="relative z-10 mx-6 flex flex-col items-center rounded-3xl border border-white/[0.05] bg-gradient-to-b from-white/[0.05] to-transparent p-6 text-center">
         <h2 id="faq-footer-title" className="mb-2 text-lg font-bold text-white">{footerTitle}</h2>
