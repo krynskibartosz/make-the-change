@@ -25,11 +25,15 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 TextArea.displayName = 'TextArea'
 
 /* ============================================================================
- * LEGACY API
+ * LEGACY API — @deprecated, use composable TextArea + Field pattern instead
+ *
+ * Still used by: packages/core/src/shared/ui/forms/form-textarea.tsx.
+ * Do not introduce new usages.
  * ========================================================================= */
 
 export type LegacyTextAreaVariant = 'default' | 'outlined' | 'filled' | 'ghost'
 
+/** @deprecated Use the new composable `TextArea` + `Field` pattern. */
 export type LegacyTextAreaProps = {
   label?: string
   error?: string
@@ -41,6 +45,7 @@ export type LegacyTextAreaProps = {
   rows?: number
 } & Omit<InputHTMLAttributes<HTMLTextAreaElement>, 'size'>
 
+/** @deprecated Use the new composable `TextArea` + `Field` pattern. */
 export const LegacyTextArea = forwardRef<HTMLTextAreaElement, LegacyTextAreaProps>(
   (
     {

@@ -26,11 +26,15 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 Input.displayName = 'Input'
 
 /* ============================================================================
- * LEGACY API — kept during transition, removed in P9
+ * LEGACY API — @deprecated, use composable Input + Field pattern instead
+ *
+ * Still used by: packages/core/src/shared/ui/theme-builder.tsx, apps/web/admin/*.
+ * Do not introduce new usages. See docs/02-product/design-system/forms.md.
  * ========================================================================= */
 
 export type LegacyInputVariant = 'default' | 'outlined' | 'filled' | 'ghost'
 
+/** @deprecated Use the new composable `Input` + `Field` pattern. See docs/02-product/design-system/forms.md */
 export type LegacyInputProps = {
   label?: string
   error?: string
@@ -47,6 +51,7 @@ export type LegacyInputProps = {
   messageClassName?: string
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'size'>
 
+/** @deprecated Use the new composable `Input` + `Field` pattern. See docs/02-product/design-system/forms.md */
 export const LegacyInput = forwardRef<HTMLInputElement, LegacyInputProps>(
   (
     {
@@ -211,6 +216,7 @@ export const LegacyInput = forwardRef<HTMLInputElement, LegacyInputProps>(
 )
 LegacyInput.displayName = 'LegacyInput'
 
+/** @deprecated Use the new `PasswordInput` from `./password-input.tsx`. */
 export const LegacyPasswordInput = forwardRef<
   HTMLInputElement,
   Omit<LegacyInputProps, 'type' | 'showPasswordToggle'>
