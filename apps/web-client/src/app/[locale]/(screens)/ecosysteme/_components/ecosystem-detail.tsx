@@ -1,6 +1,13 @@
 ﻿'use client'
 
-import { Button } from '@make-the-change/core/ui'
+import {
+  Button,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTriggerBare,
+  SelectValue,
+} from '@make-the-change/core/ui'
 import {
   ChevronLeft,
   Eye,
@@ -212,21 +219,28 @@ export function EcosystemDetail({ ecosystemId, species }: EcosystemDetailProps) 
               onClick={() => router.back()}
             />
 
-            <label className="relative min-w-0 flex-1">
+            <div className="relative min-w-0 flex-1">
               <span className="sr-only">Categorie</span>
               <ThemeIcon className="pointer-events-none absolute left-3 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-emerald-100" />
-              <select
-                className="h-11 w-full appearance-none truncate rounded-2xl border border-white/10 bg-[#05050A]/65 py-0 pl-9 pr-8 text-sm font-black text-white outline-none backdrop-blur-xl"
+              <Select
                 value={perspective}
-                onChange={(event) => handlePerspectiveChange(event.target.value as EcosystemPerspective)}
+                onValueChange={(value) => {
+                  const next = typeof value === 'string' ? value : String(value)
+                  handlePerspectiveChange(next as EcosystemPerspective)
+                }}
               >
-                {PERSPECTIVE_OPTIONS.map((option) => (
-                  <option key={option} value={option}>
-                    {PERSPECTIVE_COPY[option].label}
-                  </option>
-                ))}
-              </select>
-            </label>
+                <SelectTriggerBare className="h-11 w-full truncate rounded-2xl border border-white/10 bg-[#05050A]/65 py-0 pl-9 pr-8 text-sm font-black text-white outline-none backdrop-blur-xl">
+                  <SelectValue placeholder="Perspective" />
+                </SelectTriggerBare>
+                <SelectContent>
+                  {PERSPECTIVE_OPTIONS.map((option) => (
+                    <SelectItem key={option} value={option}>
+                      {PERSPECTIVE_COPY[option].label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
             <span
               className={cn(
