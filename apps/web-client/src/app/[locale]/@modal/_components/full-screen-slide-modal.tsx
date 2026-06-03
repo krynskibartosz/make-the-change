@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Dialog, DialogBackdrop, DialogClose, DialogPopup, DialogPortal } from '@make-the-change/core/ui'
 import { useRouter } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
+import { useScrollElevation } from './use-scroll-elevation'
 
 type FullScreenSlideModalProps = PropsWithChildren<{
   title?: string
@@ -37,7 +38,9 @@ export function FullScreenSlideModal({
   const router = useRouter()
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [open, setOpen] = useState(true)
-  const [isHeaderElevated, setIsHeaderElevated] = useState(false)
+  const isClosingRef = useRef(false)
+  const scrollElevated = useScrollElevation(containerRef, 60)
+  const isHeaderElevated = headerMode === 'dynamic' ? scrollElevated : false
 
   useEffect(() => {
     if (!title) return
@@ -50,40 +53,13 @@ export function FullScreenSlideModal({
     }
   }, [title])
 
-  useEffect(() => {
-    if (headerMode !== 'dynamic') {
-      setIsHeaderElevated(false)
-      return
-    }
-
-    const container = containerRef.current
-    if (!container) return
-
-    const handleScroll = (event: Event) => {
-      const target = event.target as HTMLElement | null
-      if (!target) return
-
-      const scrollRoot =
-        target === container
-          ? container
-          : target.hasAttribute('data-modal-scroll-root')
-            ? target
-            : null
-
-      if (!scrollRoot) return
-
-      const nextElevated = scrollRoot.scrollTop > 60
-      setIsHeaderElevated((previous) => (previous === nextElevated ? previous : nextElevated))
-    }
-
-    container.addEventListener('scroll', handleScroll, { passive: true, capture: true })
-
-    return () => {
-      container.removeEventListener('scroll', handleScroll, true)
-    }
-  }, [headerMode])
-
   const handleClose = () => {
+    if (isClosingRef.current) return
+    isClosingRef.current = true
+
+    // Always start visual close (independent of caller-provided onClose)
+    setOpen(false)
+
     if (onClose) {
       onClose()
       return
@@ -92,8 +68,6 @@ export function FullScreenSlideModal({
     if (refreshOnClose) {
       router.refresh()
     }
-
-    setOpen(false)
 
     setTimeout(() => {
       if (typeof window !== 'undefined' && window.history.length > 1) {
