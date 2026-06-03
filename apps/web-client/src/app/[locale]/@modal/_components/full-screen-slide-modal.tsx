@@ -15,6 +15,7 @@ type FullScreenSlideModalProps = PropsWithChildren<{
   contentClassName?: string
   onClose?: () => void
   refreshOnClose?: boolean
+  hideElevatedHeaderBorder?: boolean
   /** Rend le modal comme une page normale (pas d'overlay fixed, pas de scroll lock, pas d'animation). */
   asPage?: boolean
 }>
@@ -28,6 +29,7 @@ export function FullScreenSlideModal({
   contentClassName,
   onClose,
   refreshOnClose,
+  hideElevatedHeaderBorder = false,
   asPage = false,
   children,
 }: FullScreenSlideModalProps) {
@@ -146,7 +148,12 @@ export function FullScreenSlideModal({
           className={cn(
             'fixed inset-x-0 top-0 z-20 transition-all duration-500 ease-out',
             isHeaderElevated
-              ? 'border-b border-white/[0.05] bg-[#0B0F15]/55 backdrop-blur-2xl shadow-[0_4px_20px_rgba(0,0,0,0.12)]'
+              ? cn(
+                  'bg-[#0B0F15]/55 backdrop-blur-2xl shadow-[0_4px_20px_rgba(0,0,0,0.12)]',
+                  hideElevatedHeaderBorder
+                    ? 'border-b border-transparent'
+                    : 'border-b border-white/[0.05]',
+                )
               : 'border-b border-transparent bg-transparent',
           )}
         >

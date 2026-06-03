@@ -45,7 +45,7 @@ export function ProjectDetailTabs({
       <nav
         data-project-tabs-nav
         aria-label="Navigation du projet"
-        className="sticky top-[calc(2.75rem+max(0.75rem,env(safe-area-inset-top)))] z-30 mt-5 border-y border-white/[0.05] bg-[#0B0F15]/55 px-4 py-2 shadow-[0_8px_24px_rgba(0,0,0,0.14)] backdrop-blur-2xl sm:px-5"
+        className="sticky top-[calc(2.75rem+max(0.75rem,env(safe-area-inset-top)))] z-30 mt-5 border-b border-white/[0.05] bg-[#0B0F15]/55 px-4 py-2 shadow-[0_8px_24px_rgba(0,0,0,0.14)] backdrop-blur-2xl sm:px-5"
       >
         <div role="tablist" className="flex gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {tabs.map((tab) => {

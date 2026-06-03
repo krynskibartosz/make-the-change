@@ -148,6 +148,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
         title={localizedTitle}
         fallbackHref="/projects"
         headerMode="dynamic"
+        hideElevatedHeaderBorder
         asPage
         className={DARK_APP_MODAL_CLASSNAME}
       >

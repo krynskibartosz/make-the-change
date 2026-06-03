@@ -53,6 +53,7 @@ export default async function InterceptedProjectPage({ params }: InterceptedProj
       title={getLocalizedContent(project.name_i18n, locale, project.name_default)}
       fallbackHref="/projects"
       headerMode="dynamic"
+      hideElevatedHeaderBorder
       className={DARK_APP_MODAL_CLASSNAME}
     >
       <ProjectQuickView
