@@ -1,6 +1,6 @@
 'use client'
 
-import type { ForwardedRef, InputHTMLAttributes, ReactNode } from 'react'
+import type { ForwardedRef, InputHTMLAttributes, ReactNode, TextareaHTMLAttributes } from 'react'
 import { forwardRef, useId, useState } from 'react'
 
 import { cn } from '../utils'
@@ -10,7 +10,7 @@ import { textareaVariants, type TextAreaVariantProps } from './input-variants'
  * NEW API
  * ========================================================================= */
 
-export type TextAreaProps = Omit<InputHTMLAttributes<HTMLTextAreaElement>, 'size'> &
+export type TextAreaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'size'> &
   TextAreaVariantProps
 
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
