@@ -220,16 +220,7 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
         </Field>
 
         {/* Rue */}
-        <Field
-          name="street"
-          validationMode="onBlur"
-          validate={async (value) => {
-            if (typeof value !== 'string' || value.trim().length < 4) {
-              return 'Adresse trop courte'
-            }
-            return null
-          }}
-        >
+        <Field name="street">
           <FieldLabel className="block text-xs font-bold text-white/55 mb-1.5">
             Rue et numéro
           </FieldLabel>
@@ -245,7 +236,6 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
               resetValidation()
             }}
           />
-          <FieldError className="mt-1 text-xs text-red-400" />
         </Field>
 
         {/* Code postal + Ville */}
