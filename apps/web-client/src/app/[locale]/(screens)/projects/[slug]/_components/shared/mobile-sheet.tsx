@@ -22,7 +22,7 @@ export function MobileSheet({ isOpen, onClose, title, children }: MobileSheetPro
   return (
     <Dialog open={isOpen} onOpenChange={(v) => !v && onClose()}>
       <DialogPortal>
-        <DialogBackdrop className="fixed inset-0 z-[110] bg-black/40 backdrop-blur-[2px] transition-opacity duration-200 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0" />
+        <DialogBackdrop className="fixed inset-0 z-[110] bg-black/70 backdrop-blur-sm transition-opacity duration-200 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0" />
         <DialogPopup
           className={[
             'fixed inset-x-0 bottom-0 z-[120] mx-auto max-w-xl overflow-hidden rounded-t-3xl border border-white/10',
@@ -31,10 +31,7 @@ export function MobileSheet({ isOpen, onClose, title, children }: MobileSheetPro
             'data-[ending-style]:translate-y-full data-[starting-style]:translate-y-full',
           ].join(' ')}
         >
-          {/* Handle bar */}
-          <div className="mx-auto mt-3 h-1 w-12 rounded-full bg-white/20" aria-hidden="true" />
-
-          <div className="flex items-center justify-between px-5 pb-2 pt-2">
+          <div className="flex items-center justify-between px-5 pb-2 pt-4">
             {title ? (
               <DialogTitle className="text-base font-black text-white">{title}</DialogTitle>
             ) : (

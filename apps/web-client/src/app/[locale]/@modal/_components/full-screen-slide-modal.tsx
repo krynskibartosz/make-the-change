@@ -150,7 +150,7 @@ export function FullScreenSlideModal({
           </header>
         ) : null}
 
-        <div ref={containerRef} data-modal-scroll-root className={cn('min-h-0 flex-1', contentClassName)}>
+        <div ref={containerRef} data-modal-scroll-root className={cn('min-h-0 flex-1 overflow-y-auto overscroll-contain', contentClassName)}>
           {children}
         </div>
       </div>
@@ -242,7 +242,7 @@ export function FullScreenSlideModal({
             </header>
           ) : null}
 
-          <div ref={containerRef} data-modal-scroll-root className={cn('min-h-0 flex-1', contentClassName)}>
+          <div ref={containerRef} data-modal-scroll-root className={cn('min-h-0 flex-1 overflow-y-auto overscroll-contain', contentClassName)}>
             {children}
           </div>
         </DialogPopup>

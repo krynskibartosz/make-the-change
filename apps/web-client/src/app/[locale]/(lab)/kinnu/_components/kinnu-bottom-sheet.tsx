@@ -68,7 +68,7 @@ export function KinnuBottomSheet({ node, status, health, onMaster, onClose }: Ki
   return (
     <Dialog open={!!node && !!status} onOpenChange={(v: boolean) => !v && onClose()}>
       <DialogPortal>
-        <DialogBackdrop className="fixed inset-0 z-[110] bg-black/40 backdrop-blur-[2px] transition-opacity duration-200 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0" />
+        <DialogBackdrop className="fixed inset-0 z-[110] bg-black/70 backdrop-blur-sm transition-opacity duration-200 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0" />
         <DialogPopup
           className={cn(
             'fixed inset-x-0 bottom-0 z-[120] mx-auto max-w-xl overflow-hidden rounded-t-[2rem] border border-white/10 bg-[#08080F]/95 shadow-[0_-20px_80px_rgba(0,0,0,0.6)] backdrop-blur-xl outline-none',
@@ -76,13 +76,8 @@ export function KinnuBottomSheet({ node, status, health, onMaster, onClose }: Ki
             'data-[ending-style]:translate-y-full data-[starting-style]:translate-y-full',
           )}
         >
-          {/* Drag handle */}
-          <div className="flex justify-center pt-3">
-            <div className="h-1 w-10 rounded-full bg-white/20" aria-hidden="true" />
-          </div>
-
           {node && status && (
-            <div className="px-6 pb-[max(2rem,env(safe-area-inset-bottom))] pt-4">
+            <div className="px-6 pb-[max(2rem,env(safe-area-inset-bottom))] pt-6">
               {/* Header */}
               <div className="flex items-start gap-4">
                 <div
