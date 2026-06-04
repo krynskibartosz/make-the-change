@@ -1,6 +1,7 @@
 'use client'
 
 import { LockKeyhole, MapPin, Sprout, TreePine, Waves, type LucideIcon } from 'lucide-react'
+import { Meter, MeterIndicator, MeterTrack } from '@make-the-change/core/ui'
 import { type KinnuWorld, type KinnuTheme } from '@/app/[locale]/(lab)/kinnu/_lib/graph'
 import { cn } from '@/lib/utils'
 
@@ -90,12 +91,11 @@ export function KinnuWorldCard({ world, masteredCount, isLocked = false, onClick
             <span className="uppercase tracking-[0.12em]">Progression</span>
             <span className="tabular-nums">{masteredCount}/{world.nodes.length} concepts</span>
           </div>
-          <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10">
-            <div
-              className={cn('h-full rounded-full transition-all duration-700', pct === 100 ? 'bg-amber-400' : 'bg-emerald-400')}
-              style={{ width: `${pct}%` }}
-            />
-          </div>
+          <Meter value={pct} min={0} max={100} className="mt-2 h-1.5">
+            <MeterTrack className="h-full w-full rounded-full bg-white/10">
+              <MeterIndicator className={cn('h-full rounded-full transition-all duration-700', pct === 100 ? 'bg-amber-400' : 'bg-emerald-400')} />
+            </MeterTrack>
+          </Meter>
         </div>
       </div>
     </button>

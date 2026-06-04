@@ -21,6 +21,7 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useMemo, useState } from 'react'
+import { Progress } from '@make-the-change/core/ui'
 import { MOCK_ACADEMY_VIEWER_ID } from '@/app/[locale]/(lab)/_lib/mock-academy'
 import { Link } from '@/i18n/navigation'
 import { readLearningProgress } from '@/lib/learning/progress'
@@ -150,13 +151,12 @@ function PathHero({
           <span>Voyage Learning</span>
           <span>{totalCount} etapes</span>
         </div>
-        <div className="h-2 overflow-hidden rounded-full bg-white/10">
-          <motion.div
-            style={{ width: `${progress}%` }}
-            animate={{ width: `${progress}%` }}
-            className="h-full rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.8)]"
-          />
-        </div>
+        <Progress
+          value={progress}
+          max={100}
+          className="h-2 rounded-full bg-white/10"
+          indicatorClassName="bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.8)] transition-all"
+        />
       </div>
       <div className="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-500/10 blur-[54px]" />
     </section>

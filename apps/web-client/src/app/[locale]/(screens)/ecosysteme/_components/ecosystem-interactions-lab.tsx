@@ -1,6 +1,6 @@
 ﻿'use client'
 
-import { Button } from '@make-the-change/core/ui'
+import { Button, Meter, MeterIndicator, MeterTrack } from '@make-the-change/core/ui'
 import {
   ArrowLeft,
   Bug,
@@ -471,12 +471,11 @@ export function EcosystemInteractionsLab({ species }: EcosystemInteractionsLabPr
                       <p className="mt-1 text-xs leading-relaxed text-white/45">
                         {edge.explanation}
                       </p>
-                      <div className="mt-2 h-1 overflow-hidden rounded-full bg-white/10">
-                        <div
-                          className="h-full rounded-full bg-white/45"
-                          style={{ width: `${Math.round(edge.strength * 100)}%` }}
-                        />
-                      </div>
+                      <Meter value={Math.round(edge.strength * 100)} min={0} max={100} className="mt-2 h-1">
+                        <MeterTrack className="h-full w-full rounded-full bg-white/10">
+                          <MeterIndicator className="h-full rounded-full bg-white/45" />
+                        </MeterTrack>
+                      </Meter>
                       {edge.sourceUrl ? (
                         <a
                           href={edge.sourceUrl}

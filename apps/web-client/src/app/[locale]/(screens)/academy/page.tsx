@@ -53,6 +53,7 @@ import {
 } from '@/app/[locale]/(lab)/_lib/mock-academy'
 import { isUnlimitedLives } from '@/app/[locale]/(lab)/_lib/lives'
 import { LivesCounter } from '@/app/[locale]/(lab)/_components/lives-counter'
+import { Progress } from '@make-the-change/core/ui'
 import { cn } from '@/lib/utils'
 
 const LOADING_STEPS = [
@@ -713,14 +714,13 @@ export default function AcademyPage() {
               <span>Voyage Academy</span>
               <span>{completedCurrentChapterLessons}/{currentChapterLessonTotal} leçons</span>
             </div>
-            <div className="h-2 overflow-hidden rounded-full bg-white/10">
-              <motion.div
-                data-academy-progress-bar
-                style={{ width: `${currentChapterLessonProgress}%` }}
-                animate={{ width: `${currentChapterLessonProgress}%` }}
-                className="h-full rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.75)]"
-              />
-            </div>
+            <Progress
+              data-academy-progress-bar
+              value={currentChapterLessonProgress}
+              max={100}
+              className="h-2 rounded-full bg-white/10"
+              indicatorClassName="bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.75)] transition-all"
+            />
           </div>
 
           <EventCarousel onStartEvent={(event) => setLoadingTarget(`/academy/events/${event.slug}`)} />
