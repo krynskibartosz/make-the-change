@@ -170,7 +170,7 @@ function EditorialRewardRow({
         <p className="hidden text-2xl font-black tabular-nums text-lime-300 sm:block">{amount}</p>
         <span className="inline-flex items-center gap-1 text-[12px] font-black text-white/50 transition-colors group-hover:text-white sm:mt-3">
           {ctaLabel}
-          <ChevronRight className="h-3.5 w-3.5" />
+          <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
         </span>
       </div>
     </Link>
@@ -296,6 +296,8 @@ export async function ProjectQuickView({
     donationOptions: project.donation_options,
     projectImpact: project.expected_impact,
   })
+  const projectUpdates = getProjectUpdates(project.slug)
+  const latestProjectUpdate = projectUpdates[0] ?? null
 
   const partnerLabel = isContributionProject
     ? t('detail.partner_label_contribution')
@@ -342,7 +344,7 @@ export async function ProjectQuickView({
               {producerDescription}
             </p>
           </div>
-          <ChevronRight className="h-4 w-4 shrink-0 text-white/20" />
+          <ChevronRight className="h-4 w-4 shrink-0 text-white/20" aria-hidden="true" />
         </Link>
       ) : (
         <div className="flex w-full items-center gap-4 py-4">
@@ -372,7 +374,7 @@ export async function ProjectQuickView({
               rel="noopener noreferrer"
               className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-primary hover:underline"
             >
-              <Globe className="h-3 w-3" />
+              <Globe className="h-3 w-3" aria-hidden="true" />
               {websiteLabel}
             </a>
           ) : null}
@@ -566,9 +568,15 @@ export async function ProjectQuickView({
       id: 'impact',
       label: 'Impact',
       content: (
-        <div className="px-4 pt-6 sm:px-5">
+        <div className="px-4 pt-10 sm:px-5">
           {impactItems.length > 0 ? (
-            <ProjectImpactPreview items={impactItems} accentColor={glowRgba(1)} />
+            <ProjectImpactPreview
+              items={impactItems}
+              accentColor={glowRgba(1)}
+              projectType={project.type}
+              latestUpdate={latestProjectUpdate}
+              supportRewardTiers={supportRewardTiers}
+            />
           ) : (
             <p className="text-sm text-white/45">Aucun indicateur d'impact disponible pour le moment.</p>
           )}
@@ -582,7 +590,7 @@ export async function ProjectQuickView({
       label: 'Actualites',
       content: (
         <div className="px-4 pt-6 sm:px-5">
-          <ProjectUpdatesFeed updates={getProjectUpdates(project.slug)} />
+          <ProjectUpdatesFeed updates={projectUpdates} />
         </div>
       ),
     },

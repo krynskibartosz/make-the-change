@@ -1,18 +1,27 @@
+import Image from 'next/image'
 import type { ComponentType, CSSProperties } from 'react'
 import {
   Activity,
+  ArrowRight,
   Bug,
+  CalendarDays,
   ChevronDown,
   Cloud,
   Droplet,
   Fish,
   Flower2,
   Grid2x2,
+  PackageCheck,
+  ShieldCheck,
+  Sparkles,
   TreePine,
   Waves,
 } from 'lucide-react'
 import type { ImpactIconKey, ProjectImpactItem } from '../../_utils/build-project-impact-items'
+import type { SupportRewardTier } from '@/app/[locale]/(screens)/projects/_types/project'
 import { HiveSilhouette } from '@/lib/impact-icons'
+import { sanitizeImageUrl } from '@/lib/image-url'
+import type { ProjectUpdate } from '@/types/project'
 
 type IconComponent = ComponentType<{ className?: string; style?: CSSProperties }>
 
@@ -33,6 +42,9 @@ const ICON_MAP: Record<ImpactIconKey, IconComponent> = {
 type ProjectImpactPreviewProps = {
   items: ProjectImpactItem[]
   accentColor: string
+  projectType?: string | null
+  latestUpdate?: ProjectUpdate | null
+  supportRewardTiers?: SupportRewardTier[]
 }
 
 function ImpactValue({ item, size = 'md' }: { item: ProjectImpactItem; size?: 'lg' | 'md' }) {
@@ -59,7 +71,10 @@ function MethodDetails({ item }: { item: ProjectImpactItem }) {
     <details className="group mt-4 border-t border-white/[0.06] pt-3">
       <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-[11px] font-black uppercase tracking-[0.14em] text-white/30 transition-colors hover:text-white/50">
         Methode et limites
-        <ChevronDown className="h-3.5 w-3.5 shrink-0 transition-transform group-open:rotate-180" />
+        <ChevronDown
+          className="h-3.5 w-3.5 shrink-0 transition-transform group-open:rotate-180"
+          aria-hidden="true"
+        />
       </summary>
       <div className="mt-3 space-y-2.5">
         <div className="grid gap-1.5 sm:grid-cols-[84px_1fr] sm:gap-4">
@@ -87,7 +102,7 @@ function ImpactHero({ item, accentColor }: { item: ProjectImpactItem; accentColo
     <section className="border-b border-white/[0.08] pb-6">
       <div className="flex items-start gap-4">
         <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white/[0.055]">
-          <Icon className="h-6 w-6" style={{ color: accentColor }} />
+          <Icon className="h-6 w-6" style={{ color: accentColor }} aria-hidden="true" />
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
@@ -129,7 +144,7 @@ function ImpactLine({ item, accentColor }: { item: ProjectImpactItem; accentColo
     <article className="border-b border-white/[0.08] py-5 last:border-b-0">
       <div className="flex items-start gap-4">
         <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/[0.045]">
-          <Icon className="h-5 w-5" style={{ color: accentColor }} />
+          <Icon className="h-5 w-5" style={{ color: accentColor }} aria-hidden="true" />
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-start justify-between gap-3">
@@ -159,7 +174,274 @@ function ImpactLine({ item, accentColor }: { item: ProjectImpactItem; accentColo
   )
 }
 
-export function ProjectImpactPreview({ items, accentColor }: ProjectImpactPreviewProps) {
+function findImpactItem(items: ProjectImpactItem[], id: string): ProjectImpactItem | null {
+  return items.find((item) => item.id === id) ?? null
+}
+
+function getTierByAmount(tiers: SupportRewardTier[] | undefined, amount: number): SupportRewardTier | null {
+  return tiers?.find((tier) => tier.amount === amount) ?? null
+}
+
+function ImpactMiniMetric({
+  item,
+  caption,
+  accentColor,
+}: {
+  item: ProjectImpactItem
+  caption: string
+  accentColor: string
+}) {
+  const Icon = ICON_MAP[item.iconKey]
+
+  return (
+    <article className="grid grid-cols-[44px_minmax(0,1fr)_auto] items-start gap-3 border-b border-white/[0.075] py-4 last:border-b-0">
+      <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white/[0.045]">
+        <Icon className="h-5 w-5" style={{ color: accentColor }} aria-hidden="true" />
+      </div>
+      <div className="min-w-0">
+        <p className="text-[10px] font-black uppercase tracking-[0.14em] text-white/28">
+          {item.group}
+        </p>
+        <h3 className="mt-1 text-[16px] font-black leading-tight text-white">{item.label}</h3>
+        <p className="mt-1.5 text-[13px] leading-relaxed text-white/52">{caption}</p>
+      </div>
+      <div className="pt-4 text-right">
+        {item.prefix ? <p className="mb-1 text-[10px] font-bold text-white/32">{item.prefix}</p> : null}
+        <ImpactValue item={item} />
+      </div>
+    </article>
+  )
+}
+
+function SupportAmountRow({
+  amount,
+  title,
+  description,
+  tier,
+}: {
+  amount: number
+  title: string
+  description: string
+  tier: SupportRewardTier | null
+}) {
+  return (
+    <div className="grid grid-cols-[64px_minmax(0,1fr)] gap-3 border-b border-white/[0.07] py-3 last:border-b-0">
+      <p className="text-xl font-black tabular-nums text-lime-300">{amount} €</p>
+      <div>
+        <p className="text-[13px] font-black text-white">{title}</p>
+        <p className="mt-1 text-[12px] leading-relaxed text-white/48">
+          {tier?.impactSummary || description}
+        </p>
+        {tier?.rewardLabel ? (
+          <p className="mt-1.5 text-[11px] font-bold text-amber-300/72">
+            Contrepartie optionnelle : {tier.rewardLabel}
+          </p>
+        ) : null}
+      </div>
+    </div>
+  )
+}
+
+function formatUpdateDate(iso: string): string {
+  try {
+    return new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long' }).format(new Date(iso))
+  } catch {
+    return ''
+  }
+}
+
+function TerrainProofCard({ update }: { update: ProjectUpdate | null | undefined }) {
+  if (!update) return null
+  const imageUrl = sanitizeImageUrl(update.imageUrl)
+
+  return (
+    <section className="mt-8 border-t border-white/[0.08] pt-6">
+      <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
+        Sur le terrain récemment
+      </p>
+      <div className="mt-4 overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.035]">
+        {imageUrl ? (
+          <div className="relative aspect-[16/9] w-full overflow-hidden">
+            <Image src={imageUrl} alt={update.title} fill sizes="390px" className="object-cover" />
+          </div>
+        ) : null}
+        <div className="p-4">
+          <div className="flex items-center gap-2 text-[11px] font-bold text-white/36">
+            <CalendarDays className="h-3.5 w-3.5" aria-hidden="true" />
+            <time dateTime={update.postedAt}>{formatUpdateDate(update.postedAt)}</time>
+          </div>
+          <h3 className="mt-2 text-lg font-black leading-tight text-white">{update.title}</h3>
+          <p className="mt-2 line-clamp-3 text-[13px] leading-relaxed text-white/52">{update.body}</p>
+          {update.authorName ? (
+            <p className="mt-3 text-[12px] font-bold text-white/36">{update.authorName}</p>
+          ) : null}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function BeehiveImpactStory({
+  items,
+  accentColor,
+  latestUpdate,
+  supportRewardTiers,
+}: {
+  items: ProjectImpactItem[]
+  accentColor: string
+  latestUpdate?: ProjectUpdate | null
+  supportRewardTiers?: SupportRewardTier[]
+}) {
+  const hives = findImpactItem(items, 'hives')
+  const honey = findImpactItem(items, 'honey')
+  const flowers = findImpactItem(items, 'flowers')
+  const bees = findImpactItem(items, 'bees')
+
+  if (!hives) return null
+
+  const tier30 = getTierByAmount(supportRewardTiers, 30)
+  const tier60 = getTierByAmount(supportRewardTiers, 60)
+  const tier120 = getTierByAmount(supportRewardTiers, 120)
+
+  return (
+    <section>
+      <div className="rounded-[1.35rem] border border-white/[0.08] bg-[radial-gradient(circle_at_20%_0%,rgba(190,242,100,0.14),transparent_34%),rgba(255,255,255,0.035)] p-5">
+        <div className="flex flex-wrap items-center gap-2">
+          <ShieldCheck className="h-4 w-4 text-lime-300" aria-hidden="true" />
+          <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/36">
+            Impact terrain
+          </p>
+          <span className="rounded-full bg-white/[0.07] px-2 py-0.5 text-[10px] font-black text-white/40">
+            Estimation
+          </span>
+        </div>
+        <div className="mt-5 flex items-end gap-3">
+          <p className="text-7xl font-black leading-none tracking-tight text-white tabular-nums">
+            {hives.value}
+          </p>
+          <h2 className="pb-1 text-2xl font-black leading-none tracking-tight text-white">
+            ruches accompagnées
+          </h2>
+        </div>
+        <p className="mt-4 text-[15px] leading-relaxed text-white/66">
+          Votre soutien finance le suivi des colonies, l’équipement apicole et la valorisation du miel produit avec les apiculteurs locaux.
+        </p>
+      </div>
+
+      <section className="mt-8">
+        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
+          Ce que ça change
+        </p>
+        <div className="mt-3 border-y border-white/[0.08]">
+          <ImpactMiniMetric
+            item={hives}
+            accentColor={accentColor}
+            caption="Du suivi terrain et du matériel pour accompagner les ruches dans la durée."
+          />
+          <article className="grid grid-cols-[44px_minmax(0,1fr)] items-start gap-3 border-b border-white/[0.075] py-4">
+            <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white/[0.045]">
+              <PackageCheck className="h-5 w-5" style={{ color: accentColor }} aria-hidden="true" />
+            </div>
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-[0.14em] text-white/28">
+                Producteurs
+              </p>
+              <h3 className="mt-1 text-[16px] font-black leading-tight text-white">
+                Apiculteurs mieux équipés
+              </h3>
+              <p className="mt-1.5 text-[13px] leading-relaxed text-white/52">
+                Plus de moyens pour suivre les colonies, récolter le miel et valoriser leur travail.
+              </p>
+            </div>
+          </article>
+          {honey ? (
+            <ImpactMiniMetric
+              item={honey}
+              accentColor={accentColor}
+              caption="Une production locale mieux collectée, préparée et valorisée avec le partenaire."
+            />
+          ) : null}
+          {flowers ? (
+            <ImpactMiniMetric
+              item={flowers}
+              accentColor={accentColor}
+              caption="Des abeilles actives autour des ruchers, utiles aux cultures et à la biodiversité locale."
+            />
+          ) : null}
+        </div>
+      </section>
+
+      <section className="mt-8 rounded-2xl border border-white/[0.08] bg-white/[0.035] p-4">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-lime-300" aria-hidden="true" />
+            <h3 className="text-lg font-black text-white">Votre soutien devient concret</h3>
+          </div>
+          <ArrowRight className="h-4 w-4 shrink-0 text-white/30" aria-hidden="true" />
+        </div>
+        <div className="mt-3">
+          <SupportAmountRow
+            amount={30}
+            title="Suivi terrain"
+            description="Participe au suivi terrain et à l’accompagnement des apiculteurs."
+            tier={tier30}
+          />
+          <SupportAmountRow
+            amount={60}
+            title="Ruche accompagnée"
+            description="Contribue à une ruche accompagnée et inclut une contrepartie miel optionnelle."
+            tier={tier60}
+          />
+          <SupportAmountRow
+            amount={120}
+            title="Pack producteur"
+            description="Renforce l’équipement, le suivi et la valorisation du miel produit."
+            tier={tier120}
+          />
+        </div>
+      </section>
+
+      <TerrainProofCard update={latestUpdate} />
+
+      <details className="group mt-8 border-y border-white/[0.08] py-4">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-[13px] font-black text-white">
+          Comment lire ces estimations
+          <ChevronDown
+            className="h-4 w-4 shrink-0 text-white/35 transition-transform group-open:rotate-180"
+            aria-hidden="true"
+          />
+        </summary>
+        <div className="mt-3 space-y-3 text-[13px] leading-relaxed text-white/48">
+          <p>
+            Ces chiffres sont des estimations terrain. Ils aident à comprendre l’ordre de grandeur du projet, sans promettre un résultat exact.
+          </p>
+          {bees ? <p>{bees.estimate}</p> : null}
+        </div>
+      </details>
+    </section>
+  )
+}
+
+export function ProjectImpactPreview({
+  items,
+  accentColor,
+  projectType = null,
+  latestUpdate = null,
+  supportRewardTiers = [],
+}: ProjectImpactPreviewProps) {
+  const hasBeehiveImpact = projectType === 'beehive' && items.some((item) => item.id === 'hives')
+
+  if (hasBeehiveImpact) {
+    return (
+      <BeehiveImpactStory
+        items={items}
+        accentColor={accentColor}
+        latestUpdate={latestUpdate}
+        supportRewardTiers={supportRewardTiers}
+      />
+    )
+  }
+
   const mainItems = items.filter((item) => item.main)
   const leadItem = mainItems[0] ?? items[0]
   if (!leadItem) return null

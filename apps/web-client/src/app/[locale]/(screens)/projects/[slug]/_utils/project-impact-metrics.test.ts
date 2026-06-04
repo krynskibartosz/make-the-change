@@ -64,4 +64,30 @@ describe('getProjectImpactMetrics', () => {
     expect(metrics.bees).toBe(3800)
     expect(metrics.flowers).toBe(29000)
   })
+
+  it('calculates current Antsirabe-style beehive impact values from funding amount', () => {
+    const metrics = getProjectImpactMetrics({
+      amount: 7640,
+      projectType: 'beehive',
+      projectImpact: {
+        co2Absorbed: null,
+        biodiversityGain: null,
+        jobsCreated: null,
+        timeline: null,
+        hivesPerEur: 0.0008,
+        beesPerEur: 152,
+        honeyGramsPerEur: 7.7,
+        flowersPerEur: 1154,
+        co2GramsPerEur: 38.5,
+      },
+    })
+
+    if (metrics.kind !== 'bees') {
+      throw new Error(`Expected bee metrics, got ${metrics.kind}`)
+    }
+
+    expect(metrics.hivesSupported).toBe(6)
+    expect(Math.round(metrics.honeyKg)).toBe(59)
+    expect(metrics.flowers > 8_000_000).toBe(true)
+  })
 })

@@ -1,10 +1,11 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Button } from '@make-the-change/core/ui'
 import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
 import { cn } from '@/lib/utils'
+import { getProjectDetailCtaLabel } from '../_utils/project-detail-cta'
 
 export type ProjectDetailTabId =
   | 'overview'
@@ -38,11 +39,28 @@ export function ProjectDetailTabs({
   supportCtaLabel,
 }: ProjectDetailTabsProps) {
   const [activeTab, setActiveTab] = useState<ProjectDetailTabId>('overview')
+  const tabNavRef = useRef<HTMLElement>(null)
   const activeContent = tabs.find((tab) => tab.id === activeTab)?.content ?? tabs[0]?.content
+  const ctaLabel = getProjectDetailCtaLabel({
+    activeTab,
+    isFundingClosed,
+    isContributionProject,
+    closedLabel,
+    contributionCtaLabel,
+    supportCtaLabel,
+  })
+
+  const handleTabClick = (tabId: ProjectDetailTabId) => {
+    setActiveTab(tabId)
+    requestAnimationFrame(() => {
+      tabNavRef.current?.scrollIntoView({ block: 'start', behavior: 'smooth' })
+    })
+  }
 
   return (
     <>
       <nav
+        ref={tabNavRef}
         data-project-tabs-nav
         aria-label="Navigation du projet"
         className="sticky top-[calc(2.75rem+max(0.75rem,env(safe-area-inset-top)))] z-30 mt-5 border-b border-white/[0.05] bg-[#0B0F15]/55 px-4 py-2 shadow-[0_8px_24px_rgba(0,0,0,0.14)] backdrop-blur-2xl sm:px-5"
@@ -58,7 +76,7 @@ export function ProjectDetailTabs({
                 aria-selected={isActive}
                 aria-controls={`project-tab-${tab.id}`}
                 id={`project-tab-button-${tab.id}`}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => handleTabClick(tab.id)}
                 className={cn(
                   'shrink-0 rounded-full px-3 py-1.5 text-[12px] font-black transition-colors',
                   isActive
@@ -88,7 +106,7 @@ export function ProjectDetailTabs({
             className="h-14 w-full justify-center gap-0 rounded-2xl bg-white/10 text-center text-lg font-black text-muted-foreground hover:bg-white/10 [&_svg]:hidden"
             disabled
           >
-            {closedLabel}
+            {ctaLabel}
           </Button>
         ) : (
           <Button
@@ -96,7 +114,7 @@ export function ProjectDetailTabs({
             onClick={() => setActiveTab('rewards')}
             className="flex h-14 w-full items-center justify-center rounded-2xl bg-lime-400 px-4 text-center text-lg font-black text-black shadow-sm transition-transform active:scale-95"
           >
-            {isContributionProject ? contributionCtaLabel : supportCtaLabel}
+            {ctaLabel}
           </Button>
         )}
       </BottomActionBar>

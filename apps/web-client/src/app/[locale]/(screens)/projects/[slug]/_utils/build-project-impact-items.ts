@@ -41,9 +41,9 @@ export function buildProjectImpactItems(input: ProjectImpactMetricsInput): Proje
       group: 'Soutien terrain',
       iconKey: 'hives',
       main: true,
-      meaning: "Nombre de ruches directement soutenues par les contributions reçues.",
-      estimate: "Calculé selon un coût de suivi estimé à 1 250 € par ruche accompagnée.",
-      caution: "Ce nombre est une estimation. Le suivi réel dépend du terrain et des pratiques apicoles.",
+      meaning: 'Du suivi terrain et du matériel pour accompagner les ruches dans la durée.',
+      estimate: 'Estimation basée sur le coût de suivi terrain par ruche accompagnée.',
+      caution: 'Le nombre réel dépend du terrain, de la saison et des pratiques apicoles.',
     })
 
     if (metrics.bees > 0) {
@@ -55,8 +55,8 @@ export function buildProjectImpactItems(input: ProjectImpactMetricsInput): Proje
         group: 'Biodiversité',
         iconKey: 'bees',
         main: true,
-        meaning: "Estimation du nombre d'abeilles rattachées aux ruches soutenues, selon une hypothèse moyenne par euro contribué.",
-        estimate: 'Calculé à raison de 152 abeilles par euro engagé dans le projet.',
+        meaning: 'Estimation des abeilles rattachées aux ruches accompagnées par le projet.',
+        estimate: "Estimation basée sur les abeilles rattachées aux ruches accompagnées par le projet.",
         caution:
           "Ce chiffre donne un ordre de grandeur. Il ne signifie pas que chaque abeille est individuellement suivie.",
       })
@@ -72,8 +72,8 @@ export function buildProjectImpactItems(input: ProjectImpactMetricsInput): Proje
         group: 'Production',
         iconKey: 'honey',
         main: true,
-        meaning: 'Volume de miel estimé que le rucher peut produire selon la charge active.',
-        estimate: 'Calculé à 7,7 g de miel potentiel par euro engagé.',
+        meaning: 'Une production locale mieux collectée, préparée et valorisée avec le partenaire.',
+        estimate: 'Estimation basée sur le potentiel de production moyen par euro engagé.',
         caution:
           "Ce n'est pas une promesse de récolte. La production dépend des conditions climatiques et sanitaires.",
       })
@@ -82,16 +82,16 @@ export function buildProjectImpactItems(input: ProjectImpactMetricsInput): Proje
     if (metrics.flowers > 0) {
       items.push({
         id: 'flowers',
-        label: 'Fleurs visitées',
+        label: 'Fleurs pollinisées',
         value: formatCompact(metrics.flowers),
         prefix: 'Plus de',
         group: 'Pollinisation',
         iconKey: 'flowers',
         main: false,
-        meaning: "Nombre de fleurs visitées estimé, selon le rayon d'action moyen des abeilles.",
-        estimate: 'Calculé à 1 154 fleurs par euro engagé.',
+        meaning: 'Des abeilles actives autour des ruchers, utiles aux cultures et à la biodiversité locale.',
+        estimate: "Estimation basée sur l'activité moyenne de pollinisation associée aux ruches.",
         caution:
-          "Ce chiffre est une estimation à l'échelle du projet, pas une mesure individualisée.",
+          "Ce chiffre donne un ordre de grandeur à l'échelle du projet, pas une mesure individualisée.",
       })
     }
 
@@ -106,7 +106,7 @@ export function buildProjectImpactItems(input: ProjectImpactMetricsInput): Proje
         iconKey: 'co2',
         main: false,
         meaning: 'CO₂ potentiellement associé à la pollinisation des cultures liées au rucher.',
-        estimate: 'Calculé à 38,5 g de CO₂ par euro engagé.',
+        estimate: "Estimation basée sur le ratio environnemental associé aux ruches accompagnées par le projet.",
         caution:
           "Ce n'est pas une compensation carbone. La biodiversité reste variable et dépend du terrain.",
       })
