@@ -22,10 +22,10 @@ export function MobileSheet({ isOpen, onClose, title, children }: MobileSheetPro
   return (
     <Dialog open={isOpen} onOpenChange={(v) => !v && onClose()}>
       <DialogPortal>
-        <DialogBackdrop className="fixed inset-0 z-[60] bg-black/40 backdrop-blur-[2px] transition-opacity duration-200 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0" />
+        <DialogBackdrop className="fixed inset-0 z-[110] bg-black/40 backdrop-blur-[2px] transition-opacity duration-200 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0" />
         <DialogPopup
           className={[
-            'fixed inset-x-0 bottom-0 z-[70] mx-auto max-w-xl overflow-hidden rounded-t-3xl border border-white/10',
+            'fixed inset-x-0 bottom-0 z-[120] mx-auto max-w-xl overflow-hidden rounded-t-3xl border border-white/10',
             'bg-background/80 shadow-[0_-20px_80px_rgba(0,0,0,0.6)] backdrop-blur-lg outline-none',
             'transition-transform duration-300 ease-out',
             'data-[ending-style]:translate-y-full data-[starting-style]:translate-y-full',

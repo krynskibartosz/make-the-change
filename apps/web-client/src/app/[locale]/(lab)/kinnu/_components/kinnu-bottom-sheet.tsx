@@ -68,10 +68,10 @@ export function KinnuBottomSheet({ node, status, health, onMaster, onClose }: Ki
   return (
     <Dialog open={!!node && !!status} onOpenChange={(v: boolean) => !v && onClose()}>
       <DialogPortal>
-        <DialogBackdrop className="fixed inset-0 z-40 bg-black/40 backdrop-blur-[2px] transition-opacity duration-200 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0" />
+        <DialogBackdrop className="fixed inset-0 z-[110] bg-black/40 backdrop-blur-[2px] transition-opacity duration-200 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0" />
         <DialogPopup
           className={cn(
-            'fixed inset-x-0 bottom-0 z-50 mx-auto max-w-xl overflow-hidden rounded-t-[2rem] border border-white/10 bg-[#08080F]/95 shadow-[0_-20px_80px_rgba(0,0,0,0.6)] backdrop-blur-xl outline-none',
+            'fixed inset-x-0 bottom-0 z-[120] mx-auto max-w-xl overflow-hidden rounded-t-[2rem] border border-white/10 bg-[#08080F]/95 shadow-[0_-20px_80px_rgba(0,0,0,0.6)] backdrop-blur-xl outline-none',
             'transition-transform duration-[320ms] ease-[cubic-bezier(0.22,1,0.36,1)]',
             'data-[ending-style]:translate-y-full data-[starting-style]:translate-y-full',
           )}

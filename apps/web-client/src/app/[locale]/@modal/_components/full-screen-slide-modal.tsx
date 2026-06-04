@@ -82,7 +82,6 @@ export function FullScreenSlideModal({
   if (asPage) {
     return (
       <div
-        ref={containerRef}
         className={cn(
           'relative h-[100dvh] w-full flex flex-col bg-background overflow-hidden',
           className,
@@ -151,7 +150,7 @@ export function FullScreenSlideModal({
           </header>
         ) : null}
 
-        <div data-modal-scroll-root className={cn('min-h-0 flex-1', contentClassName)}>
+        <div ref={containerRef} data-modal-scroll-root className={cn('min-h-0 flex-1', contentClassName)}>
           {children}
         </div>
       </div>
@@ -163,7 +162,6 @@ export function FullScreenSlideModal({
       <DialogPortal>
         <DialogBackdrop className="fixed inset-0 z-[99] bg-black/30 backdrop-blur-sm transition-opacity duration-200 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0" />
         <DialogPopup
-          ref={containerRef}
           className={cn(
             'fixed inset-0 z-[100] flex h-[100dvh] w-full flex-col bg-background overflow-hidden',
             'transition-transform duration-300 ease-out',
@@ -244,7 +242,7 @@ export function FullScreenSlideModal({
             </header>
           ) : null}
 
-          <div data-modal-scroll-root className={cn('min-h-0 flex-1', contentClassName)}>
+          <div ref={containerRef} data-modal-scroll-root className={cn('min-h-0 flex-1', contentClassName)}>
             {children}
           </div>
         </DialogPopup>
