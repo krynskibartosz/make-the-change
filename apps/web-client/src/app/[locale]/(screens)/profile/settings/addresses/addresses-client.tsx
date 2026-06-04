@@ -1,7 +1,18 @@
 'use client'
 
-import { Field, FieldControl, FieldError, FieldLabel, Input } from '@make-the-change/core/ui'
-import { ChevronDown, Pencil, Plus, Trash2 } from 'lucide-react'
+import {
+  Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
+  Input,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTriggerBare,
+  SelectValue,
+} from '@make-the-change/core/ui'
+import { Pencil, Plus, Trash2 } from 'lucide-react'
 import { useState, useTransition } from 'react'
 import type { MockUserAddress } from '@/lib/mock/mock-addresses'
 import { AddressAutocompleteInput } from '@/app/[locale]/(screens)/_components/address-autocomplete-input'
@@ -39,18 +50,24 @@ function AddressFields({
     <div className="space-y-4 px-4 pt-4">
       <div className="space-y-1.5">
         <label className="block text-xs font-bold text-white/55">Pays</label>
-        <div className="relative">
-          <select
-            value={form.country}
-            onChange={(e) => onChange({ ...form, country: e.target.value, street: '', postalCode: '', city: '' })}
-            className="h-13 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white placeholder:text-white/25 w-full appearance-none pr-10"
-          >
+        <Select
+          value={form.country}
+          onValueChange={(value) => {
+            const next = typeof value === 'string' ? value : String(value)
+            onChange({ ...form, country: next, street: '', postalCode: '', city: '' })
+          }}
+        >
+          <SelectTriggerBare className="h-13 rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white w-full">
+            <SelectValue placeholder="Pays" />
+          </SelectTriggerBare>
+          <SelectContent>
             {CHECKOUT_COUNTRIES.map((c) => (
-              <option key={c.code} value={c.code} className="bg-[#0B0F15]">{c.label}</option>
+              <SelectItem key={c.code} value={c.code}>
+                {c.label}
+              </SelectItem>
             ))}
-          </select>
-          <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" aria-hidden="true" />
-        </div>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="space-y-1.5">

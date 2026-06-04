@@ -1,6 +1,16 @@
 'use client'
 
-import { createPortal } from 'react-dom'
+import {
+  Autocomplete,
+  AutocompleteCollection,
+  AutocompleteEmpty,
+  AutocompleteInput,
+  AutocompleteItem,
+  AutocompleteList,
+  AutocompletePopup,
+  AutocompletePortal,
+  AutocompletePositioner,
+} from '@make-the-change/core/ui'
 import { useEffect, useRef, useState } from 'react'
 import type { AddressSuggestion } from '@/lib/address-autocomplete'
 
@@ -26,15 +36,11 @@ export function AddressAutocompleteInput({
   onBlur,
 }: Props) {
   const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([])
-  const [activeIndex, setActiveIndex] = useState(-1)
-  const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [dropStyle, setDropStyle] = useState<React.CSSProperties>({})
+  const [hasSearched, setHasSearched] = useState(false)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const abortRef = useRef<AbortController | null>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  const listboxId = `${id}-listbox`
+  const isSelectingRef = useRef(false)
 
   // Cancel in-flight work on unmount
   useEffect(() => {
@@ -44,173 +50,112 @@ export function AddressAutocompleteInput({
     }
   }, [])
 
-  // Reset dropdown when country changes
+  // Reset suggestions on country change
   useEffect(() => {
     abortRef.current?.abort()
     if (debounceRef.current) clearTimeout(debounceRef.current)
     setSuggestions([])
-    setIsOpen(false)
-    setActiveIndex(-1)
     setIsLoading(false)
+    setHasSearched(false)
   }, [country])
 
-  function syncPosition() {
-    const rect = containerRef.current?.getBoundingClientRect()
-    if (!rect) return
-    const spaceBelow = window.innerHeight - rect.bottom
-    const above = spaceBelow < 260
-    setDropStyle(
-      above
-        ? { position: 'fixed', bottom: window.innerHeight - rect.top + 4, left: rect.left, width: rect.width }
-        : { position: 'fixed', top: rect.bottom + 4, left: rect.left, width: rect.width },
-    )
-  }
-
-  // Keep dropdown aligned to input on scroll/resize
-  useEffect(() => {
-    if (!isOpen) return
-    syncPosition()
-    window.addEventListener('scroll', syncPosition, true)
-    window.addEventListener('resize', syncPosition)
-    return () => {
-      window.removeEventListener('scroll', syncPosition, true)
-      window.removeEventListener('resize', syncPosition)
-    }
-  }, [isOpen])
-
-  async function fetchSuggestions(query: string) {
-    abortRef.current?.abort()
-    const controller = new AbortController()
-    abortRef.current = controller
-
-    setIsLoading(true)
-    const params = new URLSearchParams({ q: query, country: country.toLowerCase() })
-    try {
-      const res = await fetch(`/api/address-autocomplete?${params.toString()}`, {
-        signal: controller.signal,
-      })
-      if (!res.ok) return
-      const data = (await res.json()) as AddressSuggestion[]
-      if (data.length > 0) {
-        syncPosition()
-        setSuggestions(data)
-        setIsOpen(true)
-      } else {
-        setSuggestions([])
-        setIsOpen(false)
-      }
-      setActiveIndex(-1)
-    } catch (e) {
-      if (e instanceof Error && e.name === 'AbortError') return
-      // API unavailable — user can still type manually
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const val = e.target.value
-    onChange(val)
+  function handleInputChange(next: string) {
+    onChange(next)
     if (debounceRef.current) clearTimeout(debounceRef.current)
-    if (val.trim().length < 2) {
+    if (next.trim().length < 2) {
       setSuggestions([])
-      setIsOpen(false)
       setIsLoading(false)
+      setHasSearched(false)
       return
     }
     setIsLoading(true)
-    debounceRef.current = setTimeout(() => void fetchSuggestions(val), 300)
-  }
-
-  function handleSelect(suggestion: AddressSuggestion) {
-    onChange(suggestion.street)
-    onSelect(suggestion)
-    setSuggestions([])
-    setIsOpen(false)
-    setActiveIndex(-1)
-  }
-
-  function handleKeyDown(e: React.KeyboardEvent) {
-    if (!isOpen || suggestions.length === 0) return
-    if (e.key === 'ArrowDown') {
-      e.preventDefault()
-      setActiveIndex((i) => Math.min(i + 1, suggestions.length - 1))
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault()
-      setActiveIndex((i) => Math.max(i - 1, -1))
-    } else if (e.key === 'Enter' && activeIndex >= 0) {
-      e.preventDefault()
-      const selected = suggestions[activeIndex]
-      if (selected) handleSelect(selected)
-    } else if (e.key === 'Escape') {
-      setSuggestions([])
-      setIsOpen(false)
-      setActiveIndex(-1)
-    }
-  }
-
-  function handleBlurInternal() {
-    setTimeout(() => {
-      if (!containerRef.current?.contains(document.activeElement)) {
-        setIsOpen(false)
-        onBlur?.()
+    debounceRef.current = setTimeout(async () => {
+      abortRef.current?.abort()
+      const controller = new AbortController()
+      abortRef.current = controller
+      try {
+        const params = new URLSearchParams({ q: next, country: country.toLowerCase() })
+        const res = await fetch(`/api/address-autocomplete?${params.toString()}`, {
+          signal: controller.signal,
+        })
+        if (!res.ok) {
+          setSuggestions([])
+          setHasSearched(true)
+          return
+        }
+        const data = (await res.json()) as AddressSuggestion[]
+        setSuggestions(data)
+        setHasSearched(true)
+      } catch (e) {
+        if (e instanceof Error && e.name === 'AbortError') return
+        setSuggestions([])
+        setHasSearched(true)
+      } finally {
+        setIsLoading(false)
       }
-    }, 150)
+    }, 300)
   }
-
-  const dropdown = isOpen && suggestions.length > 0 ? (
-    <ul
-      id={listboxId}
-      role="listbox"
-      style={{ ...dropStyle, zIndex: 9999 }}
-      className="max-h-52 overflow-y-auto rounded-xl border border-white/10 bg-[#0B0F15] shadow-2xl"
-    >
-      {suggestions.map((suggestion, index) => (
-        <li
-          key={`${suggestion.label}-${index}`}
-          id={`${id}-option-${index}`}
-          role="option"
-          aria-selected={index === activeIndex}
-          onMouseDown={() => handleSelect(suggestion)}
-          className={`cursor-pointer px-4 py-3 text-sm transition-colors ${
-            index === activeIndex
-              ? 'bg-white/[0.08] text-white'
-              : 'text-white/70 hover:bg-white/[0.05] hover:text-white'
-          }`}
-        >
-          {suggestion.label}
-        </li>
-      ))}
-    </ul>
-  ) : null
 
   return (
-    <div ref={containerRef} className="relative">
-      {isLoading && (
-        <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center">
-          <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/20 border-t-white/60" />
-        </div>
-      )}
-      <input
-        id={id}
+    <div className="relative">
+      <Autocomplete
+        items={suggestions}
         value={value}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-        onBlur={handleBlurInternal}
-        placeholder={placeholder}
-        autoComplete="off"
-        role="combobox"
-        aria-autocomplete="list"
-        aria-expanded={isOpen}
-        aria-haspopup="listbox"
-        aria-controls={listboxId}
-        aria-activedescendant={activeIndex >= 0 ? `${id}-option-${activeIndex}` : undefined}
-        className={className}
-      />
-      {/* Portal: renders in document.body to escape parent transforms/overflow/stacking */}
-      {typeof document !== 'undefined' && dropdown !== null
-        ? createPortal(dropdown, document.body)
-        : null}
+        onValueChange={(next: string) => {
+          if (isSelectingRef.current) {
+            isSelectingRef.current = false
+            return
+          }
+          handleInputChange(String(next))
+        }}
+        // mode="none" disables internal filtering — we handle it server-side
+        mode="none"
+        // itemToStringValue fills the input with street after selection
+        itemToStringValue={(item: AddressSuggestion) => item.street}
+      >
+        <AutocompleteInput
+          id={id}
+          placeholder={placeholder}
+          autoComplete="off"
+          className={className}
+          onBlur={onBlur}
+        />
+        {isLoading && (
+          <div
+            className="pointer-events-none absolute inset-y-0 right-4 flex items-center"
+            aria-hidden="true"
+          >
+            <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/20 border-t-white/60" />
+          </div>
+        )}
+        <AutocompletePortal>
+          <AutocompletePositioner sideOffset={4} className="z-[9999]">
+            <AutocompletePopup className="max-h-52 overflow-y-auto rounded-xl border border-white/10 bg-[#0B0F15] shadow-2xl w-[var(--anchor-width)]">
+              <AutocompleteList>
+                <AutocompleteCollection>
+                  {(item: AddressSuggestion, index: number) => (
+                    <AutocompleteItem
+                      key={`${item.label}-${index}`}
+                      value={item}
+                      onClick={() => {
+                        isSelectingRef.current = true
+                        onChange(item.street)
+                        onSelect({ street: item.street, postalCode: item.postalCode, city: item.city })
+                      }}
+                      className="cursor-pointer px-4 py-3 text-sm text-white/70 transition-colors data-[highlighted]:bg-white/[0.08] data-[highlighted]:text-white"
+                    >
+                      {item.label}
+                    </AutocompleteItem>
+                  )}
+                </AutocompleteCollection>
+                <AutocompleteEmpty className="px-4 py-3 text-sm text-white/40">
+                  {hasSearched ? 'Aucune adresse trouvée' : null}
+                </AutocompleteEmpty>
+              </AutocompleteList>
+            </AutocompletePopup>
+          </AutocompletePositioner>
+        </AutocompletePortal>
+      </Autocomplete>
     </div>
   )
 }

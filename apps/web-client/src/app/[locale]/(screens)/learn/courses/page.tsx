@@ -77,6 +77,7 @@ export default async function LearningCoursesPage({ searchParams }: LearningCour
             />
           </label>
           <div className="mt-3 grid gap-2 md:grid-cols-4">
+            {/* Native select: Server Component form GET — see docs/superpowers/specs/2026-06-03-base-ui-vague-2-design.md §3.6 */}
             <select
               name="domain"
               defaultValue={params?.domain ?? 'all'}
@@ -90,6 +91,7 @@ export default async function LearningCoursesPage({ searchParams }: LearningCour
                 </option>
               ))}
             </select>
+            {/* Native select: Server Component form GET — see docs/superpowers/specs/2026-06-03-base-ui-vague-2-design.md §3.6 */}
             <select
               name="level"
               defaultValue={params?.level ?? 'all'}
@@ -102,6 +104,7 @@ export default async function LearningCoursesPage({ searchParams }: LearningCour
                 </option>
               ))}
             </select>
+            {/* Native select: Server Component form GET — see docs/superpowers/specs/2026-06-03-base-ui-vague-2-design.md §3.6 */}
             <select
               name="duration"
               defaultValue={params?.duration ?? 'all'}
@@ -111,6 +114,7 @@ export default async function LearningCoursesPage({ searchParams }: LearningCour
               <option value="all">Toute durée</option>
               <option value="5">5 min max</option>
             </select>
+            {/* Native select: Server Component form GET — see docs/superpowers/specs/2026-06-03-base-ui-vague-2-design.md §3.6 */}
             <select
               name="project"
               defaultValue={params?.project ?? 'all'}

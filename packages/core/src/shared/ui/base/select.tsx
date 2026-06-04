@@ -41,6 +41,23 @@ const SelectTrigger = forwardRef<
 ))
 SelectTrigger.displayName = 'SelectTrigger'
 
+const SelectTriggerBare = forwardRef<
+  ElementRef<typeof Select.Trigger>,
+  ComponentPropsWithoutRef<typeof Select.Trigger>
+>(({ className, children, ...props }, ref) => (
+  <Select.Trigger
+    ref={ref}
+    className={`group flex items-center justify-between cursor-pointer outline-none disabled:cursor-not-allowed disabled:opacity-50${className ? ` ${className}` : ''}`}
+    {...props}
+  >
+    {children}
+    <Select.Icon className="transition-transform group-data-[popup-open]:rotate-180">
+      <ChevronDown className="h-4 w-4 opacity-70" />
+    </Select.Icon>
+  </Select.Trigger>
+))
+SelectTriggerBare.displayName = 'SelectTriggerBare'
+
 const SelectScrollUpButton = forwardRef<
   ElementRef<typeof Select.ScrollUpArrow>,
   ComponentPropsWithoutRef<typeof Select.ScrollUpArrow>
@@ -154,6 +171,7 @@ export {
   SelectGroup,
   SelectValue,
   SelectTrigger,
+  SelectTriggerBare,
   SelectContent,
   SelectLabel,
   SelectItem,

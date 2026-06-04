@@ -29,6 +29,8 @@ const DialogRoot = Dialog.Root
 const DialogTrigger = Dialog.Trigger
 const DialogPortal = Dialog.Portal
 const DialogClose = Dialog.Close
+const DialogPopup = Dialog.Popup
+const DialogBackdrop = Dialog.Backdrop
 
 const DialogOverlay = forwardRef<
   ElementRef<typeof Dialog.Backdrop>,
@@ -137,4 +139,6 @@ export {
   DialogFooter,
   DialogTitle,
   DialogDescription,
+  DialogPopup,
+  DialogBackdrop,
 }
