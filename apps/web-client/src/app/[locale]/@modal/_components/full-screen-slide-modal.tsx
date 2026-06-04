@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from 'react'
 import { Dialog, DialogBackdrop, DialogClose, DialogPopup, DialogPortal } from '@make-the-change/core/ui'
 import { useRouter } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
-import { useScrollElevation } from './use-scroll-elevation'
 
 type FullScreenSlideModalProps = PropsWithChildren<{
   title?: string
@@ -39,8 +38,40 @@ export function FullScreenSlideModal({
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [open, setOpen] = useState(true)
   const isClosingRef = useRef(false)
-  const scrollElevated = useScrollElevation(containerRef, 60)
-  const isHeaderElevated = headerMode === 'dynamic' ? scrollElevated : false
+  const [isHeaderElevated, setIsHeaderElevated] = useState(false)
+
+  useEffect(() => {
+    if (headerMode !== 'dynamic') {
+      setIsHeaderElevated(false)
+      return
+    }
+
+    const container = containerRef.current
+    if (!container) return
+
+    const handleScroll = (event: Event) => {
+      const target = event.target as HTMLElement | null
+      if (!target) return
+
+      const scrollRoot =
+        target === container
+          ? container
+          : target instanceof HTMLElement && target.hasAttribute('data-modal-scroll-root')
+            ? target
+            : null
+
+      if (!scrollRoot) return
+
+      const nextElevated = scrollRoot.scrollTop > 60
+      setIsHeaderElevated((previous) => (previous === nextElevated ? previous : nextElevated))
+    }
+
+    container.addEventListener('scroll', handleScroll, { passive: true, capture: true })
+
+    return () => {
+      container.removeEventListener('scroll', handleScroll, true)
+    }
+  }, [headerMode])
 
   useEffect(() => {
     if (!title) return
@@ -82,6 +113,7 @@ export function FullScreenSlideModal({
   if (asPage) {
     return (
       <div
+        ref={containerRef}
         className={cn(
           'relative h-[100dvh] w-full flex flex-col bg-background overflow-hidden',
           className,
@@ -150,7 +182,7 @@ export function FullScreenSlideModal({
           </header>
         ) : null}
 
-        <div ref={containerRef} data-modal-scroll-root className={cn('min-h-0 flex-1 overflow-y-auto overscroll-contain', contentClassName)}>
+        <div data-modal-scroll-root className={cn('min-h-0 flex-1', contentClassName)}>
           {children}
         </div>
       </div>
@@ -162,6 +194,7 @@ export function FullScreenSlideModal({
       <DialogPortal>
         <DialogBackdrop className="fixed inset-0 z-[99] bg-black/30 backdrop-blur-sm transition-opacity duration-200 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0" />
         <DialogPopup
+          ref={containerRef}
           className={cn(
             'fixed inset-0 z-[100] flex h-[100dvh] w-full flex-col bg-background overflow-hidden',
             'transition-transform duration-300 ease-out',
@@ -242,7 +275,7 @@ export function FullScreenSlideModal({
             </header>
           ) : null}
 
-          <div ref={containerRef} data-modal-scroll-root className={cn('min-h-0 flex-1 overflow-y-auto overscroll-contain', contentClassName)}>
+          <div data-modal-scroll-root className={cn('min-h-0 flex-1', contentClassName)}>
             {children}
           </div>
         </DialogPopup>
