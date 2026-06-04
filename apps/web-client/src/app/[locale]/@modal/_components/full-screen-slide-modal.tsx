@@ -35,7 +35,7 @@ export function FullScreenSlideModal({
   children,
 }: FullScreenSlideModalProps) {
   const router = useRouter()
-  const containerRef = useRef<HTMLDivElement | null>(null)
+  const [container, setContainer] = useState<HTMLDivElement | null>(null)
   const [open, setOpen] = useState(true)
   const isClosingRef = useRef(false)
   const [isHeaderElevated, setIsHeaderElevated] = useState(false)
@@ -46,7 +46,6 @@ export function FullScreenSlideModal({
       return
     }
 
-    const container = containerRef.current
     if (!container) return
 
     const handleScroll = (event: Event) => {
@@ -71,7 +70,7 @@ export function FullScreenSlideModal({
     return () => {
       container.removeEventListener('scroll', handleScroll, true)
     }
-  }, [headerMode])
+  }, [headerMode, container])
 
   useEffect(() => {
     if (!title) return
@@ -113,7 +112,7 @@ export function FullScreenSlideModal({
   if (asPage) {
     return (
       <div
-        ref={containerRef}
+        ref={setContainer}
         className={cn(
           'relative h-[100dvh] w-full flex flex-col bg-background overflow-hidden',
           className,
@@ -194,7 +193,7 @@ export function FullScreenSlideModal({
       <DialogPortal>
         <DialogBackdrop className="fixed inset-0 z-[99] bg-black/30 backdrop-blur-sm transition-opacity duration-200 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0" />
         <DialogPopup
-          ref={containerRef}
+          ref={setContainer}
           className={cn(
             'fixed inset-0 z-[100] flex h-[100dvh] w-full flex-col bg-background overflow-hidden',
             'transition-transform duration-300 ease-out',
