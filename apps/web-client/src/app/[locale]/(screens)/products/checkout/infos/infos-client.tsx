@@ -14,6 +14,7 @@ import {
   SelectItem,
   SelectTriggerBare,
   SelectValue,
+  Switch,
 } from '@make-the-change/core/ui'
 import { saveCheckoutCustomerAction, saveAddressAction } from '@/app/[locale]/(screens)/products/checkout/_features/checkout-actions'
 import type { MockCheckoutCustomer } from '@/lib/mock/mock-checkout-session'
@@ -320,19 +321,17 @@ export function InfosClient({ initialCustomer, isConnected, savedAddresses, loca
         {/* Toggle sauvegarder */}
         {isConnected && (
           <div>
-            <button
-              type="button"
-              onClick={() => setSaveAddress((v) => !v)}
-              className="flex w-full items-center justify-between rounded-xl border border-white/10 bg-white/[0.04] px-4 py-4 text-left transition-colors active:bg-white/[0.07]"
-            >
-              <div>
+            <div className="flex w-full items-center justify-between gap-4 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-4">
+              <div className="flex-1">
                 <p className="text-sm font-semibold text-white">Sauvegarder cette adresse</p>
                 <p className="mt-0.5 text-xs text-white/40">Retrouve-la à ta prochaine commande</p>
               </div>
-              <div className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${saveAddress ? 'bg-lime-300' : 'bg-white/20'}`}>
-                <div className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${saveAddress ? 'translate-x-[1.375rem]' : 'translate-x-0.5'}`} />
-              </div>
-            </button>
+              <Switch
+                checked={saveAddress}
+                onCheckedChange={setSaveAddress}
+                className="h-6 w-11 shrink-0 rounded-full border-0 transition-colors data-[checked]:bg-lime-300 data-[unchecked]:bg-white/20"
+              />
+            </div>
             {addressSaveError && (
               <p className="mt-1 px-1 text-xs text-red-400/80">
                 L'adresse n'a pas pu être sauvegardée — ajoute-la depuis ton profil.
