@@ -58,6 +58,7 @@ import {
   readLearningProgress,
   writeLearningProgress,
 } from '@/lib/learning/progress'
+import { Slider as SliderPrimitive } from '@base-ui/react/slider'
 import { cn } from '@/lib/utils'
 
 const getParam = (value: string | string[] | undefined) =>
@@ -724,16 +725,28 @@ function ConfidenceCheckModal({
           <span>0 %</span>
           <span>100 %</span>
         </div>
-        <input
-          type="range"
+        <SliderPrimitive.Root
+          value={confidence}
+          onValueChange={(value) => {
+            if (typeof value === 'number') {
+              setConfidence(value)
+            } else if (Array.isArray(value) && typeof value[0] === 'number') {
+              setConfidence(value[0])
+            }
+          }}
           min={0}
           max={100}
           step={5}
-          value={confidence}
-          onChange={(event) => setConfidence(Number(event.target.value))}
           aria-label="Niveau de confiance"
-          className="h-2 w-full cursor-pointer appearance-none rounded-full bg-white/10 accent-emerald-500"
-        />
+          className="relative flex h-6 w-full touch-none select-none items-center"
+        >
+          <SliderPrimitive.Control className="relative h-2 w-full grow rounded-full bg-white/10">
+            <SliderPrimitive.Track className="relative h-full w-full rounded-full">
+              <SliderPrimitive.Indicator className="absolute h-full rounded-full bg-emerald-500" />
+            </SliderPrimitive.Track>
+            <SliderPrimitive.Thumb className="block h-5 w-5 rounded-full border border-emerald-500/40 bg-white shadow transition-colors focus-visible:outline-none data-[focus-visible]:ring-2 data-[focus-visible]:ring-emerald-500/60" />
+          </SliderPrimitive.Control>
+        </SliderPrimitive.Root>
         <div className="mb-6 mt-3 flex flex-col items-center">
           <div className="text-3xl font-black text-emerald-400 tabular-nums">{confidence}%</div>
           <div className="mt-1 text-sm font-bold text-white/70">{label}</div>
