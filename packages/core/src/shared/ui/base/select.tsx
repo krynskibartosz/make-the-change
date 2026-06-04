@@ -92,7 +92,7 @@ const SelectContent = forwardRef<
     position?: 'popper' | 'item-aligned'
   }
 >(({ className, children, position = 'popper', ...props }, ref) => (
-  <Select.Portal>
+  <Select.Portal container={typeof document !== 'undefined' ? document.body : undefined}>
     <Select.Positioner
       alignItemWithTrigger={position !== 'popper'}
       className={`z-[var(--z-overlay)]${position === 'popper'
