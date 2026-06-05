@@ -2,7 +2,6 @@
 
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -53,17 +52,19 @@ export function ConfirmDestructiveDialog({
           >
             {cancelLabel}
           </AlertDialogCancel>
-          <AlertDialogAction
+          <button
+            type="button"
             disabled={isPending}
-            onClick={(event) => {
-              event.preventDefault()
-              void Promise.resolve(onConfirm())
+            onClick={() => {
+              void Promise.resolve(onConfirm()).finally(() => {
+                onOpenChange(false)
+              })
             }}
-            className="inline-flex items-center gap-2 bg-red-500 text-white hover:bg-red-600"
+            className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-red-500 px-4 text-sm font-medium text-white transition-colors hover:bg-red-600 disabled:opacity-50"
           >
             {isPending && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}
             {confirmLabel}
-          </AlertDialogAction>
+          </button>
         </div>
       </AlertDialogContent>
     </AlertDialog>

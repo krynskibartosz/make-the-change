@@ -1,6 +1,6 @@
 ﻿'use client'
 
-import { Button } from '@make-the-change/core/ui'
+import { Button, Progress } from '@make-the-change/core/ui'
 import { Link } from '@/i18n/navigation'
 import { ArrowRight, Leaf, Droplet, Clock, ArrowLeftRight } from 'lucide-react'
 import { CurrencyAmount, CurrencyIcon } from '@/components/currency'
@@ -68,12 +68,12 @@ function GoalProgressBar() {
         </span>
         <span className="text-xs text-white/60">{progress}%</span>
       </div>
-      <div className="mb-2 h-3 w-full overflow-hidden rounded-full bg-white/10">
-        <div 
-          className="h-full bg-gradient-to-r from-amber-400 to-amber-500 transition-all duration-500"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
+      <Progress
+        value={progress}
+        max={100}
+        className="mb-2 h-3 w-full rounded-full bg-white/10"
+        indicatorClassName="bg-gradient-to-r from-amber-400 to-amber-500 transition-all duration-500"
+      />
       <p className="text-xs text-white/60">
         Plus que {remaining} Crédits Impact pour atteindre l'objectif.
       </p>
