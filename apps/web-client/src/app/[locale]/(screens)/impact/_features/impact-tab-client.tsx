@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import { Bird, Crown, Droplets, Globe, Gift, Leaf, PawPrint, Sparkles, Sprout, Star, Target, Trophy, type LucideIcon } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useRouter } from '@/i18n/navigation'
+import { Progress } from '@make-the-change/core/ui'
 import { getFactionTheme, getFactionThemeByKey } from '@/lib/faction-theme'
 import { getCollectiveGoal, getFactionContribution, getFactionContributions } from '@/lib/mock/mock-factions'
 import { getClientMockViewerSession } from '@/lib/mock/mock-session'
@@ -503,12 +504,12 @@ export function ImpactTabClient({
           </h2>
         </div>
 
-        <div className="mb-3 h-4 overflow-hidden rounded-full bg-[#1A222C]">
-          <div
-            className="h-full rounded-full bg-gradient-to-r from-lime-400 to-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.6)] transition-all duration-1000"
-            style={{ width: `${collectiveGoal.progress}%` }}
-          />
-        </div>
+        <Progress
+          value={collectiveGoal.progress}
+          max={100}
+          className="mb-3 h-4 rounded-full bg-[#1A222C]"
+          indicatorClassName="bg-gradient-to-r from-lime-400 to-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.6)] transition-all duration-1000"
+        />
         <p className="mb-8 text-center text-sm font-medium text-white/60">
           {collectiveGoal.progress}% accomplis · Encore {(collectiveGoal.targetSeeds - collectiveGoal.currentSeeds).toLocaleString('fr-FR')} <Sprout className="inline h-[1.2em] w-[1.2em] align-text-bottom text-lime-400" /> pour débloquer l'avantage collectif
         </p>

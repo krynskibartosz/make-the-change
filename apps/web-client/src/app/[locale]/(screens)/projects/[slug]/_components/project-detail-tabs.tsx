@@ -2,9 +2,8 @@
 
 import type { ReactNode } from 'react'
 import { useRef, useState } from 'react'
-import { Button } from '@make-the-change/core/ui'
+import { Button, Tabs, TabsContent, TabsList, TabsTrigger } from '@make-the-change/core/ui'
 import { BottomActionBar } from '@/app/[locale]/_components/bottom-action-bar'
-import { cn } from '@/lib/utils'
 import { getProjectDetailCtaLabel } from '../_utils/project-detail-cta'
 
 export type ProjectDetailTabId =
@@ -40,7 +39,6 @@ export function ProjectDetailTabs({
 }: ProjectDetailTabsProps) {
   const [activeTab, setActiveTab] = useState<ProjectDetailTabId>('overview')
   const tabNavRef = useRef<HTMLElement>(null)
-  const activeContent = tabs.find((tab) => tab.id === activeTab)?.content ?? tabs[0]?.content
   const ctaLabel = getProjectDetailCtaLabel({
     activeTab,
     isFundingClosed,
@@ -58,47 +56,42 @@ export function ProjectDetailTabs({
   }
 
   return (
-    <>
+    <Tabs
+      value={activeTab}
+      onValueChange={(value) => {
+        if (typeof value === 'string') {
+          handleTabClick(value as ProjectDetailTabId)
+        }
+      }}
+    >
       <nav
         ref={tabNavRef}
         data-project-tabs-nav
         aria-label="Navigation du projet"
         className="sticky top-[calc(2.75rem+max(0.75rem,env(safe-area-inset-top)))] z-30 mt-5 border-b border-white/[0.05] bg-[#0B0F15]/55 px-4 py-2 shadow-[0_8px_24px_rgba(0,0,0,0.14)] backdrop-blur-2xl sm:px-5"
       >
-        <div role="tablist" className="flex gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {tabs.map((tab) => {
-            const isActive = activeTab === tab.id
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                role="tab"
-                aria-selected={isActive}
-                aria-controls={`project-tab-${tab.id}`}
-                id={`project-tab-button-${tab.id}`}
-                onClick={() => handleTabClick(tab.id)}
-                className={cn(
-                  'shrink-0 rounded-full px-3 py-1.5 text-[12px] font-black transition-colors',
-                  isActive
-                    ? 'bg-lime-400 text-black'
-                    : 'text-white/48 hover:bg-white/[0.06] hover:text-white',
-                )}
-              >
-                {tab.label}
-              </button>
-            )
-          })}
-        </div>
+        <TabsList className="flex h-auto gap-2 overflow-x-auto rounded-none bg-transparent p-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {tabs.map((tab) => (
+            <TabsTrigger
+              key={tab.id}
+              value={tab.id}
+              className="shrink-0 rounded-full px-3 py-1.5 text-[12px] font-black transition-colors data-[selected]:bg-lime-400 data-[selected]:text-black data-[selected]:shadow-none text-white/48 hover:bg-white/[0.06] hover:text-white"
+            >
+              {tab.label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
       </nav>
 
-      <div
-        id={`project-tab-${activeTab}`}
-        role="tabpanel"
-        aria-labelledby={`project-tab-button-${activeTab}`}
-        className="pb-44 sm:pb-48"
-      >
-        {activeContent}
-      </div>
+      {tabs.map((tab) => (
+        <TabsContent
+          key={tab.id}
+          value={tab.id}
+          className="mt-0 pb-44 sm:pb-48"
+        >
+          {tab.content}
+        </TabsContent>
+      ))}
 
       <BottomActionBar className="fixed bottom-0 left-0 right-0 z-40 w-full">
         {isFundingClosed ? (
@@ -118,6 +111,6 @@ export function ProjectDetailTabs({
           </Button>
         )}
       </BottomActionBar>
-    </>
+    </Tabs>
   )
 }

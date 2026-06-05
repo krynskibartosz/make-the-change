@@ -2,6 +2,7 @@
 
 import { ArrowLeft, Brain, MapPin } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { Meter, MeterIndicator, MeterTrack } from '@make-the-change/core/ui'
 import { type KinnuWorld } from '@/app/[locale]/(lab)/kinnu/_lib/graph'
 import { computeKinnuScore } from '@/app/[locale]/(lab)/kinnu/_lib/bridge'
 
@@ -55,12 +56,11 @@ export function KinnuHud({ world, masteredCount, totalNodes }: KinnuHudProps) {
 
       {/* Progress bar */}
       <div className="mx-auto mt-2 max-w-5xl">
-        <div className="h-1 overflow-hidden rounded-full bg-white/10">
-          <div
-            className="h-full rounded-full bg-emerald-400 transition-all duration-700"
-            style={{ width: `${pct}%` }}
-          />
-        </div>
+        <Meter value={pct} min={0} max={100} className="h-1">
+          <MeterTrack className="h-full w-full rounded-full bg-white/10">
+            <MeterIndicator className="h-full rounded-full bg-emerald-400 transition-all duration-700" />
+          </MeterTrack>
+        </Meter>
         <p className="mt-1 text-right text-[0.55rem] font-bold uppercase tracking-[0.14em] text-white/30">
           {masteredCount}/{totalNodes} concepts
         </p>

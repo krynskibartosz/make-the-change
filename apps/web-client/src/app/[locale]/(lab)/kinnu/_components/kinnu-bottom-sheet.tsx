@@ -19,6 +19,9 @@ import {
   DialogPopup,
   DialogPortal,
   DialogTitle,
+  Meter,
+  MeterIndicator,
+  MeterTrack,
 } from '@make-the-change/core/ui'
 import { type KinnuNode, type KinnuNodeType } from '@/app/[locale]/(lab)/kinnu/_lib/graph'
 import { type KinnuNodeStatus, KINNU_SCORE_PER_NODE } from '@/app/[locale]/(lab)/kinnu/_lib/bridge'
@@ -151,12 +154,11 @@ export function KinnuBottomSheet({ node, status, health, onMaster, onClose }: Ki
                       {Math.round(health * 100)}%
                     </span>
                   </div>
-                  <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
-                    <div
-                      className={cn("h-full rounded-full transition-all duration-1000", health > 0.5 ? "bg-amber-400" : health > 0 ? "bg-orange-400" : "bg-red-500")}
-                      style={{ width: `${health * 100}%` }}
-                    />
-                  </div>
+                  <Meter value={health * 100} min={0} max={100} className="h-1.5 w-full">
+                    <MeterTrack className="h-full w-full rounded-full bg-white/10">
+                      <MeterIndicator className={cn("h-full rounded-full transition-all duration-1000", health > 0.5 ? "bg-amber-400" : health > 0 ? "bg-orange-400" : "bg-red-500")} />
+                    </MeterTrack>
+                  </Meter>
                 </div>
               )}
 

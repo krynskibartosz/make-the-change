@@ -5,6 +5,7 @@ import { ArrowLeft } from 'lucide-react'
 import { useRouter } from '@/i18n/navigation'
 import { updateNotifications } from './actions'
 import { Screen } from '@/app/[locale]/(screens)/_components/screen'
+import { NotificationToggleRow } from '@/components/ui/notification-toggle-row'
 
 type NotificationsClientProps = {
   initial: {
@@ -22,43 +23,6 @@ type NotificationsClientProps = {
 }
 
 type ToggleKey = 'push' | 'monthly_report' | 'email' | 'project_updates' | 'product_updates' | 'leaderboard' | 'marketing' | 'academy'
-
-function ToggleSwitch({ checked, onToggle }: { checked: boolean; onToggle: () => void }) {
-  return (
-    <button
-      onClick={onToggle}
-      className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${checked ? 'bg-lime-400' : 'bg-white/10'
-        }`}
-    >
-      <span
-        className={`inline-block h-6 w-6 transform rounded-full transition duration-200 ease-in-out ${checked ? 'translate-x-5 bg-[#0B0F15]' : 'translate-x-0 bg-white'
-          }`}
-      />
-    </button>
-  )
-}
-
-function SettingRow({
-  title,
-  description,
-  checked,
-  onToggle,
-}: {
-  title: string
-  description: string
-  checked: boolean
-  onToggle: () => void
-}) {
-  return (
-    <div className="px-5 py-4 flex items-center justify-between gap-4 bg-transparent active:bg-white/[0.02] transition-colors">
-      <div className="flex flex-col justify-center flex-1 min-w-0">
-        <h3 className="text-base font-medium text-white mb-0.5">{title}</h3>
-        <span className="text-xs text-gray-500 leading-snug">{description}</span>
-      </div>
-      <ToggleSwitch checked={checked} onToggle={onToggle} />
-    </div>
-  )
-}
 
 export function NotificationsClient({ initial }: NotificationsClientProps) {
   const router = useRouter()
@@ -134,25 +98,25 @@ export function NotificationsClient({ initial }: NotificationsClientProps) {
         Canaux de diffusion
       </div>
       <div className="mx-6 mb-6 bg-[#1A1F26] rounded-2xl border border-white/5 overflow-hidden flex flex-col">
-        <SettingRow
-          title="Notifications Push"
+        <NotificationToggleRow
+          label="Notifications Push"
           description="Alertes instantanées sur votre téléphone."
           checked={settings.push}
-          onToggle={() => handleToggle('push')}
+          onCheckedChange={() => handleToggle('push')}
         />
         <div className="border-b border-white/5" />
-        <SettingRow
-          title="Rapport mensuel d'impact"
+        <NotificationToggleRow
+          label="Rapport mensuel d'impact"
           description="Votre résumé d'impact par email."
           checked={settings.monthly_report}
-          onToggle={() => handleToggle('monthly_report')}
+          onCheckedChange={() => handleToggle('monthly_report')}
         />
         <div className="border-b border-white/5" />
-        <SettingRow
-          title="Emails importants"
+        <NotificationToggleRow
+          label="Emails importants"
           description="Mises à jour majeures de la plateforme."
           checked={settings.email}
-          onToggle={() => handleToggle('email')}
+          onCheckedChange={() => handleToggle('email')}
         />
       </div>
 
@@ -161,32 +125,32 @@ export function NotificationsClient({ initial }: NotificationsClientProps) {
         Vos intérêts
       </div>
       <div className="mx-6 bg-[#1A1F26] rounded-2xl border border-white/5 overflow-hidden flex flex-col">
-        <SettingRow
-          title="Mises à jour projets"
+        <NotificationToggleRow
+          label="Mises à jour projets"
           description="Photos, nouvelles et avancées de vos soutiens."
           checked={settings.project_updates}
-          onToggle={() => handleToggle('project_updates')}
+          onCheckedChange={() => handleToggle('project_updates')}
         />
         <div className="border-b border-white/5" />
-        <SettingRow
-          title="Avantages partenaires"
+        <NotificationToggleRow
+          label="Avantages partenaires"
           description="Nouveaux produits, offres limitées et réassorts."
           checked={settings.product_updates}
-          onToggle={() => handleToggle('product_updates')}
+          onCheckedChange={() => handleToggle('product_updates')}
         />
         <div className="border-b border-white/5" />
-        <SettingRow
-          title="Collectif & factions"
+        <NotificationToggleRow
+          label="Collectif & factions"
           description="Objectifs communs, bravos et activité de la communauté."
           checked={settings.leaderboard}
-          onToggle={() => handleToggle('leaderboard')}
+          onCheckedChange={() => handleToggle('leaderboard')}
         />
         <div className="border-b border-white/5" />
-        <SettingRow
-          title="Academy & BioDex"
+        <NotificationToggleRow
+          label="Academy & BioDex"
           description="Nouveaux cours, missions et découvertes."
           checked={settings.academy}
-          onToggle={() => handleToggle('academy')}
+          onCheckedChange={() => handleToggle('academy')}
         />
       </div>
       </div>

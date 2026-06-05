@@ -1,8 +1,9 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { AlertTriangle, Check, Flame, Info, RotateCcw } from 'lucide-react'
+import { Check, Flame, Info, RotateCcw } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
+import { ConfirmDestructiveDialog } from '@/components/ui/confirm-destructive-dialog'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import {
   MOCK_ACADEMY_VIEWER_ID,
@@ -138,40 +139,15 @@ export default function StreakPage() {
           </div>
         </motion.div>
       </div>
-      {showResetConfirm && (
-        <FullScreenSlideModal
-          title="Réinitialiser"
-          headerMode="close"
-          onClose={() => setShowResetConfirm(false)}
-          className="z-[90] bg-[#05050A] text-white"
-        >
-          <div className="mx-auto flex min-h-full max-w-sm flex-col items-center justify-center px-6 text-center">
-            <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-500/20 bg-amber-500/10">
-              <AlertTriangle className="h-7 w-7 text-amber-300" />
-            </div>
-            <h3 className="mb-2 text-xl font-black text-white">Effacer la série locale ?</h3>
-            <p className="mb-6 text-sm leading-relaxed text-white/55">
-              Toute la progression Academy locale sera remise à zéro sur cet appareil.
-            </p>
-            <div className="flex w-full flex-col gap-3">
-              <button
-                type="button"
-                onClick={() => setShowResetConfirm(false)}
-                className="w-full rounded-2xl bg-white/10 py-4 font-bold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-              >
-                Annuler
-              </button>
-              <button
-                type="button"
-                onClick={reset}
-                className="w-full rounded-2xl bg-red-500/20 py-4 font-bold text-red-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-200"
-              >
-                Réinitialiser
-              </button>
-            </div>
-          </div>
-        </FullScreenSlideModal>
-      )}
+      <ConfirmDestructiveDialog
+        open={showResetConfirm}
+        onOpenChange={setShowResetConfirm}
+        title="Effacer la série locale ?"
+        description="Toute la progression Academy locale sera remise à zéro sur cet appareil."
+        confirmLabel="Réinitialiser"
+        cancelLabel="Annuler"
+        onConfirm={reset}
+      />
     </FullScreenSlideModal>
   )
 }

@@ -2,7 +2,6 @@
 
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import {
-  AlertTriangle,
   Archive,
   Atom,
   BookOpen,
@@ -31,6 +30,7 @@ import {
 import Image from 'next/image'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
+import { ConfirmDestructiveDialog } from '@/components/ui/confirm-destructive-dialog'
 import { Link, useRouter } from '@/i18n/navigation'
 import {
   MOCK_ACADEMY_VIEWER_ID,
@@ -53,6 +53,7 @@ import {
 } from '@/app/[locale]/(lab)/_lib/mock-academy'
 import { isUnlimitedLives } from '@/app/[locale]/(lab)/_lib/lives'
 import { LivesCounter } from '@/app/[locale]/(lab)/_components/lives-counter'
+import { Progress } from '@make-the-change/core/ui'
 import { cn } from '@/lib/utils'
 
 const LOADING_STEPS = [
@@ -204,48 +205,6 @@ function LockedUnitModal({
   )
 }
 
-function ResetConfirmModal({
-  onCancel,
-  onConfirm,
-}: {
-  onCancel: () => void
-  onConfirm: () => void
-}) {
-  return (
-    <FullScreenSlideModal
-      title="Réinitialiser"
-      headerMode="close"
-      onClose={onCancel}
-      className="z-[90] bg-[#05050A] text-white"
-    >
-      <div className="mx-auto flex min-h-full max-w-sm flex-col items-center justify-center px-6 text-center">
-        <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-500/20 bg-amber-500/10">
-          <AlertTriangle className="h-7 w-7 text-amber-300" />
-        </div>
-        <h3 className="mb-2 text-xl font-black text-white">Effacer la progression locale ?</h3>
-        <p className="mb-6 text-sm leading-relaxed text-white/55">
-          Cela remettra les unités, la progression et la série Academy à zéro sur cet appareil.
-        </p>
-        <div className="flex w-full flex-col gap-3">
-          <button
-            type="button"
-            onClick={onCancel}
-            className="w-full rounded-2xl bg-white/10 py-4 font-bold text-white shadow-[0_5px_0_rgba(0,0,0,0.5)] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_3px_0_rgba(0,0,0,0.5)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:translate-y-[4px] active:shadow-[0_1px_0_rgba(0,0,0,0.5)]"
-          >
-            Annuler
-          </button>
-          <button
-            type="button"
-            onClick={onConfirm}
-            className="w-full rounded-2xl bg-red-500/20 py-4 font-bold text-red-300 shadow-[0_5px_0_rgba(127,29,29,0.5)] transition-all duration-100 hover:translate-y-0.5 hover:shadow-[0_3px_0_rgba(127,29,29,0.5)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-200 active:translate-y-[4px] active:shadow-[0_1px_0_rgba(127,29,29,0.5)]"
-          >
-            Réinitialiser
-          </button>
-        </div>
-      </div>
-    </FullScreenSlideModal>
-  )
-}
 
 function CourseLoadingScreen({ onComplete }: { onComplete: () => void }) {
   const [stepIndex, setStepIndex] = useState(0)
@@ -755,14 +714,13 @@ export default function AcademyPage() {
               <span>Voyage Academy</span>
               <span>{completedCurrentChapterLessons}/{currentChapterLessonTotal} leçons</span>
             </div>
-            <div className="h-2 overflow-hidden rounded-full bg-white/10">
-              <motion.div
-                data-academy-progress-bar
-                style={{ width: `${currentChapterLessonProgress}%` }}
-                animate={{ width: `${currentChapterLessonProgress}%` }}
-                className="h-full rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.75)]"
-              />
-            </div>
+            <Progress
+              data-academy-progress-bar
+              value={currentChapterLessonProgress}
+              max={100}
+              className="h-2 rounded-full bg-white/10"
+              indicatorClassName="bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.75)] transition-all"
+            />
           </div>
 
           <EventCarousel onStartEvent={(event) => setLoadingTarget(`/academy/events/${event.slug}`)} />
@@ -949,13 +907,14 @@ export default function AcademyPage() {
             />
           )}
 
-          {showResetConfirm && (
-            <ResetConfirmModal
-              key="reset-confirm-modal"
-              onCancel={() => setShowResetConfirm(false)}
-              onConfirm={handleResetConfirmed}
-            />
-          )}
+          <ConfirmDestructiveDialog
+            open={showResetConfirm}
+            onOpenChange={setShowResetConfirm}
+            title="Effacer la progression locale ?"
+            description="Cela remettra les unités, la progression et la série Academy à zéro sur cet appareil."
+            confirmLabel="Réinitialiser"
+            onConfirm={handleResetConfirmed}
+          />
 
           {loadingTarget && <CourseLoadingScreen key="loading-screen" onComplete={handleLoadingComplete} />}
         </AnimatePresence>

@@ -229,6 +229,7 @@ export {
 export { Separator } from './base/separator'
 export {
   Slider,
+  SliderRoot,
   SliderControl,
   SliderIndicator,
   SliderThumb,

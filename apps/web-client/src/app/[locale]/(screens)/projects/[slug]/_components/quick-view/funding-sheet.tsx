@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { ChevronUp } from 'lucide-react'
+import { Progress } from '@make-the-change/core/ui'
 import { MobileSheet } from '../shared/mobile-sheet'
 import { formatAmountNumber } from '@/lib/formatters'
 import { getSupportChips } from '../../_utils/project-labels'
@@ -117,12 +118,12 @@ export function ProjectFundingSheet({
         </p>
 
         {/* Progress bar */}
-        <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/[0.08]">
-          <div
-            className={`h-full rounded-full ${indicatorClassName ?? 'bg-gradient-to-r from-amber-500/60 to-lime-400/50'}`}
-            style={{ width: `${progress}%` }}
-          />
-        </div>
+        <Progress
+          value={progress}
+          max={100}
+          className="mt-3 h-1.5 rounded-full bg-white/[0.08]"
+          indicatorClassName={indicatorClassName ?? 'bg-gradient-to-r from-amber-500/60 to-lime-400/50'}
+        />
 
         {/* Intro */}
         <p className="mt-4 text-sm leading-relaxed text-white/55">

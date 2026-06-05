@@ -2,6 +2,7 @@
 
 import type { ExperienceSlot } from '@/app/[locale]/(screens)/advantages/_features/mock-advantages'
 import { cn } from '@/lib/utils'
+import { Radio, RadioGroup } from '@make-the-change/core/ui'
 
 type ExperienceSlotPickerProps = {
   slots: ExperienceSlot[]
@@ -19,16 +20,22 @@ export function ExperienceSlotPicker({ slots, selectedSlotId, onSelect }: Experi
           {slots.filter((s) => s.status !== 'full').length > 1 ? 's' : ''}
         </span>
       </h2>
-      <div className="mt-3 flex flex-col gap-2" role="radiogroup" aria-label="Créneaux disponibles">
+      <RadioGroup
+        value={selectedSlotId ?? undefined}
+        onValueChange={(value) => {
+          if (typeof value === 'string') onSelect(value)
+        }}
+        aria-label="Créneaux disponibles"
+        className="mt-3 flex flex-col gap-2"
+      >
         {slots.map((slot) => (
           <SlotCard
             key={slot.id}
             slot={slot}
             isSelected={selectedSlotId === slot.id}
-            onSelect={onSelect}
           />
         ))}
-      </div>
+      </RadioGroup>
     </section>
   )
 }
@@ -36,11 +43,9 @@ export function ExperienceSlotPicker({ slots, selectedSlotId, onSelect }: Experi
 function SlotCard({
   slot,
   isSelected,
-  onSelect,
 }: {
   slot: ExperienceSlot
   isSelected: boolean
-  onSelect: (slotId: string) => void
 }) {
   const isFull = slot.status === 'full'
 
@@ -54,15 +59,11 @@ function SlotCard({
           : 'border-white/[0.08] bg-white/[0.03]',
       )}
     >
-      <input
-        type="radio"
-        name="experience-slot"
+      <Radio
         value={slot.id}
-        checked={isSelected}
         disabled={isFull}
-        onChange={() => onSelect(slot.id)}
-        className="sr-only"
         aria-label={`${slot.dateLabel} ${slot.timeLabel}`}
+        className="sr-only"
       />
       <div className="flex flex-col gap-0.5">
         <span className="text-[14px] font-black text-white">{slot.dateLabel}</span>

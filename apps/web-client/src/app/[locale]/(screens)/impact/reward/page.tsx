@@ -1,5 +1,6 @@
 import { Crown, Droplets, Lock, Sparkles, Sprout } from 'lucide-react'
 import type { Metadata } from 'next'
+import { Progress } from '@make-the-change/core/ui'
 import { FullScreenSlideModal } from '@/app/[locale]/@modal/_components/full-screen-slide-modal'
 import { getMockProducts } from '@/app/[locale]/(screens)/products/_features/mock-products'
 import { CurrencyAmount } from '@/components/currency'
@@ -97,12 +98,12 @@ export default async function ImpactRewardPage() {
               <span>Progression collective</span>
               <span className="font-bold text-white">{collectiveGoal.progress}%</span>
             </div>
-            <div className="mt-3 h-2 overflow-hidden rounded-full bg-[#1A222C]">
-              <div
-                className="h-full rounded-full bg-gradient-to-r from-lime-400 to-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] transition-all duration-1000"
-                style={{ width: `${collectiveGoal.progress}%` }}
-              />
-            </div>
+            <Progress
+              value={collectiveGoal.progress}
+              max={100}
+              className="mt-3 h-2 rounded-full bg-[#1A222C]"
+              indicatorClassName="bg-gradient-to-r from-lime-400 to-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] transition-all duration-1000"
+            />
             <p className="mt-2 text-center text-[11px] text-white/40">
               Plus que <CurrencyAmount kind="seeds" value={remainingSeeds} className="font-bold" />{' '}
               � r�colter
