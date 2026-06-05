@@ -41,7 +41,7 @@ export function buildProjectImpactItems(input: ProjectImpactMetricsInput): Proje
       group: 'Soutien terrain',
       iconKey: 'hives',
       main: true,
-      meaning: 'Du suivi terrain et du matériel pour accompagner les ruches dans la durée.',
+      meaning: 'Des colonies suivies plus régulièrement, avec du matériel adapté au terrain.',
       estimate: 'Estimation basée sur le coût de suivi terrain par ruche accompagnée.',
       caution: 'Le nombre réel dépend du terrain, de la saison et des pratiques apicoles.',
     })
@@ -72,7 +72,7 @@ export function buildProjectImpactItems(input: ProjectImpactMetricsInput): Proje
         group: 'Production',
         iconKey: 'honey',
         main: true,
-        meaning: 'Une production locale mieux collectée, préparée et valorisée avec le partenaire.',
+        meaning: 'Une récolte locale mieux collectée, préparée et vendue avec le partenaire.',
         estimate: 'Estimation basée sur le potentiel de production moyen par euro engagé.',
         caution:
           "Ce n'est pas une promesse de récolte. La production dépend des conditions climatiques et sanitaires.",
@@ -88,7 +88,7 @@ export function buildProjectImpactItems(input: ProjectImpactMetricsInput): Proje
         group: 'Pollinisation',
         iconKey: 'flowers',
         main: false,
-        meaning: 'Des abeilles actives autour des ruchers, utiles aux cultures et à la biodiversité locale.',
+        meaning: 'Une activité de pollinisation utile aux cultures et à la biodiversité autour des ruchers.',
         estimate: "Estimation basée sur l'activité moyenne de pollinisation associée aux ruches.",
         caution:
           "Ce chiffre donne un ordre de grandeur à l'échelle du projet, pas une mesure individualisée.",
