@@ -39,9 +39,10 @@ const SliderThumb = forwardRef<
 ))
 SliderThumb.displayName = 'SliderThumb'
 
+const SliderRoot = SliderPrimitive.Root
 const SliderControl = SliderPrimitive.Control
 const SliderTrack = SliderPrimitive.Track
 const SliderIndicator = SliderPrimitive.Indicator
 const SliderValue = SliderPrimitive.Value
 
-export { Slider, SliderThumb, SliderControl, SliderTrack, SliderIndicator, SliderValue }
+export { Slider, SliderRoot, SliderThumb, SliderControl, SliderTrack, SliderIndicator, SliderValue }

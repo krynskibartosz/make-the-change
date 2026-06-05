@@ -58,7 +58,7 @@ import {
   readLearningProgress,
   writeLearningProgress,
 } from '@/lib/learning/progress'
-import { Slider as SliderPrimitive } from '@base-ui/react/slider'
+import { SliderRoot, SliderControl, SliderTrack, SliderIndicator, SliderThumb } from '@make-the-change/core/ui'
 import { cn } from '@/lib/utils'
 
 const getParam = (value: string | string[] | undefined) =>
@@ -725,7 +725,7 @@ function ConfidenceCheckModal({
           <span>0 %</span>
           <span>100 %</span>
         </div>
-        <SliderPrimitive.Root
+        <SliderRoot
           value={confidence}
           onValueChange={(value) => {
             if (typeof value === 'number') {
@@ -740,13 +740,13 @@ function ConfidenceCheckModal({
           aria-label="Niveau de confiance"
           className="relative flex h-6 w-full touch-none select-none items-center"
         >
-          <SliderPrimitive.Control className="relative h-2 w-full grow rounded-full bg-white/10">
-            <SliderPrimitive.Track className="relative h-full w-full rounded-full">
-              <SliderPrimitive.Indicator className="absolute h-full rounded-full bg-emerald-500" />
-            </SliderPrimitive.Track>
-            <SliderPrimitive.Thumb className="block h-5 w-5 rounded-full border border-emerald-500/40 bg-white shadow transition-colors focus-visible:outline-none data-[focus-visible]:ring-2 data-[focus-visible]:ring-emerald-500/60" />
-          </SliderPrimitive.Control>
-        </SliderPrimitive.Root>
+          <SliderControl className="relative h-2 w-full grow rounded-full bg-white/10">
+            <SliderTrack className="relative h-full w-full rounded-full">
+              <SliderIndicator className="absolute h-full rounded-full bg-emerald-500" />
+            </SliderTrack>
+            <SliderThumb className="block h-5 w-5 rounded-full border border-emerald-500/40 bg-white shadow transition-colors focus-visible:outline-none data-[focus-visible]:ring-2 data-[focus-visible]:ring-emerald-500/60" />
+          </SliderControl>
+        </SliderRoot>
         <div className="mb-6 mt-3 flex flex-col items-center">
           <div className="text-3xl font-black text-emerald-400 tabular-nums">{confidence}%</div>
           <div className="mt-1 text-sm font-bold text-white/70">{label}</div>
