@@ -1,5 +1,14 @@
 import { Progress } from '@make-the-change/core/ui'
-import { ChevronRight, Gift, Globe, HeartHandshake } from 'lucide-react'
+import {
+  BadgeCheck,
+  ChevronRight,
+  Gift,
+  Globe,
+  HeartHandshake,
+  MapPin,
+  PackageCheck,
+  Sprout,
+} from 'lucide-react'
 import Image from 'next/image'
 import { getLocale, getTranslations } from 'next-intl/server'
 import type { ReactNode } from 'react'
@@ -16,7 +25,7 @@ import { sanitizeImageUrl } from '@/lib/image-url'
 import { getCountryDisplayName, resolveCountryCode } from '@/lib/location'
 import { getLocalizedContent } from '@/lib/utils'
 import { getEntityViewTransitionName } from '@/lib/view-transition'
-import { ProjectDetailTabs, type ProjectDetailTab } from './_components/project-detail-tabs'
+import { type ProjectDetailTab, ProjectDetailTabs } from './_components/project-detail-tabs'
 import { ProjectUpdatesFeed } from './_components/project-updates-feed'
 import { ProjectBiodexSheet } from './_components/quick-view/biodex-sheet'
 import { ProjectCountrySheet } from './_components/quick-view/country-sheet'
@@ -119,6 +128,126 @@ function getSupportTierCtaLabel(tier: SupportRewardTier): string {
 function getSupportTierBadgeLabel(tier: SupportRewardTier): string | null {
   if (tier.amount === 60 && tier.rewardType !== 'none') return 'Recommandé'
   return null
+}
+
+function getOverviewSummary(
+  projectType: string | null | undefined,
+  locationLabel: string | null,
+  fallbackDescription: string,
+): string {
+  const type = projectType?.toLowerCase() ?? ''
+  const place = locationLabel ? `à ${locationLabel}` : 'sur le terrain'
+
+  if (type === 'beehive') {
+    return `Ce projet accompagne des apiculteurs ${place} avec du suivi terrain, de l’équipement apicole et une meilleure valorisation du miel.`
+  }
+
+  if (type === 'orchard' || type === 'olive_tree') {
+    return `Ce projet soutient des producteurs ${place} en renforçant les plantations, le suivi terrain et la valorisation de leur production.`
+  }
+
+  if (type === 'reef' || type === 'coral' || type === 'marine') {
+    return `Ce projet finance une action terrain ${place}: restauration, suivi scientifique et preuve d’impact après contribution.`
+  }
+
+  return (
+    fallbackDescription ||
+    `Un projet terrain concret ${place}, avec suivi, preuve d’impact et mises à jour après soutien.`
+  )
+}
+
+function getOverviewUseCases(
+  projectType: string | null | undefined,
+  isContributionProject: boolean,
+): Array<{ icon: ReactNode; title: string; description: string }> {
+  const type = projectType?.toLowerCase() ?? ''
+
+  if (type === 'beehive') {
+    return [
+      {
+        icon: <MapPin className="h-4 w-4" aria-hidden="true" />,
+        title: 'Suivre les colonies',
+        description: 'Financer l’observation terrain des ruches et de leur état sanitaire.',
+      },
+      {
+        icon: <PackageCheck className="h-4 w-4" aria-hidden="true" />,
+        title: 'Équiper les apiculteurs',
+        description: 'Aider les producteurs à travailler avec du matériel plus fiable et adapté.',
+      },
+      {
+        icon: <Sprout className="h-4 w-4" aria-hidden="true" />,
+        title: 'Valoriser le miel',
+        description: 'Mieux collecter, préparer et vendre le miel produit localement.',
+      },
+    ]
+  }
+
+  if (type === 'orchard' || type === 'olive_tree') {
+    return [
+      {
+        icon: <Sprout className="h-4 w-4" aria-hidden="true" />,
+        title: 'Entretenir les parcelles',
+        description: 'Financer les soins, la plantation et le suivi des arbres dans le temps.',
+      },
+      {
+        icon: <MapPin className="h-4 w-4" aria-hidden="true" />,
+        title: 'Documenter le terrain',
+        description: 'Recevoir des preuves simples sur les actions réalisées et leur avancée.',
+      },
+      {
+        icon: <PackageCheck className="h-4 w-4" aria-hidden="true" />,
+        title: 'Valoriser la production',
+        description: 'Aider le producteur à mieux transformer et distribuer ses produits.',
+      },
+    ]
+  }
+
+  return [
+    {
+      icon: <MapPin className="h-4 w-4" aria-hidden="true" />,
+      title: isContributionProject ? 'Financer l’action' : 'Soutenir le terrain',
+      description: isContributionProject
+        ? 'Votre contribution finance directement les étapes utiles du projet.'
+        : 'Votre soutien aide le partenaire à avancer sur les actions prioritaires.',
+    },
+    {
+      icon: <BadgeCheck className="h-4 w-4" aria-hidden="true" />,
+      title: 'Rendre le suivi lisible',
+      description: 'Les actualités et preuves terrain montrent ce qui se passe après le paiement.',
+    },
+    {
+      icon: <Sprout className="h-4 w-4" aria-hidden="true" />,
+      title: 'Mesurer l’impact',
+      description: 'Les indicateurs résument les effets attendus et les progrès du projet.',
+    },
+  ]
+}
+
+function OverviewUseCaseRow({
+  icon,
+  title,
+  description,
+  accentColor,
+}: {
+  icon: ReactNode
+  title: string
+  description: string
+  accentColor: string
+}) {
+  return (
+    <div className="grid grid-cols-[36px_minmax(0,1fr)] gap-3 border-b border-white/[0.07] py-4 last:border-b-0">
+      <div
+        className="grid h-9 w-9 place-items-center rounded-full bg-white/[0.04]"
+        style={{ color: accentColor }}
+      >
+        {icon}
+      </div>
+      <div className="min-w-0">
+        <h3 className="text-[15px] font-black leading-snug text-white">{title}</h3>
+        <p className="mt-1 text-[13px] leading-relaxed text-white/50">{description}</p>
+      </div>
+    </div>
+  )
 }
 
 function EditorialRewardRow({
@@ -263,6 +392,8 @@ export async function ProjectQuickView({
   const countryName = resolvedIso
     ? getCountryDisplayName(resolvedIso, locale)
     : (project.address_country_code ?? null)
+  const projectLocationLabel =
+    [project.address_city, countryName].filter(Boolean).join(' · ') || null
   const launchDateFormatted = project.launch_date
     ? new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(
         new Date(project.launch_date),
@@ -338,6 +469,11 @@ export async function ProjectQuickView({
     ? t('detail.funding_subtext_contribution')
     : t('detail.funding_subtext_support')
   const similarTitle = t(getSimilarProjectsTitleKey(project.type))
+  const overviewSummary = getOverviewSummary(project.type, projectLocationLabel, projectDescription)
+  const overviewUseCases = getOverviewUseCases(project.type, isContributionProject)
+  const overviewTrustText = project.producer
+    ? `Projet porté avec ${producerName}${projectLocationLabel ? `, partenaire terrain à ${projectLocationLabel}` : ''}. Le suivi, les actualités et les preuves d’impact permettent de comprendre ce qui se passe après votre soutien.`
+    : 'Projet suivi par Make the Change, avec des actualités et des preuves d’impact pour rendre l’avancement lisible après votre soutien.'
 
   const producerPanel = project.producer ? (
     <div className="px-4 pt-6 sm:px-5">
@@ -488,8 +624,8 @@ export async function ProjectQuickView({
       </h2>
       <p className="mt-2 text-sm leading-relaxed text-white/48">
         {isContributionProject
-          ? "Ces paliers financent le projet et activent le suivi terrain, sans contrepartie produit."
-          : "Soutenez sans colis ou choisissez une contrepartie produit. Vous pourrez refuser la contrepartie au paiement."}
+          ? 'Ces paliers financent le projet et activent le suivi terrain, sans contrepartie produit.'
+          : 'Soutenez sans colis ou choisissez une contrepartie produit. Vous pourrez refuser la contrepartie au paiement.'}
       </p>
 
       <div className="-mx-4 mt-7 border-t border-white/[0.08] sm:-mx-5">
@@ -502,7 +638,9 @@ export async function ProjectQuickView({
               imageAlt={option.name}
               eyebrow="Contribution"
               title={option.name}
-              description={option.impact.description ?? `${option.quantity} ${option.unitLabel} soutenu(s)`}
+              description={
+                option.impact.description ?? `${option.quantity} ${option.unitLabel} soutenu(s)`
+              }
               amount={`${formatAmountNumber(option.price)} €`}
               ctaLabel="Contribuer"
               meta={
@@ -539,7 +677,11 @@ export async function ProjectQuickView({
               <EditorialRewardRow
                 key={tier.id}
                 href={getSupportTierHref(project.slug, tier)}
-                imageSrc={tier.rewardType === 'none' ? null : getSupportRewardImage(tier, project.type, coverImage)}
+                imageSrc={
+                  tier.rewardType === 'none'
+                    ? null
+                    : getSupportRewardImage(tier, project.type, coverImage)
+                }
                 imageAlt={tier.rewardLabel ?? tier.title}
                 eyebrow={tier.rewardType === 'none' ? 'Soutien sans colis' : 'Contrepartie produit'}
                 title={tier.title}
@@ -547,11 +689,21 @@ export async function ProjectQuickView({
                 amount={`${formatAmountNumber(tier.amount)} €`}
                 ctaLabel={getSupportTierCtaLabel(tier)}
                 badgeLabel={getSupportTierBadgeLabel(tier)}
-                mediaIcon={tier.rewardType === 'none' ? <HeartHandshake className="h-7 w-7" aria-hidden="true" /> : <Gift className="h-7 w-7" aria-hidden="true" />}
+                mediaIcon={
+                  tier.rewardType === 'none' ? (
+                    <HeartHandshake className="h-7 w-7" aria-hidden="true" />
+                  ) : (
+                    <Gift className="h-7 w-7" aria-hidden="true" />
+                  )
+                }
                 meta={
                   <>
                     <span>{tier.impactSummary}</span>
-                    {tier.rewardLabel ? <span>{tier.rewardLabel}</span> : <span>Sans contrepartie produit</span>}
+                    {tier.rewardLabel ? (
+                      <span>{tier.rewardLabel}</span>
+                    ) : (
+                      <span>Sans contrepartie produit</span>
+                    )}
                     {tier.requiresShipping ? <span>Adresse au paiement</span> : null}
                     {tier.rewardLabel ? <span>Refus possible au paiement</span> : null}
                   </>
@@ -571,7 +723,67 @@ export async function ProjectQuickView({
       label: 'Apercu',
       content: (
         <div className="pt-6">
-          <div className="px-4 sm:px-5">
+          <section className="px-4 sm:px-5">
+            <p className="mb-1 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
+              En bref
+            </p>
+            <div className="rounded-2xl border border-white/[0.08] bg-[radial-gradient(circle_at_18%_0%,rgba(190,242,100,0.11),transparent_34%),rgba(255,255,255,0.035)] p-4 shadow-[0_18px_44px_rgba(0,0,0,0.24)]">
+              <h2 className="text-[22px] font-black leading-[1.08] tracking-tight text-white">
+                Pourquoi soutenir ce projet
+              </h2>
+              <p className="mt-2 text-[14px] leading-relaxed text-white/62">{overviewSummary}</p>
+              <div className="mt-4 flex flex-wrap gap-2 text-[11px] font-black text-white/42">
+                {projectLocationLabel ? (
+                  <span className="rounded-full border border-white/[0.08] bg-white/[0.035] px-2.5 py-1">
+                    Terrain: {projectLocationLabel}
+                  </span>
+                ) : null}
+                {project.producer ? (
+                  <span className="rounded-full border border-white/[0.08] bg-white/[0.035] px-2.5 py-1">
+                    Partenaire: {producerName}
+                  </span>
+                ) : null}
+              </div>
+            </div>
+          </section>
+
+          <section className="mt-7 px-4 sm:px-5">
+            <p className="mb-1 text-[10px] font-black uppercase tracking-[0.16em] text-white/30">
+              Votre soutien sert à
+            </p>
+            <div className="mt-2 border-y border-white/[0.08]">
+              {overviewUseCases.map((item) => (
+                <OverviewUseCaseRow
+                  key={item.title}
+                  icon={item.icon}
+                  title={item.title}
+                  description={item.description}
+                  accentColor={glowRgba(0.9)}
+                />
+              ))}
+            </div>
+          </section>
+
+          <section className="mt-7 px-4 sm:px-5">
+            <div className="grid grid-cols-[38px_minmax(0,1fr)] gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4">
+              <div
+                className="grid h-[38px] w-[38px] place-items-center rounded-full bg-white/[0.045]"
+                style={{ color: glowRgba(0.92) }}
+              >
+                <BadgeCheck className="h-4 w-4" aria-hidden="true" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[15px] font-black leading-snug text-white">
+                  Pourquoi faire confiance
+                </p>
+                <p className="mt-1.5 text-[13px] leading-relaxed text-white/50">
+                  {overviewTrustText}
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <div className="mt-8 px-4 sm:px-5">
             <ProjectBiodexSheet
               species={species ?? []}
               projectType={project.type}
@@ -579,9 +791,7 @@ export async function ProjectQuickView({
               isContributionProject={isContributionProject}
               description={narrativeDescription}
               producerName={project.producer ? producerName : undefined}
-              producerLocation={
-                [project.address_city, countryName].filter(Boolean).join(' · ') || undefined
-              }
+              producerLocation={projectLocationLabel ?? undefined}
             />
           </div>
           <div className="mt-10">{fundingPanel}</div>
@@ -609,7 +819,9 @@ export async function ProjectQuickView({
               supportRewardTiers={supportRewardTiers}
             />
           ) : (
-            <p className="text-sm text-white/45">Aucun indicateur d'impact disponible pour le moment.</p>
+            <p className="text-sm text-white/45">
+              Aucun indicateur d'impact disponible pour le moment.
+            </p>
           )}
         </div>
       ),
@@ -635,12 +847,14 @@ export async function ProjectQuickView({
           </p>
           <div className="rounded-2xl border border-white/[0.08] bg-white/[0.035] p-4">
             <p className="text-sm font-black text-white">
-              {isContributionProject ? 'Contribution sans contrepartie produit' : 'Soutien avec contrepartie optionnelle'}
+              {isContributionProject
+                ? 'Contribution sans contrepartie produit'
+                : 'Soutien avec contrepartie optionnelle'}
             </p>
             <p className="mt-2 text-sm leading-relaxed text-white/48">
               {isContributionProject
-                ? "Votre contribution finance le projet, active le suivi terrain et ne constitue pas un achat produit."
-                : "Les paliers peuvent inclure une contrepartie. Vous pourrez aussi y renoncer au checkout pour laisser davantage de valeur au projet."}
+                ? 'Votre contribution finance le projet, active le suivi terrain et ne constitue pas un achat produit.'
+                : 'Les paliers peuvent inclure une contrepartie. Vous pourrez aussi y renoncer au checkout pour laisser davantage de valeur au projet.'}
             </p>
           </div>
         </section>
