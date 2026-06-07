@@ -1,5 +1,5 @@
 import { Progress } from '@make-the-change/core/ui'
-import { ChevronRight, Globe } from 'lucide-react'
+import { ChevronRight, Gift, Globe, HeartHandshake } from 'lucide-react'
 import Image from 'next/image'
 import { getLocale, getTranslations } from 'next-intl/server'
 import type { ReactNode } from 'react'
@@ -109,6 +109,18 @@ function getDonationOptionImage(
   return fallbackImage ?? '/images/projects/coral-karimunjawa.png'
 }
 
+function getSupportTierCtaLabel(tier: SupportRewardTier): string {
+  if (tier.rewardType === 'none') return 'Choisir ce soutien'
+  if (tier.title.toLowerCase().includes('box')) return 'Choisir la box'
+  if (tier.title.toLowerCase().includes('pack')) return 'Choisir le pack'
+  return 'Choisir cette contrepartie'
+}
+
+function getSupportTierBadgeLabel(tier: SupportRewardTier): string | null {
+  if (tier.amount === 60 && tier.rewardType !== 'none') return 'Recommandé'
+  return null
+}
+
 function EditorialRewardRow({
   href,
   imageSrc,
@@ -120,10 +132,12 @@ function EditorialRewardRow({
   ctaLabel,
   meta,
   accentLine,
+  badgeLabel,
+  mediaIcon,
 }: {
   href: string
-  imageSrc: string
-  imageAlt: string
+  imageSrc?: string | null
+  imageAlt?: string
   eyebrow: string
   title: string
   description: string
@@ -131,26 +145,41 @@ function EditorialRewardRow({
   ctaLabel: string
   meta: ReactNode
   accentLine?: string | null
+  badgeLabel?: string | null
+  mediaIcon?: ReactNode
 }) {
   return (
     <Link
       href={href}
       className="group grid grid-cols-[72px_minmax(0,1fr)] gap-4 border-b border-white/[0.08] px-4 py-5 transition-colors hover:bg-white/[0.025] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-lime-400/60 sm:grid-cols-[92px_minmax(0,1fr)_auto] sm:items-center sm:px-5"
     >
-      <div className="relative h-[72px] w-[72px] overflow-hidden rounded-lg bg-white/[0.04] sm:h-[92px] sm:w-[92px]">
-        <Image
-          src={imageSrc}
-          alt={imageAlt}
-          fill
-          sizes="92px"
-          className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-        />
+      <div className="relative grid h-[72px] w-[72px] place-items-center overflow-hidden rounded-lg bg-white/[0.04] sm:h-[92px] sm:w-[92px]">
+        {imageSrc ? (
+          <Image
+            src={imageSrc}
+            alt={imageAlt ?? title}
+            fill
+            sizes="92px"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+          />
+        ) : (
+          <div className="grid h-full w-full place-items-center bg-[radial-gradient(circle_at_30%_20%,rgba(190,242,100,0.18),transparent_42%),rgba(255,255,255,0.025)] text-lime-300">
+            {mediaIcon ?? <HeartHandshake className="h-7 w-7" aria-hidden="true" />}
+          </div>
+        )}
       </div>
 
       <div className="min-w-0">
-        <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/28">
-          {eyebrow}
-        </p>
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/28">
+            {eyebrow}
+          </p>
+          {badgeLabel ? (
+            <span className="rounded-full bg-lime-300/12 px-2 py-0.5 text-[10px] font-black text-lime-300/85">
+              {badgeLabel}
+            </span>
+          ) : null}
+        </div>
         <div className="mt-1 flex items-baseline justify-between gap-3 sm:block">
           <h3 className="text-[17px] font-black leading-tight text-white">{title}</h3>
           <p className="shrink-0 text-[17px] font-black tabular-nums text-lime-300 sm:hidden">
@@ -455,12 +484,12 @@ export async function ProjectQuickView({
       <h2 className="text-2xl font-black tracking-tight text-white">
         {isContributionProject
           ? 'Choisir un palier de contribution'
-          : 'Choisir un soutien ou une contrepartie'}
+          : 'Choisissez comment soutenir ce projet'}
       </h2>
       <p className="mt-2 text-sm leading-relaxed text-white/48">
         {isContributionProject
           ? "Ces paliers financent le projet et activent le suivi terrain, sans contrepartie produit."
-          : "Vous pouvez soutenir librement ou choisir un palier avec contrepartie. Les contreparties physiques peuvent etre refusees au checkout."}
+          : "Soutenez sans colis ou choisissez une contrepartie produit. Vous pourrez refuser la contrepartie au paiement."}
       </p>
 
       <div className="-mx-4 mt-7 border-t border-white/[0.08] sm:-mx-5">
@@ -490,13 +519,13 @@ export async function ProjectQuickView({
           <>
             <EditorialRewardRow
               href={supportPath}
-              imageSrc={coverImage ?? '/images/projects/antsirabe-ruchers-1.jpg'}
-              imageAlt={projectName}
-              eyebrow="Soutien libre"
+              imageSrc={null}
+              mediaIcon={<HeartHandshake className="h-7 w-7" aria-hidden="true" />}
+              eyebrow="Soutien sans colis"
               title="Montant au choix"
-              description="Vous soutenez le projet sans contrepartie produit automatique, avec suivi terrain et avantages partenaires selon le montant."
+              description="Vous choisissez votre montant et recevez le suivi terrain, sans contrepartie produit automatique."
               amount="Libre"
-              ctaLabel="Choisir"
+              ctaLabel="Soutenir librement"
               meta={
                 <>
                   <span>Suivi terrain</span>
@@ -510,19 +539,21 @@ export async function ProjectQuickView({
               <EditorialRewardRow
                 key={tier.id}
                 href={getSupportTierHref(project.slug, tier)}
-                imageSrc={getSupportRewardImage(tier, project.type, coverImage)}
+                imageSrc={tier.rewardType === 'none' ? null : getSupportRewardImage(tier, project.type, coverImage)}
                 imageAlt={tier.rewardLabel ?? tier.title}
-                eyebrow={tier.rewardType === 'none' ? 'Soutien' : 'Contrepartie'}
+                eyebrow={tier.rewardType === 'none' ? 'Soutien sans colis' : 'Contrepartie produit'}
                 title={tier.title}
                 description={tier.description}
                 amount={`${formatAmountNumber(tier.amount)} €`}
-                ctaLabel="Choisir"
+                ctaLabel={getSupportTierCtaLabel(tier)}
+                badgeLabel={getSupportTierBadgeLabel(tier)}
+                mediaIcon={tier.rewardType === 'none' ? <HeartHandshake className="h-7 w-7" aria-hidden="true" /> : <Gift className="h-7 w-7" aria-hidden="true" />}
                 meta={
                   <>
                     <span>{tier.impactSummary}</span>
                     {tier.rewardLabel ? <span>{tier.rewardLabel}</span> : <span>Sans contrepartie produit</span>}
-                    {tier.requiresShipping ? <span>Livraison au checkout</span> : null}
-                    {tier.rewardLabel ? <span>Renoncement possible</span> : null}
+                    {tier.requiresShipping ? <span>Adresse au paiement</span> : null}
+                    {tier.rewardLabel ? <span>Refus possible au paiement</span> : null}
                   </>
                 }
                 accentLine={tier.unlockedAdvantageLabel ?? null}

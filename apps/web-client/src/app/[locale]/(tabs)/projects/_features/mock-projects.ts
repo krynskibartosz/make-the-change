@@ -582,12 +582,12 @@ const ilangaHoneySupportTiers: SupportRewardTier[] = [
   {
     id: 'support-libre',
     amount: 30,
-    title: 'Soutien libre',
-    description: 'Vous choisissez le montant et recevez le suivi terrain du projet.',
+    title: 'Coup de pouce',
+    description: 'Un soutien simple pour participer au suivi terrain du projet.',
     rewardType: 'none',
     requiresShipping: false,
-    impactSummary: 'Finance le suivi terrain et l accompagnement des apiculteurs.',
-    unlockedAdvantageLabel: 'Avantages partenaires niveau 1 debloques',
+    impactSummary: "Finance le suivi terrain et l'accompagnement des apiculteurs.",
+    unlockedAdvantageLabel: 'Avantages partenaires niveau 1 débloqués',
   },
   {
     id: 'box-miel',
@@ -599,7 +599,7 @@ const ilangaHoneySupportTiers: SupportRewardTier[] = [
     requiresShipping: true,
     limitedQuantity: 80,
     impactSummary: 'Accompagne une ruche et valorise le miel du partenaire.',
-    unlockedAdvantageLabel: 'Avantage partenaire -10 % debloque',
+    unlockedAdvantageLabel: 'Avantage partenaire -10 % débloqué',
   },
   {
     id: 'pack-producteur',
@@ -610,8 +610,8 @@ const ilangaHoneySupportTiers: SupportRewardTier[] = [
     rewardLabel: 'Pack producteur Ilanga',
     requiresShipping: true,
     limitedQuantity: 40,
-    impactSummary: 'Finance l equipement, le suivi et la valorisation de la filiere.',
-    unlockedAdvantageLabel: 'Avantage partenaire -15 % debloque',
+    impactSummary: "Finance l'équipement, le suivi et la valorisation de la filière.",
+    unlockedAdvantageLabel: 'Avantage partenaire -15 % débloqué',
   },
 ]
 
