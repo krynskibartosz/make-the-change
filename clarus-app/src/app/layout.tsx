@@ -27,12 +27,16 @@ export const viewport: Viewport = {
 
 type RootLayoutProps = Readonly<{
   children: ReactNode
+  modal?: ReactNode
 }>
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default function RootLayout({ children, modal }: RootLayoutProps) {
   return (
     <html lang="fr" data-theme="dark">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>{children}</body>
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        {children}
+        {modal}
+      </body>
     </html>
   )
 }
