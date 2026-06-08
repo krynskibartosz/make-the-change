@@ -1,0 +1,141 @@
+[
+  {
+    "name": "03-tab-avantages",
+    "url": "/fr/advantages",
+    "file": "C:\\Users\\utilisateur\\Downloads\\make-the-change-main\\make-the-change-main\\repo-propre5\\output\\clarus-design-refs\\web-client-mobile-deep-dive\\03-tab-avantages.png",
+    "ok": false,
+    "status": "goto-timeout: page.goto: Timeout 60000ms exceeded.",
+    "error": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('body') to be visible\u001b[22m\n\u001b[2m    - waiting for\" http://localhost:3001/fr/advantages\" navigation to finish...\u001b[22m\n"
+  },
+  {
+    "name": "04-tab-profile",
+    "url": "/fr/profile",
+    "file": "C:\\Users\\utilisateur\\Downloads\\make-the-change-main\\make-the-change-main\\repo-propre5\\output\\clarus-design-refs\\web-client-mobile-deep-dive\\04-tab-profile.png",
+    "ok": false,
+    "status": "goto-timeout: page.goto: Timeout 60000ms exceeded.",
+    "error": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('body') to be visible\u001b[22m\n\u001b[2m    - waiting for\" http://localhost:3001/fr/profile\" navigation to finish...\u001b[22m\n"
+  },
+  {
+    "name": "05-settings-main",
+    "url": "/fr/profile/settings",
+    "file": "C:\\Users\\utilisateur\\Downloads\\make-the-change-main\\make-the-change-main\\repo-propre5\\output\\clarus-design-refs\\web-client-mobile-deep-dive\\05-settings-main.png",
+    "ok": false,
+    "status": "goto-timeout: page.goto: Timeout 60000ms exceeded.",
+    "error": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('body') to be visible\u001b[22m\n\u001b[2m    - waiting for\" http://localhost:3001/fr/profile/settings\" navigation to finish...\u001b[22m\n"
+  },
+  {
+    "name": "06-settings-notifications",
+    "url": "/fr/profile/settings/notifications",
+    "file": "C:\\Users\\utilisateur\\Downloads\\make-the-change-main\\make-the-change-main\\repo-propre5\\output\\clarus-design-refs\\web-client-mobile-deep-dive\\06-settings-notifications.png",
+    "ok": false,
+    "status": "goto-timeout: page.goto: Timeout 60000ms exceeded.",
+    "error": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('body') to be visible\u001b[22m\n\u001b[2m    - waiting for\" http://localhost:3001/fr/profile/settings/notifications\" navigation to finish...\u001b[22m\n"
+  },
+  {
+    "name": "07-settings-addresses",
+    "url": "/fr/profile/settings/addresses",
+    "file": "C:\\Users\\utilisateur\\Downloads\\make-the-change-main\\make-the-change-main\\repo-propre5\\output\\clarus-design-refs\\web-client-mobile-deep-dive\\07-settings-addresses.png",
+    "ok": false,
+    "status": "goto-timeout: page.goto: Timeout 60000ms exceeded.",
+    "error": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('body') to be visible\u001b[22m\n\u001b[2m    - waiting for\" http://localhost:3001/fr/profile/settings/addresses\" navigation to finish...\u001b[22m\n"
+  },
+  {
+    "name": "08-profile-account",
+    "url": "/fr/profile/account",
+    "file": "C:\\Users\\utilisateur\\Downloads\\make-the-change-main\\make-the-change-main\\repo-propre5\\output\\clarus-design-refs\\web-client-mobile-deep-dive\\08-profile-account.png",
+    "ok": false,
+    "status": "goto-timeout: page.goto: Timeout 60000ms exceeded.",
+    "error": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('body') to be visible\u001b[22m\n\u001b[2m    - waiting for\" http://localhost:3001/fr/profile/account\" navigation to finish...\u001b[22m\n"
+  },
+  {
+    "name": "09-profile-contributions",
+    "url": "/fr/profile/contributions",
+    "file": "C:\\Users\\utilisateur\\Downloads\\make-the-change-main\\make-the-change-main\\repo-propre5\\output\\clarus-design-refs\\web-client-mobile-deep-dive\\09-profile-contributions.png",
+    "ok": false,
+    "status": "goto-timeout: page.goto: Timeout 60000ms exceeded.",
+    "error": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('body') to be visible\u001b[22m\n\u001b[2m    - waiting for\" http://localhost:3001/fr/profile/contributions\" navigation to finish...\u001b[22m\n"
+  },
+  {
+    "name": "10-project-detail-habeebee-top",
+    "url": "/fr/projects/habeebee-belgique",
+    "file": "C:\\Users\\utilisateur\\Downloads\\make-the-change-main\\make-the-change-main\\repo-propre5\\output\\clarus-design-refs\\web-client-mobile-deep-dive\\10-project-detail-habeebee-top.png",
+    "ok": true,
+    "status": "ok"
+  },
+  {
+    "name": "11-project-detail-habeebee-mid",
+    "url": "/fr/projects/habeebee-belgique",
+    "file": "C:\\Users\\utilisateur\\Downloads\\make-the-change-main\\make-the-change-main\\repo-propre5\\output\\clarus-design-refs\\web-client-mobile-deep-dive\\11-project-detail-habeebee-mid.png",
+    "ok": true,
+    "status": "ok"
+  },
+  {
+    "name": "14-products-list",
+    "url": "/fr/products",
+    "file": "C:\\Users\\utilisateur\\Downloads\\make-the-change-main\\make-the-change-main\\repo-propre5\\output\\clarus-design-refs\\web-client-mobile-deep-dive\\14-products-list.png",
+    "ok": false,
+    "status": "goto-timeout: page.goto: Timeout 60000ms exceeded.",
+    "error": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('body') to be visible\u001b[22m\n\u001b[2m    - waiting for\" http://localhost:3001/fr/products\" navigation to finish...\u001b[22m\n"
+  },
+  {
+    "name": "15-product-detail-collection-top",
+    "url": "/fr/products/collection-3-miels-ilanga",
+    "file": "C:\\Users\\utilisateur\\Downloads\\make-the-change-main\\make-the-change-main\\repo-propre5\\output\\clarus-design-refs\\web-client-mobile-deep-dive\\15-product-detail-collection-top.png",
+    "ok": false,
+    "status": "goto-timeout: page.goto: Timeout 60000ms exceeded.",
+    "error": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('body') to be visible\u001b[22m\n\u001b[2m    - waiting for\" http://localhost:3001/fr/products/collection-3-miels-ilanga\" navigation to finish...\u001b[22m\n"
+  },
+  {
+    "name": "16-product-detail-collection-mid",
+    "url": "/fr/products/collection-3-miels-ilanga",
+    "file": "C:\\Users\\utilisateur\\Downloads\\make-the-change-main\\make-the-change-main\\repo-propre5\\output\\clarus-design-refs\\web-client-mobile-deep-dive\\16-product-detail-collection-mid.png",
+    "ok": false,
+    "status": "goto-timeout: page.goto: Timeout 60000ms exceeded.",
+    "error": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('body') to be visible\u001b[22m\n\u001b[2m    - waiting for\" http://localhost:3001/fr/products/collection-3-miels-ilanga\" navigation to finish...\u001b[22m\n"
+  },
+  {
+    "name": "18-advantages-catalog",
+    "url": "/fr/advantages/catalog",
+    "file": "C:\\Users\\utilisateur\\Downloads\\make-the-change-main\\make-the-change-main\\repo-propre5\\output\\clarus-design-refs\\web-client-mobile-deep-dive\\18-advantages-catalog.png",
+    "ok": true,
+    "status": "goto-timeout: page.goto: Timeout 60000ms exceeded."
+  },
+  {
+    "name": "19-advantage-experience-top",
+    "url": "/fr/advantages/experience-visite-habeebee",
+    "file": "C:\\Users\\utilisateur\\Downloads\\make-the-change-main\\make-the-change-main\\repo-propre5\\output\\clarus-design-refs\\web-client-mobile-deep-dive\\19-advantage-experience-top.png",
+    "ok": true,
+    "status": "ok"
+  },
+  {
+    "name": "20-advantage-experience-mid",
+    "url": "/fr/advantages/experience-visite-habeebee",
+    "file": "C:\\Users\\utilisateur\\Downloads\\make-the-change-main\\make-the-change-main\\repo-propre5\\output\\clarus-design-refs\\web-client-mobile-deep-dive\\20-advantage-experience-mid.png",
+    "ok": true,
+    "status": "ok"
+  },
+  {
+    "name": "22-producer-habeebee-top",
+    "url": "/fr/producers/habeebee-belgique",
+    "file": "C:\\Users\\utilisateur\\Downloads\\make-the-change-main\\make-the-change-main\\repo-propre5\\output\\clarus-design-refs\\web-client-mobile-deep-dive\\22-producer-habeebee-top.png",
+    "ok": false,
+    "status": "goto-timeout: page.goto: Timeout 60000ms exceeded.",
+    "error": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('body') to be visible\u001b[22m\n\u001b[2m    - waiting for\" http://localhost:3001/fr/producers/habeebee-belgique\" navigation to finish...\u001b[22m\n"
+  },
+  {
+    "name": "23-producer-habeebee-mid",
+    "url": "/fr/producers/habeebee-belgique",
+    "file": "C:\\Users\\utilisateur\\Downloads\\make-the-change-main\\make-the-change-main\\repo-propre5\\output\\clarus-design-refs\\web-client-mobile-deep-dive\\23-producer-habeebee-mid.png",
+    "ok": false,
+    "status": "goto-timeout: page.goto: Timeout 60000ms exceeded.",
+    "error": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('body') to be visible\u001b[22m\n\u001b[2m    - waiting for\" http://localhost:3001/fr/producers/habeebee-belgique\" navigation to finish...\u001b[22m\n"
+  },
+  {
+    "name": "24-profile-biodex",
+    "url": "/fr/profile/biodex",
+    "file": "C:\\Users\\utilisateur\\Downloads\\make-the-change-main\\make-the-change-main\\repo-propre5\\output\\clarus-design-refs\\web-client-mobile-deep-dive\\24-profile-biodex.png",
+    "ok": false,
+    "status": "goto-timeout: page.goto: Timeout 60000ms exceeded.",
+    "error": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('body') to be visible\u001b[22m\n\u001b[2m    - waiting for\" http://localhost:3001/fr/profile/biodex\" navigation to finish...\u001b[22m\n"
+  }
+]
