@@ -11,13 +11,15 @@ Il reprend le principe des canvases existants : l'utilisateur ne doit pas avoir 
 La V0 peut demarrer avec 4 entrees principales :
 
 ```txt
-Aujourd'hui | Ajouter | Interventions | Couts
+Aujourd'hui | Journal | Chantier | Couts
 ```
 
-La V1 pourra ajouter :
+`Ajouter intervention` n'est pas une tab. C'est une action globale visible depuis les ecrans principaux.
+
+La V1 pourra ajouter des modules de niveau 2, sans changer les tabs principales :
 
 ```txt
-Etapes | Materiaux | Photos / Plans
+Detail zone | Detail phase | Materiaux | Photos / Plans
 ```
 
 ## Ecran 1 - Aujourd'hui
@@ -62,7 +64,7 @@ Derniers ajouts
 - Protection sols escalier
 ```
 
-## Ecran 2 - Ajouter intervention
+## Action globale - Ajouter intervention
 
 Objectif :
 
@@ -133,7 +135,7 @@ Etapes V0 :
    - montant ;
    - statut.
 
-## Ecran 3 - Interventions
+## Ecran 2 - Journal
 
 Objectif :
 
@@ -156,6 +158,40 @@ Sol beton - Demolition - A verifier
 Hubert 21h - 945 EUR
 Chris 21h - 945 EUR
 Total 42h - 1 890 EUR
+```
+
+## Ecran 3 - Chantier
+
+Objectif :
+
+Comprendre le chantier par zones, phases et elements lies aux interventions.
+
+Contenu V0 :
+
+- zones principales ;
+- phases principales ;
+- personnes ;
+- blocs legers taches, materiaux, depenses et photos ;
+- liens vers les interventions associees.
+
+Structure :
+
+```txt
+Chantier
+
+Zones
+- Garage
+- Sous-sol
+- Extension arriere
+
+Phases
+- Demolition
+- Structure
+- Finitions
+
+A verifier
+- Materiau sans montant
+- Zone a confirmer
 ```
 
 ## Ecran 4 - Couts
@@ -251,4 +287,3 @@ La priorite absolue reste :
 ```txt
 Ajouter intervention plus vite que Notes
 ```
-

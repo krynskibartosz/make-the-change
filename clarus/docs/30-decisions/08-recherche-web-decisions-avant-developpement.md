@@ -345,16 +345,30 @@ Decision : non en V0, mais ne pas bloquer l'architecture future.
 
 Decision : WCAG 2.2 AA comme reference, avec cibles tactiles terrain plus grandes.
 
-## Questions encore ouvertes
+### Accent couleur ?
 
-Ces questions restent a trancher avant la spec V0 finale :
+Decision : lime MTC comme accent principal V0, dans une palette dark chantier plus complete.
+
+```txt
+primary: #B6F255
+warning/to_check: #FBBF24
+success: #22C55E
+danger: #EF4444
+info: #38BDF8
+neutral: slate/dark surfaces
+```
+
+Le lime sert aux CTA et aux elements vraiment actionnables. Les statuts metier utilisent leurs propres couleurs pour eviter une interface uniquement lime/noir.
+
+## Questions restantes non bloquantes
+
+Ces questions peuvent etre tranchees dans la spec V0 finale, mais elles ne bloquent pas le cleanup ni la preparation des issues :
 
 1. Nom visible exact : `Clarus`, `Clarus Chantier`, `Sparrenlaan`, ou `Clarus Sparrenlaan`.
-2. Accent couleur final : lime web-client, vert chantier, jaune chantier, ou duo vert/jaune.
-3. Niveau de realisme photo dans les mocks : placeholders, vraies photos chantier, ou melange.
-4. Presence d'un mode "demo" distinct du futur mode data.
-5. Emplacement futur des assets plans/photos : repo, Supabase Storage, ou stockage local d'abord.
-6. Priorite apres V0 : photos, depenses, exports ou Supabase.
+2. Niveau de realisme photo dans les mocks : placeholders, vraies photos chantier, ou melange.
+3. Presence d'un mode "demo" distinct du futur mode data.
+4. Emplacement futur des assets plans/photos : repo, Supabase Storage, ou stockage local d'abord.
+5. Priorite apres V0 : photos, depenses, exports ou Supabase.
 
 ## Recommandation finale
 
@@ -371,4 +385,3 @@ Le meilleur chemin est :
 ```
 
 Cette sequence garde Clarus pragmatique, robuste et capable de devenir un vrai produit plus tard.
-

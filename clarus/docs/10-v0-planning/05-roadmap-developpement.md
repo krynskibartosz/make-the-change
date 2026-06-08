@@ -19,8 +19,9 @@ Fonctionnalites :
 - donnees mockees realistes ;
 - repository mock-first ;
 - ecran Aujourd'hui ;
-- ecran Ajouter intervention ;
-- ecran Interventions ;
+- action globale Ajouter intervention ;
+- ecran Journal ;
+- ecran Chantier ;
 - ecran Couts ;
 - calcul duree et montant ;
 - section "A verifier".
@@ -182,4 +183,3 @@ Le projet est pret pour implementation quand :
 - les mocks V0 sont listes ;
 - les calculs metier sont verrouilles ;
 - le futur scaffold peut etre cree sans decision majeure ouverte.
-
