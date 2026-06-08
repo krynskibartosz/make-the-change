@@ -302,4 +302,3 @@ Une issue est terminee si :
 - les tests/verifications indiques ont ete executes ou explicitement justifies ;
 - aucun fichier hors scope n'a ete modifie sans raison ;
 - le resultat est resumable en 3 lignes.
-

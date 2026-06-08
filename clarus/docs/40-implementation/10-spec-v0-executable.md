@@ -373,4 +373,3 @@ La V0 est acceptable si :
 - les couts/heures sont lisibles ;
 - les donnees incompletes sont visibles ;
 - l'UI est deja structuree pour remplacer les mocks plus tard.
-

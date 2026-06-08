@@ -430,4 +430,3 @@ C'est de reduire la charge mentale :
 - un agent verifie.
 
 Clarus doit rester petit, lisible et robuste.
-

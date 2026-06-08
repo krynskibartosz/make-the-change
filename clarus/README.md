@@ -46,6 +46,8 @@ clarus/
 Avant de lancer le developpement, preparer :
 
 - `docs/40-implementation/10-spec-v0-executable.md`
-- `docs/40-implementation/11-issues-developpement-v0.md`
+- `docs/40-implementation/11-backlog-v0.md`
+- `docs/40-implementation/12-agent-workflow.md`
+- `docs/40-implementation/issues/`
 
-Ces deux fichiers doivent transformer les decisions en tickets executables par agent.
+Ces fichiers transforment les decisions en tickets executables par agent.

@@ -6,7 +6,9 @@ Documents prevus :
 
 ```txt
 10-spec-v0-executable.md
-11-issues-developpement-v0.md
+11-backlog-v0.md
+12-agent-workflow.md
+issues/
 ```
 
 Regle :
