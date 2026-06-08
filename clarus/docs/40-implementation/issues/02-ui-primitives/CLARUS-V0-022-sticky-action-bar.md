@@ -32,4 +32,3 @@ Creer le CTA bas fixe pour actions principales.
 ## Tests / verification
 - rendu mobile ;
 - `pnpm type-check`
-

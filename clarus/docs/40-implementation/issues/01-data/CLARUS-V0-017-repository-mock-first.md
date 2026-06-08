@@ -40,4 +40,3 @@ Exposer les donnees V0 via repository, sans import direct des mocks par l'UI.
 ## Tests / verification
 - tests repository mock ;
 - `pnpm type-check`
-

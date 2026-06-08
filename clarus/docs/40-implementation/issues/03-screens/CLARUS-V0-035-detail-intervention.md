@@ -36,4 +36,3 @@ Creer l'ecran detail d'une intervention.
 ## Tests / verification
 - screenshot mobile ;
 - `pnpm type-check`
-

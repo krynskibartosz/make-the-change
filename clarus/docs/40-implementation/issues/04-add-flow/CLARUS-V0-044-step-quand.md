@@ -36,4 +36,3 @@ Creer l'etape horaires, pause et jours.
 ## Tests / verification
 - tester 8h00 -> 18h30 ;
 - `pnpm type-check`
-

@@ -33,4 +33,3 @@ Creer les routes principales V0 et la redirection racine.
 ## Tests / verification
 - ouvrir les 4 routes ;
 - `pnpm type-check`
-

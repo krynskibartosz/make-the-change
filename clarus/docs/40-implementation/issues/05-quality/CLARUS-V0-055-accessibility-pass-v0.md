@@ -35,4 +35,3 @@ Faire une passe accessibilite pragmatique V0.
 ## Tests / verification
 - inspection manuelle mobile ;
 - type-check apres corrections.
-

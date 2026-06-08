@@ -35,4 +35,3 @@ Poser les tokens Clarus Dark Terrain sans hardcoder les couleurs dans les compos
 ## Tests / verification
 - verifier rendu local ;
 - `pnpm type-check`
-

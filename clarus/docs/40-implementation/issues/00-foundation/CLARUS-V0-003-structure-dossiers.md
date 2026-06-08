@@ -34,4 +34,3 @@ Creer l'arborescence cible pour que les agents suivants travaillent dans des zon
 
 ## Tests / verification
 - `pnpm type-check`
-

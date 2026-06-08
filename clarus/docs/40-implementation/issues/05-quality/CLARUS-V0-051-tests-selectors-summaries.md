@@ -32,4 +32,3 @@ Verifier les mappings vers Aujourd'hui et Couts.
 
 ## Tests / verification
 - `pnpm test`
-

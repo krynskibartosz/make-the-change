@@ -36,4 +36,3 @@ Creer l'etape statuts chantier/financier.
 ## Tests / verification
 - tester choix statuts ;
 - `pnpm type-check`
-

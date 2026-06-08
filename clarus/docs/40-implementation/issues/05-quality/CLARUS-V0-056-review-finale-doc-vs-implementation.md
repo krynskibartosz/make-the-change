@@ -35,4 +35,3 @@ Comparer la V0 implementee avec la spec executable.
 - `pnpm lint`
 - `pnpm test`
 - `pnpm build`
-

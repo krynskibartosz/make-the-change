@@ -37,4 +37,3 @@ Afficher les couts principaux du chantier.
 ## Tests / verification
 - screenshot mobile ;
 - `pnpm type-check`
-

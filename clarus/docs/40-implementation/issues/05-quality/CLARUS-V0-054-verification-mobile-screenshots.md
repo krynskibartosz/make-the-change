@@ -38,4 +38,3 @@ Verifier la V0 dans un vrai viewport mobile.
 ## Tests / verification
 - Playwright/browser screenshot ;
 - rapport court.
-

@@ -32,4 +32,3 @@ Verifier tous les calculs critiques.
 
 ## Tests / verification
 - `pnpm test`
-

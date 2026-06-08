@@ -32,4 +32,3 @@ Verifier que l'UI peut utiliser les repositories sans importer les mocks.
 ## Tests / verification
 - `pnpm test`
 - recherche imports mock dans `src/app` et `src/features`
-

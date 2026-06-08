@@ -31,4 +31,3 @@ Creer les filtres rapides reutilisables.
 
 ## Tests / verification
 - `pnpm type-check`
-

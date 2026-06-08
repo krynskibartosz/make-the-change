@@ -36,4 +36,3 @@ Creer les controls necessaires au flow Ajouter intervention.
 
 ## Tests / verification
 - `pnpm type-check`
-

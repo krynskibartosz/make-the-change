@@ -38,4 +38,3 @@ Aucune.
 ## Tests / verification
 - lancer le dev server ;
 - ouvrir la page racine.
-

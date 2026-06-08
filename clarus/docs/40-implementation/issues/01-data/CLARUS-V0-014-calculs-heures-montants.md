@@ -35,4 +35,3 @@ Implementer les calculs purs de duree et montant.
 
 ## Tests / verification
 - `pnpm test -- work`
-

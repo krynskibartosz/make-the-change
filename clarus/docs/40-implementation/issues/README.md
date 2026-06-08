@@ -16,4 +16,3 @@ Ce dossier contient les issues atomiques pour developper Clarus V0 avec des agen
 Chaque issue doit rester petite, verifiable et sans decision produit majeure.
 
 Si une issue revele une decision ouverte, elle doit etre marquee `blocked` et remontee avant implementation.
-

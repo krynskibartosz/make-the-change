@@ -37,4 +37,3 @@ Implementer le hub operationnel.
 ## Tests / verification
 - screenshot mobile ;
 - `pnpm type-check`
-

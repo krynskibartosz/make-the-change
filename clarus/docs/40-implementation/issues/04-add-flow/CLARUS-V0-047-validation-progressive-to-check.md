@@ -34,4 +34,3 @@ Permettre une saisie terrain incomplete sans casser la qualite data.
 - tests validation ;
 - flow manuel incomplet ;
 - `pnpm type-check`
-

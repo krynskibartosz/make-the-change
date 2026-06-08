@@ -33,4 +33,3 @@ Creer l'etape personnes et work entries.
 ## Tests / verification
 - tester multi-select ;
 - `pnpm type-check`
-

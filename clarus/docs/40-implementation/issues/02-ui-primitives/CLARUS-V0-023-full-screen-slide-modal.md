@@ -36,4 +36,3 @@ Creer le pattern modal plein ecran pour les flows.
 ## Tests / verification
 - route test minimale ;
 - `pnpm type-check`
-

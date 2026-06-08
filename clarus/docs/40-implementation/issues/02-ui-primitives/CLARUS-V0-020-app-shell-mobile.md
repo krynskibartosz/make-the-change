@@ -35,4 +35,3 @@ Creer les shells `TabScreen` et `Screen`.
 ## Tests / verification
 - rendu local ;
 - `pnpm type-check`
-

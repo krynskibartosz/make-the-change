@@ -33,4 +33,3 @@ Creer la navigation principale Clarus.
 ## Tests / verification
 - verifier mobile viewport ;
 - `pnpm type-check`
-

@@ -34,4 +34,3 @@ Creer les composants generiques pour dashboards et details.
 
 ## Tests / verification
 - `pnpm type-check`
-

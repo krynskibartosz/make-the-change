@@ -37,4 +37,3 @@ Prevoir les etats simples pour eviter les ecrans cassants.
 ## Tests / verification
 - verifier etats manuellement ;
 - `pnpm type-check`
-

@@ -35,4 +35,3 @@ Creer les view models de l'ecran Aujourd'hui.
 ## Tests / verification
 - tests selector Aujourd'hui ;
 - `pnpm type-check`
-

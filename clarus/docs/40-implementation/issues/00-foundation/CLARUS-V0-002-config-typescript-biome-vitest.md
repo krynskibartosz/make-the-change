@@ -39,4 +39,3 @@ Configurer le tooling strict pour eviter une dette inutile des le depart.
 - `pnpm type-check`
 - `pnpm lint`
 - `pnpm test`
-

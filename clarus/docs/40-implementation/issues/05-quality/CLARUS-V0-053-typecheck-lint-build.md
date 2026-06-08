@@ -34,4 +34,3 @@ Valider le socle technique complet.
 - `pnpm lint`
 - `pnpm test`
 - `pnpm build`
-

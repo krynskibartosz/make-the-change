@@ -33,4 +33,3 @@ Creer la premiere etape du wizard : type/titre d'intervention.
 ## Tests / verification
 - tester le step mobile ;
 - `pnpm type-check`
-

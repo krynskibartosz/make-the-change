@@ -34,4 +34,3 @@ Creer la route modale du flow Ajouter intervention.
 ## Tests / verification
 - tester navigation mobile ;
 - `pnpm type-check`
-

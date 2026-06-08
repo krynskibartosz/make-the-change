@@ -34,4 +34,3 @@ Creer les primitives visuelles de base.
 ## Tests / verification
 - `pnpm type-check`
 - rendu mobile rapide
-

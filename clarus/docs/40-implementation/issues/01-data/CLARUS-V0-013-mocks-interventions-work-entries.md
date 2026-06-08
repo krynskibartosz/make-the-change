@@ -35,4 +35,3 @@ Creer des interventions realistes avec heures multi-personnes.
 ## Tests / verification
 - test validation mocks ;
 - `pnpm type-check`
-

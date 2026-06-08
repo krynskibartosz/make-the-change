@@ -34,4 +34,3 @@ Creer les types metier minimum de la V0.
 
 ## Tests / verification
 - `pnpm type-check`
-

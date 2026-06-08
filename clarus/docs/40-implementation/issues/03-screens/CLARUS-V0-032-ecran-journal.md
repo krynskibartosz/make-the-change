@@ -36,4 +36,3 @@ Afficher la liste chronologique des interventions.
 ## Tests / verification
 - screenshot mobile ;
 - `pnpm type-check`
-

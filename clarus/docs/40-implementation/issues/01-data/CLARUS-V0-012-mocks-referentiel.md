@@ -37,4 +37,3 @@ Creer les mocks de base du chantier Sparrenlaan.
 ## Tests / verification
 - test validation mocks ;
 - `pnpm type-check`
-

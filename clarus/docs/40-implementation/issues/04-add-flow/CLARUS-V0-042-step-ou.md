@@ -34,4 +34,3 @@ Creer l'etape zone/phase.
 ## Tests / verification
 - tester selection ;
 - `pnpm type-check`
-

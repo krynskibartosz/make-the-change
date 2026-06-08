@@ -33,4 +33,3 @@ Valider les mocks et les inputs sensibles avec Zod.
 ## Tests / verification
 - tests schemas ;
 - `pnpm type-check`
-

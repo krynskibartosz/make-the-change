@@ -37,4 +37,3 @@ Afficher le resume calcule et sauvegarder via repository.
 ## Tests / verification
 - tester flow complet ;
 - `pnpm type-check`
-

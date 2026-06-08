@@ -36,4 +36,3 @@ Afficher zones, phases et resume chantier.
 ## Tests / verification
 - screenshot mobile ;
 - `pnpm type-check`
-

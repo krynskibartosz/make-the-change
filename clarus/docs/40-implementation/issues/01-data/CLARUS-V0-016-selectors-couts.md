@@ -36,4 +36,3 @@ Creer les view models de l'ecran Couts.
 ## Tests / verification
 - tests selector Couts ;
 - `pnpm type-check`
-
