@@ -13,6 +13,7 @@
   --warning: #fbbf24;
   --success: #22c55e;
   --danger: #ef4444;
+  --danger-foreground: #ffffff;
   --info: #38bdf8;
   --blocked: #f97316;
   --paid: #34d399;
@@ -44,6 +45,7 @@
   --warning: #b45309;
   --success: #15803d;
   --danger: #dc2626;
+  --danger-foreground: #ffffff;
   --info: #0369a1;
   --blocked: #c2410c;
   --paid: #047857;

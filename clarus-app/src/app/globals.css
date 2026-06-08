@@ -13,6 +13,7 @@
   --color-warning: var(--warning);
   --color-success: var(--success);
   --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
   --color-info: var(--info);
   --color-blocked: var(--blocked);
   --color-paid: var(--paid);

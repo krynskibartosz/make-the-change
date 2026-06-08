@@ -10,6 +10,7 @@ export type ClarusSemanticToken =
   | 'warning'
   | 'success'
   | 'danger'
+  | 'dangerForeground'
   | 'info'
   | 'blocked'
   | 'paid'
@@ -30,6 +31,7 @@ export const clarusThemeTokens = {
     warning: '#FBBF24',
     success: '#22C55E',
     danger: '#EF4444',
+    dangerForeground: '#FFFFFF',
     info: '#38BDF8',
     blocked: '#F97316',
     paid: '#34D399',
@@ -47,6 +49,7 @@ export const clarusThemeTokens = {
     warning: '#B45309',
     success: '#15803D',
     danger: '#DC2626',
+    dangerForeground: '#FFFFFF',
     info: '#0369A1',
     blocked: '#C2410C',
     paid: '#047857',
