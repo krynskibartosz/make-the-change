@@ -1,0 +1,22 @@
+# Clarus App
+
+Prototype mobile-first mock-first pour le chantier Sparrenlaan.
+
+## Scripts
+
+```bash
+pnpm dev
+pnpm lint
+pnpm type-check
+pnpm test
+pnpm build
+```
+
+Le serveur local utilise le port `3002`.
+
+## Decisions V0
+
+- App standalone, hors workspace Make the Change.
+- Next App Router, TypeScript strict, Biome, Vitest.
+- Theme visible dark-first, light-ready via tokens.
+- Donnees V0 mock-first; Supabase hors scope pour l'instant.
