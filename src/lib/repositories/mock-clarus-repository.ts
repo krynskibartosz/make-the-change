@@ -4,7 +4,11 @@ import type {
   CreateInterventionDraftInput,
   Intervention,
   InterventionDraft,
+  Person,
+  Phase,
+  Project,
   WorkEntry,
+  Zone,
 } from '@/lib/domain'
 import {
   mockInterventions,
@@ -20,31 +24,51 @@ import type { ClarusRepository } from './clarus-repository'
 const FALLBACK_PHASE_ID = 'phase-admin'
 const FALLBACK_ZONE_ID = 'zone-maison-existante'
 
-export const createMockClarusRepository = (): ClarusRepository => ({
-  getProject: async () => mockProject,
-  getPeople: async () => [...mockPeople],
-  getPhases: async () => [...mockPhases],
-  getZones: async () => [...mockZones],
-  getInterventions: async () => [...mockInterventions],
-  getInterventionById: async (id: string) =>
-    mockInterventions.find((intervention) => intervention.id === id) ?? null,
-  getWorkEntries: async () => [...mockWorkEntries],
-  getTodaySummary: async (date: string) =>
-    selectTodaySummary({
-      date,
-      interventions: mockInterventions,
-      workEntries: mockWorkEntries,
-      people: mockPeople,
-      zones: mockZones,
-      phases: mockPhases,
-    }),
-  createInterventionDraft: async (input: CreateInterventionDraftInput) =>
-    createInterventionDraft(input),
-})
+export const createMockClarusRepository = (): ClarusRepository => {
+  const project = cloneProject(mockProject)
+  const people = mockPeople.map(clonePerson)
+  const phases = mockPhases.map(clonePhase)
+  const zones = mockZones.map(cloneZone)
+  const interventions = mockInterventions.map(cloneIntervention)
+  const workEntries = mockWorkEntries.map(cloneWorkEntry)
+  let draftSequence = 0
+
+  return {
+    getProject: async () => cloneProject(project),
+    getPeople: async () => people.map(clonePerson),
+    getPhases: async () => phases.map(clonePhase),
+    getZones: async () => zones.map(cloneZone),
+    getInterventions: async () => interventions.map(cloneIntervention),
+    getInterventionById: async (id: string) =>
+      cloneInterventionOrNull(interventions.find((intervention) => intervention.id === id) ?? null),
+    getWorkEntries: async () => workEntries.map(cloneWorkEntry),
+    getTodaySummary: async (date: string) =>
+      selectTodaySummary({
+        date,
+        interventions,
+        workEntries,
+        people,
+        zones,
+        phases,
+      }),
+    createInterventionDraft: async (input: CreateInterventionDraftInput) => {
+      draftSequence += 1
+      const draft = createInterventionDraft(input, draftSequence)
+
+      interventions.push(cloneIntervention(draft.intervention))
+      workEntries.push(...draft.workEntries.map(cloneWorkEntry))
+
+      return cloneInterventionDraft(draft)
+    },
+  }
+}
 
 export const mockClarusRepository = createMockClarusRepository()
 
-const createInterventionDraft = (input: CreateInterventionDraftInput): InterventionDraft => {
+const createInterventionDraft = (
+  input: CreateInterventionDraftInput,
+  draftSequence: number,
+): InterventionDraft => {
   const parsed = createInterventionDraftInputSchema.safeParse(input)
 
   if (!parsed.success) {
@@ -60,8 +84,9 @@ const createInterventionDraft = (input: CreateInterventionDraftInput): Intervent
     data.endTime === null ||
     data.isExtra === 'to_check'
   const now = new Date().toISOString()
+  const draftId = `draft-${data.date}-${slugify(data.title)}-${draftSequence}`
   const intervention: Intervention = {
-    id: `draft-${data.date}-${slugify(data.title)}`,
+    id: draftId,
     projectId: data.projectId,
     title: data.title,
     description: data.description,
@@ -138,3 +163,38 @@ const slugify = (value: string): string =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '')
     .slice(0, 48)
+
+function cloneProject(project: Project): Project {
+  return { ...project }
+}
+
+function clonePerson(person: Person): Person {
+  return { ...person }
+}
+
+function clonePhase(phase: Phase): Phase {
+  return { ...phase }
+}
+
+function cloneZone(zone: Zone): Zone {
+  return { ...zone }
+}
+
+function cloneIntervention(intervention: Intervention): Intervention {
+  return { ...intervention }
+}
+
+function cloneInterventionOrNull(intervention: Intervention | null): Intervention | null {
+  return intervention === null ? null : cloneIntervention(intervention)
+}
+
+function cloneWorkEntry(workEntry: WorkEntry): WorkEntry {
+  return { ...workEntry }
+}
+
+function cloneInterventionDraft(draft: InterventionDraft): InterventionDraft {
+  return {
+    intervention: cloneIntervention(draft.intervention),
+    workEntries: draft.workEntries.map(cloneWorkEntry),
+  }
+}
