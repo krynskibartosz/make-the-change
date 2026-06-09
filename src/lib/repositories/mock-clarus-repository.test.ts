@@ -101,6 +101,32 @@ describe('mock Clarus repository', () => {
     expect(draft.workEntries).toEqual([])
   })
 
+  it('preserves explicit billing and payment statuses from draft input', async () => {
+    const repository = createMockClarusRepository()
+
+    const draft = await repository.createInterventionDraft({
+      projectId: 'project-sparrenlaan',
+      title: 'Achat materiaux paye',
+      type: 'expense',
+      date: '2026-06-09',
+      phaseId: 'phase-finitions',
+      zoneId: 'zone-stockage',
+      personIds: ['person-hubert'],
+      startTime: '08:00',
+      endTime: '09:00',
+      breakMinutes: 0,
+      days: 1,
+      hourlyRate: 45,
+      isExtra: true,
+      billingStatus: 'paid',
+      paymentStatus: 'paid',
+    })
+
+    expect(draft.intervention.isExtra).toBe(true)
+    expect(draft.intervention.billingStatus).toBe('paid')
+    expect(draft.intervention.paymentStatus).toBe('paid')
+  })
+
   it('returns complete draft interventions and work entries after creation', async () => {
     const repository = createMockClarusRepository()
 

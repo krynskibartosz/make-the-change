@@ -36,6 +36,8 @@ export const createDraftInputFromState = ({
     days: state.when.days,
     hourlyRate: getDefaultHourlyRate(people),
     isExtra: state.status.isExtra,
+    billingStatus: state.status.billingStatus,
+    paymentStatus: state.status.paymentStatus,
     notes: note === '' ? undefined : note,
   }
 }

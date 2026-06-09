@@ -218,6 +218,8 @@ export type CreateInterventionDraftInput = {
   days: number
   hourlyRate: number
   isExtra: boolean | 'to_check'
+  billingStatus?: BillingStatus
+  paymentStatus?: PaymentStatus
   notes?: string
 }
 

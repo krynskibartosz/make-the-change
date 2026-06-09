@@ -96,8 +96,9 @@ const createInterventionDraft = (
     zoneId: data.zoneId ?? FALLBACK_ZONE_ID,
     status: isIncomplete ? 'to_check' : 'draft',
     isExtra: data.isExtra,
-    billingStatus: isIncomplete || data.isExtra === true ? 'to_check' : 'not_billable',
-    paymentStatus: 'not_applicable',
+    billingStatus:
+      data.billingStatus ?? (isIncomplete || data.isExtra === true ? 'to_check' : 'not_billable'),
+    paymentStatus: data.paymentStatus ?? 'not_applicable',
     sourceNote: data.notes,
     createdAt: now,
     updatedAt: now,
