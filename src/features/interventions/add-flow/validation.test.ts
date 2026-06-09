@@ -35,6 +35,19 @@ describe('validateAddInterventionState', () => {
     expect(result.warningMessages).toEqual(['Zone ou phase a verifier.', 'Personnes a verifier.'])
   })
 
+  it('blocks when time range is invalid', () => {
+    const state = createInitialAddInterventionState({ today: '2026-06-09' })
+
+    const result = validateAddInterventionState({
+      ...state,
+      what: { ...state.what, type: 'demolition', title: 'Demolition garage' },
+      when: { ...state.when, startTime: '18:00', endTime: '08:00' },
+    })
+
+    expect(result.canSave).toBe(false)
+    expect(result.blockingMessages).toContain('Verifie les horaires.')
+  })
+
   it('marks location to define as zone or phase to verify', () => {
     const state = createInitialAddInterventionState({ today: '2026-06-09' })
 

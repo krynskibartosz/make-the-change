@@ -1,3 +1,5 @@
+import { calculateWorkEntryDuration } from '@/lib/calculations'
+
 import type { AddInterventionState } from './types'
 
 export type AddInterventionValidation = {
@@ -23,6 +25,12 @@ export const validateAddInterventionState = (
 
   if (state.when.date.trim() === '') {
     blockingMessages.push('Choisis une date.')
+  }
+
+  try {
+    calculateWorkEntryDuration(state.when)
+  } catch {
+    blockingMessages.push('Verifie les horaires.')
   }
 
   if (state.where.locationToDefine || state.where.phaseId === null || state.where.zoneId === null) {
