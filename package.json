@@ -6,7 +6,7 @@
   "description": "Prototype mobile-first mock-first pour le chantier Sparrenlaan.",
   "scripts": {
     "dev": "next dev --turbo -p 3002",
-    "build": "next build --turbo",
+    "build": "next build",
     "start": "next start -p 3002",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",

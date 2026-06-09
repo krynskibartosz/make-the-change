@@ -8,7 +8,7 @@ export default function TodayPage() {
       action={
         <Link
           className="inline-flex min-h-12 items-center rounded-[var(--radius-control)] bg-primary px-4 text-sm font-semibold text-primary-foreground"
-          href="/interventions/new"
+          href="/ajouter"
         >
           Ajouter
         </Link>
