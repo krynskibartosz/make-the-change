@@ -3,10 +3,11 @@ import { clarusRepository } from '@/lib/repositories'
 import { TabScreen } from '../_components/tab-screen'
 
 export default async function ProjectPage() {
-  const [zones, phases, people] = await Promise.all([
+  const [zones, phases, people, tasks] = await Promise.all([
     clarusRepository.getZones(),
     clarusRepository.getPhases(),
     clarusRepository.getPeople(),
+    clarusRepository.getTasks(),
   ])
 
   const simpleZones = zones.filter((z) => z.type === 'simple').sort((a, b) => a.order - b.order)
@@ -19,6 +20,33 @@ export default async function ProjectPage() {
   return (
     <TabScreen title="Chantier">
       <div className="flex flex-col gap-8">
+        {/* Taches */}
+        {tasks.length > 0 && (
+          <section>
+            <h2 className="mb-4 font-semibold text-foreground">Taches a faire</h2>
+            <div className="flex flex-col gap-2">
+              {tasks.map((task) => (
+                <Card key={task.id} className="flex flex-col p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="font-medium text-foreground">{task.title}</p>
+                    <Badge tone={task.status === 'to_do' ? 'neutral' : 'success'}>
+                      {task.status === 'to_do' ? 'A faire' : 'Termine'}
+                    </Badge>
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    Priorite: {task.priority}
+                    {task.assignedTo &&
+                      (() => {
+                        const assignee = people.find((p) => p.id === task.assignedTo)
+                        return assignee ? ` - Assigne a: ${assignee.name}` : ''
+                      })()}
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Zones */}
         <section>
           <h2 className="mb-4 font-semibold text-foreground">Zones</h2>

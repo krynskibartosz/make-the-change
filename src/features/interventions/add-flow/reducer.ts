@@ -1,3 +1,4 @@
+import type { Intervention, WorkEntry } from '@/lib/domain'
 import type {
   AddInterventionState,
   AddInterventionStatusState,
@@ -65,6 +66,43 @@ export const createInitialAddInterventionState = ({
   saveState: 'idle',
   saveError: null,
 })
+
+export const createEditInterventionState = (
+  intervention: Intervention,
+  workEntries: WorkEntry[],
+): AddInterventionState => {
+  const firstWe = workEntries[0]
+  return {
+    currentStep: 'summary',
+    what: {
+      type: intervention.type,
+      title: intervention.title,
+      note: intervention.sourceNote ?? '',
+    },
+    where: {
+      phaseId: intervention.phaseId,
+      zoneId: intervention.zoneId,
+      locationToDefine: false,
+    },
+    who: {
+      personIds: workEntries.map((we) => we.personId),
+    },
+    when: {
+      date: intervention.date,
+      startTime: firstWe?.startTime ?? '08:00',
+      endTime: firstWe?.endTime ?? '18:30',
+      breakMinutes: firstWe?.breakMinutes ?? 30,
+      days: firstWe?.days ?? 1,
+    },
+    status: {
+      isExtra: intervention.isExtra,
+      billingStatus: intervention.billingStatus,
+      paymentStatus: intervention.paymentStatus,
+    },
+    saveState: 'idle',
+    saveError: null,
+  }
+}
 
 export const reduceAddInterventionState = (
   state: AddInterventionState,

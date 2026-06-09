@@ -1,7 +1,12 @@
 export { AddInterventionFlow } from './add-intervention-flow'
 export * from './draft'
 export * from './options'
-export * from './reducer'
+export {
+  type AddInterventionAction,
+  createEditInterventionState,
+  createInitialAddInterventionState,
+  reduceAddInterventionState,
+} from './reducer'
 export * from './step-status'
 export * from './step-summary'
 export * from './step-what'

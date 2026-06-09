@@ -238,6 +238,9 @@ export type InterventionListItem = {
   isExtra: boolean | 'to_check'
   zoneName: string
   phaseName: string
+  zoneId: string
+  phaseId: string
+  personIds: string[]
   hours: number
   amount: number
   updatedAt: string

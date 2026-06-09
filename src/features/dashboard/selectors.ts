@@ -91,6 +91,9 @@ export const toInterventionListItem = (
     zoneName: zones.find((zone) => zone.id === intervention.zoneId)?.name ?? 'Zone a verifier',
     phaseName:
       phases.find((phase) => phase.id === intervention.phaseId)?.name ?? 'Phase a verifier',
+    zoneId: intervention.zoneId,
+    phaseId: intervention.phaseId,
+    personIds: Array.from(new Set(matchingEntries.map((we) => we.personId))),
     hours: totals.hours,
     amount: totals.amount,
     updatedAt: intervention.updatedAt,

@@ -1,6 +1,7 @@
 import { Calendar, Clock, MapPin, Search } from 'lucide-react'
+import Link from 'next/link'
 
-import { Badge, EmptyState, InfoRow, StatusChip } from '@/components/ui'
+import { Badge, Button, EmptyState, InfoRow, StatusChip, StickyActionBar } from '@/components/ui'
 import { clarusRepository } from '@/lib/repositories'
 import { Screen } from '../../_components/screen'
 
@@ -13,13 +14,16 @@ type InterventionDetailPageProps = Readonly<{
 export default async function InterventionDetailPage({ params }: InterventionDetailPageProps) {
   const { id } = await params
 
-  const [intervention, allWorkEntries, zones, phases, people] = await Promise.all([
-    clarusRepository.getInterventionById(id),
-    clarusRepository.getWorkEntries(),
-    clarusRepository.getZones(),
-    clarusRepository.getPhases(),
-    clarusRepository.getPeople(),
-  ])
+  const [intervention, allWorkEntries, zones, phases, people, expenses, allTasks] =
+    await Promise.all([
+      clarusRepository.getInterventionById(id),
+      clarusRepository.getWorkEntries(),
+      clarusRepository.getZones(),
+      clarusRepository.getPhases(),
+      clarusRepository.getPeople(),
+      clarusRepository.getExpensesByInterventionId(id),
+      clarusRepository.getTasks(),
+    ])
 
   if (!intervention) {
     return (
@@ -33,6 +37,7 @@ export default async function InterventionDetailPage({ params }: InterventionDet
   }
 
   const workEntries = allWorkEntries.filter((we) => we.interventionId === intervention.id)
+  const interventionTasks = allTasks.filter((t) => t.interventionId === intervention.id)
   const zone = zones.find((z) => z.id === intervention.zoneId)
   const phase = phases.find((p) => p.id === intervention.phaseId)
 
@@ -107,13 +112,45 @@ export default async function InterventionDetailPage({ params }: InterventionDet
           )}
         </section>
 
+        {/* Taches */}
+        {interventionTasks.length > 0 && (
+          <section>
+            <h2 className="mb-2 font-semibold text-foreground">Taches a faire</h2>
+            <div className="flex flex-col">
+              {interventionTasks.map((task) => (
+                <InfoRow
+                  key={task.id}
+                  label={task.title}
+                  value={
+                    <Badge tone={task.status === 'to_do' ? 'neutral' : 'success'}>
+                      {task.status === 'to_do' ? 'A faire' : 'Termine'}
+                    </Badge>
+                  }
+                  action={null}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Couts */}
         <section>
           <h2 className="mb-2 font-semibold text-foreground">Couts</h2>
           <div className="flex flex-col">
             <InfoRow label="Main d'oeuvre" value={`${totalLaborCost} \u20ac`} action={null} />
-            {/* V0: Material / Expenses simplified */}
-            <InfoRow label="Materiaux & Depenses" value="Voir dashboard" action={null} />
+            {expenses.length > 0 && (
+              <>
+                <div className="my-2 border-t border-border" />
+                {expenses.map((expense) => (
+                  <InfoRow
+                    key={expense.id}
+                    label={expense.description || expense.supplier}
+                    value={expense.amount ? `${expense.amount} \u20ac` : 'A verifier'}
+                    action={null}
+                  />
+                ))}
+              </>
+            )}
           </div>
         </section>
 
@@ -127,6 +164,16 @@ export default async function InterventionDetailPage({ params }: InterventionDet
           />
         </section>
       </div>
+
+      <StickyActionBar
+        primaryAction={
+          <Link href={`/interventions/${intervention.id}/edit`} className="w-full">
+            <Button fullWidth variant="secondary">
+              Modifier l'intervention
+            </Button>
+          </Link>
+        }
+      />
     </Screen>
   )
 }

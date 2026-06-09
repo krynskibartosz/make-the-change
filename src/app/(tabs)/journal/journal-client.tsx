@@ -4,19 +4,35 @@ import { useState } from 'react'
 
 import { SegmentedControl } from '@/components/ui'
 import { InterventionCard } from '@/features/interventions/components'
-import type { InterventionListItem } from '@/lib/domain'
+import type { InterventionListItem, Person, Phase, Zone } from '@/lib/domain'
 
 type JournalClientProps = Readonly<{
   interventions: InterventionListItem[]
   todayDate: string
+  people: Person[]
+  zones: Zone[]
+  phases: Phase[]
 }>
 
 type FilterType = 'all' | 'today' | 'to_check' | 'extra'
 
-export function JournalClient({ interventions, todayDate }: JournalClientProps) {
+export function JournalClient({
+  interventions,
+  todayDate,
+  people,
+  zones,
+  phases,
+}: JournalClientProps) {
   const [filter, setFilter] = useState<FilterType>('all')
+  const [personFilter, setPersonFilter] = useState<string>('all')
+  const [zoneFilter, setZoneFilter] = useState<string>('all')
+  const [phaseFilter, setPhaseFilter] = useState<string>('all')
 
   const filteredInterventions = interventions.filter((item) => {
+    if (personFilter !== 'all' && !item.personIds?.includes(personFilter)) return false
+    if (zoneFilter !== 'all' && item.zoneId !== zoneFilter) return false
+    if (phaseFilter !== 'all' && item.phaseId !== phaseFilter) return false
+
     switch (filter) {
       case 'today':
         return item.date === todayDate
@@ -55,6 +71,45 @@ export function JournalClient({ interventions, todayDate }: JournalClientProps) 
         value={filter}
         onValueChange={(val: string) => setFilter(val as FilterType)}
       />
+
+      <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
+        <select
+          className="h-9 min-w-32 rounded-[var(--radius-input)] border border-border bg-surface px-3 text-sm"
+          value={personFilter}
+          onChange={(e) => setPersonFilter(e.target.value)}
+        >
+          <option value="all">Personne (Toutes)</option>
+          {people.map((p) => (
+            <option key={p.id} value={p.id}>
+              {p.name}
+            </option>
+          ))}
+        </select>
+        <select
+          className="h-9 min-w-32 rounded-[var(--radius-input)] border border-border bg-surface px-3 text-sm"
+          value={zoneFilter}
+          onChange={(e) => setZoneFilter(e.target.value)}
+        >
+          <option value="all">Zone (Toutes)</option>
+          {zones.map((z) => (
+            <option key={z.id} value={z.id}>
+              {z.name}
+            </option>
+          ))}
+        </select>
+        <select
+          className="h-9 min-w-32 rounded-[var(--radius-input)] border border-border bg-surface px-3 text-sm"
+          value={phaseFilter}
+          onChange={(e) => setPhaseFilter(e.target.value)}
+        >
+          <option value="all">Phase (Toutes)</option>
+          {phases.map((p) => (
+            <option key={p.id} value={p.id}>
+              {p.name}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <div className="flex flex-col gap-6">
         {sortedDates.length === 0 ? (

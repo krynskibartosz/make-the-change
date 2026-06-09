@@ -2,19 +2,23 @@ import { selectTodaySummary } from '@/features/dashboard'
 import { calculateWorkEntryAmount, calculateWorkEntryDuration } from '@/lib/calculations'
 import type {
   CreateInterventionDraftInput,
+  Expense,
   Intervention,
   InterventionDraft,
   Person,
   Phase,
   Project,
+  Task,
   WorkEntry,
   Zone,
 } from '@/lib/domain'
 import {
+  mockExpenses,
   mockInterventions,
   mockPeople,
   mockPhases,
   mockProject,
+  mockTasks,
   mockWorkEntries,
   mockZones,
 } from '@/lib/mock'
@@ -31,6 +35,8 @@ export const createMockClarusRepository = (): ClarusRepository => {
   const zones = mockZones.map(cloneZone)
   const interventions = mockInterventions.map(cloneIntervention)
   const workEntries = mockWorkEntries.map(cloneWorkEntry)
+  const tasks = mockTasks.map(cloneTask)
+  const expenses = mockExpenses.map(cloneExpense)
   let draftSequence = 0
 
   return {
@@ -59,6 +65,56 @@ export const createMockClarusRepository = (): ClarusRepository => {
       workEntries.push(...draft.workEntries.map(cloneWorkEntry))
 
       return cloneInterventionDraft(draft)
+    },
+    updateInterventionDraft: async (id: string, input: CreateInterventionDraftInput) => {
+      // Find and remove old work entries for this intervention
+      const oldWeIndices: number[] = []
+      for (let i = 0; i < workEntries.length; i++) {
+        const we = workEntries[i]
+        if (we && we.interventionId === id) {
+          oldWeIndices.push(i)
+        }
+      }
+      for (let i = oldWeIndices.length - 1; i >= 0; i--) {
+        const index = oldWeIndices[i]
+        if (index !== undefined) {
+          workEntries.splice(index, 1)
+        }
+      }
+
+      // Generate new draft to get updated intervention and new work entries
+      const draft = createInterventionDraft(input, draftSequence)
+      // Keep original ID and dates
+      draft.intervention.id = id
+      const existingInt = interventions.find((i) => i.id === id)
+      if (existingInt) {
+        draft.intervention.createdAt = existingInt.createdAt
+        draft.intervention.updatedAt = new Date().toISOString()
+        const index = interventions.indexOf(existingInt)
+        interventions[index] = cloneIntervention(draft.intervention)
+      } else {
+        interventions.push(cloneIntervention(draft.intervention))
+      }
+
+      // Add new work entries (fix their interventionId just in case)
+      draft.workEntries.forEach((we) => {
+        we.interventionId = id
+        workEntries.push(cloneWorkEntry(we))
+      })
+
+      return cloneInterventionDraft(draft)
+    },
+    getTasks: async () => tasks.map(cloneTask),
+    getExpenses: async () => expenses.map(cloneExpense),
+    getExpensesByInterventionId: async (interventionId: string) =>
+      expenses.filter((e) => e.interventionId === interventionId).map(cloneExpense),
+    createExpense: async (input: Omit<Expense, 'id'>) => {
+      const newExpense: Expense = {
+        ...input,
+        id: `expense-mock-${Date.now()}`,
+      }
+      expenses.push(cloneExpense(newExpense))
+      return cloneExpense(newExpense)
     },
   }
 }
@@ -198,4 +254,12 @@ function cloneInterventionDraft(draft: InterventionDraft): InterventionDraft {
     intervention: cloneIntervention(draft.intervention),
     workEntries: draft.workEntries.map(cloneWorkEntry),
   }
+}
+
+function cloneTask(task: Task): Task {
+  return { ...task }
+}
+
+function cloneExpense(expense: Expense): Expense {
+  return { ...expense }
 }

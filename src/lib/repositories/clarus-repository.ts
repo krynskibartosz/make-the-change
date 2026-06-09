@@ -1,10 +1,12 @@
 import type {
   CreateInterventionDraftInput,
+  Expense,
   Intervention,
   InterventionDraft,
   Person,
   Phase,
   Project,
+  Task,
   TodaySummary,
   WorkEntry,
   Zone,
@@ -20,4 +22,13 @@ export type ClarusRepository = {
   getWorkEntries: () => Promise<WorkEntry[]>
   getTodaySummary: (date: string) => Promise<TodaySummary>
   createInterventionDraft: (input: CreateInterventionDraftInput) => Promise<InterventionDraft>
+  updateInterventionDraft: (
+    id: string,
+    input: CreateInterventionDraftInput,
+  ) => Promise<InterventionDraft>
+
+  getTasks: () => Promise<Task[]>
+  getExpenses: () => Promise<Expense[]>
+  getExpensesByInterventionId: (interventionId: string) => Promise<Expense[]>
+  createExpense: (input: Omit<Expense, 'id'>) => Promise<Expense>
 }
