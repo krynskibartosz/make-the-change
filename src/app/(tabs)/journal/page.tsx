@@ -1,13 +1,23 @@
+import { toInterventionListItem } from '@/features/dashboard'
+import { clarusRepository } from '@/lib/repositories'
 import { TabScreen } from '../_components/tab-screen'
+import { JournalClient } from './journal-client'
 
-export default function JournalPage() {
+export default async function JournalPage() {
+  const [interventions, workEntries, zones, phases] = await Promise.all([
+    clarusRepository.getInterventions(),
+    clarusRepository.getWorkEntries(),
+    clarusRepository.getZones(),
+    clarusRepository.getPhases(),
+  ])
+
+  const mappedInterventions = interventions.map((intervention) =>
+    toInterventionListItem(intervention, workEntries, zones, phases),
+  )
+
   return (
     <TabScreen title="Journal">
-      <section className="rounded-[var(--radius-card)] border border-border bg-surface p-4">
-        <p className="text-sm leading-6 text-muted-foreground">
-          Shell pret pour la liste chronologique des interventions.
-        </p>
-      </section>
+      <JournalClient interventions={mappedInterventions} todayDate="2026-06-08" />
     </TabScreen>
   )
 }
