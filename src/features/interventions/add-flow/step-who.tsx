@@ -2,7 +2,7 @@
 
 import type { Dispatch } from 'react'
 
-import { Badge, ChoiceCard } from '@/components/ui'
+import { Badge, Card } from '@/components/ui'
 import type { Person } from '@/lib/domain'
 
 import type { AddInterventionAction } from './reducer'
@@ -21,7 +21,7 @@ export function StepWho({ dispatch, people, state }: StepWhoProps) {
     <div className="grid gap-3">
       <p className="text-sm font-semibold text-muted-foreground">Personnes actives</p>
       {activePeople.map((person) => (
-        <ChoiceCard
+        <Card
           description={
             <span className="flex flex-wrap items-center gap-2">
               <span>{person.role ?? 'Role non defini'}</span>
