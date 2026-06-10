@@ -3,7 +3,6 @@
 import { TabScreen } from '../_components/tab-screen'
 import { ChantierDashboardClient } from './chantier-dashboard-client'
 import { WorkerCockpit } from '@/features/roles/components/worker-cockpit'
-import { ManagerInbox } from '@/features/roles/components/manager-inbox'
 import { ClientPortal } from '@/features/roles/components/client-portal'
 import { useRole } from '@/lib/role-context'
 
@@ -25,13 +24,7 @@ export default function ProjectPage() {
     )
   }
 
-  if (role === 'chef') {
-    return (
-      <TabScreen title="Validation" subtitle="Boîte de réception terrain">
-        <ManagerInbox />
-      </TabScreen>
-    )
-  }
+
 
   // Mode Admin par défaut
   return (
