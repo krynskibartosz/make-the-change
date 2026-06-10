@@ -22,6 +22,8 @@ export type {
   Photo,
   PhotoType,
   Plan,
+  PlanZone,
+  PlanPin,
   Project,
   ProjectStatus,
   Task,
