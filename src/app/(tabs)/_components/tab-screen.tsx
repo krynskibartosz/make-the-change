@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 
-import { useScrollHeader } from '@/lib/hooks/use-scroll-header'
 import { mockClarusRepository } from '@/lib/repositories'
 import { cn } from '@/lib/utils/cn'
 
@@ -26,7 +25,6 @@ export function TabScreen({
   subtitle,
   title,
 }: TabScreenProps) {
-  const { isVisible } = useScrollHeader()
   const [projectName, setProjectName] = useState<string>('Chargement...')
 
   useEffect(() => {
@@ -45,10 +43,7 @@ export function TabScreen({
       )}
     >
       <header
-        className={cn(
-          'sticky top-0 z-30 flex items-start justify-between gap-4 pb-4 px-5 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/85 backdrop-blur-xl border-b border-border/70 mb-5 transition-all duration-300 ease-in-out',
-          isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0',
-        )}
+        className="flex items-start justify-between gap-4 pb-4 px-5 pt-[max(env(safe-area-inset-top),1.25rem)] mb-5"
       >
         <div className="min-w-0">
           <p className="text-sm font-medium text-muted-foreground">{displayEyebrow}</p>
