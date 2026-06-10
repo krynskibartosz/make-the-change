@@ -13,7 +13,7 @@ export function BottomNav() {
   return (
     <nav
       aria-label="Navigation principale"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/94 px-3 pb-[max(env(safe-area-inset-bottom),0.75rem)] pt-2 shadow-[var(--shadow-elevated)] backdrop-blur"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-border/70 bg-background/80 px-3 pb-[max(env(safe-area-inset-bottom),0.75rem)] pt-2 shadow-sm backdrop-blur-md"
     >
       <div className="mx-auto grid max-w-md grid-cols-4 gap-1">
         {clarusTabs.map((tab) => {
