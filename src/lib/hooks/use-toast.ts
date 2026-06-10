@@ -13,16 +13,17 @@ export type Toast = {
 
 type ToastInput = Omit<Toast, 'id'>
 
-// Singleton event emitter — fonctionne en dehors du contexte React
 type Listener = (toast: Toast) => void
 type DismissListener = (id: string) => void
 
+// Singleton — guard SSR: listeners ne sont actifs que côté client
 const listeners: Listener[] = []
 const dismissListeners: DismissListener[] = []
 
 let counter = 0
 
 export function toast(input: ToastInput) {
+  if (typeof window === 'undefined') return ''
   const id = String(++counter)
   const newToast: Toast = { id, variant: 'info', ...input }
   for (const listener of listeners) listener(newToast)

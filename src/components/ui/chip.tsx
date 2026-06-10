@@ -22,6 +22,9 @@ export type ClarusStatus =
   | 'supplement'
   | 'blocked'
   | 'billable'
+  | 'in_progress'
+  | 'done'
+  | 'cancelled'
 
 type StatusDefinition = Readonly<{
   icon: LucideIcon
@@ -64,6 +67,21 @@ const statusDefinitions: Record<ClarusStatus, StatusDefinition> = {
     icon: FileCheck2,
     label: 'Facturable',
     toneClassName: 'border-billable/30 bg-billable/15 text-billable',
+  },
+  in_progress: {
+    icon: CircleDashed,
+    label: 'En cours',
+    toneClassName: 'border-blue-500/30 bg-blue-500/15 text-blue-500',
+  },
+  done: {
+    icon: CheckCircle2,
+    label: 'Terminé',
+    toneClassName: 'border-success/30 bg-success/15 text-success',
+  },
+  cancelled: {
+    icon: ShieldAlert,
+    label: 'Annulé',
+    toneClassName: 'border-muted/30 bg-muted/15 text-muted-foreground',
   },
 }
 

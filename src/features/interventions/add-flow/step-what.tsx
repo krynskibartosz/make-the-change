@@ -2,7 +2,7 @@
 
 import type { Dispatch } from 'react'
 
-import { Input, Textarea, Card } from '@/components/ui'
+import { Input, SelectableCard, Textarea } from '@/components/ui'
 
 import { INTERVENTION_TYPE_OPTIONS } from './options'
 import type { AddInterventionAction } from './reducer'
@@ -20,7 +20,7 @@ export function StepWhat({ dispatch, state }: StepWhatProps) {
         <p className="text-sm font-semibold text-muted-foreground">Type d intervention</p>
         <div className="grid gap-2">
           {INTERVENTION_TYPE_OPTIONS.map((option) => (
-            <Card
+            <SelectableCard
               description={option.defaultTitle}
               key={option.value}
               onClick={() =>
@@ -33,7 +33,7 @@ export function StepWhat({ dispatch, state }: StepWhatProps) {
               selected={state.type === option.value}
             >
               {option.label}
-            </Card>
+            </SelectableCard>
           ))}
         </div>
       </div>

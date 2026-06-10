@@ -2,7 +2,7 @@
 
 import type { Dispatch } from 'react'
 
-import { Card as ChoiceCard } from "@/components/ui"
+import { SelectableCard } from '@/components/ui'
 import type { BillingStatus, PaymentStatus } from '@/lib/domain'
 
 import type { AddInterventionAction } from './reducer'
@@ -71,7 +71,7 @@ export function StepStatus({ dispatch, state }: StepStatusProps) {
   return (
     <div className="grid gap-3">
       {STATUS_OPTIONS.map((option) => (
-        <ChoiceCard
+        <SelectableCard
           description={
             <span className="grid gap-1">
               <span>{option.description}</span>
@@ -83,7 +83,7 @@ export function StepStatus({ dispatch, state }: StepStatusProps) {
           selected={isSameStatus(state, option.value)}
         >
           {option.label}
-        </ChoiceCard>
+        </SelectableCard>
       ))}
     </div>
   )

@@ -39,7 +39,6 @@ export function EditInterventionFlow({ interventionId, initialState }: EditInter
 
     try {
       const draft = await mockClarusRepository.createInterventionDraft(
-        interventionId,
         createDraftInputFromState({
           project: mockProject,
           people: mockPeople,

@@ -1,9 +1,11 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 
-import { cn } from '@/lib/utils/cn'
 import { useScrollHeader } from '@/lib/hooks/use-scroll-header'
+import { mockClarusRepository } from '@/lib/repositories'
+import { cn } from '@/lib/utils/cn'
 
 type TabScreenProps = Readonly<{
   action?: ReactNode
@@ -20,11 +22,20 @@ export function TabScreen({
   children,
   className,
   contentClassName,
-  eyebrow = 'Sparrenlaan',
+  eyebrow,
   subtitle,
   title,
 }: TabScreenProps) {
   const { isVisible } = useScrollHeader()
+  const [projectName, setProjectName] = useState<string>('Chargement...')
+
+  useEffect(() => {
+    mockClarusRepository.getProject().then((project) => {
+      setProjectName(project.name)
+    })
+  }, [])
+
+  const displayEyebrow = eyebrow ?? projectName
 
   return (
     <main
@@ -40,7 +51,7 @@ export function TabScreen({
         )}
       >
         <div className="min-w-0">
-          <p className="text-sm font-medium text-muted-foreground">{eyebrow}</p>
+          <p className="text-sm font-medium text-muted-foreground">{displayEyebrow}</p>
           <h1 className="mt-1 text-3xl font-semibold leading-tight">{title}</h1>
           {subtitle ? (
             <div className="mt-2 text-sm leading-6 text-muted-foreground">{subtitle}</div>

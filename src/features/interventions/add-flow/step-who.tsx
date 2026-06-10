@@ -2,7 +2,7 @@
 
 import type { Dispatch } from 'react'
 
-import { Badge, Card } from '@/components/ui'
+import { SelectableCard } from '@/components/ui'
 import type { Person } from '@/lib/domain'
 
 import type { AddInterventionAction } from './reducer'
@@ -21,11 +21,13 @@ export function StepWho({ dispatch, people, state }: StepWhoProps) {
     <div className="grid gap-3">
       <p className="text-sm font-semibold text-muted-foreground">Personnes actives</p>
       {activePeople.map((person) => (
-        <Card
+        <SelectableCard
           description={
             <span className="flex flex-wrap items-center gap-2">
               <span>{person.role ?? 'Role non defini'}</span>
-              <Badge tone="neutral">{formatHourlyRate(person.defaultHourlyRate)}</Badge>
+              <span className="rounded-full bg-surface-elevated px-2 py-0.5 text-[10px] font-semibold text-muted-foreground">
+                {formatHourlyRate(person.defaultHourlyRate)}
+              </span>
             </span>
           }
           key={person.id}
@@ -33,7 +35,7 @@ export function StepWho({ dispatch, people, state }: StepWhoProps) {
           selected={state.personIds.includes(person.id)}
         >
           {person.name}
-        </Card>
+        </SelectableCard>
       ))}
     </div>
   )

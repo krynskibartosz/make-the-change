@@ -2,7 +2,7 @@
 
 import type { Dispatch } from 'react'
 
-import { Card as ChoiceCard } from "@/components/ui"
+import { SelectableCard } from '@/components/ui'
 import type { Phase, Zone } from '@/lib/domain'
 
 import type { AddInterventionAction } from './reducer'
@@ -18,27 +18,27 @@ export type StepWhereProps = Readonly<{
 export function StepWhere({ dispatch, phases, state, zones }: StepWhereProps) {
   return (
     <div className="grid gap-6">
-      <ChoiceCard
+      <SelectableCard
         description="La zone et la phase seront marquees a verifier."
         onClick={() => dispatch({ type: 'setLocationToDefine', value: !state.locationToDefine })}
         selected={state.locationToDefine}
       >
         A definir
-      </ChoiceCard>
+      </SelectableCard>
 
       <fieldset className="grid gap-3" disabled={state.locationToDefine}>
         <legend className="text-sm font-semibold text-muted-foreground">Zone</legend>
         <div className="grid gap-2">
           {zones.map((zone) => (
-            <ChoiceCard
-              
+            <SelectableCard
+              description={getZoneDescription(zone)}
               disabled={state.locationToDefine}
               key={zone.id}
               onClick={() => dispatch({ type: 'setZone', zoneId: zone.id })}
               selected={state.zoneId === zone.id}
             >
               {zone.name}
-            </ChoiceCard>
+            </SelectableCard>
           ))}
         </div>
       </fieldset>
@@ -47,15 +47,15 @@ export function StepWhere({ dispatch, phases, state, zones }: StepWhereProps) {
         <legend className="text-sm font-semibold text-muted-foreground">Phase</legend>
         <div className="grid gap-2">
           {phases.map((phase) => (
-            <ChoiceCard
-              
+            <SelectableCard
+              description={phase.description}
               disabled={state.locationToDefine}
               key={phase.id}
               onClick={() => dispatch({ type: 'setPhase', phaseId: phase.id })}
               selected={state.phaseId === phase.id}
             >
               {phase.name}
-            </ChoiceCard>
+            </SelectableCard>
           ))}
         </div>
       </fieldset>

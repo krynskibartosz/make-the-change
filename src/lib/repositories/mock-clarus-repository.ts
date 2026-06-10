@@ -43,9 +43,7 @@ export const createMockClarusRepository = (): ClarusRepository => {
   let tasks: Task[] = [...mockTasks] as Task[]
   let expenses: Expense[] = [...mockExpenses] as Expense[]
   let materialMovements: MaterialMovement[] = [...mockMaterialMovements] as MaterialMovement[]
-  const _photos = mockPhotos.map(clonePhoto)
   const people = mockPeople.map(clonePerson)
-  const _draftSequence = 0
 
   return {
     getProject: async () => mockProject,
@@ -65,8 +63,16 @@ export const createMockClarusRepository = (): ClarusRepository => {
     updatePerson: async (id: string, input: UpdatePersonInput) => {
       const idx = people.findIndex((p) => p.id === id)
       if (idx === -1) throw new Error('Person not found')
-      const person = people[idx]
-      const updated: Person = { ...person!, ...input, id: person!.id, projectId: person!.projectId, name: input.name || person!.name, defaultHourlyRate: input.defaultHourlyRate ?? person!.defaultHourlyRate, active: input.active ?? person!.active }
+      const person = people[idx]!
+      const updated: Person = {
+        ...person,
+        ...input,
+        id: person.id,
+        projectId: person.projectId,
+        name: input.name ?? person.name,
+        defaultHourlyRate: input.defaultHourlyRate ?? person.defaultHourlyRate,
+        active: input.active ?? person.active,
+      }
       people[idx] = updated
       return clonePerson(updated)
     },
@@ -93,7 +99,7 @@ export const createMockClarusRepository = (): ClarusRepository => {
     createTask: async (input: CreateTaskInput) => {
       const now = new Date().toISOString()
       const task: Task = {
-        id: `task-${Date.now()}`,
+        id: `task-${crypto.randomUUID()}`,
         projectId: input.projectId,
         interventionId: input.interventionId,
         phaseId: input.phaseId,
@@ -118,7 +124,7 @@ export const createMockClarusRepository = (): ClarusRepository => {
     },
     createExpense: async (input: CreateExpenseInput) => {
       const expense: Expense = {
-        id: `expense-${Date.now()}`,
+        id: `expense-${crypto.randomUUID()}`,
         projectId: input.projectId,
         interventionId: input.interventionId,
         materialMovementId: input.materialMovementId,
@@ -135,7 +141,7 @@ export const createMockClarusRepository = (): ClarusRepository => {
     },
     createMaterialMovement: async (input: CreateMaterialMovementInput) => {
       const movement: MaterialMovement = {
-        id: `movement-${Date.now()}`,
+        id: `movement-${crypto.randomUUID()}`,
         projectId: input.projectId,
         materialId: input.materialId,
         interventionId: input.interventionId,

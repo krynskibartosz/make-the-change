@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { mockPeople, mockProject } from '@/lib/mock'
 import { createDraftInputFromState } from './draft'
 import { createInitialAddInterventionState } from './reducer'
+import type { AddInterventionStatusState } from './types'
 
 describe('createDraftInputFromState', () => {
   it('maps a complete wizard state to repository input', () => {
@@ -61,7 +62,8 @@ describe('createDraftInputFromState', () => {
         who: { personIds: ['person-hubert'] },
         status: {
           isExtra: true,
-          
+          billingStatus: 'to_check',
+          paymentStatus: 'not_applicable',
         },
       },
     })
@@ -112,7 +114,7 @@ describe('createDraftInputFromState', () => {
           locationToDefine: false,
         },
         who: { personIds: [] },
-        status: { isExtra: true },
+        status: { isExtra: true, billingStatus: 'to_check', paymentStatus: 'not_applicable' },
       },
     })
 
@@ -134,7 +136,7 @@ describe('createDraftInputFromState', () => {
           locationToDefine: false,
         },
         who: { personIds: ['person-hubert'] },
-        status: { isExtra: 'to_check' as any },
+        status: { isExtra: 'to_check' as AddInterventionStatusState['isExtra'], billingStatus: 'to_check', paymentStatus: 'to_check' },
       },
     })
 
