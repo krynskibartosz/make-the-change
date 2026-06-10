@@ -73,7 +73,8 @@ export function SmartPlanClient({ plan }: { plan: Plan }) {
               { label: 'Pins', value: 'pins' },
             ]}
             value={mode}
-            onChange={(val) => setMode(val as PlanMode)}
+            onValueChange={(val) => setMode(val as PlanMode)}
+            ariaLabel="Plan mode"
           />
         </div>
       </div>
