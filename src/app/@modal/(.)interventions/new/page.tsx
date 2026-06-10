@@ -8,7 +8,7 @@ export default function NewInterventionModalPage() {
 
   return (
     <InterceptedRouteDialog>
-      <FullScreenSlideModal title="Ajouter intervention">
+      <FullScreenSlideModal title="Nouveau travail">
         <AddInterventionFlow today={today} />
       </FullScreenSlideModal>
     </InterceptedRouteDialog>

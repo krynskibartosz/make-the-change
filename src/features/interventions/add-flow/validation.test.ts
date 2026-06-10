@@ -14,7 +14,7 @@ describe('validateAddInterventionState', () => {
 
     expect(result.canSave).toBe(false)
     expect(result.blockingMessages).toEqual([
-      'Choisis un type d intervention.',
+      'Choisis un type de travail.',
       'Ajoute un titre court.',
       'Choisis une date.',
     ])

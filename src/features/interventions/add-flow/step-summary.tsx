@@ -1,12 +1,15 @@
 'use client'
 
-import { Badge, InfoRow } from '@/components/ui'
+import { Badge } from '@/components/ui'
 import { calculateWorkEntryAmount, calculateWorkEntryDuration } from '@/lib/calculations'
 import type { Person, Phase, Zone } from '@/lib/domain'
-import type { AddInterventionState, AddInterventionStatusState } from './types'
+import type { Dispatch } from 'react'
+import type { AddInterventionAction } from './reducer'
+import type { AddInterventionState, SimplifiedStatus } from './types'
 import type { AddInterventionValidation } from './validation'
 
 export type StepSummaryProps = Readonly<{
+  dispatch: Dispatch<AddInterventionAction>
   people: Person[]
   phases: Phase[]
   state: AddInterventionState
@@ -14,99 +17,124 @@ export type StepSummaryProps = Readonly<{
   zones: Zone[]
 }>
 
-export function StepSummary({ people, phases, state, validation, zones }: StepSummaryProps) {
-  const selectedPeople = people.filter((person) => state.who.personIds.includes(person.id))
-  const zone = zones.find((candidate) => candidate.id === state.where.zoneId)
-  const phase = phases.find((candidate) => candidate.id === state.where.phaseId)
-  const preview = calculateSummaryPreview(state, selectedPeople)
+const STATUS_OPTIONS: { value: SimplifiedStatus; label: string; description: string }[] = [
+  { value: 'inclus', label: 'Inclus chantier', description: 'Prévu dans le devis' },
+  { value: 'to_check', label: 'À vérifier', description: 'Incertain, à valider' },
+  { value: 'extra', label: 'Supplément probable', description: 'Hors devis, à confirmer' },
+  { value: 'blocked', label: 'Bloquant / Urgent', description: 'Point critique' },
+]
+
+export function StepSummary({ dispatch, people, phases, state, validation, zones }: StepSummaryProps) {
+  const selectedPeople = people.filter((p) => state.form.personIds.includes(p.id))
+  const zone = zones.find((z) => z.id === state.form.zoneId)
+  const phase = phases.find((p) => p.id === state.form.phaseId)
   const warnings = [...validation.blockingMessages, ...validation.warningMessages]
+
+  let costText = '—'
+  try {
+    const durationMinutes = calculateWorkEntryDuration({
+      startTime: state.form.startTime,
+      endTime: state.form.endTime,
+      breakMinutes: state.form.breakMinutes,
+    })
+    const hours = Math.floor(durationMinutes / 60)
+    const mins = durationMinutes % 60
+    const durationStr = mins === 0 ? `${hours}h` : `${hours}h${mins}`
+    const totalAmount = selectedPeople.reduce(
+      (total, person) =>
+        total + calculateWorkEntryAmount({ durationMinutes, hourlyRate: person.defaultHourlyRate }),
+      0,
+    )
+    if (selectedPeople.length > 1) {
+      costText = `${selectedPeople.length} pers × ${durationStr} = ${totalAmount.toFixed(0)} €`
+    } else {
+      costText = `${durationStr} — ${totalAmount.toFixed(0)} €`
+    }
+  } catch {
+    costText = 'Horaires à vérifier'
+  }
 
   return (
     <div className="grid gap-5">
+      {/* Validation badges */}
       <div className="flex flex-wrap items-center gap-2">
-        {validation.shouldMarkToCheck ? <Badge tone="warning">A verifier</Badge> : null}
         {validation.canSave ? (
-          <Badge tone="success">Pret</Badge>
+          <Badge tone="success">Prêt à enregistrer</Badge>
         ) : (
           <Badge tone="danger">Incomplet</Badge>
         )}
+        {validation.shouldMarkToCheck && <Badge tone="warning">À vérifier</Badge>}
       </div>
 
-      <div className="grid gap-1 rounded-[var(--radius-card)] border border-border bg-surface px-4 py-2">
-        <InfoRow label="Titre" value={state.what.title.trim() || 'Sans titre'} />
-        <InfoRow label="Type" value={state.what.type ?? 'A choisir'} />
-        <InfoRow
+      {/* Summary rows */}
+      <div className="overflow-hidden rounded-[var(--radius-card)] border border-border bg-surface">
+        <SummaryRow label="Type" value={state.form.type ?? 'À choisir'} />
+        <SummaryRow label="Titre" value={state.form.title.trim() || 'Sans titre'} />
+        <SummaryRow
           label="Zone"
-          value={state.where.locationToDefine ? 'A definir' : (zone?.name ?? 'A definir')}
+          value={state.form.locationToDefine ? 'À définir' : (zone?.name ?? 'À définir')}
         />
-        <InfoRow
-          label="Phase"
-          value={state.where.locationToDefine ? 'A definir' : (phase?.name ?? 'A definir')}
+        {phase && <SummaryRow label="Phase" value={phase.name} />}
+        <SummaryRow
+          label="Personnes"
+          value={selectedPeople.length > 0 ? selectedPeople.map((p) => p.name).join(', ') : 'À vérifier'}
         />
-        <InfoRow label="Personnes" value={formatPeople(selectedPeople)} />
-        <InfoRow label="Date" value={state.when.date || 'A choisir'} />
-        <InfoRow label="Heures" value={`${state.when.startTime} - ${state.when.endTime}`} />
-        <InfoRow
-          label="Pause / jours"
-          value={`${state.when.breakMinutes} min / ${state.when.days} j`}
-        />
-        <InfoRow label="Montant" value={preview} />
-        <InfoRow label="Statut" value={formatStatus(state.status)} />
+        <SummaryRow label="Date" value={state.form.date || 'À choisir'} />
+        <SummaryRow label="Horaires" value={`${state.form.startTime} – ${state.form.endTime}`} />
+        <SummaryRow label="Pause" value={`${state.form.breakMinutes} min`} last />
       </div>
 
-      {warnings.length > 0 ? (
-        <div className="grid gap-2 rounded-[var(--radius-card)] border border-warning/30 bg-warning/10 px-4 py-3">
-          <p className="text-sm font-semibold text-foreground">Points a verifier</p>
+      {/* Cost highlight */}
+      <div className="flex items-center justify-between rounded-xl border border-primary/20 bg-primary/5 px-4 py-3">
+        <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Coût estimé</span>
+        <span className="text-base font-bold text-primary">{costText}</span>
+      </div>
+
+      {/* Status selection */}
+      <section className="grid gap-3">
+        <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Statut</p>
+        <div className="grid gap-2">
+          {STATUS_OPTIONS.map((option) => (
+            <button
+              key={option.value}
+              onClick={() => dispatch({ type: 'setStatus', status: option.value })}
+              className={`flex flex-col items-start rounded-xl border px-4 py-3 text-left transition-colors ${
+                state.status.simplified === option.value
+                  ? option.value === 'blocked'
+                    ? 'border-danger/50 bg-danger/10 text-danger'
+                    : option.value === 'extra'
+                    ? 'border-warning/50 bg-warning/10 text-warning'
+                    : 'border-primary bg-primary/10 text-primary'
+                  : 'border-border bg-surface text-foreground hover:bg-surface-elevated'
+              }`}
+            >
+              <span className="text-sm font-bold">{option.label}</span>
+              <span className="text-xs font-normal text-muted-foreground">{option.description}</span>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {/* Warnings */}
+      {warnings.length > 0 && (
+        <div className="rounded-[var(--radius-card)] border border-warning/30 bg-warning/10 px-4 py-3">
+          <p className="mb-1.5 text-sm font-bold text-foreground">À compléter avant d'enregistrer :</p>
           <ul className="grid gap-1 text-sm text-muted-foreground">
-            {warnings.map((warning) => (
-              <li key={warning}>{warning}</li>
+            {warnings.map((w) => (
+              <li key={w}>• {w}</li>
             ))}
           </ul>
         </div>
-      ) : null}
+      )}
     </div>
   )
 }
 
-const calculateSummaryPreview = (state: AddInterventionState, selectedPeople: Person[]): string => {
-  try {
-    const durationMinutes = calculateWorkEntryDuration(state.when)
-    const amount = selectedPeople.reduce(
-      (total, person) =>
-        total +
-        calculateWorkEntryAmount({
-          durationMinutes,
-          hourlyRate: person.defaultHourlyRate,
-        }),
-      0,
-    )
-
-    return `${amount.toFixed(2)} EUR`
-  } catch {
-    return 'Horaires a verifier'
-  }
-}
-
-const formatPeople = (people: Person[]): string => {
-  if (people.length === 0) {
-    return 'A verifier'
-  }
-
-  return people.map((person) => person.name).join(', ')
-}
-
-const formatStatus = (status: AddInterventionStatusState): string => {
-  if (status.isExtra === 'to_check') {
-    return 'A verifier'
-  }
-
-  if (status.billingStatus === 'paid' || status.paymentStatus === 'paid') {
-    return 'Paye'
-  }
-
-  if (status.billingStatus === 'to_invoice') {
-    return status.isExtra ? 'Supplement - a facturer' : 'A facturer'
-  }
-
-  return status.isExtra ? 'Supplement' : 'Inclus chantier'
+function SummaryRow({ label, value, last }: { label: string; value: string; last?: boolean }) {
+  return (
+    <div className={`flex items-start justify-between px-4 py-2.5 ${!last ? 'border-b border-border' : ''}`}>
+      <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</span>
+      <span className="max-w-[60%] text-right text-sm font-semibold text-foreground">{value}</span>
+    </div>
+  )
 }

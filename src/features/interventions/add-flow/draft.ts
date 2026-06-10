@@ -15,28 +15,34 @@ export const createDraftInputFromState = ({
 }: CreateDraftInputFromStateInput): CreateInterventionDraftInput => {
   const validation = validateAddInterventionState(state)
 
-  if (!validation.canSave || state.what.type === null) {
+  if (!validation.canSave || state.form.type === null) {
     throw new Error(validation.blockingMessages.join(' '))
   }
 
-  const note = state.what.note.trim()
+  const note = state.form.note.trim()
+
+  let isExtra: boolean | 'to_check' = false
+  if (state.status.simplified === 'extra') {
+    isExtra = true
+  } else if (state.status.simplified === 'to_check') {
+    isExtra = 'to_check'
+  }
 
   return {
     projectId: project.id,
-    title: state.what.title.trim(),
+    title: state.form.title.trim(),
     description: note === '' ? undefined : note,
-    type: state.what.type,
-    date: state.when.date.trim(),
-    phaseId: state.where.locationToDefine ? null : state.where.phaseId,
-    zoneId: state.where.locationToDefine ? null : state.where.zoneId,
-    personIds: state.who.personIds,
-    startTime: state.when.startTime,
-    endTime: state.when.endTime,
-    breakMinutes: state.when.breakMinutes,
-    days: state.when.days,
+    type: state.form.type,
+    date: state.form.date.trim(),
+    phaseId: state.form.locationToDefine ? null : state.form.phaseId,
+    zoneId: state.form.locationToDefine ? null : state.form.zoneId,
+    personIds: state.form.personIds,
+    startTime: state.form.startTime,
+    endTime: state.form.endTime,
+    breakMinutes: state.form.breakMinutes,
+    days: state.form.days,
     hourlyRate: getDefaultHourlyRate(people),
-    isExtra: state.status.isExtra,
-
+    isExtra: isExtra,
     notes: note === '' ? undefined : note,
   }
 }

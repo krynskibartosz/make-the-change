@@ -58,13 +58,19 @@ export default function CostsPage() {
   return (
     <Screen title="Coûts du chantier" backHref="/menu">
       <div className="flex flex-col gap-6">
-        
+
+        {/* Bannière rôle admin */}
+        <div className="flex items-center gap-2 rounded-xl border border-border bg-surface px-4 py-2.5 text-xs text-muted-foreground">
+          <span className="text-base">🔒</span>
+          Vue réservée à l'équipe de gestion du chantier.
+        </div>
+
         {/* Résumé Global */}
         <section>
           <div className="bg-surface rounded-2xl border border-border p-5 shadow-sm mb-4">
             <h2 className="text-sm font-semibold text-muted-foreground mb-1">Coût total du chantier</h2>
             <div className="text-3xl font-bold text-foreground">
-              {dashboard.totalCost.toLocaleString('fr-FR')} €
+              {dashboard.totalCost.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €
             </div>
             
             {/* Barre de répartition */}
@@ -93,13 +99,13 @@ export default function CostsPage() {
           <div className="grid grid-cols-2 gap-3">
             <MetricCard
               label="Main d'œuvre"
-              value={`${dashboard.laborAmount.toLocaleString('fr-FR')} €`}
+              value={`${dashboard.laborAmount.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`}
               icon={HardHat}
               helper="Coût estimé des heures prestées"
             />
             <MetricCard
               label="Dépenses directes"
-              value={`${dashboard.expensesAmount.toLocaleString('fr-FR')} €`}
+              value={`${dashboard.expensesAmount.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`}
               icon={ShoppingCart}
               helper="Achats et matériaux"
             />
@@ -117,7 +123,7 @@ export default function CostsPage() {
                 <Receipt className="size-5" />
               </div>
               <div>
-                <h3 className="font-semibold text-foreground">Facturation en attente</h3>
+                <h3 className="font-semibold text-foreground">Suppléments / Travaux à facturer</h3>
                 <p className="text-sm font-medium text-emerald-500 mt-0.5">
                   {dashboard.pendingBillableAmount > 0 
                     ? `${dashboard.pendingBillableAmount.toLocaleString('fr-FR')} € à facturer` 

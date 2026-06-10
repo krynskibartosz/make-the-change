@@ -181,7 +181,7 @@ export function TodayView({ summary }: { summary: TodaySummary }) {
 
       {summary.latestInterventions.length === 0 && (
         <p className="py-8 text-center text-sm text-muted-foreground">
-          Aucune intervention enregistrée aujourd'hui.
+          Aucun travail enregistré aujourd'hui.
         </p>
       )}
     </div>

@@ -5,7 +5,7 @@ export type ValidationResult = {
   errors: string[]
 }
 
-export function validateStepQuoi(state: ExpenseAddFlowState['quoi']): ValidationResult {
+export function validateStepReceiptAndInfo(state: ExpenseAddFlowState['receiptAndInfo']): ValidationResult {
   const errors: string[] = []
   if (!state.titre.trim()) errors.push('Le titre est requis.')
   if (!state.montant.trim()) errors.push('Le montant est requis.')
@@ -19,27 +19,16 @@ export function validateStepQuoi(state: ExpenseAddFlowState['quoi']): Validation
   }
 }
 
-export function validateStepPreuve(_state: ExpenseAddFlowState['preuve']): ValidationResult {
+export function validateStepLinkToProject(state: ExpenseAddFlowState['linkToProject']): ValidationResult {
   const errors: string[] = []
-  // Preuve might be optional or "to_check", but let's make it optional for now or just warn
-  return {
-    isValid: errors.length === 0,
-    errors,
+  if (state.linkType === 'zone' && !state.zoneId) {
+    errors.push('Veuillez sélectionner une zone.')
   }
-}
-
-export function validateStepImputation(state: ExpenseAddFlowState['imputation']): ValidationResult {
-  const errors: string[] = []
-  // At least one imputation is typically required
-  if (!state.zonePhaseId && !state.interventionId) {
-    errors.push('Veuillez sélectionner une zone/phase ou une intervention.')
+  if (state.linkType === 'intervention' && !state.interventionId) {
+    errors.push('Veuillez sélectionner un travail.')
   }
   return {
     isValid: errors.length === 0,
     errors,
   }
-}
-
-export function validateStepStatut(_state: ExpenseAddFlowState['statut']): ValidationResult {
-  return { isValid: true, errors: [] }
 }

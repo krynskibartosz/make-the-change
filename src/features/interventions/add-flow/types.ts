@@ -1,24 +1,15 @@
 import type { BillingStatus, InterventionType, PaymentStatus } from '@/lib/domain'
 
-export type AddInterventionStepId = 'what' | 'where' | 'who' | 'when' | 'status' | 'summary'
+export type AddInterventionStepId = 'quick_form' | 'summary'
 
-export type AddInterventionWhatState = {
+export type AddInterventionFormState = {
   type: InterventionType | null
   title: string
   note: string
-}
-
-export type AddInterventionWhereState = {
   phaseId: string | null
   zoneId: string | null
   locationToDefine: boolean
-}
-
-export type AddInterventionWhoState = {
   personIds: string[]
-}
-
-export type AddInterventionWhenState = {
   date: string
   startTime: string
   endTime: string
@@ -26,18 +17,15 @@ export type AddInterventionWhenState = {
   days: number
 }
 
+export type SimplifiedStatus = 'inclus' | 'to_check' | 'extra' | 'blocked'
+
 export type AddInterventionStatusState = {
-  isExtra: boolean | 'to_check'
-  billingStatus: BillingStatus
-  paymentStatus: PaymentStatus
+  simplified: SimplifiedStatus
 }
 
 export type AddInterventionState = {
   currentStep: AddInterventionStepId
-  what: AddInterventionWhatState
-  where: AddInterventionWhereState
-  who: AddInterventionWhoState
-  when: AddInterventionWhenState
+  form: AddInterventionFormState
   status: AddInterventionStatusState
   saveState: 'idle' | 'saving' | 'saved' | 'error'
   saveError: string | null

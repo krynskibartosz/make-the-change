@@ -29,9 +29,9 @@ export function ZoneRowCard({
   const hasActivity = tasksCount > 0 || interventionsCount > 0
 
   return (
-    <Card className="group relative overflow-hidden flex flex-col p-4 bg-surface hover:bg-surface-elevated transition-colors mb-2 cursor-pointer border-border/50">
+    <Card className="group relative overflow-hidden flex flex-col p-5 bg-surface hover:bg-surface-elevated transition-colors mb-3 cursor-pointer border-border/50">
       <div className="flex items-start justify-between w-full">
-        <div className="flex items-start gap-3">
+        <div className="flex items-start gap-4">
           {/* Dot Status */}
           <div className="mt-1.5 flex h-3 w-3 shrink-0 items-center justify-center rounded-full">
             <span
@@ -39,22 +39,22 @@ export function ZoneRowCard({
             />
           </div>
 
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1.5">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-medium text-foreground">
+              <span className="text-base font-bold text-foreground">
                 {isTechnical && technicalCode ? `${technicalCode} — ` : ''}
                 {name}
               </span>
               {isSensible && (
-                <Badge tone="danger" className="h-5 px-1.5 text-[10px] uppercase gap-1">
-                  <AlertTriangle className="size-3" />
+                <Badge tone="danger" className="h-6 px-2 text-xs uppercase gap-1">
+                  <AlertTriangle className="size-3.5" />
                   Sensible
                 </Badge>
               )}
             </div>
 
             {/* Activity Summary */}
-            <div className="flex items-center gap-3 text-xs text-muted-foreground mt-0.5">
+            <div className="flex items-center gap-3 text-sm font-medium text-muted-foreground mt-0.5">
               {!hasActivity ? (
                 <span>Aucune activité</span>
               ) : (

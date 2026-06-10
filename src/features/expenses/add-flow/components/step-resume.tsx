@@ -1,5 +1,9 @@
+'use client'
+
 import type React from 'react'
-import { Button } from '@/components/ui/button'
+import { ChevronLeft, CheckCircle2 } from 'lucide-react'
+import { Button, StickyActionBar } from '@/components/ui'
+import { mockZones, mockInterventions } from '@/lib/mock'
 import type { ExpenseAddFlowAction, ExpenseAddFlowState } from '../types'
 
 type Props = {
@@ -9,7 +13,7 @@ type Props = {
 }
 
 export function StepResume({ state, dispatch, onSave }: Props) {
-  const { quoi, preuve, imputation, statut } = state
+  const { receiptAndInfo, linkToProject } = state
 
   const handlePrev = () => {
     dispatch({ type: 'PREV_STEP' })
@@ -19,43 +23,68 @@ export function StepResume({ state, dispatch, onSave }: Props) {
     onSave(state)
   }
 
+  const getLinkText = () => {
+    if (linkToProject.linkType === 'project') return 'Tout le chantier'
+    if (linkToProject.linkType === 'zone') {
+      const zone = mockZones.find((z) => z.id === linkToProject.zoneId)
+      return zone?.name ?? 'Zone non sélectionnée'
+    }
+    if (linkToProject.linkType === 'intervention') {
+      const inter = mockInterventions.find((i) => i.id === linkToProject.interventionId)
+      return inter?.title ?? 'Travail non sélectionné'
+    }
+    return 'Non défini'
+  }
+
+  const montantFormatted = (() => {
+    const val = Number.parseFloat(receiptAndInfo.montant)
+    if (Number.isNaN(val)) return receiptAndInfo.montant
+    return `${val.toFixed(2).replace('.', ',')} €`
+  })()
+
   return (
-    <div className="flex flex-col gap-4">
-      <h2 className="text-lg font-bold">5. Résumé</h2>
-
-      <div className="flex flex-col gap-2 p-4 border rounded bg-surface">
-        <div>
-          <strong>Titre:</strong> {quoi.titre}
-        </div>
-        <div>
-          <strong>Montant:</strong> {quoi.montant} €
-        </div>
-        <div>
-          <strong>Fournisseur:</strong> {quoi.fournisseur}
-        </div>
-        <hr className="my-2" />
-        <div>
-          <strong>Preuve:</strong> {preuve.photoUrl ? 'Photo jointe' : 'Aucune photo'}
-        </div>
-        <hr className="my-2" />
-        <div>
-          <strong>Zone/Phase:</strong> {imputation.zonePhaseId || 'N/A'}
-        </div>
-        <div>
-          <strong>Intervention:</strong> {imputation.interventionId || 'N/A'}
-        </div>
-        <hr className="my-2" />
-        <div>
-          <strong>Refacturable:</strong> {statut.isRebillable ? 'Oui' : 'Non'}
-        </div>
+    <div className="flex flex-col gap-5 pb-28">
+      {/* Confirmation badge */}
+      <div className="flex items-center gap-2 rounded-xl border border-success/40 bg-success/10 px-4 py-3">
+        <CheckCircle2 className="size-5 shrink-0 text-success" />
+        <p className="text-sm font-bold text-success">Prêt à enregistrer</p>
       </div>
 
-      <div className="mt-4 flex justify-between">
-        <Button variant="secondary" onClick={handlePrev}>
-          Précédent
-        </Button>
-        <Button onClick={handleSave}>Sauvegarder</Button>
+      {/* Summary */}
+      <div className="overflow-hidden rounded-[var(--radius-card)] border border-border bg-surface">
+        <SummaryRow label="Article" value={receiptAndInfo.titre || '—'} />
+        <SummaryRow label="Montant" value={montantFormatted} highlight />
+        <SummaryRow label="Fournisseur" value={receiptAndInfo.fournisseur || '—'} />
+        <SummaryRow label="Preuve" value={receiptAndInfo.photoUrl ? 'Photo jointe ✓' : 'Aucune photo'} />
+        <SummaryRow label="Concerne" value={getLinkText()} />
+        {linkToProject.isRebillable && <SummaryRow label="Supplément" value="À refacturer au client" />}
+        {linkToProject.isToCheck && <SummaryRow label="Statut" value="À vérifier" last />}
+        {!linkToProject.isRebillable && !linkToProject.isToCheck && (
+          <SummaryRow label="Statut" value="Inclus chantier" last />
+        )}
       </div>
+
+      <StickyActionBar
+        primaryAction={
+          <Button fullWidth onClick={handleSave} leftIcon={<CheckCircle2 className="size-4" />}>
+            Enregistrer la dépense
+          </Button>
+        }
+        secondaryAction={
+          <Button variant="secondary" onClick={handlePrev} leftIcon={<ChevronLeft className="size-4" />}>
+            Retour
+          </Button>
+        }
+      />
+    </div>
+  )
+}
+
+function SummaryRow({ label, value, highlight, last }: { label: string; value: string; highlight?: boolean; last?: boolean }) {
+  return (
+    <div className={`flex items-start justify-between px-4 py-2.5 ${!last ? 'border-b border-border' : ''}`}>
+      <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</span>
+      <span className={`max-w-[60%] text-right text-sm font-semibold ${highlight ? 'text-primary' : 'text-foreground'}`}>{value}</span>
     </div>
   )
 }

@@ -15,34 +15,38 @@ export const validateAddInterventionState = (
   const blockingMessages: string[] = []
   const warningMessages: string[] = []
 
-  if (state.what.type === null) {
-    blockingMessages.push('Choisis un type d intervention.')
+  if (state.form.type === null) {
+    blockingMessages.push('Choisis un type de travail.')
   }
 
-  if (state.what.title.trim() === '') {
+  if (state.form.title.trim() === '') {
     blockingMessages.push('Ajoute un titre court.')
   }
 
-  if (state.when.date.trim() === '') {
+  if (state.form.date.trim() === '') {
     blockingMessages.push('Choisis une date.')
   }
 
   try {
-    calculateWorkEntryDuration(state.when)
+    calculateWorkEntryDuration({
+      startTime: state.form.startTime,
+      endTime: state.form.endTime,
+      breakMinutes: state.form.breakMinutes,
+    })
   } catch {
-    blockingMessages.push('Verifie les horaires.')
+    blockingMessages.push('Vérifie les horaires.')
   }
 
-  if (state.where.locationToDefine || state.where.phaseId === null || state.where.zoneId === null) {
-    warningMessages.push('Zone ou phase a verifier.')
+  if (state.form.locationToDefine || state.form.phaseId === null || state.form.zoneId === null) {
+    warningMessages.push('Zone ou phase à vérifier.')
   }
 
-  if (state.who.personIds.length === 0) {
-    warningMessages.push('Personnes a verifier.')
+  if (state.form.personIds.length === 0) {
+    warningMessages.push('Personnes à vérifier.')
   }
 
-  if (state.status.isExtra === 'to_check') {
-    warningMessages.push('Statut supplement a verifier.')
+  if (state.status.simplified === 'to_check') {
+    warningMessages.push('Statut à vérifier.')
   }
 
   return {

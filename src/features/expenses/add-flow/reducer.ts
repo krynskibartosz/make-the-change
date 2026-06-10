@@ -2,20 +2,18 @@ import type { ExpenseAddFlowAction, ExpenseAddFlowState } from './types'
 
 export const initialExpenseAddFlowState: ExpenseAddFlowState = {
   step: 1,
-  quoi: {
+  receiptAndInfo: {
+    photoUrl: null,
     titre: '',
     montant: '',
     fournisseur: '',
   },
-  preuve: {
-    photoUrl: null,
-  },
-  imputation: {
-    zonePhaseId: null,
+  linkToProject: {
+    linkType: 'project',
+    zoneId: null,
     interventionId: null,
-  },
-  statut: {
     isRebillable: false,
+    isToCheck: false,
   },
 }
 
@@ -25,17 +23,13 @@ export function expenseAddFlowReducer(
 ): ExpenseAddFlowState {
   switch (action.type) {
     case 'NEXT_STEP':
-      return { ...state, step: Math.min(state.step + 1, 5) }
+      return { ...state, step: Math.min(state.step + 1, 3) }
     case 'PREV_STEP':
       return { ...state, step: Math.max(state.step - 1, 1) }
-    case 'SET_QUOI':
-      return { ...state, quoi: { ...state.quoi, ...action.payload } }
-    case 'SET_PREUVE':
-      return { ...state, preuve: { ...state.preuve, ...action.payload } }
-    case 'SET_IMPUTATION':
-      return { ...state, imputation: { ...state.imputation, ...action.payload } }
-    case 'SET_STATUT':
-      return { ...state, statut: { ...state.statut, ...action.payload } }
+    case 'SET_RECEIPT_AND_INFO':
+      return { ...state, receiptAndInfo: { ...state.receiptAndInfo, ...action.payload } }
+    case 'SET_LINK_TO_PROJECT':
+      return { ...state, linkToProject: { ...state.linkToProject, ...action.payload } }
     case 'RESET':
       return initialExpenseAddFlowState
     default:

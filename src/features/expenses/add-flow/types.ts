@@ -1,27 +1,23 @@
 export type ExpenseAddFlowState = {
   step: number
-  quoi: {
+  receiptAndInfo: {
+    photoUrl: string | null
     titre: string
     montant: string
     fournisseur: string
   }
-  preuve: {
-    photoUrl: string | null
-  }
-  imputation: {
-    zonePhaseId: string | null
+  linkToProject: {
+    linkType: 'project' | 'zone' | 'intervention'
+    zoneId: string | null
     interventionId: string | null
-  }
-  statut: {
     isRebillable: boolean
+    isToCheck: boolean
   }
 }
 
 export type ExpenseAddFlowAction =
   | { type: 'NEXT_STEP' }
   | { type: 'PREV_STEP' }
-  | { type: 'SET_QUOI'; payload: Partial<ExpenseAddFlowState['quoi']> }
-  | { type: 'SET_PREUVE'; payload: Partial<ExpenseAddFlowState['preuve']> }
-  | { type: 'SET_IMPUTATION'; payload: Partial<ExpenseAddFlowState['imputation']> }
-  | { type: 'SET_STATUT'; payload: Partial<ExpenseAddFlowState['statut']> }
+  | { type: 'SET_RECEIPT_AND_INFO'; payload: Partial<ExpenseAddFlowState['receiptAndInfo']> }
+  | { type: 'SET_LINK_TO_PROJECT'; payload: Partial<ExpenseAddFlowState['linkToProject']> }
   | { type: 'RESET' }

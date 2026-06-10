@@ -2,7 +2,7 @@
 
 import { Check, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { type Dispatch, useReducer } from 'react'
+import { useReducer } from 'react'
 
 import { Button, StickyActionBar } from '@/components/ui'
 import { mockPeople, mockPhases, mockProject, mockZones } from '@/lib/mock'
@@ -11,17 +11,14 @@ import { mockClarusRepository } from '@/lib/repositories'
 import {
   ADD_INTERVENTION_STEPS,
   type AddInterventionAction,
-  type AddInterventionState,
   createDraftInputFromState,
+  createEditInterventionState,
   reduceAddInterventionState,
-  StepStatus,
+  StepQuickForm,
   StepSummary,
-  StepWhat,
-  StepWhen,
-  StepWhere,
-  StepWho,
   validateAddInterventionState,
 } from '../add-flow'
+import type { AddInterventionState } from '../add-flow/types'
 
 type EditInterventionFlowProps = Readonly<{
   interventionId: string
@@ -60,27 +57,42 @@ export function EditInterventionFlow({ interventionId, initialState }: EditInter
 
   const goPrevious = () => {
     const previous = ADD_INTERVENTION_STEPS[Math.max(stepIndex - 1, 0)]
-
-    if (previous) {
-      dispatch({ type: 'goToStep', step: previous.id })
-    }
+    if (previous) dispatch({ type: 'goToStep', step: previous.id })
   }
 
   const goNext = () => {
     const next = ADD_INTERVENTION_STEPS[Math.min(stepIndex + 1, ADD_INTERVENTION_STEPS.length - 1)]
-
-    if (next) {
-      dispatch({ type: 'goToStep', step: next.id })
-    }
+    if (next) dispatch({ type: 'goToStep', step: next.id })
   }
 
   return (
     <div className="flex flex-1 flex-col gap-5 pb-28">
       <StepProgress currentIndex={stepIndex} />
-      {renderStep({ dispatch, state, validation })}
+
+      {state.currentStep === 'quick_form' && (
+        <StepQuickForm
+          dispatch={dispatch}
+          people={mockPeople}
+          phases={mockPhases}
+          state={state}
+          zones={mockZones}
+        />
+      )}
+
+      {state.currentStep === 'summary' && (
+        <StepSummary
+          dispatch={dispatch}
+          people={mockPeople}
+          phases={mockPhases}
+          state={state}
+          validation={validation}
+          zones={mockZones}
+        />
+      )}
+
       {state.saveState === 'saved' ? (
         <p className="rounded-[var(--radius-card)] border border-success/30 bg-success/10 px-4 py-3 text-sm font-semibold text-success">
-          Modifications enregistrees.
+          Modifications enregistrées.
         </p>
       ) : null}
       {state.saveError ? (
@@ -88,6 +100,7 @@ export function EditInterventionFlow({ interventionId, initialState }: EditInter
           {state.saveError}
         </p>
       ) : null}
+
       <StickyActionBar
         primaryAction={
           state.currentStep === 'summary' ? (
@@ -97,7 +110,7 @@ export function EditInterventionFlow({ interventionId, initialState }: EditInter
               leftIcon={<Check aria-hidden="true" className="size-4" />}
               onClick={saveDraft}
             >
-              {state.saveState === 'saving' ? 'Enregistrement...' : 'Mettre a jour'}
+              {state.saveState === 'saving' ? 'Enregistrement...' : 'Mettre à jour'}
             </Button>
           ) : (
             <Button
@@ -125,51 +138,9 @@ export function EditInterventionFlow({ interventionId, initialState }: EditInter
   )
 }
 
-function renderStep({
-  dispatch,
-  state,
-  validation,
-}: {
-  dispatch: Dispatch<AddInterventionAction>
-  state: AddInterventionState
-  validation: ReturnType<typeof validateAddInterventionState>
-}) {
-  switch (state.currentStep) {
-    case 'what':
-      return <StepWhat dispatch={dispatch} state={state.what} />
-    case 'where':
-      return (
-        <StepWhere dispatch={dispatch} phases={mockPhases} state={state.where} zones={mockZones} />
-      )
-    case 'who':
-      return <StepWho dispatch={dispatch} people={mockPeople} state={state.who} />
-    case 'when':
-      return (
-        <StepWhen
-          dispatch={dispatch}
-          people={mockPeople}
-          selectedPersonIds={state.who.personIds}
-          state={state.when}
-        />
-      )
-    case 'status':
-      return <StepStatus dispatch={dispatch} state={state.status} />
-    case 'summary':
-      return (
-        <StepSummary
-          people={mockPeople}
-          phases={mockPhases}
-          state={state}
-          validation={validation}
-          zones={mockZones}
-        />
-      )
-  }
-}
-
 function StepProgress({ currentIndex }: { currentIndex: number }) {
   return (
-    <section aria-label="Progression ajout intervention" className="grid gap-2">
+    <section aria-label="Progression édition" className="grid gap-2">
       <div className="flex gap-1">
         {ADD_INTERVENTION_STEPS.map((step, index) => (
           <span
@@ -183,7 +154,7 @@ function StepProgress({ currentIndex }: { currentIndex: number }) {
         ))}
       </div>
       <p className="text-sm font-semibold text-muted-foreground">
-        {ADD_INTERVENTION_STEPS[currentIndex]?.label ?? 'Editer'}
+        {ADD_INTERVENTION_STEPS[currentIndex]?.label ?? 'Éditer'}
       </p>
     </section>
   )

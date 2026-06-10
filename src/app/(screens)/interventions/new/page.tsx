@@ -6,7 +6,7 @@ export default function NewInterventionPage() {
   const today = format(new Date(), 'yyyy-MM-dd')
 
   return (
-    <FullScreenSlideModal asPage headerMode="back" title="Ajouter intervention">
+    <FullScreenSlideModal asPage headerMode="back" title="Nouveau travail">
       <AddInterventionFlow today={today} />
     </FullScreenSlideModal>
   )

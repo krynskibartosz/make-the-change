@@ -7,11 +7,7 @@ export {
   createInitialAddInterventionState,
   reduceAddInterventionState,
 } from './reducer'
-export * from './step-status'
+export * from './step-quick-form'
 export * from './step-summary'
-export * from './step-what'
-export * from './step-when'
-export * from './step-where'
-export * from './step-who'
 export type * from './types'
 export * from './validation'

@@ -1,9 +1,5 @@
 import type { Intervention, WorkEntry } from '@/lib/domain'
-import type {
-  AddInterventionState,
-  AddInterventionStatusState,
-  AddInterventionStepId,
-} from './types'
+import type { AddInterventionState, AddInterventionStepId, SimplifiedStatus } from './types'
 
 type CreateInitialStateInput = {
   today: string
@@ -11,23 +7,8 @@ type CreateInitialStateInput = {
 
 export type AddInterventionAction =
   | { type: 'goToStep'; step: AddInterventionStepId }
-  | {
-      type: 'selectType'
-      interventionType: NonNullable<AddInterventionState['what']['type']>
-      defaultTitle: string
-    }
-  | { type: 'setTitle'; title: string }
-  | { type: 'setNote'; note: string }
-  | { type: 'setPhase'; phaseId: string | null }
-  | { type: 'setZone'; zoneId: string | null }
-  | { type: 'setLocationToDefine'; value: boolean }
-  | { type: 'togglePerson'; personId: string }
-  | { type: 'setDate'; date: string }
-  | { type: 'setStartTime'; startTime: string }
-  | { type: 'setEndTime'; endTime: string }
-  | { type: 'setBreakMinutes'; breakMinutes: number }
-  | { type: 'setDays'; days: number }
-  | { type: 'setStatus'; status: AddInterventionStatusState }
+  | { type: 'updateForm'; payload: Partial<AddInterventionState['form']> }
+  | { type: 'setStatus'; status: SimplifiedStatus }
   | {
       type: 'setSaveState'
       saveState: AddInterventionState['saveState']
@@ -37,21 +18,15 @@ export type AddInterventionAction =
 export const createInitialAddInterventionState = ({
   today,
 }: CreateInitialStateInput): AddInterventionState => ({
-  currentStep: 'what',
-  what: {
+  currentStep: 'quick_form',
+  form: {
     type: null,
     title: '',
     note: '',
-  },
-  where: {
     phaseId: null,
     zoneId: null,
     locationToDefine: false,
-  },
-  who: {
     personIds: [],
-  },
-  when: {
     date: today,
     startTime: '08:00',
     endTime: '18:30',
@@ -59,9 +34,7 @@ export const createInitialAddInterventionState = ({
     days: 1,
   },
   status: {
-    isExtra: false,
-    billingStatus: 'not_billable',
-    paymentStatus: 'not_applicable',
+    simplified: 'inclus',
   },
   saveState: 'idle',
   saveError: null,
@@ -72,22 +45,26 @@ export const createEditInterventionState = (
   workEntries: WorkEntry[],
 ): AddInterventionState => {
   const firstWe = workEntries[0]
+  
+  let simplifiedStatus: SimplifiedStatus = 'inclus'
+  if (intervention.status === 'blocked') {
+    simplifiedStatus = 'blocked'
+  } else if (intervention.isExtra === true) {
+    simplifiedStatus = 'extra'
+  } else if (intervention.isExtra === 'to_check') {
+    simplifiedStatus = 'to_check'
+  }
+
   return {
     currentStep: 'summary',
-    what: {
+    form: {
       type: intervention.type,
       title: intervention.title,
       note: intervention.sourceNote ?? '',
-    },
-    where: {
       phaseId: intervention.phaseId,
       zoneId: intervention.zoneId,
       locationToDefine: false,
-    },
-    who: {
       personIds: workEntries.map((we) => we.personId),
-    },
-    when: {
       date: intervention.date,
       startTime: firstWe?.startTime ?? '08:00',
       endTime: firstWe?.endTime ?? '18:30',
@@ -95,9 +72,7 @@ export const createEditInterventionState = (
       days: firstWe?.days ?? 1,
     },
     status: {
-      isExtra: intervention.isExtra,
-      billingStatus: intervention.billingStatus,
-      paymentStatus: intervention.paymentStatus,
+      simplified: simplifiedStatus,
     },
     saveState: 'idle',
     saveError: null,
@@ -111,59 +86,17 @@ export const reduceAddInterventionState = (
   switch (action.type) {
     case 'goToStep':
       return { ...state, currentStep: action.step }
-    case 'selectType':
-      return {
-        ...state,
-        what: {
-          ...state.what,
-          type: action.interventionType,
-          title: state.what.title.trim() === '' ? action.defaultTitle : state.what.title,
-        },
-      }
-    case 'setTitle':
-      return { ...state, what: { ...state.what, title: action.title } }
-    case 'setNote':
-      return { ...state, what: { ...state.what, note: action.note } }
-    case 'setPhase':
-      return { ...state, where: { ...state.where, phaseId: action.phaseId } }
-    case 'setZone':
-      return { ...state, where: { ...state.where, zoneId: action.zoneId } }
-    case 'setLocationToDefine':
-      return {
-        ...state,
-        where: {
-          ...state.where,
-          locationToDefine: action.value,
-          phaseId: action.value ? null : state.where.phaseId,
-          zoneId: action.value ? null : state.where.zoneId,
-        },
-      }
-    case 'togglePerson':
-      return {
-        ...state,
-        who: {
-          personIds: state.who.personIds.includes(action.personId)
-            ? state.who.personIds.filter((personId) => personId !== action.personId)
-            : [...state.who.personIds, action.personId],
-        },
-      }
-    case 'setDate':
-      return { ...state, when: { ...state.when, date: action.date } }
-    case 'setStartTime':
-      return { ...state, when: { ...state.when, startTime: action.startTime } }
-    case 'setEndTime':
-      return { ...state, when: { ...state.when, endTime: action.endTime } }
-    case 'setBreakMinutes':
-      return { ...state, when: { ...state.when, breakMinutes: action.breakMinutes } }
-    case 'setDays':
-      return { ...state, when: { ...state.when, days: action.days } }
+    case 'updateForm':
+      return { ...state, form: { ...state.form, ...action.payload } }
     case 'setStatus':
-      return { ...state, status: action.status }
+      return { ...state, status: { simplified: action.status } }
     case 'setSaveState':
       return {
         ...state,
         saveState: action.saveState,
         saveError: action.saveError ?? null,
       }
+    default:
+      return state
   }
 }

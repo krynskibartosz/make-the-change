@@ -1,26 +1,22 @@
 import type { InterventionTypeOption, StepDefinition, TimePreset } from './types'
 
 export const ADD_INTERVENTION_STEPS: StepDefinition[] = [
-  { id: 'what', label: 'Quoi' },
-  { id: 'where', label: 'Ou' },
-  { id: 'who', label: 'Qui' },
-  { id: 'when', label: 'Quand' },
-  { id: 'status', label: 'Statut' },
-  { id: 'summary', label: 'Resume' },
+  { id: 'quick_form', label: 'Travail' },
+  { id: 'summary', label: 'Résumé' },
 ]
 
 export const INTERVENTION_TYPE_OPTIONS: InterventionTypeOption[] = [
   {
-    label: 'Demolition',
-    shortLabel: 'Demo',
+    label: 'Démolition',
+    shortLabel: 'Démo',
     value: 'demolition',
-    defaultTitle: 'Demolition',
+    defaultTitle: 'Démolition',
   },
   {
-    label: 'Evacuation',
-    shortLabel: 'Evac',
+    label: 'Évacuation',
+    shortLabel: 'Évac',
     value: 'evacuation',
-    defaultTitle: 'Evacuation dechets',
+    defaultTitle: 'Évacuation déchets',
   },
   {
     label: 'Protection',
@@ -38,24 +34,24 @@ export const INTERVENTION_TYPE_OPTIONS: InterventionTypeOption[] = [
     label: 'Achat',
     shortLabel: 'Achat',
     value: 'expense',
-    defaultTitle: 'Achat materiel',
+    defaultTitle: 'Achat matériel',
   },
   {
-    label: 'Tache',
-    shortLabel: 'Tache',
+    label: 'Tâche',
+    shortLabel: 'Tâche',
     value: 'task',
-    defaultTitle: 'Tache chantier',
+    defaultTitle: 'Tâche chantier',
   },
   {
     label: 'Autre',
     shortLabel: 'Autre',
     value: 'other',
-    defaultTitle: 'Intervention chantier',
+    defaultTitle: 'Travail réalisé',
   },
 ]
 
 export const TIME_PRESETS: TimePreset[] = [
-  { label: 'Journee', startTime: '08:00', endTime: '18:30', breakMinutes: 30 },
+  { label: 'Journée', startTime: '08:00', endTime: '18:30', breakMinutes: 30 },
   { label: 'Matin', startTime: '08:00', endTime: '12:00', breakMinutes: 0 },
-  { label: 'Apres-midi', startTime: '13:00', endTime: '18:30', breakMinutes: 0 },
+  { label: 'Après-midi', startTime: '13:00', endTime: '18:30', breakMinutes: 0 },
 ]

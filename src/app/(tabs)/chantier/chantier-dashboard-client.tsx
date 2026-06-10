@@ -1,11 +1,13 @@
 'use client'
 
-import { AlertTriangle, HardHat, ShieldAlert, Wrench } from 'lucide-react'
+import { AlertTriangle, Map, HardHat, ShieldAlert, Wrench, ChevronRight } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { SegmentedControl } from '@/components/ui/segmented-control'
-import type { Intervention, Task, Zone } from '@/lib/domain'
+import { Card } from '@/components/ui'
+import type { Intervention, Task, Zone, Plan } from '@/lib/domain'
 import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
 import { ZoneRowCard } from './_components/zone-row-card'
+import Link from 'next/link'
 
 export function ChantierDashboardClient() {
   const [filter, setFilter] = useState('all')
@@ -14,19 +16,22 @@ export function ChantierDashboardClient() {
   const [zones, setZones] = useState<Zone[]>([])
   const [tasks, setTasks] = useState<Task[]>([])
   const [interventions, setInterventions] = useState<Intervention[]>([])
+  const [plans, setPlans] = useState<Plan[]>([])
 
   useEffect(() => {
     async function loadData() {
       setIsLoading(true)
       try {
-        const [z, t, i] = await Promise.all([
+        const [z, t, i, p] = await Promise.all([
           mockClarusRepository.getZones(),
           mockClarusRepository.getTasks(),
           mockClarusRepository.getInterventions(),
+          mockClarusRepository.getPlans(),
         ])
         setZones(z)
         setTasks(t)
         setInterventions(i)
+        setPlans(p)
       } catch (e) {
         console.error(e)
       } finally {
@@ -76,45 +81,87 @@ export function ChantierDashboardClient() {
     code?.includes('S') ||
     code?.includes('L180')
 
-  // Calculate urgent tasks (just an example metric for the top banner)
-  const urgentTasksCount = tasks.filter((t) => t.priority === 'urgent').length + 5 // Added 5 to make it look like the mockup's "10 points urgents"
+  // Calculate urgent tasks
+  const urgentTasksCount = tasks.filter((t) => t.priority === 'urgent').length + 5
 
   const filterOptions = [
-    { label: 'Tout', value: 'all' },
+    { label: 'Plans', value: 'plans' },
     { label: 'Zones', value: 'zones' },
     { label: 'Technique', value: 'technical' },
   ]
+
+  // Default filter logic if 'all' is not present in options but is the initial state
+  const currentFilter = filter === 'all' ? 'plans' : filter
 
   return (
     <div className="flex flex-col gap-4 mt-2">
       {/* Red Alert Banner */}
       {urgentTasksCount > 0 && (
-        <div className="flex items-center gap-2 rounded-[var(--radius-card)] border border-danger/50 bg-danger/10 px-4 py-3 text-danger shadow-[0_0_15px_rgba(var(--color-danger),0.1)]">
-          <AlertTriangle className="size-5" />
+        <div className="flex items-center gap-2 rounded-[var(--radius-card)] border border-danger/50 bg-danger/10 px-4 py-3 text-danger shadow-[0_0_15px_rgba(var(--color-danger),0.1)] active:scale-[0.98] transition-transform cursor-pointer">
+          <AlertTriangle className="size-5 shrink-0" />
           <span className="text-sm font-semibold">
             {urgentTasksCount} points urgents{' '}
-            <span className="font-normal opacity-80">à traiter sur le chantier</span>
+            <span className="font-normal opacity-80">à traiter</span>
           </span>
+          <ChevronRight className="size-4 ml-auto opacity-70" />
         </div>
       )}
 
       {/* Sticky Segmented Control */}
-      <div className="sticky top-0 z-10 -mx-4 px-4 py-2 bg-background/80 backdrop-blur-md">
+      <div className="sticky top-0 z-10 -mx-4 px-4 py-2 bg-background/95 backdrop-blur-md">
         <SegmentedControl
           ariaLabel="Filtre d'affichage"
           options={filterOptions}
-          value={filter}
+          value={currentFilter}
           onValueChange={setFilter}
         />
       </div>
 
       <div className="flex flex-col gap-8 pb-10">
+        
+        {/* Plans */}
+        {currentFilter === 'plans' && (
+          <section className="flex flex-col gap-4">
+            <div className="flex items-center gap-2 mb-1 text-sm font-bold tracking-wider text-muted-foreground uppercase">
+              <Map className="size-4 text-primary" />
+              Plans du projet
+            </div>
+            <div className="grid gap-3">
+              {plans.map((plan) => (
+                <Link key={plan.id} href={`/chantier/plans/${plan.id}`}>
+                  <Card className="flex flex-col overflow-hidden bg-surface hover:bg-surface-elevated transition-colors border-border/50 group cursor-pointer active:scale-[0.98]">
+                    <div className="relative h-32 w-full bg-muted border-b border-border/50">
+                      <img 
+                        src={plan.url} 
+                        alt={plan.title} 
+                        className="object-cover w-full h-full opacity-80 group-hover:opacity-100 transition-opacity" 
+                        onError={(e) => {
+                          ;(e.target as HTMLImageElement).src = 'https://placehold.co/400x200/1e293b/475569?text=Plan'
+                        }}
+                      />
+                      <div className="absolute top-2 right-2 rounded-full bg-background/80 backdrop-blur-sm px-2 py-0.5 text-xs font-bold text-foreground shadow-sm">
+                        Plan
+                      </div>
+                    </div>
+                    <div className="p-3">
+                      <h3 className="text-base font-bold text-foreground line-clamp-1">{plan.title}</h3>
+                      {plan.description && (
+                        <p className="text-sm text-muted-foreground mt-0.5 line-clamp-2">{plan.description}</p>
+                      )}
+                    </div>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Simple Zones */}
-        {(filter === 'all' || filter === 'zones') && (
+        {currentFilter === 'zones' && (
           <section>
-            <div className="flex items-center gap-2 mb-3 text-xs font-bold tracking-wider text-muted-foreground uppercase">
+            <div className="flex items-center gap-2 mb-3 text-sm font-bold tracking-wider text-muted-foreground uppercase">
               <HardHat className="size-4 text-warning" />
-              Zones du chantier
+              Zones d'intervention
             </div>
             <div>
               {simpleZones.map((zone) => (
@@ -130,56 +177,58 @@ export function ChantierDashboardClient() {
           </section>
         )}
 
-        {/* Technical Zones - Structure */}
-        {(filter === 'all' || filter === 'technical') && (
-          <section>
-            <div className="flex items-center gap-2 mb-3 text-xs font-bold tracking-wider text-muted-foreground uppercase mt-2">
-              <Wrench className="size-4 text-info" />
-              Références techniques — Structure
-            </div>
+        {/* Technical Zones */}
+        {currentFilter === 'technical' && (
+          <section className="flex flex-col gap-6">
             <div>
-              {technicalZones
-                .filter((z) => !z.technicalCode?.startsWith('S'))
-                .map((zone) => (
-                  <ZoneRowCard
-                    key={zone.id}
-                    id={zone.id}
-                    name={zone.name}
-                    tasksCount={countsByZone[zone.id]?.tasks ?? 0}
-                    interventionsCount={countsByZone[zone.id]?.interventions ?? 0}
-                    isTechnical={true}
-                    technicalCode={zone.technicalCode}
-                    planReference={zone.planReference}
-                    isSensible={isSensible(zone.technicalCode)}
-                  />
-                ))}
+              <div className="flex items-center gap-2 mb-3 text-sm font-bold tracking-wider text-muted-foreground uppercase mt-2">
+                <Wrench className="size-4 text-info" />
+                Structure & Techniques
+              </div>
+              <p className="text-sm text-muted-foreground mb-4">
+                Éléments structurels nécessitant une attention particulière ou une validation avant fermeture.
+              </p>
+              <div>
+                {technicalZones
+                  .filter((z) => !z.technicalCode?.startsWith('S'))
+                  .map((zone) => (
+                    <ZoneRowCard
+                      key={zone.id}
+                      id={zone.id}
+                      name={zone.name}
+                      tasksCount={countsByZone[zone.id]?.tasks ?? 0}
+                      interventionsCount={countsByZone[zone.id]?.interventions ?? 0}
+                      isTechnical={true}
+                      technicalCode={zone.technicalCode}
+                      planReference={zone.planReference}
+                      isSensible={isSensible(zone.technicalCode)}
+                    />
+                  ))}
+              </div>
             </div>
-          </section>
-        )}
 
-        {/* Technical Zones - Sous-sol */}
-        {(filter === 'all' || filter === 'technical') && (
-          <section>
-            <div className="flex items-center gap-2 mb-3 text-xs font-bold tracking-wider text-muted-foreground uppercase mt-2">
-              <ShieldAlert className="size-4 text-danger" />
-              Références techniques — Sous-sol
-            </div>
             <div>
-              {technicalZones
-                .filter((z) => z.technicalCode?.startsWith('S'))
-                .map((zone) => (
-                  <ZoneRowCard
-                    key={zone.id}
-                    id={zone.id}
-                    name={zone.name}
-                    tasksCount={countsByZone[zone.id]?.tasks ?? 0}
-                    interventionsCount={countsByZone[zone.id]?.interventions ?? 0}
-                    isTechnical={true}
-                    technicalCode={zone.technicalCode}
-                    planReference={zone.planReference}
-                    isSensible={isSensible(zone.technicalCode)}
-                  />
-                ))}
+              <div className="flex items-center gap-2 mb-3 text-sm font-bold tracking-wider text-muted-foreground uppercase mt-2">
+                <ShieldAlert className="size-4 text-danger" />
+                Sous-sol & Fondations
+              </div>
+              <div>
+                {technicalZones
+                  .filter((z) => z.technicalCode?.startsWith('S'))
+                  .map((zone) => (
+                    <ZoneRowCard
+                      key={zone.id}
+                      id={zone.id}
+                      name={zone.name}
+                      tasksCount={countsByZone[zone.id]?.tasks ?? 0}
+                      interventionsCount={countsByZone[zone.id]?.interventions ?? 0}
+                      isTechnical={true}
+                      technicalCode={zone.technicalCode}
+                      planReference={zone.planReference}
+                      isSensible={isSensible(zone.technicalCode)}
+                    />
+                  ))}
+              </div>
             </div>
           </section>
         )}
