@@ -25,17 +25,21 @@ function AjouterHeuresForm() {
 
     setIsSubmitting(true)
     try {
-      // Pour ce raccourci, on enregistre une "Intervention" de type "Autre/Heures"
-      // ou on utilise l'endpoint générique existant
-      await mockClarusRepository.createIntervention({
+      await mockClarusRepository.createInterventionDraft({
         projectId: 'project-1',
-        workType: 'Saisie d\'heures rapides',
-        status: 'to_check', // Toujours à vérifier par le chef
-        date: new Date().toISOString().split('T')[0],
+        title: 'Pointage heures',
+        type: 'other',
+        date: new Date().toISOString().split('T')[0]!,
+        phaseId: null,
+        zoneId: null,
+        personIds: ['person-1'], // Mock pour "Moi"
         startTime,
         endTime,
-        pauseMinutes: parseInt(pauseMinutes, 10),
-        workers: ['user-1'], // Mock pour "Moi"
+        breakMinutes: parseInt(pauseMinutes, 10),
+        days: 1,
+        hourlyRate: 50,
+        isExtra: 'to_check',
+        notes: comment,
       })
 
       toast({ title: 'Heures enregistrées ✓', variant: 'success' })
