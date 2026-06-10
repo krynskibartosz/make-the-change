@@ -1,7 +1,8 @@
 'use client'
 
-import { Package, Plus } from 'lucide-react'
+import { ChevronRight, Package, Plus } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { FullScreenSlideModal } from '../../@modal/_components/full-screen-slide-modal'
 import type { Material, MaterialMovement } from '@/lib/domain'
@@ -56,9 +57,10 @@ export default function MateriauxPage() {
               {materials.map((material) => {
                 const stock = getStock(material.id)
                 return (
-                  <div
+                  <Link
                     key={material.id}
-                    className="flex items-center justify-between p-4 transition-colors border-b border-border last:border-0"
+                    href={`/materiaux/${material.id}`}
+                    className="flex items-center justify-between p-4 transition-colors border-b border-border last:border-0 active:bg-surface-elevated"
                   >
                     <div className="flex flex-col min-w-0 pr-4">
                       <span className="font-semibold text-base truncate">{material.name}</span>
@@ -66,11 +68,14 @@ export default function MateriauxPage() {
                         {material.category || 'Sans catégorie'}
                       </span>
                     </div>
-                    <div className="flex flex-col items-end shrink-0">
-                      <span className="font-bold text-lg text-primary">{stock}</span>
-                      <span className="text-xs text-muted-foreground">{material.defaultUnit || 'pièce'}(s)</span>
+                    <div className="flex items-center gap-3 shrink-0">
+                      <div className="flex flex-col items-end">
+                        <span className="font-bold text-lg text-primary">{stock}</span>
+                        <span className="text-xs text-muted-foreground">{material.defaultUnit || 'pièce'}(s)</span>
+                      </div>
+                      <ChevronRight className="h-5 w-5 text-muted-foreground/40" />
                     </div>
-                  </div>
+                  </Link>
                 )
               })}
             </div>

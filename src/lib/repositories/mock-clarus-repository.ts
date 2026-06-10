@@ -9,6 +9,7 @@ import type {
   Expense,
   Intervention,
   InterventionDraft,
+  Material,
   MaterialMovement,
   Person,
   Phase,
@@ -46,6 +47,7 @@ export const createMockClarusRepository = (): ClarusRepository => {
   let tasks: Task[] = [...mockTasks] as Task[]
   let expenses: Expense[] = [...mockExpenses] as Expense[]
   let materialMovements: MaterialMovement[] = [...mockMaterialMovements] as MaterialMovement[]
+  let materials: Material[] = [...mockMaterials]
   const people = mockPeople.map(clonePerson)
 
   return {
@@ -81,7 +83,14 @@ export const createMockClarusRepository = (): ClarusRepository => {
     },
     getPhases: async () => mockPhases.map((p) => ({ ...p })),
     getZones: async () => [...mockZones],
-    getMaterials: async () => [...mockMaterials],
+    getMaterials: async () => [...materials],
+    getMaterialById: async (id: string) => materials.find((m) => m.id === id) ?? null,
+    updateMaterial: async (id: string, input: Partial<Material>) => {
+      const idx = materials.findIndex((m) => m.id === id)
+      if (idx === -1) throw new Error('Material not found')
+      materials[idx] = { ...materials[idx], ...input } as Material
+      return materials[idx]
+    },
     getMaterialMovements: async () => [...materialMovements],
     getPhotos: async () => [...mockPhotos],
     getPlans: async () => [...mockPlans],
