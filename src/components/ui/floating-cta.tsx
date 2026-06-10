@@ -14,7 +14,7 @@ export function FloatingCTA({ children, className }: FloatingCTAProps) {
   return (
     <div
       className={cn(
-        'fixed bottom-0 inset-x-0 p-4 pb-[max(env(safe-area-inset-bottom),1rem)]',
+        'sticky bottom-0 w-screen left-1/2 -translate-x-1/2 mt-auto p-4 pb-[max(env(safe-area-inset-bottom),1rem)]',
         'bg-background/90 backdrop-blur-md border-t border-border/50 z-40',
         className,
       )}
