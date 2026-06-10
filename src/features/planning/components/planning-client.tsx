@@ -48,7 +48,7 @@ export function PlanningClient({
               activeTab === 'timeline' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
             }`}
           >
-            Timeline
+            Journal
           </button>
         </div>
       </div>
@@ -64,11 +64,11 @@ export function PlanningClient({
       {activeTab !== 'timeline' && (
         <div className="fixed bottom-[calc(max(env(safe-area-inset-bottom),0.75rem)+5.5rem)] inset-x-0 z-40 flex justify-center px-5 pointer-events-none">
           <Link
-            className="pointer-events-auto flex h-14 w-full max-w-sm items-center justify-center gap-2 rounded-full bg-primary font-semibold text-primary-foreground shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-transform active:scale-[0.98]"
-            href="/interventions/new"
+            className="pointer-events-auto flex h-14 w-full max-w-sm items-center justify-center gap-2 rounded-full bg-primary font-semibold text-primary-foreground text-lg shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-transform active:scale-[0.98]"
+            href="/ajouter"
           >
-            <Plus className="size-5" />
-            Ajouter une intervention
+            <Plus className="size-6" />
+            Ajouter
           </Link>
         </div>
       )}

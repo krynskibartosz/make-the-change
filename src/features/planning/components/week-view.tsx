@@ -1,7 +1,40 @@
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import { CheckCircle2, Circle } from 'lucide-react'
+import { CheckCircle2, Circle, Loader2, Target, XCircle } from 'lucide-react'
 import type { WeeklyPlan } from '@/lib/domain'
+
+function GoalStatusBadge({ status }: { status: string }) {
+  if (status === 'completed') {
+    return (
+      <span className="flex shrink-0 items-center gap-1 rounded-full bg-green-500/15 px-2 py-0.5 text-[10px] font-semibold text-green-600 dark:text-green-400">
+        <CheckCircle2 className="size-3" />
+        Terminé
+      </span>
+    )
+  }
+  if (status === 'in_progress') {
+    return (
+      <span className="flex shrink-0 items-center gap-1 rounded-full bg-blue-500/15 px-2 py-0.5 text-[10px] font-semibold text-blue-600 dark:text-blue-400">
+        <Loader2 className="size-3 animate-spin" />
+        En cours
+      </span>
+    )
+  }
+  if (status === 'blocked') {
+    return (
+      <span className="flex shrink-0 items-center gap-1 rounded-full bg-red-500/15 px-2 py-0.5 text-[10px] font-semibold text-red-600 dark:text-red-400">
+        <XCircle className="size-3" />
+        Bloqué
+      </span>
+    )
+  }
+  return (
+    <span className="flex shrink-0 items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold text-muted-foreground">
+      <Circle className="size-3" />
+      Pas commencé
+    </span>
+  )
+}
 
 export function WeekView({ plan }: { plan: WeeklyPlan | null }) {
   if (!plan) {
@@ -14,10 +47,18 @@ export function WeekView({ plan }: { plan: WeeklyPlan | null }) {
 
   return (
     <div className="flex flex-col gap-6 pb-24">
+      {/* Priorité de la semaine */}
+      <section className="flex flex-col gap-2 rounded-[var(--radius-card)] border border-primary/20 bg-primary/5 p-4">
+        <div className="flex items-center gap-2 text-primary">
+          <Target className="size-4" />
+          <span className="text-xs font-bold uppercase tracking-wider">Priorité de la semaine</span>
+        </div>
+        <p className="text-base font-bold text-foreground">{plan.mainObjective}</p>
+      </section>
+
       {/* Header Sprint */}
       <section className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-sm">
         <h2 className="text-lg font-bold">Semaine du {format(new Date(plan.weekStart), 'd MMM', { locale: fr })}</h2>
-        <p className="text-sm font-medium text-foreground/80">{plan.mainObjective}</p>
         
         {/* Progress Ring / Bar */}
         <div className="mt-2 flex items-center gap-4">
@@ -47,11 +88,15 @@ export function WeekView({ plan }: { plan: WeeklyPlan | null }) {
           {plan.goals?.map(goal => (
             <div key={goal.id} className="flex items-center gap-3 p-4">
               {goal.status === 'completed' ? (
-                <CheckCircle2 className="size-5 text-green-500" />
+                <CheckCircle2 className="size-5 shrink-0 text-green-500" />
+              ) : goal.status === 'blocked' ? (
+                <XCircle className="size-5 shrink-0 text-red-500" />
+              ) : goal.status === 'in_progress' ? (
+                <Loader2 className="size-5 shrink-0 animate-spin text-blue-500" />
               ) : (
-                <Circle className="size-5 text-muted-foreground" />
+                <Circle className="size-5 shrink-0 text-muted-foreground" />
               )}
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <p className={`text-sm font-medium ${goal.status === 'completed' ? 'text-muted-foreground line-through' : 'text-foreground'}`}>
                   {goal.title}
                 </p>
@@ -61,6 +106,7 @@ export function WeekView({ plan }: { plan: WeeklyPlan | null }) {
                   </div>
                 )}
               </div>
+              <GoalStatusBadge status={goal.status} />
             </div>
           ))}
         </div>
