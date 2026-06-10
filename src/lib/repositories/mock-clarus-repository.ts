@@ -102,9 +102,60 @@ export const createMockClarusRepository = (): ClarusRepository => {
     getMaterialMovements: async () => [...materialMovements],
     getPhotos: async () => [...mockPhotos],
     createPhoto: async (input: Omit<Photo, 'id'>) => {
-      const newPhoto: Photo = { ...input, id: `photo-${Date.now()}` }
-      mockPhotos.push(newPhoto)
-      return newPhoto
+      const photo: Photo = { ...input, id: `photo-${crypto.randomUUID()}` }
+      mockPhotos.push(photo)
+      return photo
+    },
+    getTimelineEvents: async () => {
+      const events: import('../domain').TimelineEvent[] = []
+      for (const intervention of interventions) {
+        const d = intervention.actualDate || intervention.date
+        if (d) events.push({ type: 'intervention', data: intervention, date: d })
+      }
+      for (const task of tasks) {
+        const d = task.completedAt?.split('T')[0] || task.plannedDate
+        if (d) events.push({ type: 'task', data: task, date: d })
+      }
+      for (const expense of expenses) {
+        if (expense.date) events.push({ type: 'expense', data: expense, date: expense.date })
+      }
+      for (const photo of mockPhotos) {
+        const d = photo.takenAt?.split('T')[0]
+        if (d) events.push({ type: 'photo', data: photo, date: d })
+      }
+      return events.sort((a, b) => b.date.localeCompare(a.date))
+    },
+    getWeeklyPlan: async (weekStart: string) => {
+      return {
+        id: 'wp-1',
+        projectId: mockProject.id,
+        weekStart,
+        weekEnd: '2026-06-14',
+        mainObjective: 'Terminer la démolition béton extérieur et évacuer gravats',
+        status: 'in_progress',
+        goals: [
+          {
+            id: 'goal-1',
+            projectId: mockProject.id,
+            title: 'Démolition béton extérieur',
+            type: 'weekly',
+            startDate: weekStart,
+            endDate: '2026-06-14',
+            status: 'in_progress',
+            progress: 60,
+          },
+          {
+            id: 'goal-2',
+            projectId: mockProject.id,
+            title: 'Évacuation gravats',
+            type: 'weekly',
+            startDate: weekStart,
+            endDate: '2026-06-14',
+            status: 'not_started',
+            progress: 0,
+          },
+        ]
+      } as import('../domain').WeeklyPlan
     },
     getPlans: async () => [...mockPlans],
     getPlanZones: async (planId: string) => mockPlanZones.filter((z) => z.planId === planId),

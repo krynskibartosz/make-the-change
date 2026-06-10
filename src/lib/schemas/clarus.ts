@@ -152,7 +152,11 @@ export const interventionSchema = baseEntitySchema
     title: z.string().min(1),
     description: z.string().optional(),
     type: interventionTypeSchema,
-    date: isoDateSchema,
+    date: isoDateSchema, // Legacy, we keep it for backward compatibility
+    plannedDate: isoDateSchema.nullish(),
+    actualDate: isoDateSchema.nullish(),
+    plannedDurationMinutes: z.number().int().nonnegative().nullish(),
+    actualDurationMinutes: z.number().int().nonnegative().nullish(),
     phaseId: idSchema,
     zoneId: idSchema,
     status: interventionStatusSchema,
@@ -184,6 +188,8 @@ export const taskSchema = baseEntitySchema.merge(locationContextSchema).extend({
   priority: taskPrioritySchema,
   assignedTo: idSchema.nullish(),
   dueDate: isoDateSchema.nullish(),
+  plannedDate: isoDateSchema.nullish(),
+  completedAt: isoDateTimeSchema.nullish(),
   createdAt: isoDateTimeSchema,
 })
 
@@ -251,6 +257,27 @@ export const planPinSchema = z.object({
   status: z.string().optional(),
 })
 
+export const goalStatusSchema = z.enum(['not_started', 'in_progress', 'completed', 'blocked'])
+
+export const goalSchema = baseEntitySchema.extend({
+  title: z.string().min(1),
+  description: z.string().optional(),
+  type: z.enum(['global', 'monthly', 'weekly']),
+  startDate: isoDateSchema,
+  endDate: isoDateSchema,
+  status: goalStatusSchema,
+  progress: z.number().min(0).max(100),
+})
+
+export const weeklyPlanSchema = baseEntitySchema.extend({
+  weekStart: isoDateSchema,
+  weekEnd: isoDateSchema,
+  mainObjective: z.string(),
+  status: goalStatusSchema,
+  notes: z.string().optional(),
+  goals: z.array(goalSchema).optional(),
+})
+
 // --- Type Inference ---
 export type ProjectStatus = z.infer<typeof projectStatusSchema>
 export type ZoneType = z.infer<typeof zoneTypeSchema>
@@ -279,6 +306,8 @@ export type Photo = z.infer<typeof photoSchema>
 export type Plan = z.infer<typeof planSchema>
 export type PlanZone = z.infer<typeof planZoneSchema>
 export type PlanPin = z.infer<typeof planPinSchema>
+export type Goal = z.infer<typeof goalSchema>
+export type WeeklyPlan = z.infer<typeof weeklyPlanSchema>
 
 export const createInterventionDraftInputSchema = z.object({
   projectId: idSchema,

@@ -17,9 +17,12 @@ import type {
   PlanZone,
   Project,
   Task,
+  TaskPriority,
   TaskStatus,
+  TimelineEvent,
   TodaySummary,
   UpdatePersonInput,
+  WeeklyPlan,
   WorkEntry,
   Zone,
 } from '@/lib/domain'
@@ -52,4 +55,7 @@ export type ClarusRepository = {
   createExpense: (input: CreateExpenseInput) => Promise<Expense>
   createMaterialMovement: (input: CreateMaterialMovementInput) => Promise<MaterialMovement>
   markAsInvoiced: (interventionIds: string[], expenseIds: string[]) => Promise<void>
+  
+  getTimelineEvents: () => Promise<TimelineEvent[]>
+  getWeeklyPlan: (weekStart: string) => Promise<WeeklyPlan | null>
 }

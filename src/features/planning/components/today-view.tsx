@@ -2,18 +2,11 @@ import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { AlertTriangle, Clock } from 'lucide-react'
 import Link from 'next/link'
+import type { TodaySummary } from '@/lib/domain'
 
-import { mockClarusRepository } from '@/lib/repositories'
-import { TabScreen } from '../_components/tab-screen'
-
-export default async function TodayPage() {
-  const today = format(new Date(), 'yyyy-MM-dd')
-  const summary = await mockClarusRepository.getTodaySummary(today)
-
-  const formattedDate = format(new Date(), 'EEEE d MMMM', { locale: fr })
-
+export function TodayView({ summary }: { summary: TodaySummary }) {
   return (
-    <TabScreen eyebrow={formattedDate} title="Aujourd'hui">
+    <div className="flex flex-col gap-6 pb-24">
       {/* Métriques du jour */}
       <section className="grid grid-cols-2 gap-3">
         <div className="flex flex-col gap-1 rounded-[var(--radius-card)] border border-border bg-surface p-4">
@@ -95,31 +88,6 @@ export default async function TodayPage() {
           Aucune intervention enregistrée aujourd'hui.
         </p>
       )}
-
-      {/* Bouton flottant Ajouter */}
-      <div className="fixed bottom-[calc(max(env(safe-area-inset-bottom),0.75rem)+5.5rem)] inset-x-0 z-40 flex justify-center px-5 pointer-events-none">
-        <Link
-          className="pointer-events-auto flex h-14 w-full max-w-sm items-center justify-center gap-2 rounded-full bg-primary font-semibold text-primary-foreground shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-transform active:scale-[0.98]"
-          href="/interventions/new"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="size-5"
-          >
-            <path d="M5 12h14" />
-            <path d="M12 5v14" />
-          </svg>
-          Ajouter une intervention
-        </Link>
-      </div>
-    </TabScreen>
+    </div>
   )
 }

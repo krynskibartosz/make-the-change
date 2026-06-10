@@ -8,8 +8,8 @@ export type ClarusTab = Readonly<{
 
 export const clarusTabs = [
   {
-    href: '/aujourd-hui',
-    label: "Aujourd'hui",
+    href: '/planning',
+    label: 'Planning',
     icon: CalendarDays,
   },
   {

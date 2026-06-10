@@ -7,6 +7,7 @@ import type {
   CreateTaskInput,
   Expense,
   ExpenseStatus,
+  Goal,
   Intervention,
   InterventionStatus,
   InterventionType,
@@ -27,6 +28,7 @@ import type {
   Task,
   TaskPriority,
   TaskStatus,
+  WeeklyPlan,
   WorkEntry,
   Zone,
   ZoneType,
@@ -41,6 +43,7 @@ export type {
   CreateTaskInput,
   Expense,
   ExpenseStatus,
+  Goal,
   Intervention,
   InterventionStatus,
   InterventionType,
@@ -61,6 +64,7 @@ export type {
   Task,
   TaskPriority,
   TaskStatus,
+  WeeklyPlan,
   WorkEntry,
   Zone,
   ZoneType,
@@ -109,3 +113,9 @@ export type TodaySummary = {
 }
 
 export type UpdatePersonInput = Partial<CreatePersonInput> & { active?: boolean }
+
+export type TimelineEvent =
+  | { type: 'intervention'; data: Intervention; date: string }
+  | { type: 'task'; data: Task; date: string }
+  | { type: 'expense'; data: Expense; date: string }
+  | { type: 'photo'; data: Photo; date: string }

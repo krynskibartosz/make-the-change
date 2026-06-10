@@ -39,7 +39,7 @@ export function ExpenseWizard() {
         description: finalState.quoi.titre,
         amount: Number.parseFloat(finalState.quoi.montant),
         supplier: finalState.quoi.fournisseur,
-        date: new Date().toISOString().split('T')[0],
+        date: new Date().toISOString().split('T')[0] || new Date().toISOString(),
         isRebillable: finalState.statut.isRebillable,
         receiptPhotoId,
       })
