@@ -25,8 +25,10 @@ export function BottomNav() {
     if (role === 'chef') {
       return tab.href === '/chantier' || tab.href === '/a-verifier' || tab.href === '/planning' || tab.href === '/menu'
     }
-    // Admin voit tout le reste pour l'instant
-    return tab.href === '/planning' || tab.href === '/chantier' || tab.href === '/menu'
+    if (role === 'admin') {
+      return tab.href === '/dashboard' || tab.href === '/menu'
+    }
+    return tab.href === '/menu'
   })
 
   return (
