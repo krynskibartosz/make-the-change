@@ -172,7 +172,7 @@ export function SmartPlanClient({ plan }: { plan: Plan }) {
             <h3 className="text-xl font-bold">{selectedZone.label}</h3>
             <p className="text-sm text-muted-foreground mt-1">3 interventions • 2 tâches ouvertes</p>
           </div>
-          <Button className="w-full" size="lg">
+          <Button className="w-full" size="primary">
             Ajouter intervention ici
           </Button>
         </div>
@@ -189,7 +189,7 @@ export function SmartPlanClient({ plan }: { plan: Plan }) {
               </p>
             </div>
           </div>
-          <Button className="w-full" size="lg">
+          <Button className="w-full" size="primary">
             Voir les détails
           </Button>
         </div>
