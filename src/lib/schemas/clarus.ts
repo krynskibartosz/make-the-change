@@ -80,6 +80,18 @@ export const photoTypeSchema = z.enum([
   'other',
 ])
 
+export const planZoneShapeSchema = z.enum(['rect', 'polygon'])
+export const planPinTypeSchema = z.enum([
+  'photo',
+  'task',
+  'problem',
+  'confirm',
+  'done',
+  'material',
+  'expense',
+])
+
+
 const idSchema = z.string().min(1)
 const isoDateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/)
 const isoDateTimeSchema = z.string().datetime()
@@ -232,6 +244,26 @@ export const planSchema = z.object({
   createdAt: isoDateTimeSchema,
 })
 
+export const planZoneSchema = z.object({
+  id: idSchema,
+  planId: idSchema,
+  label: z.string().min(1),
+  shapeType: planZoneShapeSchema,
+  coordinates: z.array(z.array(z.number())),
+})
+
+export const planPinSchema = z.object({
+  id: idSchema,
+  planId: idSchema,
+  zoneId: idSchema.nullish(),
+  interventionId: idSchema.nullish(),
+  type: planPinTypeSchema,
+  x: z.number(),
+  y: z.number(),
+  title: z.string().min(1),
+  status: z.string().optional(),
+})
+
 // --- Type Inference ---
 export type ProjectStatus = z.infer<typeof projectStatusSchema>
 export type ZoneType = z.infer<typeof zoneTypeSchema>
@@ -258,6 +290,8 @@ export type MaterialMovement = z.infer<typeof materialMovementSchema>
 export type Expense = z.infer<typeof expenseSchema>
 export type Photo = z.infer<typeof photoSchema>
 export type Plan = z.infer<typeof planSchema>
+export type PlanZone = z.infer<typeof planZoneSchema>
+export type PlanPin = z.infer<typeof planPinSchema>
 
 export const createInterventionDraftInputSchema = z.object({
   projectId: idSchema,
@@ -290,6 +324,9 @@ export const mockDatasetSchema = z
     materialMovements: z.array(materialMovementSchema),
     expenses: z.array(expenseSchema),
     photos: z.array(photoSchema),
+    plans: z.array(planSchema).optional(),
+    planZones: z.array(planZoneSchema).optional(),
+    planPins: z.array(planPinSchema).optional(),
   })
   .superRefine((dataset, context) => {
     const interventionIds = new Set(dataset.interventions.map((intervention) => intervention.id))

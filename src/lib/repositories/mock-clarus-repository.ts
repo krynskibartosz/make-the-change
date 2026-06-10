@@ -28,6 +28,8 @@ import {
   mockPhases,
   mockPhotos,
   mockPlans,
+  mockPlanZones,
+  mockPlanPins,
   mockProject,
   mockTasks,
   mockWorkEntries,
@@ -82,6 +84,8 @@ export const createMockClarusRepository = (): ClarusRepository => {
     getMaterials: async () => [...mockMaterials],
     getPhotos: async () => [...mockPhotos],
     getPlans: async () => [...mockPlans],
+    getPlanZones: async (planId: string) => mockPlanZones.filter((z) => z.planId === planId),
+    getPlanPins: async (planId: string) => mockPlanPins.filter((p) => p.planId === planId),
     getTasks: async () => [...tasks],
     getInterventions: async () => [...interventions],
     getInterventionById: async (id: string) =>

@@ -3,6 +3,7 @@
 import { Map, X } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { FullScreenSlideModal } from '@/app/@modal/_components/full-screen-slide-modal'
+import { SmartPlanClient } from './smart-plan-client'
 import type { Plan } from '@/lib/domain'
 import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
 
@@ -77,24 +78,7 @@ export function PlansGalleryClient() {
           headerMode="close"
           onClose={() => setSelectedPlan(null)}
         >
-          <div className="flex h-full w-full flex-col bg-black">
-            <div className="flex-1 relative overflow-auto">
-              <div className="min-h-full min-w-full flex items-center justify-center p-4">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={selectedPlan.url}
-                  alt={selectedPlan.title}
-                  className="max-h-none max-w-none object-contain"
-                  style={{ width: '100%', height: 'auto' }}
-                />
-              </div>
-            </div>
-            {selectedPlan.description && (
-              <div className="absolute bottom-0 left-0 right-0 bg-black/80 backdrop-blur-md p-6 border-t border-white/10">
-                <p className="text-white text-sm leading-relaxed">{selectedPlan.description}</p>
-              </div>
-            )}
-          </div>
+          <SmartPlanClient plan={selectedPlan} />
         </FullScreenSlideModal>
       )}
     </>

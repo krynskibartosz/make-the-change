@@ -6,6 +6,8 @@ import type {
   MaterialMovement,
   Photo,
   Plan,
+  PlanZone,
+  PlanPin,
   Task,
   WorkEntry,
 } from '@/lib/domain'
@@ -753,5 +755,64 @@ export const mockPlans: Plan[] = [
     url: 'https://images.unsplash.com/photo-1541888009-410fb5566f7f?q=80&w=2940&auto=format&fit=crop',
     description: 'Modélisation 3D de l\'extension projetée.',
     createdAt: '2026-06-03T12:00:00.000Z',
+  },
+]
+
+export const mockPlanZones: PlanZone[] = [
+  {
+    id: 'zone-1',
+    planId: 'plan-1',
+    label: 'Terrasse',
+    shapeType: 'polygon',
+    coordinates: [
+      [10, 10],
+      [40, 10],
+      [40, 30],
+      [10, 30],
+    ],
+  },
+  {
+    id: 'zone-2',
+    planId: 'plan-1',
+    label: 'Structure Principale',
+    shapeType: 'rect',
+    coordinates: [
+      [45, 10],
+      [90, 80],
+    ],
+  },
+]
+
+export const mockPlanPins: PlanPin[] = [
+  {
+    id: 'pin-1',
+    planId: 'plan-1',
+    zoneId: 'zone-2',
+    type: 'confirm',
+    x: 60,
+    y: 40,
+    title: 'À confirmer avec Martin (P1.7)',
+    status: 'to_check',
+    interventionId: 'int-confirmation-p17',
+  },
+  {
+    id: 'pin-2',
+    planId: 'plan-1',
+    zoneId: 'zone-1',
+    type: 'photo',
+    x: 25,
+    y: 20,
+    title: 'Photo terrasse avant',
+  },
+  {
+    id: 'pin-3',
+    planId: 'plan-1',
+    zoneId: 'zone-2',
+    type: 'task',
+    x: 75,
+    y: 60,
+    title: 'Acheter disques béton',
+    status: 'to_do',
+    interventionId: 'int-disques-beton',
   },
 ]

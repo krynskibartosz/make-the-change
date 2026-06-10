@@ -13,6 +13,8 @@ import type {
   Phase,
   Photo,
   Plan,
+  PlanZone,
+  PlanPin,
   Project,
   Task,
   TaskStatus,
@@ -32,6 +34,8 @@ export type ClarusRepository = {
   getMaterials: () => Promise<Material[]>
   getPhotos: () => Promise<Photo[]>
   getPlans: () => Promise<Plan[]>
+  getPlanZones: (planId: string) => Promise<PlanZone[]>
+  getPlanPins: (planId: string) => Promise<PlanPin[]>
   getTasks: () => Promise<Task[]>
   getInterventions: () => Promise<Intervention[]>
   getInterventionById: (id: string) => Promise<Intervention | null>
