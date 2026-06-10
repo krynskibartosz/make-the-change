@@ -19,8 +19,11 @@ export function BottomNav() {
     if (role === 'ouvrier') {
       return tab.href === '/chantier' || tab.href === '/menu'
     }
-    // Chef ou Admin voient tout pour l'instant
-    return true
+    if (role === 'client') {
+      return tab.href === '/chantier' || tab.href === '/validations' || tab.href === '/menu'
+    }
+    // Chef ou Admin voient planning, chantier, menu
+    return tab.href === '/planning' || tab.href === '/chantier' || tab.href === '/menu'
   })
 
   return (

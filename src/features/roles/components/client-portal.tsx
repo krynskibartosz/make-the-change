@@ -63,9 +63,9 @@ export function ClientPortal() {
               Avant de continuer la structure, nous devons confirmer cette option pour garantir la stabilité de la dalle.
             </p>
           </div>
-          <button className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold py-2.5 px-4 rounded-xl transition-colors w-full">
+          <Link href="/validations" className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold py-2.5 px-4 rounded-xl transition-colors w-full text-center">
             Voir et Valider
-          </button>
+          </Link>
         </div>
       </section>
 
