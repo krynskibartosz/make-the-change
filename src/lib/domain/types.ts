@@ -218,8 +218,6 @@ export type CreateInterventionDraftInput = {
   days: number
   hourlyRate: number
   isExtra: boolean | 'to_check'
-  billingStatus?: BillingStatus
-  paymentStatus?: PaymentStatus
   notes?: string
 }
 
@@ -256,9 +254,7 @@ export type CreateMaterialMovementInput = {
   type: MaterialMovementType
   quantity: number
   unit: string
-  estimatedCost?: number | null
-  realCost?: number | null
-  supplier?: string | null
+  status: MaterialMovementStatus
 }
 
 export type InterventionDraft = {
@@ -276,9 +272,6 @@ export type InterventionListItem = {
   isExtra: boolean | 'to_check'
   zoneName: string
   phaseName: string
-  zoneId: string
-  phaseId: string
-  personIds: string[]
   hours: number
   amount: number
   updatedAt: string
@@ -303,3 +296,10 @@ export type TodaySummary = {
   latestInterventions: InterventionListItem[]
   alerts: TodayAlert[]
 }
+export type CreatePersonInput = {
+  projectId: string
+  name: string
+  role?: string
+  defaultHourlyRate: number
+}
+export type UpdatePersonInput = Partial<CreatePersonInput> & { active?: boolean }

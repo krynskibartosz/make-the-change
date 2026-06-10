@@ -238,8 +238,6 @@ export const createInterventionDraftInputSchema = z.object({
   days: z.number().positive(),
   hourlyRate: nonNegativeMoneySchema,
   isExtra: toCheckBooleanSchema,
-  billingStatus: billingStatusSchema.optional(),
-  paymentStatus: paymentStatusSchema.optional(),
   notes: z.string().optional(),
 })
 

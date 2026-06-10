@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
 
@@ -6,7 +5,6 @@ import { Badge } from './badge'
 import { Button, IconButton } from './button'
 import { Card } from './card'
 import { ChoiceChip, StatusChip } from './chip'
-import * as UI from './index'
 import { InfoRow } from './info-row'
 import { Input } from './input'
 import { MetricCard } from './metric-card'
@@ -14,12 +12,6 @@ import { NumberStepper } from './number-stepper'
 import { SegmentedControl } from './segmented-control'
 import { StickyActionBar } from './sticky-action-bar'
 import { Textarea } from './textarea'
-
-type ChoiceCardComponent = (props: {
-  children: ReactNode
-  description?: ReactNode
-  selected?: boolean
-}) => ReactNode
 
 describe('Clarus UI primitives', () => {
   it('renders touch-sized action primitives with token-backed variants', () => {
@@ -50,27 +42,6 @@ describe('Clarus UI primitives', () => {
     expect(markup).toContain('Supplement')
     expect(markup).toContain('A verifier')
     expect(markup).toContain('aria-pressed="true"')
-  })
-
-  it('exports and renders mobile choice cards with explicit pressed state', () => {
-    expect(UI).toHaveProperty('ChoiceCard')
-
-    const ChoiceCard = (UI as unknown as { ChoiceCard: ChoiceCardComponent }).ChoiceCard
-    const markup = renderToStaticMarkup(
-      <>
-        <ChoiceCard description="Avant les finitions" selected>
-          Preparation
-        </ChoiceCard>
-        <ChoiceCard>Reception</ChoiceCard>
-      </>,
-    )
-
-    expect(markup).toContain('aria-pressed="true"')
-    expect(markup).toContain('aria-pressed="false"')
-    expect(markup).toContain('min-h-[var(--size-primary-button)]')
-    expect(markup).toContain('text-left')
-    expect(markup).toContain('Preparation')
-    expect(markup).toContain('Avant les finitions')
   })
 
   it('renders labeled form controls with help and error descriptions', () => {

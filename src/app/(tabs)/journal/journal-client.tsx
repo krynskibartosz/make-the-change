@@ -126,7 +126,7 @@ export function JournalClient({
                   month: 'long',
                 })}
               </h2>
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col divide-y divide-border -mx-4 px-4 sm:mx-0 sm:px-0">
                 {groupedByDate[date]?.map((item) => (
                   <InterventionCard key={item.id} intervention={item} />
                 ))}

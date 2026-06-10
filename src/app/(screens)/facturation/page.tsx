@@ -19,7 +19,7 @@ export default function FacturationPage() {
   const loadData = useCallback(async () => {
     const [fetchedInterventions, fetchedExpenses] = await Promise.all([
       mockClarusRepository.getInterventions(),
-      mockClarusRepository.getExpenses(),
+      Promise.resolve([] as Expense[]),
     ])
     setInterventions(fetchedInterventions)
     setExpenses(fetchedExpenses)

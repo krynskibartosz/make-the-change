@@ -47,10 +47,10 @@ export function FullScreenSlideModal({
       className={
         asPage
           ? 'min-h-dvh bg-background text-foreground'
-          : 'fixed inset-0 z-50 overflow-y-auto bg-background text-foreground'
+          : 'fixed inset-0 z-50 bg-background text-foreground'
       }
     >
-      <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pb-[max(env(safe-area-inset-bottom),1.25rem)] pt-[max(env(safe-area-inset-top),1.25rem)]">
+      <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pb-5 pt-[max(env(safe-area-inset-top),1.25rem)]">
         <header className="flex items-start gap-3 border-b border-border pb-4">
           {headerMode !== 'none' ? (
             <button

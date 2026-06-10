@@ -6,11 +6,9 @@ import {
   CircleDashed,
   Euro,
   FileCheck2,
-  Loader2,
   type LucideIcon,
   PlusCircle,
   ShieldAlert,
-  XCircle,
 } from 'lucide-react'
 import { type ComponentPropsWithoutRef, forwardRef, type ReactNode } from 'react'
 
@@ -24,9 +22,6 @@ export type ClarusStatus =
   | 'supplement'
   | 'blocked'
   | 'billable'
-  | 'in_progress'
-  | 'done'
-  | 'cancelled'
 
 type StatusDefinition = Readonly<{
   icon: LucideIcon
@@ -69,21 +64,6 @@ const statusDefinitions: Record<ClarusStatus, StatusDefinition> = {
     icon: FileCheck2,
     label: 'Facturable',
     toneClassName: 'border-billable/30 bg-billable/15 text-billable',
-  },
-  in_progress: {
-    icon: Loader2,
-    label: 'En cours',
-    toneClassName: 'border-info/30 bg-info/15 text-info',
-  },
-  done: {
-    icon: CheckCircle2,
-    label: 'Termine',
-    toneClassName: 'border-success/30 bg-success/15 text-success',
-  },
-  cancelled: {
-    icon: XCircle,
-    label: 'Annule',
-    toneClassName: 'border-border bg-surface-elevated text-muted-foreground',
   },
 }
 

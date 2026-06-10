@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { Badge, Card, StatusChip } from '@/components/ui'
+import { Badge, StatusChip } from '@/components/ui'
 import type { InterventionListItem } from '@/lib/domain'
 
 type InterventionCardProps = Readonly<{
@@ -12,7 +12,7 @@ export function InterventionCard({ intervention }: InterventionCardProps) {
 
   return (
     <Link href={`/interventions/${intervention.id}`} className="block">
-      <Card className="flex flex-col gap-3 active:scale-[0.98] transition-transform">
+      <div className="flex flex-col gap-3 py-4 active:opacity-70 transition-opacity">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
             <h3 className="truncate font-semibold text-foreground">{intervention.title}</h3>
@@ -33,11 +33,11 @@ export function InterventionCard({ intervention }: InterventionCardProps) {
           <StatusChip status={intervention.status} />
         </div>
 
-        <div className="mt-1 flex items-center justify-between border-t border-border pt-3 text-sm">
+        <div className="flex items-center justify-between text-sm">
           <span className="font-medium text-foreground">{intervention.hours}h</span>
           <span className="font-medium text-foreground">{intervention.amount} €</span>
         </div>
-      </Card>
+      </div>
     </Link>
   )
 }
