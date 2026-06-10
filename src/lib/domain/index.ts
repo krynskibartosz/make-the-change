@@ -21,6 +21,7 @@ export type {
   Phase,
   Photo,
   PhotoType,
+  Plan,
   Project,
   ProjectStatus,
   Task,
