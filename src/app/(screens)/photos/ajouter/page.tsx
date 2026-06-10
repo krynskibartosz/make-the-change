@@ -34,7 +34,7 @@ export default function AjouterPhotoPage() {
       await mockClarusRepository.createPhoto({
         projectId: 'project-1', // Default mock project
         url,
-        type: type || undefined,
+        type: (type as any) || 'other',
         zoneId: zoneId || undefined,
         comment: comment || undefined,
         takenAt: new Date().toISOString(),
