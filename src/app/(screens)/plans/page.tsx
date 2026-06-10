@@ -1,6 +1,6 @@
 import { ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
-import { PlansGalleryClient } from './plans-gallery-client'
+import { ZoneChantierClient } from './zone-chantier-client'
 
 export default function PlansPage() {
   return (
@@ -13,13 +13,18 @@ export default function PlansPage() {
           <ChevronLeft className="h-6 w-6" />
         </Link>
         <div className="min-w-0 flex-1">
-          <h1 className="text-xl font-semibold leading-tight truncate">Plans & Documents</h1>
+          <h1 className="text-xl font-semibold leading-tight truncate">
+            Chantier
+          </h1>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            Zones &amp; références techniques
+          </p>
         </div>
       </header>
 
-      <section className="p-5">
-        <PlansGalleryClient />
-      </section>
+      <div className="pb-6">
+        <ZoneChantierClient />
+      </div>
     </main>
   )
 }
