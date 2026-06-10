@@ -59,16 +59,16 @@ export default function FacturationPage() {
   const totalSelected = selectedInterventionIds.length + selectedExpenseIds.length
 
   return (
-    <div className="min-h-dvh bg-background pb-20 pt-[max(env(safe-area-inset-top),1.25rem)] text-foreground">
-      <div className="mx-auto flex w-full max-w-md flex-col px-5">
-        <header className="mb-6 flex items-center gap-3">
+    <div className="min-h-dvh bg-background pb-20 text-foreground">
+      <div className="mx-auto flex w-full max-w-md flex-col">
+        <header className="sticky top-0 z-30 mb-6 flex items-center gap-3 pb-4 px-5 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/70">
           <IconButton aria-label="Retour" onClick={() => router.back()} variant="secondary">
             <ChevronLeft className="size-5" />
           </IconButton>
           <h1 className="text-2xl font-bold">Facturation</h1>
         </header>
 
-        <section className="flex flex-col gap-3">
+        <section className="flex flex-col gap-3 px-5">
           <h2 className="text-sm font-semibold text-foreground">Interventions Facturables</h2>
           {billableInterventions.length === 0 ? (
             <p className="text-sm text-muted-foreground">Aucune intervention facturable.</p>

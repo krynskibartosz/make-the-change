@@ -17,7 +17,7 @@ export default function EquipePage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-10 flex items-center justify-between p-4 bg-surface border-b border-border">
+      <header className="sticky top-0 z-30 flex items-center justify-between pb-4 px-5 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/70 mb-5">
         <div className="flex items-center gap-4">
           <IconButton type="button" onClick={() => router.back()} variant="ghost" aria-label="Retour">
             <ChevronLeft size={24} />

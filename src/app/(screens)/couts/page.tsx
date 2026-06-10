@@ -9,8 +9,8 @@ export default function CostsPage() {
   const router = useRouter()
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pb-32 pt-[max(env(safe-area-inset-top),1.25rem)] text-foreground">
-      <header className="flex items-center gap-4 pb-5">
+    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col pb-32 text-foreground">
+      <header className="sticky top-0 z-30 flex items-center gap-4 pb-4 px-5 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/70 mb-5">
         <IconButton aria-label="Retour" variant="ghost" onClick={() => router.back()}>
           <ChevronLeft />
         </IconButton>
@@ -19,7 +19,7 @@ export default function CostsPage() {
         </div>
       </header>
 
-      <div className="flex flex-1 flex-col gap-4">
+      <div className="flex flex-1 flex-col gap-4 px-5">
         <section className="rounded-[var(--radius-card)] border border-border bg-surface p-4">
           <p className="text-sm leading-6 text-muted-foreground">
             Shell pret pour les totaux heures, main d'oeuvre et repartitions.

@@ -5,14 +5,15 @@ import Link from 'next/link'
 
 export default function MenuPage() {
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pb-32 pt-[max(env(safe-area-inset-top),1.25rem)] text-foreground">
-      <header className="flex items-center gap-4 pb-5">
+    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col pb-32 text-foreground">
+      <header className="sticky top-0 z-30 flex items-center gap-4 pb-4 px-5 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/70 mb-5">
         <div className="min-w-0">
           <h1 className="text-3xl font-semibold leading-tight">Menu</h1>
         </div>
       </header>
 
-      <div className="flex flex-col rounded-[var(--radius-card)] bg-surface shadow-sm overflow-hidden border border-border">
+      <div className="flex flex-col px-5">
+        <div className="flex flex-col rounded-[var(--radius-card)] bg-surface shadow-sm overflow-hidden border border-border">
         <Link
           href="/couts"
           className="flex items-center gap-4 p-4 transition-colors hover:bg-surface-elevated border-b border-border last:border-0"
@@ -83,6 +84,7 @@ export default function MenuPage() {
           </div>
           <ChevronRight className="size-5 text-muted-foreground" />
         </button>
+        </div>
       </div>
     </main>
   )
