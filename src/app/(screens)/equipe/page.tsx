@@ -1,7 +1,8 @@
 'use client'
 
-import { ChevronLeft, Plus, Users } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Plus, Users } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { IconButton } from '@/components/ui/button'
 import type { Person } from '@/lib/domain'
@@ -36,21 +37,25 @@ export default function EquipePage() {
           ) : (
             <div className="flex flex-col bg-surface rounded-[var(--radius-card)] border border-border">
               {people.map((person) => (
-                <div
+                <Link
                   key={person.id}
-                  className="flex items-center justify-between p-4 transition-colors border-b border-border last:border-0"
+                  href={`/equipe/${person.id}/editer`}
+                  className="flex items-center justify-between p-4 transition-colors border-b border-border last:border-0 active:bg-surface-elevated"
                 >
-                <div className="flex flex-col">
-                  <span className="font-semibold text-base">{person.name}</span>
-                  <span className="text-sm text-muted-foreground">
-                    {person.role || 'Sans rôle'}
-                  </span>
-                </div>
-                <div className="flex flex-col items-end">
-                  <span className="font-medium">{person.defaultHourlyRate} €</span>
-                  <span className="text-xs text-muted-foreground">par heure</span>
-                </div>
-                </div>
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-base">{person.name}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {person.role || 'Sans rôle'}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="flex flex-col items-end">
+                      <span className="font-medium">{person.defaultHourlyRate} €</span>
+                      <span className="text-[10px] uppercase tracking-wider text-muted-foreground">par heure</span>
+                    </div>
+                    <ChevronRight className="h-5 w-5 text-muted-foreground/40" />
+                  </div>
+                </Link>
               ))}
             </div>
           )}
