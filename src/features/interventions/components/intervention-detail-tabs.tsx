@@ -6,6 +6,7 @@ export type InterventionDetailTab = {
   id: string
   label: string
   content: React.ReactNode
+  cta?: React.ReactNode
 }
 
 type InterventionDetailTabsProps = {
@@ -38,9 +39,18 @@ export function InterventionDetailTabs({ tabs }: InterventionDetailTabsProps) {
           })}
         </div>
       </div>
-      <div className="w-full">
+      <div className="w-full flex-1 mb-20">
         {tabs.find((tab) => tab.id === activeTab)?.content}
       </div>
+      
+      {/* Fixed Bottom CTA */}
+      {tabs.find((tab) => tab.id === activeTab)?.cta && (
+        <div className="fixed bottom-0 left-0 right-0 p-4 pb-[max(env(safe-area-inset-bottom),1rem)] bg-background/90 backdrop-blur-md border-t border-border/50 z-40">
+          <div className="max-w-md mx-auto">
+            {tabs.find((tab) => tab.id === activeTab)?.cta}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

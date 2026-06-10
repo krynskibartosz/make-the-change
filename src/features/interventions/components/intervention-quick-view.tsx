@@ -123,6 +123,11 @@ export function InterventionQuickView({
           )}
         </div>
       ),
+      cta: (
+        <button className="w-full flex items-center justify-center gap-2 rounded-xl bg-surfaceElevated text-foreground py-3.5 font-semibold border border-border active:scale-[0.98] transition-all">
+          Éditer l'intervention
+        </button>
+      ),
     },
     {
       id: 'hours',
@@ -157,12 +162,14 @@ export function InterventionQuickView({
                 <p className="text-sm text-muted-foreground">Aucune heure enregistrée</p>
               </div>
             )}
-            
-            <button className="mt-4 w-full rounded-xl bg-surfaceElevated py-3 text-sm font-bold text-primary hover:bg-surfaceElevated/80 transition-colors">
-              + Ajouter des heures
-            </button>
           </section>
         </div>
+      ),
+      cta: (
+        <button className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground py-3.5 font-semibold active:scale-[0.98] transition-all shadow-lg shadow-primary/20">
+          <Clock className="w-5 h-5" />
+          Ajouter des heures
+        </button>
       ),
     },
     {
@@ -198,15 +205,17 @@ export function InterventionQuickView({
                 <p className="text-sm text-muted-foreground">Aucune dépense enregistrée</p>
               </div>
             )}
-            
-            <Link 
-              href={`/ajouter-depense`}
-              className="mt-4 block w-full text-center rounded-xl bg-surfaceElevated py-3 text-sm font-bold text-primary hover:bg-surfaceElevated/80 transition-colors"
-            >
-              + Ajouter une dépense
-            </Link>
           </section>
         </div>
+      ),
+      cta: (
+        <Link 
+          href={`/ajouter-depense`}
+          className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground py-3.5 font-semibold active:scale-[0.98] transition-all shadow-lg shadow-primary/20"
+        >
+          <PackageCheck className="w-5 h-5" />
+          Ajouter une dépense
+        </Link>
       ),
     },
     {
@@ -239,12 +248,14 @@ export function InterventionQuickView({
                 <p className="text-sm text-muted-foreground">Aucune photo pour l'instant</p>
               </div>
             )}
-            
-            <button className="mt-4 w-full rounded-xl bg-surfaceElevated py-3 text-sm font-bold text-primary hover:bg-surfaceElevated/80 transition-colors">
-              + Ajouter une photo
-            </button>
           </section>
         </div>
+      ),
+      cta: (
+        <button className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground py-3.5 font-semibold active:scale-[0.98] transition-all shadow-lg shadow-primary/20">
+          <ImageIcon className="w-5 h-5" />
+          Ajouter une photo
+        </button>
       ),
     },
   ]
