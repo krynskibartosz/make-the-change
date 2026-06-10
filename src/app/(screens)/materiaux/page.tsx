@@ -62,11 +62,24 @@ export default function MateriauxPage() {
                     href={`/materiaux/${material.id}`}
                     className="flex items-center justify-between p-4 transition-colors border-b border-border last:border-0 active:bg-surface-elevated"
                   >
-                    <div className="flex flex-col min-w-0 pr-4">
-                      <span className="font-semibold text-base truncate">{material.name}</span>
-                      <span className="text-sm text-muted-foreground">
-                        {material.category || 'Sans catégorie'}
-                      </span>
+                    <div className="flex items-center gap-4 min-w-0 pr-4">
+                      {material.photoUrl ? (
+                        <img
+                          src={material.photoUrl}
+                          alt={`Photo de ${material.name}`}
+                          className="h-12 w-12 rounded-lg border border-border object-cover bg-background shrink-0"
+                        />
+                      ) : (
+                        <div className="h-12 w-12 rounded-lg border border-border bg-background flex items-center justify-center shrink-0">
+                          <Package className="h-6 w-6 text-muted-foreground/50" />
+                        </div>
+                      )}
+                      <div className="flex flex-col min-w-0">
+                        <span className="font-semibold text-base truncate">{material.name}</span>
+                        <span className="text-sm text-muted-foreground truncate">
+                          {material.category || 'Sans catégorie'}
+                        </span>
+                      </div>
                     </div>
                     <div className="flex items-center gap-3 shrink-0">
                       <div className="flex flex-col items-end">

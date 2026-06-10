@@ -42,11 +42,26 @@ export default function EquipePage() {
                   href={`/equipe/${person.id}/editer`}
                   className="flex items-center justify-between p-4 transition-colors border-b border-border last:border-0 active:bg-surface-elevated"
                 >
-                  <div className="flex flex-col">
-                    <span className="font-semibold text-base">{person.name}</span>
-                    <span className="text-sm text-muted-foreground">
-                      {person.role || 'Sans rôle'}
-                    </span>
+                  <div className="flex items-center gap-4 min-w-0">
+                    {person.avatarUrl ? (
+                      <img
+                        src={person.avatarUrl}
+                        alt={`Avatar de ${person.name}`}
+                        className="h-12 w-12 rounded-full border border-border object-cover bg-background shrink-0"
+                      />
+                    ) : (
+                      <div className="h-12 w-12 rounded-full border border-border bg-background flex items-center justify-center shrink-0">
+                        <span className="text-sm font-medium text-muted-foreground uppercase">
+                          {person.name.substring(0, 2)}
+                        </span>
+                      </div>
+                    )}
+                    <div className="flex flex-col min-w-0">
+                      <span className="font-semibold text-base truncate">{person.name}</span>
+                      <span className="text-sm text-muted-foreground truncate">
+                        {person.role || 'Sans rôle'}
+                      </span>
+                    </div>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="flex flex-col items-end">

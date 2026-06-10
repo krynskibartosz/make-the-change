@@ -102,7 +102,15 @@ export default function MaterialDetailsPage() {
           
           {/* Dashboard Hero */}
           <section className="bg-surface rounded-[var(--radius-card)] border border-border p-6 flex flex-col items-center justify-center text-center shadow-sm">
-            <Package size={40} className="text-primary/80 mb-3" />
+            {material.photoUrl ? (
+              <img
+                src={material.photoUrl}
+                alt={`Photo de ${material.name}`}
+                className="w-24 h-24 rounded-2xl object-cover mb-4 border border-border bg-background shadow-sm"
+              />
+            ) : (
+              <Package size={40} className="text-primary/80 mb-3" />
+            )}
             <h2 className="text-2xl font-bold">{material.name}</h2>
             <p className="text-muted-foreground mb-6">{material.category || 'Sans catégorie'}</p>
             

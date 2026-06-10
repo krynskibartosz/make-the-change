@@ -9,6 +9,7 @@ export const mockPeople: Person[] = [
     role: 'Chef chantier',
     defaultHourlyRate: 45,
     active: true,
+    avatarUrl: 'https://api.dicebear.com/9.x/initials/svg?seed=Hubert&backgroundColor=000000',
   },
   {
     id: 'person-chris',
@@ -17,6 +18,7 @@ export const mockPeople: Person[] = [
     role: 'Ouvrier polyvalent',
     defaultHourlyRate: 45,
     active: true,
+    avatarUrl: 'https://api.dicebear.com/9.x/initials/svg?seed=Chris&backgroundColor=333333',
   },
   {
     id: 'person-bartosz',
@@ -25,6 +27,7 @@ export const mockPeople: Person[] = [
     role: 'Demolition',
     defaultHourlyRate: 45,
     active: true,
+    avatarUrl: 'https://api.dicebear.com/9.x/initials/svg?seed=Bartosz&backgroundColor=666666',
   },
   {
     id: 'person-gregory',
@@ -33,6 +36,7 @@ export const mockPeople: Person[] = [
     role: 'Suivi administratif',
     defaultHourlyRate: 45,
     active: true,
+    avatarUrl: 'https://api.dicebear.com/9.x/initials/svg?seed=Gregory&backgroundColor=999999',
   },
   {
     id: 'person-autre',

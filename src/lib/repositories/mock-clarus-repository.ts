@@ -60,6 +60,7 @@ export const createMockClarusRepository = (): ClarusRepository => {
         name: input.name,
         role: input.role,
         defaultHourlyRate: input.defaultHourlyRate,
+        avatarUrl: input.avatarUrl,
         active: true,
       }
       people.push(person)
@@ -75,7 +76,9 @@ export const createMockClarusRepository = (): ClarusRepository => {
         id: person.id,
         projectId: person.projectId,
         name: input.name ?? person.name,
+        role: input.role ?? person.role,
         defaultHourlyRate: input.defaultHourlyRate ?? person.defaultHourlyRate,
+        avatarUrl: input.avatarUrl !== undefined ? input.avatarUrl : person.avatarUrl,
         active: input.active ?? person.active,
       }
       people[idx] = updated
@@ -88,7 +91,12 @@ export const createMockClarusRepository = (): ClarusRepository => {
     updateMaterial: async (id: string, input: Partial<Material>) => {
       const idx = materials.findIndex((m) => m.id === id)
       if (idx === -1) throw new Error('Material not found')
-      materials[idx] = { ...materials[idx], ...input } as Material
+      const current = materials[idx]!
+      materials[idx] = { 
+        ...current, 
+        ...input,
+        photoUrl: input.photoUrl !== undefined ? input.photoUrl : current.photoUrl 
+      } as Material
       return materials[idx]
     },
     getMaterialMovements: async () => [...materialMovements],

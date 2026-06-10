@@ -10,6 +10,7 @@ export default function AjouterMembreEquipePage() {
   const [name, setName] = useState('')
   const [role, setRole] = useState('')
   const [defaultHourlyRate, setDefaultHourlyRate] = useState('')
+  const [avatarUrl, setAvatarUrl] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -20,6 +21,7 @@ export default function AjouterMembreEquipePage() {
       name,
       role,
       defaultHourlyRate: parseFloat(defaultHourlyRate),
+      avatarUrl: avatarUrl || undefined,
     })
 
     router.back()
@@ -42,6 +44,20 @@ export default function AjouterMembreEquipePage() {
               className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
               placeholder="Ex: Jean Dupont"
               required
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label htmlFor="avatarUrl" className="text-sm font-medium">
+              Photo de profil (URL optionnelle)
+            </label>
+            <input
+              id="avatarUrl"
+              type="url"
+              value={avatarUrl}
+              onChange={(e) => setAvatarUrl(e.target.value)}
+              className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
+              placeholder="https://..."
             />
           </div>
 

@@ -14,6 +14,7 @@ export default function EditerMembreEquipePage() {
   const [name, setName] = useState('')
   const [role, setRole] = useState('')
   const [defaultHourlyRate, setDefaultHourlyRate] = useState('')
+  const [avatarUrl, setAvatarUrl] = useState('')
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -25,6 +26,7 @@ export default function EditerMembreEquipePage() {
           setName(person.name)
           setRole(person.role || '')
           setDefaultHourlyRate(person.defaultHourlyRate.toString())
+          setAvatarUrl(person.avatarUrl || '')
         } else {
           toast({ title: 'Membre introuvable', variant: 'error' })
           router.back()
@@ -44,6 +46,7 @@ export default function EditerMembreEquipePage() {
       name,
       role,
       defaultHourlyRate: parseFloat(defaultHourlyRate),
+      avatarUrl: avatarUrl || undefined,
     })
 
     toast({ title: 'Membre mis à jour ✓', variant: 'success' })
@@ -77,6 +80,20 @@ export default function EditerMembreEquipePage() {
                 className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
                 placeholder="Ex: Jean Dupont"
                 required
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label htmlFor="avatarUrl" className="text-sm font-medium">
+                Photo de profil (URL optionnelle)
+              </label>
+              <input
+                id="avatarUrl"
+                type="url"
+                value={avatarUrl}
+                onChange={(e) => setAvatarUrl(e.target.value)}
+                className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
+                placeholder="https://..."
               />
             </div>
 

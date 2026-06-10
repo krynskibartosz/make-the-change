@@ -145,6 +145,7 @@ export const personSchema = baseEntitySchema.extend({
   role: z.string().optional(),
   defaultHourlyRate: nonNegativeMoneySchema,
   active: z.boolean(),
+  avatarUrl: z.string().url().nullish(),
 })
 
 export const interventionSchema = baseEntitySchema.extend({
@@ -189,6 +190,7 @@ export const materialSchema = baseEntitySchema.extend({
   name: z.string().min(1),
   category: z.string().optional(),
   defaultUnit: z.string().optional(),
+  photoUrl: z.string().url().nullish(),
 })
 
 export const materialMovementSchema = baseEntitySchema.merge(locationContextSchema).extend({

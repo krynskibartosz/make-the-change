@@ -14,6 +14,7 @@ export default function EditerMateriauPage() {
   const [name, setName] = useState('')
   const [category, setCategory] = useState('')
   const [defaultUnit, setDefaultUnit] = useState('')
+  const [photoUrl, setPhotoUrl] = useState('')
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -24,6 +25,7 @@ export default function EditerMateriauPage() {
           setName(material.name)
           setCategory(material.category || '')
           setDefaultUnit(material.defaultUnit || '')
+          setPhotoUrl(material.photoUrl || '')
         } else {
           toast({ title: 'Matériau introuvable', variant: 'error' })
           router.back()
@@ -43,6 +45,7 @@ export default function EditerMateriauPage() {
       name,
       category,
       defaultUnit,
+      photoUrl: photoUrl || undefined,
     })
 
     toast({ title: 'Matériau mis à jour ✓', variant: 'success' })
@@ -90,6 +93,20 @@ export default function EditerMateriauPage() {
                 onChange={(e) => setCategory(e.target.value)}
                 className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
                 placeholder="Ex: Maçonnerie"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label htmlFor="photoUrl" className="text-sm font-medium">
+                Photo du matériau (URL optionnelle)
+              </label>
+              <input
+                id="photoUrl"
+                type="url"
+                value={photoUrl}
+                onChange={(e) => setPhotoUrl(e.target.value)}
+                className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
+                placeholder="https://..."
               />
             </div>
 

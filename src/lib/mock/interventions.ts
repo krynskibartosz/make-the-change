@@ -639,6 +639,7 @@ export const mockMaterials: Material[] = [
     name: 'Protection sols',
     category: 'Protection',
     defaultUnit: 'rouleau',
+    photoUrl: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=200&auto=format&fit=crop',
   },
   {
     id: 'mat-disque-beton',
@@ -646,6 +647,7 @@ export const mockMaterials: Material[] = [
     name: 'Disques béton',
     category: 'Consommable',
     defaultUnit: 'pièce',
+    photoUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=200&auto=format&fit=crop',
   },
   {
     id: 'mat-sacs-gravats',
@@ -653,6 +655,7 @@ export const mockMaterials: Material[] = [
     name: 'Sacs gravats',
     category: 'Évacuation',
     defaultUnit: 'pièce',
+    photoUrl: 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=200&auto=format&fit=crop',
   },
   {
     id: 'mat-ipe360',
