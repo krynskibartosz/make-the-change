@@ -119,10 +119,10 @@ export function SmartPlanClient({ plan }: { plan: Plan }) {
                   if (zone.shapeType === 'rect') {
                     const [p1, p2] = zone.coordinates
                     if (!p1 || !p2) return null
-                    const x = Math.min(p1[0], p2[0])
-                    const y = Math.min(p1[1], p2[1])
-                    const width = Math.abs(p2[0] - p1[0])
-                    const height = Math.abs(p2[1] - p1[1])
+                    const x = Math.min(p1[0] as number, p2[0] as number)
+                    const y = Math.min(p1[1] as number, p2[1] as number)
+                    const width = Math.abs((p2[0] as number) - (p1[0] as number))
+                    const height = Math.abs((p2[1] as number) - (p1[1] as number))
                     return (
                       <rect
                         key={zone.id}
