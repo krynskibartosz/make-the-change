@@ -2,7 +2,9 @@
 
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { FloatingCTA } from '@/components/ui'
 import type { Material, Zone } from '@/lib/domain'
+import { CURRENT_PROJECT_ID } from '@/lib/constants'
 import { toast } from '@/lib/hooks/use-toast'
 import { mockClarusRepository } from '@/lib/repositories'
 import { FullScreenSlideModal } from '../../@modal/_components/full-screen-slide-modal'
@@ -38,7 +40,7 @@ export default function AjouterMateriauPage() {
     const zone = zones.find((z) => z.id === selectedZoneId)
 
     await mockClarusRepository.createMaterialMovement({
-      projectId: 'project-1',
+      projectId: CURRENT_PROJECT_ID,
       materialId: selectedMaterialId,
       zoneId: selectedZoneId,
       type: 'used',
@@ -124,17 +126,15 @@ export default function AjouterMateriauPage() {
         </section>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 p-4 pb-[max(env(safe-area-inset-bottom),1rem)] bg-background/90 backdrop-blur-md border-t border-border/50 z-40">
-        <div className="max-w-md mx-auto">
-          <button
-            type="submit"
-            form="add-material-form"
-            className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground py-3.5 font-semibold active:scale-[0.98] transition-all shadow-lg shadow-primary/20"
-          >
-            Enregistrer l'utilisation
-          </button>
-        </div>
-      </div>
+      <FloatingCTA>
+        <button
+          type="submit"
+          form="add-material-form"
+          className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground py-3.5 font-semibold active:scale-[0.98] transition-all shadow-lg shadow-primary/20"
+        >
+          Enregistrer l'utilisation
+        </button>
+      </FloatingCTA>
     </FullScreenSlideModal>
   )
 }

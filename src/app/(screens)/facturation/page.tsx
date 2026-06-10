@@ -1,13 +1,14 @@
 'use client'
 
-import { ChevronLeft, Image as ImageIcon } from 'lucide-react'
+import { Image as ImageIcon } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
-import { Button, IconButton } from '@/components/ui'
+import { Button, FloatingCTA } from '@/components/ui'
 import { selectBillingSummary } from '@/features/billing/selectors'
 import type { Expense, Intervention, Photo } from '@/lib/domain'
 import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
+import { Screen } from '../_components/screen'
 
 export default function FacturationPage() {
   const router = useRouter()
@@ -63,16 +64,8 @@ export default function FacturationPage() {
   const totalSelected = selectedInterventionIds.length + selectedExpenseIds.length
 
   return (
-    <div className="min-h-dvh bg-background pb-20 text-foreground">
-      <div className="mx-auto flex w-full max-w-md flex-col">
-        <header className="sticky top-0 z-30 mb-6 flex items-center gap-3 pb-4 px-5 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/70">
-          <IconButton aria-label="Retour" onClick={() => router.back()} variant="secondary">
-            <ChevronLeft className="size-5" />
-          </IconButton>
-          <h1 className="text-2xl font-bold">Facturation</h1>
-        </header>
-
-        <section className="flex flex-col gap-3 px-5">
+    <Screen title="Facturation" backHref="/couts">
+      <section className="flex flex-col gap-3">
           <h2 className="text-sm font-semibold text-foreground">Interventions Facturables</h2>
           {billableInterventions.length === 0 ? (
             <p className="text-sm text-muted-foreground">Aucune intervention facturable.</p>
@@ -153,16 +146,13 @@ export default function FacturationPage() {
               })}
             </div>
           )}
-        </section>
+      </section>
 
-        <div className="fixed inset-x-0 bottom-0 border-t border-border bg-surface p-4 pb-[max(env(safe-area-inset-bottom),1rem)]">
-          <div className="mx-auto max-w-md">
-            <Button fullWidth disabled={totalSelected === 0} onClick={handleInvoice}>
-              Marquer comme facturé ({totalSelected})
-            </Button>
-          </div>
-        </div>
-      </div>
-    </div>
+      <FloatingCTA>
+        <Button fullWidth disabled={totalSelected === 0} onClick={handleInvoice}>
+          Marquer comme facturé ({totalSelected})
+        </Button>
+      </FloatingCTA>
+    </Screen>
   )
 }

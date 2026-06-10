@@ -1,7 +1,8 @@
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import { Clock, Image as ImageIcon, Receipt, CheckSquare } from 'lucide-react'
+import { Camera, FileText, Package, Wrench, Clock, Image as ImageIcon, Receipt, CheckSquare } from 'lucide-react'
 import type { TimelineEvent } from '@/lib/domain'
+import { groupByDate } from '@/lib/utils/group-by-date'
 import Link from 'next/link'
 
 export function TimelineView({ events }: { events: TimelineEvent[] }) {
@@ -10,12 +11,7 @@ export function TimelineView({ events }: { events: TimelineEvent[] }) {
   }
 
   // Group events by date
-  const groupedEvents = events.reduce((acc, event) => {
-    const list = acc[event.date] || []
-    list.push(event)
-    acc[event.date] = list
-    return acc
-  }, {} as Record<string, TimelineEvent[]>)
+  const groupedEvents = groupByDate(events, (e) => e.date)
 
   const sortedDates = Object.keys(groupedEvents).sort((a, b) => b.localeCompare(a))
 

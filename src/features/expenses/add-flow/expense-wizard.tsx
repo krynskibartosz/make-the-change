@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { useReducer, useState } from 'react'
+import { CURRENT_PROJECT_ID } from '@/lib/constants'
 import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
 import { StepImputation } from './components/step-imputation'
 import { StepPreuve } from './components/step-preuve'
@@ -24,7 +25,7 @@ export function ExpenseWizard() {
       // S'il y a une photo uploadée, on la crée d'abord
       if (finalState.preuve.photoUrl) {
         const photo = await mockClarusRepository.createPhoto({
-          projectId: 'project-1', // Default project
+          projectId: CURRENT_PROJECT_ID,
           url: finalState.preuve.photoUrl,
           type: 'receipt',
           comment: `Reçu pour ${finalState.quoi.titre}`,
@@ -34,7 +35,7 @@ export function ExpenseWizard() {
       }
 
       await mockClarusRepository.createExpense({
-        projectId: 'project-1',
+        projectId: CURRENT_PROJECT_ID,
         interventionId: finalState.imputation.interventionId || undefined,
         description: finalState.quoi.titre,
         amount: Number.parseFloat(finalState.quoi.montant),
