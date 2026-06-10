@@ -33,7 +33,7 @@ export function StepWho({ dispatch, people, state }: StepWhoProps) {
           selected={state.personIds.includes(person.id)}
         >
           {person.name}
-        </ChoiceCard>
+        </Card>
       ))}
     </div>
   )
