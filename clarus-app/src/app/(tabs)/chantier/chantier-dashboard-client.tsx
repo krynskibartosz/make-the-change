@@ -1,16 +1,16 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { AlertTriangle, HardHat, Wrench, ShieldAlert } from 'lucide-react'
-import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
-import type { Zone, Task, Intervention } from '@/lib/domain'
+import { AlertTriangle, HardHat, ShieldAlert, Wrench } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { SegmentedControl } from '@/components/ui/segmented-control'
+import type { Intervention, Task, Zone } from '@/lib/domain'
+import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
 import { ZoneRowCard } from './_components/zone-row-card'
 
 export function ChantierDashboardClient() {
   const [filter, setFilter] = useState('all')
   const [isLoading, setIsLoading] = useState(true)
-  
+
   const [zones, setZones] = useState<Zone[]>([])
   const [tasks, setTasks] = useState<Task[]>([])
   const [interventions, setInterventions] = useState<Intervention[]>([])
@@ -22,7 +22,7 @@ export function ChantierDashboardClient() {
         const [z, t, i] = await Promise.all([
           mockClarusRepository.getZones(),
           mockClarusRepository.getTasks(),
-          mockClarusRepository.getInterventions()
+          mockClarusRepository.getInterventions(),
         ])
         setZones(z)
         setTasks(t)
@@ -37,23 +37,28 @@ export function ChantierDashboardClient() {
   }, [])
 
   if (isLoading) {
-    return <div className="p-4 text-center text-sm text-muted-foreground">Chargement du chantier...</div>
+    return (
+      <div className="p-4 text-center text-sm text-muted-foreground">Chargement du chantier...</div>
+    )
   }
 
   // Count tasks and interventions per zone
-  const countsByZone = zones.reduce((acc, zone) => {
-    acc[zone.id] = { tasks: 0, interventions: 0 }
-    return acc
-  }, {} as Record<string, { tasks: number; interventions: number }>)
+  const countsByZone = zones.reduce(
+    (acc, zone) => {
+      acc[zone.id] = { tasks: 0, interventions: 0 }
+      return acc
+    },
+    {} as Record<string, { tasks: number; interventions: number }>,
+  )
 
-  tasks.forEach(task => {
+  tasks.forEach((task) => {
     if (task.zoneId) {
       const zoneData = countsByZone[task.zoneId]
       if (zoneData) zoneData.tasks++
     }
   })
 
-  interventions.forEach(intervention => {
+  interventions.forEach((intervention) => {
     if (intervention.zoneId) {
       const zoneData = countsByZone[intervention.zoneId]
       if (zoneData) zoneData.interventions++
@@ -61,19 +66,23 @@ export function ChantierDashboardClient() {
   })
 
   // Group zones
-  const simpleZones = zones.filter(z => z.type === 'simple' && !z.parentZoneId)
-  const technicalZones = zones.filter(z => z.type === 'technical')
-  
+  const simpleZones = zones.filter((z) => z.type === 'simple' && !z.parentZoneId)
+  const technicalZones = zones.filter((z) => z.type === 'technical')
+
   // A heuristic to mark technical elements as 'sensible' (for the demo)
-  const isSensible = (code?: string | null) => code?.includes('P1.7') || code?.includes('P1.8') || code?.includes('S') || code?.includes('L180')
+  const isSensible = (code?: string | null) =>
+    code?.includes('P1.7') ||
+    code?.includes('P1.8') ||
+    code?.includes('S') ||
+    code?.includes('L180')
 
   // Calculate urgent tasks (just an example metric for the top banner)
-  const urgentTasksCount = tasks.filter(t => t.priority === 'urgent').length + 5 // Added 5 to make it look like the mockup's "10 points urgents"
+  const urgentTasksCount = tasks.filter((t) => t.priority === 'urgent').length + 5 // Added 5 to make it look like the mockup's "10 points urgents"
 
   const filterOptions = [
     { label: 'Tout', value: 'all' },
     { label: 'Zones', value: 'zones' },
-    { label: 'Technique', value: 'technical' }
+    { label: 'Technique', value: 'technical' },
   ]
 
   return (
@@ -83,7 +92,8 @@ export function ChantierDashboardClient() {
         <div className="flex items-center gap-2 rounded-[var(--radius-card)] border border-danger/50 bg-danger/10 px-4 py-3 text-danger shadow-[0_0_15px_rgba(var(--color-danger),0.1)]">
           <AlertTriangle className="size-5" />
           <span className="text-sm font-semibold">
-            {urgentTasksCount} points urgents <span className="font-normal opacity-80">à traiter sur le chantier</span>
+            {urgentTasksCount} points urgents{' '}
+            <span className="font-normal opacity-80">à traiter sur le chantier</span>
           </span>
         </div>
       )}
@@ -107,7 +117,7 @@ export function ChantierDashboardClient() {
               Zones du chantier
             </div>
             <div>
-              {simpleZones.map(zone => (
+              {simpleZones.map((zone) => (
                 <ZoneRowCard
                   key={zone.id}
                   id={zone.id}
@@ -129,20 +139,20 @@ export function ChantierDashboardClient() {
             </div>
             <div>
               {technicalZones
-                .filter(z => !z.technicalCode?.startsWith('S'))
-                .map(zone => (
-                <ZoneRowCard
-                  key={zone.id}
-                  id={zone.id}
-                  name={zone.name}
-                  tasksCount={countsByZone[zone.id]?.tasks ?? 0}
-                  interventionsCount={countsByZone[zone.id]?.interventions ?? 0}
-                  isTechnical={true}
-                  technicalCode={zone.technicalCode}
-                  planReference={zone.planReference}
-                  isSensible={isSensible(zone.technicalCode)}
-                />
-              ))}
+                .filter((z) => !z.technicalCode?.startsWith('S'))
+                .map((zone) => (
+                  <ZoneRowCard
+                    key={zone.id}
+                    id={zone.id}
+                    name={zone.name}
+                    tasksCount={countsByZone[zone.id]?.tasks ?? 0}
+                    interventionsCount={countsByZone[zone.id]?.interventions ?? 0}
+                    isTechnical={true}
+                    technicalCode={zone.technicalCode}
+                    planReference={zone.planReference}
+                    isSensible={isSensible(zone.technicalCode)}
+                  />
+                ))}
             </div>
           </section>
         )}
@@ -156,20 +166,20 @@ export function ChantierDashboardClient() {
             </div>
             <div>
               {technicalZones
-                .filter(z => z.technicalCode?.startsWith('S'))
-                .map(zone => (
-                <ZoneRowCard
-                  key={zone.id}
-                  id={zone.id}
-                  name={zone.name}
-                  tasksCount={countsByZone[zone.id]?.tasks ?? 0}
-                  interventionsCount={countsByZone[zone.id]?.interventions ?? 0}
-                  isTechnical={true}
-                  technicalCode={zone.technicalCode}
-                  planReference={zone.planReference}
-                  isSensible={isSensible(zone.technicalCode)}
-                />
-              ))}
+                .filter((z) => z.technicalCode?.startsWith('S'))
+                .map((zone) => (
+                  <ZoneRowCard
+                    key={zone.id}
+                    id={zone.id}
+                    name={zone.name}
+                    tasksCount={countsByZone[zone.id]?.tasks ?? 0}
+                    interventionsCount={countsByZone[zone.id]?.interventions ?? 0}
+                    isTechnical={true}
+                    technicalCode={zone.technicalCode}
+                    planReference={zone.planReference}
+                    isSensible={isSensible(zone.technicalCode)}
+                  />
+                ))}
             </div>
           </section>
         )}

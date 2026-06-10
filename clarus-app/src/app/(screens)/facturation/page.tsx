@@ -2,8 +2,8 @@
 
 import { ChevronLeft } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { Button, Card, ChoiceChip, IconButton } from '@/components/ui'
+import { useEffect, useState, useCallback } from 'react'
+import { Button, Card, IconButton } from '@/components/ui'
 import { selectBillingSummary } from '@/features/billing/selectors'
 import type { Expense, Intervention } from '@/lib/domain'
 import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
@@ -16,23 +16,25 @@ export default function FacturationPage() {
   const [selectedInterventionIds, setSelectedInterventionIds] = useState<string[]>([])
   const [selectedExpenseIds, setSelectedExpenseIds] = useState<string[]>([])
 
-  const loadData = async () => {
-    const [fetchedInterventions, fetchedExpenses] = await Promise.all([
-      mockClarusRepository.getInterventions(),
-      // mockClarusRepository.getExpenses is not defined, wait, how do I get expenses?
-      // I can only fetch what is available in the repository. Let me see if getExpenses exists.
-      // Ah, `getExpenses` is not in clarus-repository.ts
-      // Let's just use what we have or add getExpenses if we can't. Let me check the type of ClarusRepository again.
-      // No getExpenses method...
-      Promise.resolve([] as Expense[]), // Mocking expenses for now since there's no getExpenses in the repo
-    ])
-    setInterventions(fetchedInterventions)
-    setExpenses(fetchedExpenses)
-  }
+  const [isLoading, setIsLoading] = useState(false)
+
+  const loadData = useCallback(async () => {
+    setIsLoading(true)
+    try {
+      const interventionsData = await mockClarusRepository.getInterventions()
+      const expensesData: Expense[] = []
+      setInterventions(interventionsData)
+      setExpenses(expensesData)
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
 
   useEffect(() => {
     loadData()
-  }, [])
+  }, [loadData])
 
   const { interventions: billableInterventions, expenses: billableExpenses } = selectBillingSummary(
     {

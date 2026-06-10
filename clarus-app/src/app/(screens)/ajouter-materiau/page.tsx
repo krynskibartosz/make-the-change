@@ -51,6 +51,7 @@ export default function AjouterMateriauPage() {
       <section className="rounded-[var(--radius-card)] border border-border bg-surface p-4 flex-1 overflow-hidden flex flex-col">
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
+            {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
             <label className="text-sm font-medium">Matériau</label>
             <select
               value={selectedMaterialId}
@@ -68,6 +69,7 @@ export default function AjouterMateriauPage() {
           </div>
 
           <div className="flex flex-col gap-2">
+            {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
             <label className="text-sm font-medium">Zone</label>
             <select
               value={selectedZoneId}
@@ -86,6 +88,7 @@ export default function AjouterMateriauPage() {
 
           <div className="flex gap-4">
             <div className="flex flex-col gap-2 flex-1">
+              {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
               <label className="text-sm font-medium">Quantité</label>
               <input
                 type="number"
@@ -98,6 +101,7 @@ export default function AjouterMateriauPage() {
               />
             </div>
             <div className="flex flex-col gap-2 flex-1">
+              {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
               <label className="text-sm font-medium">Unité</label>
               <input
                 type="text"

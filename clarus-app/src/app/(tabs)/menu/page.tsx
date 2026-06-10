@@ -53,6 +53,7 @@ export default function MenuPage() {
         </Link>
 
         <button
+          type="button"
           disabled
           className="flex w-full items-center gap-4 rounded-[var(--radius-card)] border border-border bg-surface p-4 text-left opacity-50 cursor-not-allowed"
         >

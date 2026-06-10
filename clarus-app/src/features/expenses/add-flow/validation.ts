@@ -9,7 +9,8 @@ export function validateStepQuoi(state: ExpenseAddFlowState['quoi']): Validation
   const errors: string[] = []
   if (!state.titre.trim()) errors.push('Le titre est requis.')
   if (!state.montant.trim()) errors.push('Le montant est requis.')
-  else if (isNaN(Number(state.montant))) errors.push('Le montant doit être un nombre valide.')
+  else if (Number.isNaN(Number(state.montant)))
+    errors.push('Le montant doit être un nombre valide.')
   if (!state.fournisseur.trim()) errors.push('Le fournisseur est requis.')
 
   return {
@@ -18,7 +19,7 @@ export function validateStepQuoi(state: ExpenseAddFlowState['quoi']): Validation
   }
 }
 
-export function validateStepPreuve(state: ExpenseAddFlowState['preuve']): ValidationResult {
+export function validateStepPreuve(_state: ExpenseAddFlowState['preuve']): ValidationResult {
   const errors: string[] = []
   // Preuve might be optional or "to_check", but let's make it optional for now or just warn
   return {
@@ -39,6 +40,6 @@ export function validateStepImputation(state: ExpenseAddFlowState['imputation'])
   }
 }
 
-export function validateStepStatut(state: ExpenseAddFlowState['statut']): ValidationResult {
+export function validateStepStatut(_state: ExpenseAddFlowState['statut']): ValidationResult {
   return { isValid: true, errors: [] }
 }

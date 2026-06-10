@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import React, { useReducer } from 'react'
+import { useReducer } from 'react'
 import { StepImputation } from './components/step-imputation'
 import { StepPreuve } from './components/step-preuve'
 import { StepQuoi } from './components/step-quoi'

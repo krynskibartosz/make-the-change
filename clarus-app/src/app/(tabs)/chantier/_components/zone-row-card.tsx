@@ -34,13 +34,16 @@ export function ZoneRowCard({
         <div className="flex items-start gap-3">
           {/* Dot Status */}
           <div className="mt-1.5 flex h-3 w-3 shrink-0 items-center justify-center rounded-full">
-            <span className={`h-2.5 w-2.5 rounded-full ${dotColor} shadow-[0_0_8px_rgba(var(--color-${dotColor.split('-')[1]}),0.5)]`} />
+            <span
+              className={`h-2.5 w-2.5 rounded-full ${dotColor} shadow-[0_0_8px_rgba(var(--color-${dotColor.split('-')[1]}),0.5)]`}
+            />
           </div>
 
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2 flex-wrap">
               <span className="font-medium text-foreground">
-                {isTechnical && technicalCode ? `${technicalCode} — ` : ''}{name}
+                {isTechnical && technicalCode ? `${technicalCode} — ` : ''}
+                {name}
               </span>
               {isSensible && (
                 <Badge tone="danger" className="h-5 px-1.5 text-[10px] uppercase gap-1">
@@ -65,7 +68,8 @@ export function ZoneRowCard({
                   {interventionsCount > 0 && (
                     <span className="flex items-center gap-1">
                       <Clock className="size-3.5" />
-                      {interventionsCount} {interventionsCount > 1 ? 'interventions' : 'intervention'}
+                      {interventionsCount}{' '}
+                      {interventionsCount > 1 ? 'interventions' : 'intervention'}
                     </span>
                   )}
                 </>
