@@ -24,14 +24,6 @@ export default function EquipePage() {
           </IconButton>
           <h1 className="text-xl font-semibold">Équipe du chantier</h1>
         </div>
-        <button
-          type="button"
-          onClick={() => router.push('/equipe/ajouter')}
-          className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-primary bg-primary/10 rounded-[var(--radius-button)] hover:bg-primary/20 transition-colors"
-        >
-          <Plus size={16} />
-          Ajouter
-        </button>
       </header>
 
       <main className="flex-1 p-4">
@@ -64,6 +56,20 @@ export default function EquipePage() {
           )}
         </div>
       </main>
+
+      {/* Fixed Bottom CTA */}
+      <div className="fixed bottom-0 left-0 right-0 p-4 pb-[max(env(safe-area-inset-bottom),1rem)] bg-background/90 backdrop-blur-md border-t border-border/50 z-40">
+        <div className="max-w-md mx-auto">
+          <button
+            type="button"
+            onClick={() => router.push('/equipe/ajouter')}
+            className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground py-3.5 font-semibold active:scale-[0.98] transition-all shadow-lg shadow-primary/20"
+          >
+            <Plus size={20} />
+            Ajouter un membre
+          </button>
+        </div>
+      </div>
     </div>
   )
 }

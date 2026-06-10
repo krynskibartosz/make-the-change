@@ -92,15 +92,17 @@ export default async function TodayPage() {
         </p>
       )}
 
-      {/* Bouton flottant Ajouter */}
-      <div className="fixed bottom-[calc(max(env(safe-area-inset-bottom),0.75rem)+5.5rem)] inset-x-0 z-40 flex justify-center px-5 pointer-events-none">
-        <Link
-          className="pointer-events-auto flex h-14 w-full max-w-sm items-center justify-center gap-2 rounded-full bg-primary font-semibold text-primary-foreground shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-transform active:scale-[0.98]"
-          href="/interventions/new"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="size-5"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-          Ajouter une intervention
-        </Link>
+      {/* Bouton fixe Ajouter en bas */}
+      <div className="fixed bottom-[calc(env(safe-area-inset-bottom)+4.5rem)] left-0 right-0 p-4 bg-background/90 backdrop-blur-md border-t border-border/50 z-40">
+        <div className="max-w-md mx-auto">
+          <Link
+            className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground py-3.5 font-semibold active:scale-[0.98] transition-all shadow-lg shadow-primary/20"
+            href="/interventions/new"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            Ajouter une intervention
+          </Link>
+        </div>
       </div>
     </TabScreen>
   )

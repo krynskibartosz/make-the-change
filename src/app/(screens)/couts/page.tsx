@@ -28,19 +28,25 @@ export default function CostsPage() {
 
         <section className="mt-6 flex flex-col gap-4">
           <Link
-            href="/ajouter-depense"
-            className="inline-flex min-h-[var(--size-primary-button)] items-center justify-center rounded-[var(--radius-control)] bg-primary px-5 text-base font-semibold text-primary-foreground shadow-[var(--shadow-elevated)] transition-colors"
-          >
-            Ajouter une dépense
-          </Link>
-
-          <Link
             href="/facturation"
             className="inline-flex min-h-[var(--size-primary-button)] items-center justify-center rounded-[var(--radius-control)] border border-border bg-surface-elevated px-5 text-base font-semibold text-foreground transition-colors"
           >
             Gérer la facturation
           </Link>
         </section>
+      </div>
+
+      {/* Fixed Bottom CTA */}
+      <div className="fixed bottom-0 left-0 right-0 p-4 pb-[max(env(safe-area-inset-bottom),1rem)] bg-background/90 backdrop-blur-md border-t border-border/50 z-40">
+        <div className="max-w-md mx-auto">
+          <Link
+            href="/ajouter-depense"
+            className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground py-3.5 font-semibold active:scale-[0.98] transition-all shadow-lg shadow-primary/20"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            Ajouter une dépense
+          </Link>
+        </div>
       </div>
     </main>
   )
