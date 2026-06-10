@@ -38,8 +38,7 @@ describe('createDraftInputFromState', () => {
       days: 1,
       hourlyRate: 45,
       isExtra: false,
-      billingStatus: 'not_billable',
-      paymentStatus: 'not_applicable',
+      
       description: 'Mur retire.',
       notes: 'Mur retire.',
     })
@@ -62,16 +61,14 @@ describe('createDraftInputFromState', () => {
         who: { personIds: ['person-hubert'] },
         status: {
           isExtra: true,
-          billingStatus: 'paid',
-          paymentStatus: 'paid',
+          
         },
       },
     })
 
     expect(input).toMatchObject({
       isExtra: true,
-      billingStatus: 'paid',
-      paymentStatus: 'paid',
+      
     })
   })
 
@@ -96,8 +93,6 @@ describe('createDraftInputFromState', () => {
     expect(input.phaseId).toBeNull()
     expect(input.zoneId).toBeNull()
     expect(input.isExtra).toBe(false)
-    expect(input.billingStatus).toBe('not_billable')
-    expect(input.paymentStatus).toBe('not_applicable')
     expect(input.description).toBeUndefined()
     expect(input.notes).toBeUndefined()
   })
@@ -117,7 +112,7 @@ describe('createDraftInputFromState', () => {
           locationToDefine: false,
         },
         who: { personIds: [] },
-        status: { ...base.status, isExtra: true },
+        status: { isExtra: true },
       },
     })
 
@@ -139,7 +134,7 @@ describe('createDraftInputFromState', () => {
           locationToDefine: false,
         },
         who: { personIds: ['person-hubert'] },
-        status: { ...base.status, isExtra: 'to_check' },
+        status: { isExtra: 'to_check' as any },
       },
     })
 

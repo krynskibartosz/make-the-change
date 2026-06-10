@@ -66,7 +66,7 @@ export const createMockClarusRepository = (): ClarusRepository => {
       const idx = people.findIndex((p) => p.id === id)
       if (idx === -1) throw new Error('Person not found')
       const person = people[idx]
-      const updated = { ...person, ...input }
+      const updated: Person = { ...person!, ...input, id: person!.id, projectId: person!.projectId, name: input.name || person!.name, defaultHourlyRate: input.defaultHourlyRate ?? person!.defaultHourlyRate, active: input.active ?? person!.active }
       people[idx] = updated
       return clonePerson(updated)
     },

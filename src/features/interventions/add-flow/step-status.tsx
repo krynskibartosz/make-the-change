@@ -2,7 +2,7 @@
 
 import type { Dispatch } from 'react'
 
-import { ChoiceCard } from '@/components/ui'
+import { Card as ChoiceCard } from "@/components/ui"
 import type { BillingStatus, PaymentStatus } from '@/lib/domain'
 
 import type { AddInterventionAction } from './reducer'

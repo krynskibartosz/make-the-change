@@ -6,7 +6,7 @@ import { type Dispatch, useReducer } from 'react'
 
 import { Button, StickyActionBar } from '@/components/ui'
 import { mockPeople, mockPhases, mockProject, mockZones } from '@/lib/mock'
-import { clarusRepository } from '@/lib/repositories'
+import { mockClarusRepository } from '@/lib/repositories'
 
 import {
   ADD_INTERVENTION_STEPS,
@@ -38,7 +38,7 @@ export function EditInterventionFlow({ interventionId, initialState }: EditInter
     dispatch({ type: 'setSaveState', saveState: 'saving' })
 
     try {
-      const draft = await clarusRepository.updateInterventionDraft(
+      const draft = await mockClarusRepository.createInterventionDraft(
         interventionId,
         createDraftInputFromState({
           project: mockProject,

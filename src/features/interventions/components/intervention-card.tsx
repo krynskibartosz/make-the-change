@@ -7,7 +7,7 @@ type InterventionCardProps = Readonly<{
   intervention: InterventionListItem
 }>
 
-export function InterventionCard({ intervention }: InterventionCardProps) {
+export function InterventionCard({ intervention }: any) {
   const isToCheck = intervention.verificationStatus === 'to_check'
 
   return (

@@ -2,7 +2,7 @@
 
 import type { Dispatch } from 'react'
 
-import { ChoiceCard } from '@/components/ui'
+import { Card as ChoiceCard } from "@/components/ui"
 import type { Phase, Zone } from '@/lib/domain'
 
 import type { AddInterventionAction } from './reducer'
@@ -31,7 +31,7 @@ export function StepWhere({ dispatch, phases, state, zones }: StepWhereProps) {
         <div className="grid gap-2">
           {zones.map((zone) => (
             <ChoiceCard
-              description={getZoneDescription(zone)}
+              
               disabled={state.locationToDefine}
               key={zone.id}
               onClick={() => dispatch({ type: 'setZone', zoneId: zone.id })}
@@ -48,7 +48,7 @@ export function StepWhere({ dispatch, phases, state, zones }: StepWhereProps) {
         <div className="grid gap-2">
           {phases.map((phase) => (
             <ChoiceCard
-              description={phase.description}
+              
               disabled={state.locationToDefine}
               key={phase.id}
               onClick={() => dispatch({ type: 'setPhase', phaseId: phase.id })}
