@@ -8,7 +8,7 @@ describe('clarusTabs', () => {
       ["Aujourd'hui", '/aujourd-hui'],
       ['Journal', '/journal'],
       ['Chantier', '/chantier'],
-      ['Couts', '/couts'],
+      ['Menu', '/menu'],
     ])
   })
 })

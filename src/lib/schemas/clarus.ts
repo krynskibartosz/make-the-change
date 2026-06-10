@@ -223,6 +223,32 @@ export const photoSchema = z.object({
   takenAt: isoDateTimeSchema,
 })
 
+// --- Type Inference ---
+export type ProjectStatus = z.infer<typeof projectStatusSchema>
+export type ZoneType = z.infer<typeof zoneTypeSchema>
+export type InterventionType = z.infer<typeof interventionTypeSchema>
+export type InterventionStatus = z.infer<typeof interventionStatusSchema>
+export type BillingStatus = z.infer<typeof billingStatusSchema>
+export type PaymentStatus = z.infer<typeof paymentStatusSchema>
+export type TaskStatus = z.infer<typeof taskStatusSchema>
+export type TaskPriority = z.infer<typeof taskPrioritySchema>
+export type MaterialMovementType = z.infer<typeof materialMovementTypeSchema>
+export type MaterialMovementStatus = z.infer<typeof materialMovementStatusSchema>
+export type ExpenseStatus = z.infer<typeof expenseStatusSchema>
+export type PhotoType = z.infer<typeof photoTypeSchema>
+
+export type Project = z.infer<typeof projectSchema>
+export type Phase = z.infer<typeof phaseSchema>
+export type Zone = z.infer<typeof zoneSchema>
+export type Person = z.infer<typeof personSchema>
+export type Intervention = z.infer<typeof interventionSchema>
+export type WorkEntry = z.infer<typeof workEntrySchema>
+export type Task = z.infer<typeof taskSchema>
+export type Material = z.infer<typeof materialSchema>
+export type MaterialMovement = z.infer<typeof materialMovementSchema>
+export type Expense = z.infer<typeof expenseSchema>
+export type Photo = z.infer<typeof photoSchema>
+
 export const createInterventionDraftInputSchema = z.object({
   projectId: idSchema,
   title: z.string().min(1),
@@ -358,7 +384,7 @@ export const mockDatasetSchema = z
   })
 
 export type MockDataset = z.infer<typeof mockDatasetSchema>
-export type CreateInterventionDraftInputSchema = z.infer<typeof createInterventionDraftInputSchema>
+export type CreateInterventionDraftInput = z.infer<typeof createInterventionDraftInputSchema>
 
 export const validateMockDataset = (dataset: MockDataset) => mockDatasetSchema.safeParse(dataset)
 

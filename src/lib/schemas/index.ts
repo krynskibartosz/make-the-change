@@ -1,4 +1,4 @@
-export type { CreateInterventionDraftInputSchema, MockDataset } from './clarus'
+export type { CreateInterventionDraftInput, MockDataset } from './clarus'
 export {
   billingStatusSchema,
   createInterventionDraftInputSchema,
