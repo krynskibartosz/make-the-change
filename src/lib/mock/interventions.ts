@@ -1141,12 +1141,13 @@ export const mockPhotos: Photo[] = [
     takenAt: '2026-06-08T10:20:00.000Z',
   },
   {
+    id: 'photo-ticket-lovemat',
     projectId: SPARRENLAAN_PROJECT_ID,
     interventionId: 'int-lovemat-protection',
     zoneId: 'zone-escalier-etage',
     phaseId: 'phase-admin',
     type: 'receipt',
-    url: '/mock/photos/lovemat-ticket.jpg',
+    url: 'https://images.unsplash.com/photo-1554224155-671804f5e135?q=80&w=1000&auto=format&fit=crop',
     takenAt: '2026-06-08T11:32:00.000Z',
   },
 ]

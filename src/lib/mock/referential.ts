@@ -9,7 +9,7 @@ export const mockPeople: Person[] = [
     role: 'Chef chantier',
     defaultHourlyRate: 45,
     active: true,
-    avatarUrl: 'https://api.dicebear.com/9.x/initials/svg?seed=Hubert&backgroundColor=000000',
+    avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop',
   },
   {
     id: 'person-chris',
@@ -18,7 +18,7 @@ export const mockPeople: Person[] = [
     role: 'Ouvrier polyvalent',
     defaultHourlyRate: 45,
     active: true,
-    avatarUrl: 'https://api.dicebear.com/9.x/initials/svg?seed=Chris&backgroundColor=333333',
+    avatarUrl: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=200&auto=format&fit=crop',
   },
   {
     id: 'person-bartosz',
@@ -27,7 +27,7 @@ export const mockPeople: Person[] = [
     role: 'Demolition',
     defaultHourlyRate: 45,
     active: true,
-    avatarUrl: 'https://api.dicebear.com/9.x/initials/svg?seed=Bartosz&backgroundColor=666666',
+    avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop',
   },
   {
     id: 'person-gregory',
@@ -36,15 +36,16 @@ export const mockPeople: Person[] = [
     role: 'Suivi administratif',
     defaultHourlyRate: 45,
     active: true,
-    avatarUrl: 'https://api.dicebear.com/9.x/initials/svg?seed=Gregory&backgroundColor=999999',
+    avatarUrl: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&auto=format&fit=crop',
   },
   {
     id: 'person-autre',
     projectId: SPARRENLAAN_PROJECT_ID,
     name: 'Autre',
-    role: 'Renfort',
+    role: 'Ouvrier',
     defaultHourlyRate: 45,
     active: true,
+    avatarUrl: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=200&auto=format&fit=crop',
   },
 ]
 
