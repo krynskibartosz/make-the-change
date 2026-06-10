@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Camera, ChevronLeft, Loader2, Receipt, CheckCircle2 } from 'lucide-react'
-import { Button } from '@/components/ui'
+import { Button, StickyActionBar } from '@/components/ui'
 
 type Status = 'idle' | 'scanning' | 'success'
 
@@ -51,14 +51,18 @@ export default function AjouterTicketPage() {
               <span className="text-primary font-medium">Cadrez le ticket ici</span>
             </div>
 
-            <Button 
-              size="primary" 
-              className="w-full h-16 text-lg rounded-2xl flex items-center justify-center gap-3"
-              onClick={handleScan}
-            >
-              <Camera className="size-6" />
-              Prendre la photo
-            </Button>
+            <StickyActionBar 
+              primaryAction={
+                <Button 
+                  size="primary" 
+                  className="w-full h-16 text-lg rounded-2xl flex items-center justify-center gap-3"
+                  onClick={handleScan}
+                >
+                  <Camera className="size-6" />
+                  Prendre la photo
+                </Button>
+              }
+            />
           </div>
         )}
 
@@ -108,13 +112,17 @@ export default function AjouterTicketPage() {
                 </div>
               </div>
 
-              <Button 
-                size="primary" 
-                className="w-full rounded-xl"
-                onClick={handleFinish}
-              >
-                Retour au menu
-              </Button>
+              <StickyActionBar 
+                primaryAction={
+                  <Button 
+                    size="primary" 
+                    className="w-full rounded-xl"
+                    onClick={handleFinish}
+                  >
+                    Retour au menu
+                  </Button>
+                }
+              />
             </div>
           </div>
         )}
