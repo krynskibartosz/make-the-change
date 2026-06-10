@@ -4,23 +4,18 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 import { cn } from '@/lib/utils/cn'
-import { useScrollHeader } from '@/lib/hooks/use-scroll-header'
 
 import { clarusTabs } from './tabs'
 
 export function BottomNav() {
   const pathname = usePathname()
-  const { isVisible } = useScrollHeader()
 
   return (
     <nav
       aria-label="Navigation principale"
-      className={cn(
-        'fixed inset-x-0 bottom-0 z-40 border-t border-border/70 bg-background/85 px-3 pb-[max(env(safe-area-inset-bottom),0.75rem)] pt-2 backdrop-blur-xl transition-all duration-300 ease-in-out',
-        isVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0',
-      )}
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-border/70 bg-background/85 px-3 pb-[max(env(safe-area-inset-bottom),0.75rem)] pt-2 backdrop-blur-xl"
     >
-      <div className="mx-auto grid max-w-md grid-cols-4 gap-1">
+      <div className="mx-auto grid max-w-md grid-cols-4 gap-1 h-[4.5rem]">
         {clarusTabs.map((tab) => {
           const isActive = pathname === tab.href || pathname.startsWith(`${tab.href}/`)
           const Icon = tab.icon
@@ -29,18 +24,17 @@ export function BottomNav() {
             <Link
               aria-current={isActive ? 'page' : undefined}
               className={cn(
-                'relative flex min-h-[var(--size-bottom-nav-item)] flex-col items-center justify-center gap-1 rounded-[var(--radius-control)] px-2 text-xs font-semibold transition-colors',
+                'relative flex flex-col items-center justify-center gap-1.5 rounded-[var(--radius-control)] px-2 transition-colors',
                 isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground',
               )}
               href={tab.href}
               key={tab.href}
             >
-              {/* Pill + glow on active icon — style porté depuis web-client/mobile-bottom-nav */}
               <span
                 className={cn(
                   'flex h-8 w-12 items-center justify-center rounded-xl transition-all duration-200',
                   isActive
-                    ? 'scale-105 bg-primary/15 ring-1 ring-primary/30'
+                    ? 'scale-105 bg-primary/18 ring-1 ring-primary/35'
                     : 'bg-transparent',
                 )}
               >
@@ -53,7 +47,9 @@ export function BottomNav() {
                   )}
                 />
               </span>
-              <span>{tab.label}</span>
+              <span className={cn('w-full whitespace-nowrap text-center text-[10px] leading-none tracking-wide', isActive ? 'font-bold' : 'font-medium')}>
+                {tab.label}
+              </span>
             </Link>
           )
         })}

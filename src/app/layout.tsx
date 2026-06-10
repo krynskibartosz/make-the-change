@@ -24,6 +24,7 @@ export const viewport: Viewport = {
   themeColor: '#080B0F',
   width: 'device-width',
   initialScale: 1,
+  viewportFit: 'cover',
 }
 
 type RootLayoutProps = Readonly<{

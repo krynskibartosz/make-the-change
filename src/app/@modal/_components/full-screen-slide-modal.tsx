@@ -3,6 +3,7 @@
 import { ChevronLeft, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import type { ReactNode } from 'react'
+import { useEffect, useRef } from 'react'
 
 import { cn } from '@/lib/utils/cn'
 
@@ -34,6 +35,20 @@ export function FullScreenSlideModal({
   const router = useRouter()
   const isBackMode = headerMode === 'back'
   const resolvedCloseLabel = closeLabel ?? (isBackMode ? 'Retour' : 'Fermer')
+  const containerRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    const html = document.documentElement
+    const body = document.body
+
+    html.classList.add('overflow-hidden')
+    body.classList.add('overflow-hidden')
+
+    return () => {
+      html.classList.remove('overflow-hidden')
+      body.classList.remove('overflow-hidden')
+    }
+  }, [])
 
   function closeModal() {
     if (onClose) {
@@ -51,14 +66,14 @@ export function FullScreenSlideModal({
 
   return (
     <div
-      className={
-        asPage
-          ? 'min-h-dvh bg-background text-foreground'
-          : 'fixed inset-0 z-50 bg-background text-foreground'
-      }
+      ref={containerRef}
+      className={cn(
+        asPage ? 'relative' : 'fixed inset-0 z-50',
+        'h-[100dvh] w-full flex flex-col bg-background text-foreground overflow-y-auto overflow-x-hidden overscroll-y-contain'
+      )}
     >
-      <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pb-5 pt-[max(env(safe-area-inset-top),1.25rem)]">
-        <header className="flex items-start gap-3 border-b border-border pb-4">
+      <div className="mx-auto flex flex-1 w-full max-w-md flex-col">
+        <header className="sticky top-0 z-40 flex items-start gap-3 border-b border-white/5 bg-background/90 backdrop-blur-md px-5 pb-4 pt-[max(env(safe-area-inset-top),1.25rem)]">
           {headerMode !== 'none' ? (
             <button
               aria-label={resolvedCloseLabel}
@@ -79,7 +94,7 @@ export function FullScreenSlideModal({
           </div>
           {action ? <div className="shrink-0">{action}</div> : null}
         </header>
-        <div className={cn('flex flex-1 flex-col gap-4 py-5', contentClassName)}>{children}</div>
+        <div className={cn('flex flex-1 flex-col gap-4 px-5 pb-5 py-5', contentClassName)}>{children}</div>
       </div>
     </div>
   )
