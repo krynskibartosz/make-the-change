@@ -107,20 +107,20 @@ export function ClientPortal() {
           Rapports
         </h2>
         <div className="rounded-2xl border border-border bg-surface overflow-hidden flex flex-col">
-          <button className="flex items-center justify-between p-4 bg-transparent hover:bg-surface-elevated transition-colors text-left border-b border-border/50">
+          <Link href="/rapports/semaine-24" className="flex items-center justify-between p-4 bg-transparent hover:bg-surface-elevated transition-colors text-left border-b border-border/50">
             <div className="flex items-center gap-3">
               <Calendar className="size-5 text-muted-foreground" />
               <span className="text-sm font-medium">Rapport Semaine 24</span>
             </div>
             <FileText className="size-4 text-muted-foreground" />
-          </button>
-          <button className="flex items-center justify-between p-4 bg-transparent hover:bg-surface-elevated transition-colors text-left">
+          </Link>
+          <Link href="/rapports/semaine-23" className="flex items-center justify-between p-4 bg-transparent hover:bg-surface-elevated transition-colors text-left">
             <div className="flex items-center gap-3">
               <Calendar className="size-5 text-muted-foreground" />
               <span className="text-sm font-medium">Rapport Semaine 23</span>
             </div>
             <FileText className="size-4 text-muted-foreground" />
-          </button>
+          </Link>
         </div>
       </section>
     </div>
