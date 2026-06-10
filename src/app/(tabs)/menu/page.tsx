@@ -1,6 +1,6 @@
 'use client'
 
-import { BarChart3, ChevronRight, Image as ImageIcon, PlusCircle, Settings, Users, type LucideIcon } from 'lucide-react'
+import { BarChart3, ChevronRight, Image as ImageIcon, Map, PlusCircle, Settings, Users, type LucideIcon } from 'lucide-react'
 import Link from 'next/link'
 
 type SettingsItem = {
@@ -97,6 +97,14 @@ export default function MenuPage() {
   ]
 
   const projectItems: SettingsItem[] = [
+    {
+      label: 'Plans & Documents',
+      description: 'Consulter les plans du chantier',
+      icon: Map,
+      href: '/plans',
+      iconWrapperClassName: 'bg-purple-500',
+      iconClassName: 'text-white',
+    },
     {
       label: 'Photos',
       description: 'Voir et ajouter des photos du chantier',

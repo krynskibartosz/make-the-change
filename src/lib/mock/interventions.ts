@@ -5,6 +5,7 @@ import type {
   Material,
   MaterialMovement,
   Photo,
+  Plan,
   Task,
   WorkEntry,
 } from '@/lib/domain'
@@ -725,5 +726,32 @@ export const mockPhotos: Photo[] = [
     type: 'receipt',
     url: '/mock/photos/lovemat-ticket.jpg',
     takenAt: '2026-06-08T11:32:00.000Z',
+  },
+]
+
+export const mockPlans: Plan[] = [
+  {
+    id: 'plan-1',
+    projectId: SPARRENLAAN_PROJECT_ID,
+    title: 'Plan RDC - Électricité',
+    url: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2831&auto=format&fit=crop',
+    description: 'Implantation électrique au rez-de-chaussée, version finale V3.',
+    createdAt: '2026-06-01T10:00:00.000Z',
+  },
+  {
+    id: 'plan-2',
+    projectId: SPARRENLAAN_PROJECT_ID,
+    title: 'Plan Coupe Transversale',
+    url: 'https://images.unsplash.com/photo-1621251392659-42b781eefcce?q=80&w=2938&auto=format&fit=crop',
+    description: 'Coupe détaillée pour les hauteurs sous plafond.',
+    createdAt: '2026-06-02T11:00:00.000Z',
+  },
+  {
+    id: 'plan-3',
+    projectId: SPARRENLAAN_PROJECT_ID,
+    title: 'Vue Architecture - Extension',
+    url: 'https://images.unsplash.com/photo-1541888009-410fb5566f7f?q=80&w=2940&auto=format&fit=crop',
+    description: 'Modélisation 3D de l\'extension projetée.',
+    createdAt: '2026-06-03T12:00:00.000Z',
   },
 ]

@@ -223,6 +223,15 @@ export const photoSchema = z.object({
   takenAt: isoDateTimeSchema,
 })
 
+export const planSchema = z.object({
+  id: idSchema,
+  projectId: idSchema,
+  title: z.string().min(1),
+  url: z.string().min(1),
+  description: z.string().optional(),
+  createdAt: isoDateTimeSchema,
+})
+
 // --- Type Inference ---
 export type ProjectStatus = z.infer<typeof projectStatusSchema>
 export type ZoneType = z.infer<typeof zoneTypeSchema>
@@ -248,6 +257,7 @@ export type Material = z.infer<typeof materialSchema>
 export type MaterialMovement = z.infer<typeof materialMovementSchema>
 export type Expense = z.infer<typeof expenseSchema>
 export type Photo = z.infer<typeof photoSchema>
+export type Plan = z.infer<typeof planSchema>
 
 export const createInterventionDraftInputSchema = z.object({
   projectId: idSchema,

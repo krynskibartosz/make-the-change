@@ -4,6 +4,7 @@ export {
   mockMaterialMovements,
   mockMaterials,
   mockPhotos,
+  mockPlans,
   mockTasks,
   mockWorkEntries,
 } from './interventions'
