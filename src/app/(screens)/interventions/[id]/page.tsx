@@ -1,4 +1,7 @@
-import { Screen } from '../../_components/screen'
+import { notFound } from 'next/navigation'
+import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
+import { InterventionQuickView } from '@/features/interventions/components/intervention-quick-view'
+import { FullScreenSlideModal } from '@/app/@modal/_components/full-screen-slide-modal'
 
 type InterventionDetailPageProps = Readonly<{
   params: Promise<{
@@ -9,14 +12,45 @@ type InterventionDetailPageProps = Readonly<{
 export default async function InterventionDetailPage({ params }: InterventionDetailPageProps) {
   const { id } = await params
 
+  const intervention = await mockClarusRepository.getInterventionById(id)
+
+  if (!intervention) {
+    notFound()
+  }
+
+  // En V0 mock-first, on filtre manuellement les données liées
+  const [allWorkEntries, allExpenses, allTasks, allPhotos, phases, zones] = await Promise.all([
+    mockClarusRepository.getWorkEntries(),
+    mockClarusRepository.getExpenses(),
+    mockClarusRepository.getTasks(),
+    mockClarusRepository.getPhotos(),
+    mockClarusRepository.getPhases(),
+    mockClarusRepository.getZones(),
+  ])
+
+  const workEntries = allWorkEntries.filter((e) => e.interventionId === intervention.id)
+  const expenses = allExpenses.filter((e) => e.interventionId === intervention.id)
+  const tasks = allTasks.filter((t) => t.interventionId === intervention.id)
+  // Fake filter for photos since in mock they might not have interventionId linked, or maybe they do
+  const photos = allPhotos.slice(0, 4) // Show some mock photos for the demo
+
   return (
-    <Screen title="Intervention">
-      <section className="rounded-[var(--radius-card)] border border-border bg-surface p-4">
-        <p className="font-mono text-sm text-primary">{id}</p>
-        <p className="mt-3 text-sm leading-6 text-muted-foreground">
-          Shell pret pour Apercu, Heures, Couts et Photos.
-        </p>
-      </section>
-    </Screen>
+    <FullScreenSlideModal
+      title="Détails de l'intervention"
+      fallbackHref="/journal"
+      headerMode="back"
+      asPage
+      contentClassName="bg-background"
+    >
+      <InterventionQuickView
+        intervention={intervention}
+        workEntries={workEntries}
+        expenses={expenses}
+        tasks={tasks}
+        photos={photos}
+        phases={phases}
+        zones={zones}
+      />
+    </FullScreenSlideModal>
   )
 }

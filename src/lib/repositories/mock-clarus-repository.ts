@@ -91,6 +91,7 @@ export const createMockClarusRepository = (): ClarusRepository => {
     getInterventionById: async (id: string) =>
       interventions.find((intervention) => intervention.id === id) ?? null,
     getWorkEntries: async () => [...mockWorkEntries],
+    getExpenses: async () => [...expenses],
     getTodaySummary: async (date: string) =>
       selectTodaySummary({
         date,

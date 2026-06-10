@@ -40,6 +40,7 @@ export type ClarusRepository = {
   getInterventions: () => Promise<Intervention[]>
   getInterventionById: (id: string) => Promise<Intervention | null>
   getWorkEntries: () => Promise<WorkEntry[]>
+  getExpenses: () => Promise<Expense[]>
   getTodaySummary: (date: string) => Promise<TodaySummary>
   createInterventionDraft: (input: CreateInterventionDraftInput) => Promise<InterventionDraft>
   createTask: (input: CreateTaskInput) => Promise<Task>
