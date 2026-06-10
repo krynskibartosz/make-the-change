@@ -19,20 +19,22 @@ export default async function InterventionDetailPage({ params }: InterventionDet
   }
 
   // En V0 mock-first, on filtre manuellement les données liées
-  const [allWorkEntries, allExpenses, allTasks, allPhotos, phases, zones] = await Promise.all([
-    mockClarusRepository.getWorkEntries(),
-    mockClarusRepository.getExpenses(),
-    mockClarusRepository.getTasks(),
-    mockClarusRepository.getPhotos(),
-    mockClarusRepository.getPhases(),
-    mockClarusRepository.getZones(),
-  ])
+  const [allWorkEntries, allExpenses, allTasks, allPhotos, phases, zones, allMaterialMovements] =
+    await Promise.all([
+      mockClarusRepository.getWorkEntries(),
+      mockClarusRepository.getExpenses(),
+      mockClarusRepository.getTasks(),
+      mockClarusRepository.getPhotos(),
+      mockClarusRepository.getPhases(),
+      mockClarusRepository.getZones(),
+      mockClarusRepository.getMaterialMovements(),
+    ])
 
   const workEntries = allWorkEntries.filter((e) => e.interventionId === intervention.id)
   const expenses = allExpenses.filter((e) => e.interventionId === intervention.id)
   const tasks = allTasks.filter((t) => t.interventionId === intervention.id)
-  // Fake filter for photos since in mock they might not have interventionId linked, or maybe they do
-  const photos = allPhotos.slice(0, 4) // Show some mock photos for the demo
+  const photos = allPhotos.filter((p) => p.interventionId === intervention.id)
+  const materialMovements = allMaterialMovements.filter((m) => m.interventionId === intervention.id)
 
   return (
     <FullScreenSlideModal
@@ -50,6 +52,7 @@ export default async function InterventionDetailPage({ params }: InterventionDet
         photos={photos}
         phases={phases}
         zones={zones}
+        materialMovements={materialMovements}
       />
     </FullScreenSlideModal>
   )

@@ -10,9 +10,10 @@ import {
   Loader2,
   PlusCircle,
 } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
-import type { Intervention, Task, Zone } from '@/lib/domain'
+import type { Intervention, MaterialMovement, Photo, Task, Zone } from '@/lib/domain'
 import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
 
 type ZoneWithStats = Zone & {
@@ -152,11 +153,15 @@ export function ZoneDetailClient({
   zone,
   tasks,
   interventions,
+  photos = [],
+  materialMovements = [],
   onTaskUpdated,
 }: {
   zone: ZoneWithStats
   tasks: Task[]
   interventions: Intervention[]
+  photos?: Photo[]
+  materialMovements?: MaterialMovement[]
   onTaskUpdated: () => void
 }) {
   const openTasks = tasks.filter((t) => t.status !== 'done')
@@ -273,6 +278,63 @@ export function ZoneDetailClient({
                 <InterventionItem intervention={intervention} />
                 {idx < interventions.length - 1 && (
                   <div className="ml-[2.75rem] border-b border-border/40" />
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Photos section */}
+      {photos.length > 0 && (
+        <section className="mt-5">
+          <h3 className="ml-5 mb-1.5 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/70">
+            Photos de la zone
+          </h3>
+          <div className="mx-4 grid grid-cols-2 gap-3">
+            {photos.map((photo) => (
+              <div
+                key={photo.id}
+                className="relative aspect-square rounded-xl overflow-hidden bg-surface-elevated"
+              >
+                {photo.url ? (
+                  <Image src={photo.url} alt={photo.id} fill className="object-cover" />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
+                    <Camera className="w-8 h-8 opacity-20" />
+                  </div>
+                )}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 p-2">
+                  <p className="text-[10px] text-white truncate">{photo.comment || photo.type}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Materials section */}
+      {materialMovements.length > 0 && (
+        <section className="mt-5">
+          <h3 className="ml-5 mb-1.5 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/70">
+            Matériaux
+          </h3>
+          <div className="mx-4 overflow-hidden rounded-xl bg-surface border border-border/50">
+            {materialMovements.map((movement, idx) => (
+              <div key={movement.id}>
+                <div className="flex justify-between items-center px-4 py-3">
+                  <div>
+                    <p className="font-bold text-sm text-foreground">{movement.materialId}</p>
+                    <p className="text-xs text-muted-foreground capitalize">{movement.type}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-bold text-foreground">
+                      {movement.quantity} {movement.unit}
+                    </p>
+                  </div>
+                </div>
+                {idx < materialMovements.length - 1 && (
+                  <div className="mx-4 border-b border-border/40" />
                 )}
               </div>
             ))}

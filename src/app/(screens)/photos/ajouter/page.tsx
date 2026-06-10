@@ -1,20 +1,25 @@
 'use client'
 
 import { Camera, Image as ImageIcon } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { Suspense, useEffect, useState } from 'react'
 import type { Zone } from '@/lib/domain'
 import { toast } from '@/lib/hooks/use-toast'
 import { mockClarusRepository } from '@/lib/repositories'
 import { FullScreenSlideModal } from '../../../@modal/_components/full-screen-slide-modal'
 
-export default function AjouterPhotoPage() {
+function AjouterPhotoForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const defaultZoneId = searchParams.get('zoneId') || ''
+  const defaultInterventionId = searchParams.get('interventionId') || ''
+
   const [zones, setZones] = useState<Zone[]>([])
 
   const [url, setUrl] = useState('')
   const [type, setType] = useState<'before' | 'during' | 'after' | ''>('')
-  const [zoneId, setZoneId] = useState('')
+  const [zoneId, setZoneId] = useState(defaultZoneId)
+  const [interventionId] = useState(defaultInterventionId)
   const [comment, setComment] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -36,6 +41,7 @@ export default function AjouterPhotoPage() {
         url,
         type: (type as any) || 'other',
         zoneId: zoneId || undefined,
+        interventionId: interventionId || undefined,
         comment: comment || undefined,
         takenAt: new Date().toISOString(),
       })
@@ -146,5 +152,13 @@ export default function AjouterPhotoPage() {
         </div>
       </div>
     </FullScreenSlideModal>
+  )
+}
+
+export default function AjouterPhotoPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center">Chargement...</div>}>
+      <AjouterPhotoForm />
+    </Suspense>
   )
 }

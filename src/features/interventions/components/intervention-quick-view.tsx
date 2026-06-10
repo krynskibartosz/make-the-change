@@ -8,7 +8,16 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import type { Expense, Intervention, Phase, Photo, Task, WorkEntry, Zone } from '@/lib/domain/types'
+import type {
+  Expense,
+  Intervention,
+  MaterialMovement,
+  Phase,
+  Photo,
+  Task,
+  WorkEntry,
+  Zone,
+} from '@/lib/domain/types'
 import { type InterventionDetailTab, InterventionDetailTabs } from './intervention-detail-tabs'
 
 function formatAmountNumber(amount: number | null | undefined): string {
@@ -24,6 +33,7 @@ type InterventionQuickViewProps = {
   photos: Photo[]
   phases: Phase[]
   zones: Zone[]
+  materialMovements?: MaterialMovement[]
 }
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
@@ -61,6 +71,7 @@ export function InterventionQuickView({
   photos,
   phases,
   zones,
+  materialMovements = [],
 }: InterventionQuickViewProps) {
   const zoneName = zones.find((z) => z.id === intervention.zoneId)?.name || 'Zone non définie'
   const phaseName = phases.find((p) => p.id === intervention.phaseId)?.name || 'Phase non définie'
@@ -244,6 +255,61 @@ export function InterventionQuickView({
       ),
     },
     {
+      id: 'materials',
+      label: 'Matériaux',
+      content: (
+        <div className="pt-6 px-4 space-y-6 pb-12">
+          <section>
+            <div className="flex items-center justify-between mb-4">
+              <SectionHeading>Matériaux & Logistique</SectionHeading>
+              <span className="text-sm font-bold text-muted-foreground">
+                {materialMovements.length} flux
+              </span>
+            </div>
+
+            {materialMovements.length > 0 ? (
+              <div className="space-y-3">
+                {materialMovements.map((movement) => (
+                  <div
+                    key={movement.id}
+                    className="rounded-xl border border-border bg-surface p-4 flex justify-between items-center"
+                  >
+                    <div>
+                      <p className="font-bold text-sm text-foreground">{movement.materialId}</p>
+                      <p className="text-xs text-muted-foreground mt-1 capitalize">
+                        {movement.type}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold text-foreground">
+                        {movement.quantity} {movement.unit}
+                      </p>
+                      <span className="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold bg-surfaceElevated text-muted-foreground capitalize">
+                        {movement.status}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="py-8 text-center border border-dashed border-border rounded-2xl">
+                <p className="text-sm text-muted-foreground">Aucun mouvement de matériel</p>
+              </div>
+            )}
+          </section>
+        </div>
+      ),
+      cta: (
+        <Link
+          href={`/ajouter-materiau`}
+          className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground py-3.5 font-semibold active:scale-[0.98] transition-all shadow-lg shadow-primary/20"
+        >
+          <PackageCheck className="w-5 h-5" />
+          Ajouter un matériel
+        </Link>
+      ),
+    },
+    {
       id: 'photos',
       label: 'Photos',
       content: (
@@ -282,10 +348,13 @@ export function InterventionQuickView({
         </div>
       ),
       cta: (
-        <button className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground py-3.5 font-semibold active:scale-[0.98] transition-all shadow-lg shadow-primary/20">
+        <Link
+          href={`/photos/ajouter?interventionId=${intervention.id}${intervention.zoneId ? `&zoneId=${intervention.zoneId}` : ''}`}
+          className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground py-3.5 font-semibold active:scale-[0.98] transition-all shadow-lg shadow-primary/20"
+        >
           <ImageIcon className="w-5 h-5" />
           Ajouter une photo
-        </button>
+        </Link>
       ),
     },
   ]

@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { FullScreenSlideModal } from '@/app/@modal/_components/full-screen-slide-modal'
-import type { Intervention, Task, Zone } from '@/lib/domain'
+import type { Intervention, MaterialMovement, Photo, Task, Zone } from '@/lib/domain'
 import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
 import { ZoneDetailClient } from './zone-detail-client'
 
@@ -180,20 +180,26 @@ export function ZoneChantierClient() {
   const [zones, setZones] = useState<Zone[]>([])
   const [tasks, setTasks] = useState<Task[]>([])
   const [interventions, setInterventions] = useState<Intervention[]>([])
+  const [photos, setPhotos] = useState<Photo[]>([])
+  const [materialMovements, setMaterialMovements] = useState<MaterialMovement[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [selectedZone, setSelectedZone] = useState<ZoneWithStats | null>(null)
 
   const loadData = useCallback(async () => {
     setIsLoading(true)
     try {
-      const [z, t, i] = await Promise.all([
+      const [z, t, i, p, m] = await Promise.all([
         mockClarusRepository.getZones(),
         mockClarusRepository.getTasks(),
         mockClarusRepository.getInterventions(),
+        mockClarusRepository.getPhotos(),
+        mockClarusRepository.getMaterialMovements(),
       ])
       setZones(z)
       setTasks(t)
       setInterventions(i)
+      setPhotos(p)
+      setMaterialMovements(m)
     } catch (e) {
       console.error(e)
     } finally {
@@ -275,6 +281,8 @@ export function ZoneChantierClient() {
             zone={selectedZone}
             tasks={tasks.filter((t) => t.zoneId === selectedZone.id)}
             interventions={interventions.filter((i) => i.zoneId === selectedZone.id)}
+            photos={photos.filter((p) => p.zoneId === selectedZone.id)}
+            materialMovements={materialMovements.filter((m) => m.zoneId === selectedZone.id)}
             onTaskUpdated={loadData}
           />
         </FullScreenSlideModal>

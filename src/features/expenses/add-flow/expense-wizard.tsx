@@ -1,7 +1,8 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useReducer } from 'react'
+import { useReducer, useState } from 'react'
+import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
 import { StepImputation } from './components/step-imputation'
 import { StepPreuve } from './components/step-preuve'
 import { StepQuoi } from './components/step-quoi'
@@ -13,10 +14,42 @@ export function ExpenseWizard() {
   const router = useRouter()
   const [state, dispatch] = useReducer(expenseAddFlowReducer, initialExpenseAddFlowState)
 
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   const handleSave = async (finalState: typeof state) => {
-    // Dans une implémentation réelle, on appellerait une mutation / action server ici
-    console.log('Expense saved:', finalState)
-    router.back() // Fermer la modale
+    setIsSubmitting(true)
+    try {
+      let receiptPhotoId: string | undefined
+
+      // S'il y a une photo uploadée, on la crée d'abord
+      if (finalState.preuve.photoUrl) {
+        const photo = await mockClarusRepository.createPhoto({
+          projectId: 'project-1', // Default project
+          url: finalState.preuve.photoUrl,
+          type: 'receipt',
+          comment: `Reçu pour ${finalState.quoi.titre}`,
+          takenAt: new Date().toISOString(),
+        })
+        receiptPhotoId = photo.id
+      }
+
+      await mockClarusRepository.createExpense({
+        projectId: 'project-1',
+        interventionId: finalState.imputation.interventionId || undefined,
+        description: finalState.quoi.titre,
+        amount: Number.parseFloat(finalState.quoi.montant),
+        supplier: finalState.quoi.fournisseur,
+        date: new Date().toISOString().split('T')[0],
+        isRebillable: finalState.statut.isRebillable,
+        receiptPhotoId,
+      })
+
+      router.back()
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (

@@ -1,11 +1,12 @@
 'use client'
 
-import { ChevronLeft } from 'lucide-react'
+import { ChevronLeft, Image as ImageIcon } from 'lucide-react'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { Button, IconButton } from '@/components/ui'
 import { selectBillingSummary } from '@/features/billing/selectors'
-import type { Expense, Intervention } from '@/lib/domain'
+import type { Expense, Intervention, Photo } from '@/lib/domain'
 import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
 
 export default function FacturationPage() {
@@ -13,16 +14,19 @@ export default function FacturationPage() {
 
   const [interventions, setInterventions] = useState<Intervention[]>([])
   const [expenses, setExpenses] = useState<Expense[]>([])
+  const [photos, setPhotos] = useState<Photo[]>([])
   const [selectedInterventionIds, setSelectedInterventionIds] = useState<string[]>([])
   const [selectedExpenseIds, setSelectedExpenseIds] = useState<string[]>([])
 
   const loadData = useCallback(async () => {
-    const [fetchedInterventions, fetchedExpenses] = await Promise.all([
+    const [fetchedInterventions, fetchedExpenses, fetchedPhotos] = await Promise.all([
       mockClarusRepository.getInterventions(),
-      Promise.resolve([] as Expense[]),
+      mockClarusRepository.getExpenses(),
+      mockClarusRepository.getPhotos(),
     ])
     setInterventions(fetchedInterventions)
     setExpenses(fetchedExpenses)
+    setPhotos(fetchedPhotos)
   }, [])
 
   useEffect(() => {
@@ -110,6 +114,8 @@ export default function FacturationPage() {
             <div className="flex flex-col bg-surface rounded-[var(--radius-card)] border border-border">
               {billableExpenses.map((expense) => {
                 const isSelected = selectedExpenseIds.includes(expense.id)
+                const receiptPhoto = photos.find((p) => p.id === expense.receiptPhotoId)
+
                 return (
                   <div
                     key={expense.id}
@@ -118,11 +124,22 @@ export default function FacturationPage() {
                     }`}
                     onClick={() => toggleExpense(expense.id)}
                   >
-                    <div className="flex flex-col">
-                      <span className="font-medium">{expense.description}</span>
+                    <div className="flex flex-col flex-1 min-w-0">
+                      <span className="font-medium truncate pr-4">{expense.description}</span>
                       <span className="text-sm text-muted-foreground">{expense.amount} €</span>
                     </div>
-                    <div>
+
+                    <div className="flex items-center gap-4">
+                      {receiptPhoto ? (
+                        <div className="relative size-10 rounded-md overflow-hidden bg-surface-elevated shrink-0 border border-border">
+                          <Image src={receiptPhoto.url} alt="Reçu" fill className="object-cover" />
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-center size-10 rounded-md bg-surface-elevated shrink-0 border border-border border-dashed text-muted-foreground">
+                          <ImageIcon className="size-4 opacity-50" />
+                        </div>
+                      )}
+
                       <div
                         className={`size-5 rounded-full border-2 ${
                           isSelected
