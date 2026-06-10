@@ -1,7 +1,9 @@
 import { selectTodaySummary } from '@/features/dashboard'
 import { calculateWorkEntryAmount, calculateWorkEntryDuration } from '@/lib/calculations'
 import type {
+  CreateExpenseInput,
   CreateInterventionDraftInput,
+  CreateTaskInput,
   Expense,
   Intervention,
   InterventionDraft,
@@ -9,6 +11,7 @@ import type {
   Phase,
   Project,
   Task,
+  TaskStatus,
   WorkEntry,
   Zone,
 } from '@/lib/domain'
@@ -108,13 +111,59 @@ export const createMockClarusRepository = (): ClarusRepository => {
     getExpenses: async () => expenses.map(cloneExpense),
     getExpensesByInterventionId: async (interventionId: string) =>
       expenses.filter((e) => e.interventionId === interventionId).map(cloneExpense),
-    createExpense: async (input: Omit<Expense, 'id'>) => {
-      const newExpense: Expense = {
-        ...input,
-        id: `expense-mock-${Date.now()}`,
+    createTask: async (input: CreateTaskInput) => {
+      const now = new Date().toISOString()
+      const task: Task = {
+        id: `task-${Date.now()}`,
+        projectId: input.projectId,
+        interventionId: input.interventionId,
+        phaseId: input.phaseId,
+        zoneId: input.zoneId,
+        title: input.title,
+        description: input.description,
+        status: 'to_do',
+        priority: input.priority ?? 'normal',
+        assignedTo: input.assignedTo,
+        dueDate: input.dueDate,
+        createdAt: now,
       }
-      expenses.push(cloneExpense(newExpense))
-      return cloneExpense(newExpense)
+      tasks.push(cloneTask(task))
+      return cloneTask(task)
+    },
+    updateTaskStatus: async (id: string, status: TaskStatus) => {
+      const index = tasks.findIndex((t) => t.id === id)
+      if (index === -1) throw new Error('Task not found')
+      const taskToUpdate = tasks[index]
+      if (!taskToUpdate) throw new Error('Task not found')
+      taskToUpdate.status = status
+      return cloneTask(taskToUpdate)
+    },
+    createExpense: async (input: CreateExpenseInput) => {
+      const expense: Expense = {
+        id: `expense-${Date.now()}`,
+        projectId: input.projectId,
+        interventionId: input.interventionId,
+        materialMovementId: input.materialMovementId,
+        supplier: input.supplier,
+        description: input.description,
+        amount: input.amount,
+        date: input.date,
+        status: 'to_pay',
+        isRebillable: input.isRebillable,
+        receiptPhotoId: input.receiptPhotoId,
+      }
+      expenses.push(cloneExpense(expense))
+      return cloneExpense(expense)
+    },
+    markAsInvoiced: async (interventionIds: string[], expenseIds: string[]) => {
+      interventionIds.forEach((id) => {
+        const int = interventions.find((i) => i.id === id)
+        if (int) int.billingStatus = 'invoiced'
+      })
+      expenseIds.forEach((id) => {
+        const exp = expenses.find((e) => e.id === id)
+        if (exp) exp.status = 'invoiced'
+      })
     },
   }
 }

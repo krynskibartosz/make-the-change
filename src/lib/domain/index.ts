@@ -1,6 +1,8 @@
 export type {
   BillingStatus,
+  CreateExpenseInput,
   CreateInterventionDraftInput,
+  CreateTaskInput,
   Expense,
   ExpenseStatus,
   Intervention,

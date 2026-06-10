@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { InfoRow, MetricCard } from '@/components/ui'
 import { selectCostsSummary } from '@/features/costs'
 import { clarusRepository } from '@/lib/repositories'
@@ -38,6 +39,22 @@ export default async function CostsPage() {
               value={`${summary.totals.extraAmount} \u20ac`}
             />
           </div>
+        </section>
+
+        <section className="flex flex-col gap-4">
+          <Link
+            href="/ajouter-depense"
+            className="inline-flex min-h-[var(--size-primary-button)] items-center justify-center rounded-[var(--radius-control)] bg-primary px-5 text-base font-semibold text-primary-foreground shadow-[var(--shadow-elevated)] transition-colors"
+          >
+            Ajouter une dépense
+          </Link>
+
+          <Link
+            href="/facturation"
+            className="inline-flex min-h-[var(--size-primary-button)] items-center justify-center rounded-[var(--radius-control)] border border-border bg-surface-elevated px-5 text-base font-semibold text-foreground transition-colors"
+          >
+            Gérer la facturation
+          </Link>
         </section>
 
         <section>

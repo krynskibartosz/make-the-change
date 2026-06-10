@@ -1,4 +1,5 @@
 import { Badge, Card } from '@/components/ui'
+import { CreateTaskModal } from '@/features/tasks/components/create-task-modal'
 import { clarusRepository } from '@/lib/repositories'
 import { TabScreen } from '../_components/tab-screen'
 
@@ -21,6 +22,10 @@ export default async function ProjectPage() {
     <TabScreen title="Chantier">
       <div className="flex flex-col gap-8">
         {/* Taches */}
+        <section>
+          <CreateTaskModal />
+        </section>
+
         {tasks.length > 0 && (
           <section>
             <h2 className="mb-4 font-semibold text-foreground">Taches a faire</h2>

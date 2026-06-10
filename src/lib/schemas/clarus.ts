@@ -59,7 +59,14 @@ export const materialMovementStatusSchema = z.enum([
   'missing',
   'to_check',
 ])
-export const expenseStatusSchema = z.enum(['to_pay', 'paid', 'to_rebill', 'rebilled', 'to_check'])
+export const expenseStatusSchema = z.enum([
+  'to_pay',
+  'paid',
+  'to_rebill',
+  'rebilled',
+  'to_check',
+  'invoiced',
+])
 export const photoTypeSchema = z.enum([
   'before',
   'during',
