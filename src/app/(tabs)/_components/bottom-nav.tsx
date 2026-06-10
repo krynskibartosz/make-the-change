@@ -16,7 +16,7 @@ export function BottomNav() {
     <nav
       aria-label="Navigation principale"
       className={cn(
-        'fixed inset-x-0 bottom-0 z-40 border-t border-border/70 bg-background/80 px-3 pb-[max(env(safe-area-inset-bottom),0.75rem)] pt-2 backdrop-blur-md transition-all duration-300 ease-in-out',
+        'fixed inset-x-0 bottom-0 z-40 border-t border-border/70 bg-background/85 px-3 pb-[max(env(safe-area-inset-bottom),0.75rem)] pt-2 backdrop-blur-xl transition-all duration-300 ease-in-out',
         isVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0',
       )}
     >
