@@ -42,11 +42,12 @@ export default function EquipePage() {
               <p>Aucun membre dans l'équipe</p>
             </div>
           ) : (
-            people.map((person) => (
-              <div
-                key={person.id}
-                className="flex items-center justify-between p-4 bg-surface border border-border rounded-[var(--radius-card)]"
-              >
+            <div className="flex flex-col bg-surface rounded-[var(--radius-card)] border border-border">
+              {people.map((person) => (
+                <div
+                  key={person.id}
+                  className="flex items-center justify-between p-4 transition-colors border-b border-border last:border-0"
+                >
                 <div className="flex flex-col">
                   <span className="font-semibold text-base">{person.name}</span>
                   <span className="text-sm text-muted-foreground">
@@ -57,8 +58,9 @@ export default function EquipePage() {
                   <span className="font-medium">{person.defaultHourlyRate} €</span>
                   <span className="text-xs text-muted-foreground">par heure</span>
                 </div>
-              </div>
-            ))
+                </div>
+              ))}
+            </div>
           )}
         </div>
       </main>

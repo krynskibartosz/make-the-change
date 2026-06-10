@@ -3,7 +3,7 @@
 import { ChevronLeft } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
-import { Button, Card, IconButton } from '@/components/ui'
+import { Button, IconButton } from '@/components/ui'
 import { selectBillingSummary } from '@/features/billing/selectors'
 import type { Expense, Intervention } from '@/lib/domain'
 import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
@@ -73,12 +73,13 @@ export default function FacturationPage() {
           {billableInterventions.length === 0 ? (
             <p className="text-sm text-muted-foreground">Aucune intervention facturable.</p>
           ) : (
-            billableInterventions.map((item) => {
+            <div className="flex flex-col bg-surface rounded-[var(--radius-card)] border border-border">
+              {billableInterventions.map((item) => {
               const isSelected = selectedInterventionIds.includes(item.id)
               return (
-                <Card
+                <div
                   key={item.id}
-                  className={`flex cursor-pointer items-center justify-between p-4 transition-colors ${
+                  className={`flex cursor-pointer items-center justify-between p-4 transition-colors border-b border-border last:border-0 ${
                     isSelected ? 'border-primary bg-primary/5' : ''
                   }`}
                   onClick={() => toggleIntervention(item.id)}
@@ -96,21 +97,23 @@ export default function FacturationPage() {
                       }`}
                     />
                   </div>
-                </Card>
+                </div>
               )
-            })
+              })}
+            </div>
           )}
 
           <h2 className="mt-4 text-sm font-semibold text-foreground">Dépenses Facturables</h2>
           {billableExpenses.length === 0 ? (
             <p className="text-sm text-muted-foreground">Aucune dépense facturable.</p>
           ) : (
-            billableExpenses.map((expense) => {
+            <div className="flex flex-col bg-surface rounded-[var(--radius-card)] border border-border">
+              {billableExpenses.map((expense) => {
               const isSelected = selectedExpenseIds.includes(expense.id)
               return (
-                <Card
+                <div
                   key={expense.id}
-                  className={`flex cursor-pointer items-center justify-between p-4 transition-colors ${
+                  className={`flex cursor-pointer items-center justify-between p-4 transition-colors border-b border-border last:border-0 ${
                     isSelected ? 'border-primary bg-primary/5' : ''
                   }`}
                   onClick={() => toggleExpense(expense.id)}
@@ -128,9 +131,10 @@ export default function FacturationPage() {
                       }`}
                     />
                   </div>
-                </Card>
+                </div>
               )
-            })
+            })}
+            </div>
           )}
         </section>
 
