@@ -1,6 +1,10 @@
 import type {
   BillingStatus,
   CreateInterventionDraftInput,
+  CreateExpenseInput,
+  CreateMaterialMovementInput,
+  CreatePersonInput,
+  CreateTaskInput,
   Expense,
   ExpenseStatus,
   Intervention,
@@ -31,6 +35,10 @@ import type {
 export type {
   BillingStatus,
   CreateInterventionDraftInput,
+  CreateExpenseInput,
+  CreateMaterialMovementInput,
+  CreatePersonInput,
+  CreateTaskInput,
   Expense,
   ExpenseStatus,
   Intervention,
@@ -59,42 +67,6 @@ export type {
 }
 
 export type VerificationStatus = 'complete' | 'to_check'
-
-export type CreateTaskInput = {
-  projectId: string
-  interventionId?: string | null
-  phaseId?: string | null
-  zoneId?: string | null
-  title: string
-  description?: string
-  priority?: TaskPriority
-  assignedTo?: string | null
-  dueDate?: string | null
-}
-
-export type CreateExpenseInput = {
-  projectId: string
-  interventionId?: string | null
-  materialMovementId?: string | null
-  supplier: string
-  description: string
-  amount?: number | null
-  date: string
-  isRebillable: boolean | 'to_check'
-  receiptPhotoId?: string | null
-}
-
-export type CreateMaterialMovementInput = {
-  projectId: string
-  materialId: string
-  interventionId?: string | null
-  zoneId?: string | null
-  phaseId?: string | null
-  type: MaterialMovementType
-  quantity: number
-  unit: string
-  status: MaterialMovementStatus
-}
 
 export type InterventionDraft = {
   intervention: Intervention
@@ -135,10 +107,5 @@ export type TodaySummary = {
   latestInterventions: InterventionListItem[]
   alerts: TodayAlert[]
 }
-export type CreatePersonInput = {
-  projectId: string
-  name: string
-  role?: string
-  defaultHourlyRate: number
-}
+
 export type UpdatePersonInput = Partial<CreatePersonInput> & { active?: boolean }

@@ -93,7 +93,7 @@ export const toInterventionListItem = (
       phases.find((phase) => phase.id === intervention.phaseId)?.name ?? 'Phase a verifier',
     hours: totals.hours,
     amount: totals.amount,
-    updatedAt: intervention.updatedAt,
+    updatedAt: intervention.updatedAt ?? intervention.createdAt,
   }
 }
 

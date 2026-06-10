@@ -99,6 +99,22 @@ const timeSchema = z.string().regex(/^\d{2}:\d{2}$/)
 const nonNegativeMoneySchema = z.number().nonnegative()
 const toCheckBooleanSchema = z.union([z.boolean(), z.literal('to_check')])
 
+export const baseEntitySchema = z.object({
+  id: idSchema,
+  projectId: idSchema,
+})
+
+export const locationContextSchema = z.object({
+  zoneId: idSchema.nullish(),
+  phaseId: idSchema.nullish(),
+  interventionId: idSchema.nullish(),
+})
+
+export const timestampedSchema = z.object({
+  createdAt: isoDateTimeSchema,
+  updatedAt: isoDateTimeSchema.optional(),
+})
+
 export const projectSchema = z.object({
   id: idSchema,
   name: z.string().min(1),
@@ -107,17 +123,13 @@ export const projectSchema = z.object({
   status: projectStatusSchema,
 })
 
-export const phaseSchema = z.object({
-  id: idSchema,
-  projectId: idSchema,
+export const phaseSchema = baseEntitySchema.extend({
   name: z.string().min(1),
   order: z.number().int().positive(),
   description: z.string().optional(),
 })
 
-export const zoneSchema = z.object({
-  id: idSchema,
-  projectId: idSchema,
+export const zoneSchema = baseEntitySchema.extend({
   name: z.string().min(1),
   type: zoneTypeSchema,
   order: z.number().int().positive(),
@@ -125,20 +137,17 @@ export const zoneSchema = z.object({
   technicalCode: z.string().nullish(),
   planReference: z.string().nullish(),
   description: z.string().optional(),
+  isSensitive: z.boolean().optional(),
 })
 
-export const personSchema = z.object({
-  id: idSchema,
-  projectId: idSchema,
+export const personSchema = baseEntitySchema.extend({
   name: z.string().min(1),
   role: z.string().optional(),
   defaultHourlyRate: nonNegativeMoneySchema,
   active: z.boolean(),
 })
 
-export const interventionSchema = z.object({
-  id: idSchema,
-  projectId: idSchema,
+export const interventionSchema = baseEntitySchema.extend({
   title: z.string().min(1),
   description: z.string().optional(),
   type: interventionTypeSchema,
@@ -150,13 +159,9 @@ export const interventionSchema = z.object({
   billingStatus: billingStatusSchema,
   paymentStatus: paymentStatusSchema,
   sourceNote: z.string().optional(),
-  createdAt: isoDateTimeSchema,
-  updatedAt: isoDateTimeSchema,
-})
+}).merge(timestampedSchema)
 
-export const workEntrySchema = z.object({
-  id: idSchema,
-  projectId: idSchema,
+export const workEntrySchema = baseEntitySchema.extend({
   interventionId: idSchema,
   personId: idSchema,
   date: isoDateSchema,
@@ -170,12 +175,7 @@ export const workEntrySchema = z.object({
   notes: z.string().optional(),
 })
 
-export const taskSchema = z.object({
-  id: idSchema,
-  projectId: idSchema,
-  interventionId: idSchema.nullish(),
-  phaseId: idSchema.nullish(),
-  zoneId: idSchema.nullish(),
+export const taskSchema = baseEntitySchema.merge(locationContextSchema).extend({
   title: z.string().min(1),
   description: z.string().optional(),
   status: taskStatusSchema,
@@ -185,21 +185,14 @@ export const taskSchema = z.object({
   createdAt: isoDateTimeSchema,
 })
 
-export const materialSchema = z.object({
-  id: idSchema,
-  projectId: idSchema,
+export const materialSchema = baseEntitySchema.extend({
   name: z.string().min(1),
   category: z.string().optional(),
   defaultUnit: z.string().optional(),
 })
 
-export const materialMovementSchema = z.object({
-  id: idSchema,
-  projectId: idSchema,
+export const materialMovementSchema = baseEntitySchema.merge(locationContextSchema).extend({
   materialId: idSchema,
-  interventionId: idSchema.nullish(),
-  zoneId: idSchema.nullish(),
-  phaseId: idSchema.nullish(),
   type: materialMovementTypeSchema,
   quantity: z.number().positive(),
   unit: z.string().min(1),
@@ -209,9 +202,7 @@ export const materialMovementSchema = z.object({
   status: materialMovementStatusSchema,
 })
 
-export const expenseSchema = z.object({
-  id: idSchema,
-  projectId: idSchema,
+export const expenseSchema = baseEntitySchema.extend({
   interventionId: idSchema.nullish(),
   materialMovementId: idSchema.nullish(),
   supplier: z.string().min(1),
@@ -223,21 +214,14 @@ export const expenseSchema = z.object({
   receiptPhotoId: idSchema.nullish(),
 })
 
-export const photoSchema = z.object({
-  id: idSchema,
-  projectId: idSchema,
-  interventionId: idSchema.nullish(),
-  zoneId: idSchema.nullish(),
-  phaseId: idSchema.nullish(),
+export const photoSchema = baseEntitySchema.merge(locationContextSchema).extend({
   type: photoTypeSchema,
   url: z.string().min(1),
   comment: z.string().optional(),
   takenAt: isoDateTimeSchema,
 })
 
-export const planSchema = z.object({
-  id: idSchema,
-  projectId: idSchema,
+export const planSchema = baseEntitySchema.extend({
   title: z.string().min(1),
   url: z.string().min(1),
   description: z.string().optional(),
@@ -432,6 +416,16 @@ export const mockDatasetSchema = z
 
 export type MockDataset = z.infer<typeof mockDatasetSchema>
 export type CreateInterventionDraftInput = z.infer<typeof createInterventionDraftInputSchema>
+export const createTaskInputSchema = taskSchema.omit({ id: true, createdAt: true })
+export const createExpenseInputSchema = expenseSchema.omit({ id: true, status: true })
+export const createMaterialMovementInputSchema = materialMovementSchema.omit({ id: true })
+export const createPersonInputSchema = personSchema.omit({ id: true, active: true })
+
+export type CreateTaskInput = z.infer<typeof createTaskInputSchema>
+export type CreateExpenseInput = z.infer<typeof createExpenseInputSchema>
+export type CreateMaterialMovementInput = z.infer<typeof createMaterialMovementInputSchema>
+export type CreatePersonInput = z.infer<typeof createPersonInputSchema>
+
 
 export const validateMockDataset = (dataset: MockDataset) => mockDatasetSchema.safeParse(dataset)
 
