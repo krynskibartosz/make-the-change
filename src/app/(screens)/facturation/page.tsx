@@ -1,31 +1,35 @@
 'use client'
 
+import { format } from 'date-fns'
+import { fr } from 'date-fns/locale'
 import { Image as ImageIcon } from 'lucide-react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
-import { Button, FloatingCTA } from '@/components/ui'
-import { selectBillingSummary } from '@/features/billing/selectors'
-import type { Expense, Intervention, Photo } from '@/lib/domain'
+import { Button, FloatingCTA, SegmentedControl } from '@/components/ui'
+import type { Expense, Intervention, Photo, WorkEntry } from '@/lib/domain'
 import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
 import { Screen } from '../_components/screen'
 
 export default function FacturationPage() {
-  const router = useRouter()
-
+  const [activeTab, setActiveTab] = useState<'pending' | 'history'>('pending')
+  
   const [interventions, setInterventions] = useState<Intervention[]>([])
+  const [workEntries, setWorkEntries] = useState<WorkEntry[]>([])
   const [expenses, setExpenses] = useState<Expense[]>([])
   const [photos, setPhotos] = useState<Photo[]>([])
+  
   const [selectedInterventionIds, setSelectedInterventionIds] = useState<string[]>([])
   const [selectedExpenseIds, setSelectedExpenseIds] = useState<string[]>([])
 
   const loadData = useCallback(async () => {
-    const [fetchedInterventions, fetchedExpenses, fetchedPhotos] = await Promise.all([
+    const [fetchedInterventions, fetchedWorkEntries, fetchedExpenses, fetchedPhotos] = await Promise.all([
       mockClarusRepository.getInterventions(),
+      mockClarusRepository.getWorkEntries(),
       mockClarusRepository.getExpenses(),
       mockClarusRepository.getPhotos(),
     ])
     setInterventions(fetchedInterventions)
+    setWorkEntries(fetchedWorkEntries)
     setExpenses(fetchedExpenses)
     setPhotos(fetchedPhotos)
   }, [])
@@ -34,13 +38,25 @@ export default function FacturationPage() {
     loadData()
   }, [loadData])
 
-  const { interventions: billableInterventions, expenses: billableExpenses } = selectBillingSummary(
-    {
-      interventions,
-      expenses,
-    },
+  const getInterventionAmount = (id: string) => {
+    return workEntries
+      .filter((e) => e.interventionId === id)
+      .reduce((sum, e) => sum + e.amount, 0)
+  }
+
+  // Filter pending billable items
+  const billableInterventions = interventions.filter(
+    (i) => i.billingStatus === 'to_invoice' || i.isExtra === true
+  )
+  const billableExpenses = expenses.filter(
+    (e) => e.isRebillable === true && e.status !== 'invoiced'
   )
 
+  // Filter history (already invoiced)
+  const historyInterventions = interventions.filter((i) => i.billingStatus === 'invoiced' || i.billingStatus === 'paid')
+  const historyExpenses = expenses.filter((e) => e.status === 'invoiced' || e.status === 'paid')
+
+  // Toggle selection
   const toggleIntervention = (id: string) => {
     setSelectedInterventionIds((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
@@ -53,6 +69,7 @@ export default function FacturationPage() {
     )
   }
 
+  // Invoice action
   const handleInvoice = async () => {
     if (selectedInterventionIds.length === 0 && selectedExpenseIds.length === 0) return
     await mockClarusRepository.markAsInvoiced(selectedInterventionIds, selectedExpenseIds)
@@ -61,98 +78,179 @@ export default function FacturationPage() {
     await loadData()
   }
 
-  const totalSelected = selectedInterventionIds.length + selectedExpenseIds.length
+  // Calculate totals for CTA
+  const totalSelectedCount = selectedInterventionIds.length + selectedExpenseIds.length
+  const totalSelectedAmount = 
+    billableInterventions.filter(i => selectedInterventionIds.includes(i.id)).reduce((sum, i) => sum + getInterventionAmount(i.id), 0) +
+    billableExpenses.filter(e => selectedExpenseIds.includes(e.id)).reduce((sum, e) => sum + (e.amount || 0), 0)
 
   return (
     <Screen title="Facturation" backHref="/couts">
-      <section className="flex flex-col gap-3">
-          <h2 className="text-sm font-semibold text-foreground">Interventions Facturables</h2>
-          {billableInterventions.length === 0 ? (
-            <p className="text-sm text-muted-foreground">Aucune intervention facturable.</p>
-          ) : (
-            <div className="flex flex-col bg-surface rounded-[var(--radius-card)] border border-border">
-              {billableInterventions.map((item) => {
-                const isSelected = selectedInterventionIds.includes(item.id)
-                return (
-                  <div
-                    key={item.id}
-                    className={`flex cursor-pointer items-center justify-between p-4 transition-colors border-b border-border last:border-0 ${
-                      isSelected ? 'border-primary bg-primary/5' : ''
-                    }`}
-                    onClick={() => toggleIntervention(item.id)}
-                  >
+      <div className="mb-6">
+        <SegmentedControl
+          ariaLabel="Vue de la facturation"
+          options={[
+            { value: 'pending', label: 'À facturer' },
+            { value: 'history', label: 'Historique' },
+          ]}
+          value={activeTab}
+          onValueChange={(id) => setActiveTab(id as 'pending' | 'history')}
+        />
+      </div>
+
+      {activeTab === 'pending' && (
+        <section className="flex flex-col gap-6">
+          <div>
+            <h2 className="text-sm font-semibold text-muted-foreground mb-3 uppercase tracking-wider">Interventions</h2>
+            {billableInterventions.length === 0 ? (
+              <p className="text-sm text-muted-foreground bg-surface p-4 rounded-xl border border-border text-center">
+                Aucune intervention à facturer.
+              </p>
+            ) : (
+              <div className="flex flex-col bg-surface rounded-[var(--radius-card)] border border-border">
+                {billableInterventions.map((item) => {
+                  const isSelected = selectedInterventionIds.includes(item.id)
+                  return (
+                    <div
+                      key={item.id}
+                      className={`flex cursor-pointer items-center justify-between p-4 transition-colors border-b border-border last:border-0 ${
+                        isSelected ? 'border-primary bg-primary/5' : 'active:bg-surface-elevated'
+                      }`}
+                      onClick={() => toggleIntervention(item.id)}
+                    >
+                      <div className="flex flex-col flex-1 min-w-0 pr-4">
+                        <span className="font-semibold text-foreground truncate">{item.title}</span>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="text-xs text-muted-foreground">
+                            {item.date ? format(new Date(item.date), 'dd MMM yyyy', { locale: fr }) : 'Date inconnue'}
+                          </span>
+                          {item.isExtra && (
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-500 bg-amber-500/10 px-1.5 py-0.5 rounded-sm">
+                              Extra
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4 shrink-0">
+                        <span className="font-bold">{getInterventionAmount(item.id)} €</span>
+                        <div className={`size-5 rounded-full border-2 transition-colors ${
+                          isSelected ? 'border-primary bg-primary' : 'border-muted-foreground/50 bg-transparent'
+                        }`} />
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+
+          <div>
+            <h2 className="text-sm font-semibold text-muted-foreground mb-3 uppercase tracking-wider">Dépenses & Achats</h2>
+            {billableExpenses.length === 0 ? (
+              <p className="text-sm text-muted-foreground bg-surface p-4 rounded-xl border border-border text-center">
+                Aucune dépense à facturer.
+              </p>
+            ) : (
+              <div className="flex flex-col bg-surface rounded-[var(--radius-card)] border border-border">
+                {billableExpenses.map((expense) => {
+                  const isSelected = selectedExpenseIds.includes(expense.id)
+                  const receiptPhoto = photos.find((p) => p.id === expense.receiptPhotoId)
+
+                  return (
+                    <div
+                      key={expense.id}
+                      className={`flex cursor-pointer items-start justify-between p-4 transition-colors border-b border-border last:border-0 ${
+                        isSelected ? 'border-primary bg-primary/5' : 'active:bg-surface-elevated'
+                      }`}
+                      onClick={() => toggleExpense(expense.id)}
+                    >
+                      <div className="flex gap-3 flex-1 min-w-0 pr-4">
+                        {receiptPhoto ? (
+                          <div className="relative size-12 rounded-lg overflow-hidden bg-surface-elevated shrink-0 border border-border">
+                            <Image src={receiptPhoto.url} alt="Reçu" fill className="object-cover" />
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-center size-12 rounded-lg bg-surface-elevated shrink-0 border border-border border-dashed text-muted-foreground/50">
+                            <ImageIcon className="size-5" />
+                          </div>
+                        )}
+                        <div className="flex flex-col min-w-0 pt-0.5">
+                          <span className="font-semibold text-foreground truncate">{expense.description}</span>
+                          <span className="text-xs text-muted-foreground mt-1 truncate">
+                            {expense.supplier || 'Sans fournisseur'} • {format(new Date(expense.date), 'dd MMM', { locale: fr })}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-4 shrink-0 pt-1">
+                        <span className="font-bold">{expense.amount || 0} €</span>
+                        <div className={`size-5 rounded-full border-2 transition-colors ${
+                          isSelected ? 'border-primary bg-primary' : 'border-muted-foreground/50 bg-transparent'
+                        }`} />
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {activeTab === 'history' && (
+        <section className="flex flex-col gap-6 opacity-70">
+          <div>
+            <h2 className="text-sm font-semibold text-muted-foreground mb-3 uppercase tracking-wider">Historique des Interventions</h2>
+            {historyInterventions.length === 0 ? (
+              <p className="text-sm text-muted-foreground bg-surface p-4 rounded-xl border border-border text-center">
+                Aucun historique.
+              </p>
+            ) : (
+              <div className="flex flex-col bg-surface rounded-[var(--radius-card)] border border-border">
+                {historyInterventions.map((item) => (
+                  <div key={item.id} className="flex items-center justify-between p-4 border-b border-border last:border-0">
                     <div className="flex flex-col">
-                      <span className="font-medium">{item.title}</span>
-                      <span className="text-sm text-muted-foreground">{item.date}</span>
+                      <span className="font-medium text-foreground">{item.title}</span>
+                      <span className="text-xs text-muted-foreground mt-1">Facturé</span>
                     </div>
-                    <div>
-                      <div
-                        className={`size-5 rounded-full border-2 ${
-                          isSelected
-                            ? 'border-primary bg-primary'
-                            : 'border-muted-foreground bg-transparent'
-                        }`}
-                      />
-                    </div>
+                    <span className="font-semibold">{getInterventionAmount(item.id)} €</span>
                   </div>
-                )
-              })}
-            </div>
-          )}
-
-          <h2 className="mt-4 text-sm font-semibold text-foreground">Dépenses Facturables</h2>
-          {billableExpenses.length === 0 ? (
-            <p className="text-sm text-muted-foreground">Aucune dépense facturable.</p>
-          ) : (
-            <div className="flex flex-col bg-surface rounded-[var(--radius-card)] border border-border">
-              {billableExpenses.map((expense) => {
-                const isSelected = selectedExpenseIds.includes(expense.id)
-                const receiptPhoto = photos.find((p) => p.id === expense.receiptPhotoId)
-
-                return (
-                  <div
-                    key={expense.id}
-                    className={`flex cursor-pointer items-center justify-between p-4 transition-colors border-b border-border last:border-0 ${
-                      isSelected ? 'border-primary bg-primary/5' : ''
-                    }`}
-                    onClick={() => toggleExpense(expense.id)}
-                  >
-                    <div className="flex flex-col flex-1 min-w-0">
-                      <span className="font-medium truncate pr-4">{expense.description}</span>
-                      <span className="text-sm text-muted-foreground">{expense.amount} €</span>
+                ))}
+              </div>
+            )}
+          </div>
+          <div>
+            <h2 className="text-sm font-semibold text-muted-foreground mb-3 uppercase tracking-wider">Historique des Dépenses</h2>
+            {historyExpenses.length === 0 ? (
+              <p className="text-sm text-muted-foreground bg-surface p-4 rounded-xl border border-border text-center">
+                Aucun historique.
+              </p>
+            ) : (
+              <div className="flex flex-col bg-surface rounded-[var(--radius-card)] border border-border">
+                {historyExpenses.map((expense) => (
+                  <div key={expense.id} className="flex items-center justify-between p-4 border-b border-border last:border-0">
+                    <div className="flex flex-col">
+                      <span className="font-medium text-foreground">{expense.description}</span>
+                      <span className="text-xs text-muted-foreground mt-1">Facturé</span>
                     </div>
-
-                    <div className="flex items-center gap-4">
-                      {receiptPhoto ? (
-                        <div className="relative size-10 rounded-md overflow-hidden bg-surface-elevated shrink-0 border border-border">
-                          <Image src={receiptPhoto.url} alt="Reçu" fill className="object-cover" />
-                        </div>
-                      ) : (
-                        <div className="flex items-center justify-center size-10 rounded-md bg-surface-elevated shrink-0 border border-border border-dashed text-muted-foreground">
-                          <ImageIcon className="size-4 opacity-50" />
-                        </div>
-                      )}
-
-                      <div
-                        className={`size-5 rounded-full border-2 ${
-                          isSelected
-                            ? 'border-primary bg-primary'
-                            : 'border-muted-foreground bg-transparent'
-                        }`}
-                      />
-                    </div>
+                    <span className="font-semibold">{expense.amount || 0} €</span>
                   </div>
-                )
-              })}
-            </div>
-          )}
-      </section>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
-      <FloatingCTA>
-        <Button fullWidth disabled={totalSelected === 0} onClick={handleInvoice}>
-          Marquer comme facturé ({totalSelected})
-        </Button>
-      </FloatingCTA>
+      {activeTab === 'pending' && (
+        <FloatingCTA>
+          <Button fullWidth disabled={totalSelectedCount === 0} onClick={handleInvoice}>
+            {totalSelectedCount > 0 
+              ? `Facturer — ${totalSelectedAmount.toLocaleString('fr-FR')} € (${totalSelectedCount})`
+              : 'Marquer comme facturé'}
+          </Button>
+        </FloatingCTA>
+      )}
     </Screen>
   )
 }

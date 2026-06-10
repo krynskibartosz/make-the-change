@@ -112,3 +112,41 @@ const getToCheckReason = (intervention: Intervention): string => {
 }
 
 const sum = (values: number[]): number => values.reduce((total, value) => total + value, 0)
+
+import type { Expense } from '@/lib/domain'
+import { selectBillingSummary } from '@/features/billing/selectors'
+
+export type CostsDashboardInput = {
+  interventions: Intervention[]
+  workEntries: WorkEntry[]
+  expenses: Expense[]
+}
+
+export const selectCostsDashboard = ({ interventions, workEntries, expenses }: CostsDashboardInput) => {
+  const laborAmount = roundMoney(sum(workEntries.map((entry) => entry.amount)))
+  const expensesAmount = roundMoney(sum(expenses.map((expense) => expense.amount || 0)))
+  const totalCost = laborAmount + expensesAmount
+
+  const { interventions: billableInterventions, expenses: billableExpenses } = selectBillingSummary({
+    interventions,
+    expenses,
+  })
+
+  // We need to calculate the amount of billable interventions
+  const billableInterventionsAmount = roundMoney(sum(
+    billableInterventions.map((intervention) => getInterventionAmount(intervention.id, workEntries))
+  ))
+  const billableExpensesAmount = roundMoney(sum(billableExpenses.map((expense) => expense.amount || 0)))
+  const pendingBillableAmount = billableInterventionsAmount + billableExpensesAmount
+
+  // Sort expenses by date descending
+  const recentExpenses = [...expenses].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3)
+
+  return {
+    totalCost,
+    laborAmount,
+    expensesAmount,
+    pendingBillableAmount,
+    recentExpenses,
+  }
+}
