@@ -15,6 +15,7 @@ type FullScreenSlideModalProps = Readonly<{
   eyebrow?: string
   fallbackHref?: string
   headerMode?: 'back' | 'close' | 'none'
+  onClose?: () => void
   title: string
 }>
 
@@ -27,6 +28,7 @@ export function FullScreenSlideModal({
   eyebrow = 'Sparrenlaan',
   fallbackHref = '/aujourd-hui',
   headerMode = 'close',
+  onClose,
   title,
 }: FullScreenSlideModalProps) {
   const router = useRouter()
@@ -34,6 +36,11 @@ export function FullScreenSlideModal({
   const resolvedCloseLabel = closeLabel ?? (isBackMode ? 'Retour' : 'Fermer')
 
   function closeModal() {
+    if (onClose) {
+      onClose()
+      return
+    }
+
     if (window.history.length > 1) {
       router.back()
       return

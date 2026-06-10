@@ -1,8 +1,9 @@
 'use client'
 
-import { Plus, X } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { useState } from 'react'
-import { Button, Card, IconButton, Input } from '@/components/ui'
+import { Button, Input } from '@/components/ui'
+import { FullScreenSlideModal } from '@/app/@modal/_components/full-screen-slide-modal'
 
 export function CreateTaskModal() {
   const [isOpen, setIsOpen] = useState(false)
@@ -33,46 +34,38 @@ export function CreateTaskModal() {
       </div>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4 backdrop-blur-sm">
-          <Card className="w-full max-w-md shadow-lg" elevated>
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-foreground">Nouvelle tâche</h2>
-              <IconButton aria-label="Fermer" onClick={() => setIsOpen(false)} variant="ghost">
-                <X className="size-5" />
-              </IconButton>
-            </div>
+        <FullScreenSlideModal
+          title="Nouvelle tâche"
+          headerMode="close"
+          onClose={() => setIsOpen(false)}
+        >
+          <div className="flex flex-col gap-4">
+            <Input
+              label="Titre"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Ex: Peinture du salon"
+            />
+            <Input
+              label="Assigné à"
+              value={assignedTo}
+              onChange={(e) => setAssignedTo(e.target.value)}
+              placeholder="Ex: Jean Dupont"
+            />
+            <Input
+              label="Zone"
+              value={zoneId}
+              onChange={(e) => setZoneId(e.target.value)}
+              placeholder="Ex: Zone A"
+            />
 
-            <div className="flex flex-col gap-4">
-              <Input
-                label="Titre"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Ex: Peinture du salon"
-              />
-              <Input
-                label="Assigné à"
-                value={assignedTo}
-                onChange={(e) => setAssignedTo(e.target.value)}
-                placeholder="Ex: Jean Dupont"
-              />
-              <Input
-                label="Zone"
-                value={zoneId}
-                onChange={(e) => setZoneId(e.target.value)}
-                placeholder="Ex: Zone A"
-              />
-
-              <div className="mt-4 flex gap-3">
-                <Button variant="secondary" fullWidth onClick={() => setIsOpen(false)}>
-                  Annuler
-                </Button>
-                <Button fullWidth onClick={handleCreate}>
-                  Créer
-                </Button>
-              </div>
+            <div className="mt-4 flex gap-3">
+              <Button fullWidth onClick={handleCreate}>
+                Créer
+              </Button>
             </div>
-          </Card>
-        </div>
+          </div>
+        </FullScreenSlideModal>
       )}
     </>
   )
