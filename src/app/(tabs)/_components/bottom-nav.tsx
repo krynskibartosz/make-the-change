@@ -22,7 +22,10 @@ export function BottomNav() {
     if (role === 'client') {
       return tab.href === '/chantier' || tab.href === '/validations' || tab.href === '/menu'
     }
-    // Chef ou Admin voient planning, chantier, menu
+    if (role === 'chef') {
+      return tab.href === '/chantier' || tab.href === '/a-verifier' || tab.href === '/planning' || tab.href === '/menu'
+    }
+    // Admin voit tout le reste pour l'instant
     return tab.href === '/planning' || tab.href === '/chantier' || tab.href === '/menu'
   })
 
