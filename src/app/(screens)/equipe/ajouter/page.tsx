@@ -27,8 +27,9 @@ export default function AjouterMembreEquipePage() {
 
   return (
     <FullScreenSlideModal asPage headerMode="back" title="Ajouter un membre">
-      <section className="rounded-[var(--radius-card)] border border-border bg-surface p-4 flex-1 overflow-hidden flex flex-col">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <div className="flex-1 overflow-y-auto pb-[calc(env(safe-area-inset-bottom)+80px)]">
+        <section className="p-5">
+          <form id="add-team-member-form" onSubmit={handleSubmit} className="flex flex-col gap-5">
           <div className="flex flex-col gap-2">
             <label htmlFor="name" className="text-sm font-medium">
               Nom
@@ -38,7 +39,7 @@ export default function AjouterMembreEquipePage() {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="p-3 rounded-[var(--radius-control)] border border-border bg-background text-foreground"
+              className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
               placeholder="Ex: Jean Dupont"
               required
             />
@@ -53,7 +54,7 @@ export default function AjouterMembreEquipePage() {
               type="text"
               value={role}
               onChange={(e) => setRole(e.target.value)}
-              className="p-3 rounded-[var(--radius-control)] border border-border bg-background text-foreground"
+              className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
               placeholder="Ex: Électricien"
             />
           </div>
@@ -69,20 +70,27 @@ export default function AjouterMembreEquipePage() {
               min="0"
               value={defaultHourlyRate}
               onChange={(e) => setDefaultHourlyRate(e.target.value)}
-              className="p-3 rounded-[var(--radius-control)] border border-border bg-background text-foreground"
+              className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
               placeholder="Ex: 45"
               required
             />
           </div>
 
+          </form>
+        </section>
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 p-4 pb-[max(env(safe-area-inset-bottom),1rem)] bg-background/90 backdrop-blur-md border-t border-border/50 z-40">
+        <div className="max-w-md mx-auto">
           <button
             type="submit"
-            className="mt-6 p-4 bg-primary text-primary-foreground rounded-[var(--radius-control)] font-semibold text-lg"
+            form="add-team-member-form"
+            className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground py-3.5 font-semibold active:scale-[0.98] transition-all shadow-lg shadow-primary/20"
           >
             Ajouter à l'équipe
           </button>
-        </form>
-      </section>
+        </div>
+      </div>
     </FullScreenSlideModal>
   )
 }
