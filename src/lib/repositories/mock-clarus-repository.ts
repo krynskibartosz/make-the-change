@@ -82,6 +82,7 @@ export const createMockClarusRepository = (): ClarusRepository => {
     getPhases: async () => mockPhases.map((p) => ({ ...p })),
     getZones: async () => [...mockZones],
     getMaterials: async () => [...mockMaterials],
+    getMaterialMovements: async () => [...materialMovements],
     getPhotos: async () => [...mockPhotos],
     getPlans: async () => [...mockPlans],
     getPlanZones: async (planId: string) => mockPlanZones.filter((z) => z.planId === planId),

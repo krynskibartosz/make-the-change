@@ -1,6 +1,6 @@
 'use client'
 
-import { BarChart3, ChevronRight, ClipboardList, Image as ImageIcon, Map, PlusCircle, Settings, Users, type LucideIcon } from 'lucide-react'
+import { BarChart3, ChevronRight, ClipboardList, Image as ImageIcon, Map, Package, PlusCircle, Settings, Users, type LucideIcon } from 'lucide-react'
 import Link from 'next/link'
 
 type SettingsItem = {
@@ -87,10 +87,10 @@ export default function MenuPage() {
       iconClassName: 'text-white',
     },
     {
-      label: 'Ajouter un matériau',
-      description: 'Enregistrer de nouveaux matériaux',
-      icon: PlusCircle,
-      href: '/ajouter-materiau',
+      label: 'Matériaux',
+      description: 'Gérer les matériaux et le stock',
+      icon: Package,
+      href: '/materiaux',
       iconWrapperClassName: 'bg-emerald-500',
       iconClassName: 'text-white',
     },

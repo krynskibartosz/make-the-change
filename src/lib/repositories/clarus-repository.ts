@@ -32,6 +32,7 @@ export type ClarusRepository = {
   getPhases: () => Promise<Phase[]>
   getZones: () => Promise<Zone[]>
   getMaterials: () => Promise<Material[]>
+  getMaterialMovements: () => Promise<MaterialMovement[]>
   getPhotos: () => Promise<Photo[]>
   getPlans: () => Promise<Plan[]>
   getPlanZones: (planId: string) => Promise<PlanZone[]>
