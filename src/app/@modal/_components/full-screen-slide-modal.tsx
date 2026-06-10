@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronLeft, X } from 'lucide-react'
+import { ArrowLeft, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import type { ReactNode } from 'react'
 import { useEffect, useRef } from 'react'
@@ -17,7 +17,7 @@ type FullScreenSlideModalProps = Readonly<{
   fallbackHref?: string
   headerMode?: 'back' | 'close' | 'none'
   onClose?: () => void
-  title: string
+  title?: string
 }>
 
 export function FullScreenSlideModal({
@@ -26,7 +26,7 @@ export function FullScreenSlideModal({
   children,
   closeLabel,
   contentClassName = '',
-  eyebrow = 'Sparrenlaan',
+  eyebrow,
   fallbackHref = '/aujourd-hui',
   headerMode = 'close',
   onClose,
@@ -68,33 +68,44 @@ export function FullScreenSlideModal({
     <div
       ref={containerRef}
       className={cn(
-        asPage ? 'relative' : 'fixed inset-0 z-50',
+        asPage ? 'relative' : 'fixed inset-0 z-50 animate-in slide-in-from-bottom-full duration-300',
         'h-[100dvh] w-full flex flex-col bg-background text-foreground overflow-y-auto overflow-x-hidden overscroll-y-contain'
       )}
     >
       <div className="mx-auto flex flex-1 w-full max-w-md flex-col">
-        <header className="sticky top-0 z-40 flex items-start gap-3 border-b border-white/5 bg-background/90 backdrop-blur-md px-5 pb-4 pt-[max(env(safe-area-inset-top),1.25rem)]">
-          {headerMode !== 'none' ? (
-            <button
-              aria-label={resolvedCloseLabel}
-              className="inline-flex size-[var(--size-icon-button)] shrink-0 items-center justify-center rounded-[var(--radius-control)] border border-border bg-surface-elevated text-foreground"
-              onClick={closeModal}
-              type="button"
-            >
-              {isBackMode ? (
-                <ChevronLeft aria-hidden="true" className="size-5" />
-              ) : (
-                <X aria-hidden="true" className="size-5" />
-              )}
+        {headerMode === 'back' ? (
+          <header className="sticky top-0 z-40 flex items-center gap-2 border-b border-white/5 bg-background/90 px-2 py-1 backdrop-blur-md pt-[max(env(safe-area-inset-top),0.25rem)]">
+            <button onClick={closeModal} className="p-4" aria-label={resolvedCloseLabel}>
+              <ArrowLeft className="h-6 w-6 text-foreground" />
             </button>
-          ) : null}
-          <div className="min-w-0 flex-1 pt-1">
-            <p className="text-sm font-medium text-muted-foreground">{eyebrow}</p>
-            <h1 className="mt-1 text-2xl font-semibold leading-tight">{title}</h1>
-          </div>
-          {action ? <div className="shrink-0">{action}</div> : null}
-        </header>
-        <div className={cn('flex flex-1 flex-col gap-4 px-5 pb-5 py-5', contentClassName)}>{children}</div>
+            <div className="flex-1 min-w-0">
+              {title ? <p className="truncate text-base font-semibold text-foreground">{title}</p> : null}
+            </div>
+            {action ? <div className="shrink-0 pr-2">{action}</div> : null}
+          </header>
+        ) : null}
+
+        {headerMode === 'close' ? (
+          <>
+            <button
+              onClick={closeModal}
+              aria-label={resolvedCloseLabel}
+              className="absolute right-4 top-[max(1rem,env(safe-area-inset-top))] z-40 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-background/80 backdrop-blur-md text-foreground"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            {title && (
+              <header className="sticky top-0 z-30 flex items-center gap-2 border-b border-white/5 bg-background/90 px-4 py-4 backdrop-blur-md pt-[max(env(safe-area-inset-top),1rem)]">
+                <div className="flex-1 min-w-0 pr-12">
+                  <p className="truncate text-lg font-semibold text-foreground">{title}</p>
+                </div>
+                {action ? <div className="shrink-0 pr-2">{action}</div> : null}
+              </header>
+            )}
+          </>
+        ) : null}
+
+        <div className={cn('flex flex-1 flex-col min-h-0', contentClassName)}>{children}</div>
       </div>
     </div>
   )
