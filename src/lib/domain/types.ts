@@ -247,6 +247,20 @@ export type CreateExpenseInput = {
   receiptPhotoId?: string | null
 }
 
+export type CreateMaterialMovementInput = {
+  projectId: string
+  materialId: string
+  interventionId?: string | null
+  zoneId?: string | null
+  phaseId?: string | null
+  type: MaterialMovementType
+  quantity: number
+  unit: string
+  estimatedCost?: number | null
+  realCost?: number | null
+  supplier?: string | null
+}
+
 export type InterventionDraft = {
   intervention: Intervention
   workEntries: WorkEntry[]

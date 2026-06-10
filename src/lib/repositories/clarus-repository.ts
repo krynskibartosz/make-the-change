@@ -1,12 +1,15 @@
 import type {
   CreateExpenseInput,
   CreateInterventionDraftInput,
+  CreateMaterialMovementInput,
   CreateTaskInput,
   Expense,
   Intervention,
   InterventionDraft,
+  MaterialMovement,
   Person,
   Phase,
+  Photo,
   Project,
   Task,
   TaskStatus,
@@ -37,4 +40,7 @@ export type ClarusRepository = {
   updateTaskStatus: (id: string, status: TaskStatus) => Promise<Task>
   createExpense: (input: CreateExpenseInput) => Promise<Expense>
   markAsInvoiced: (interventionIds: string[], expenseIds: string[]) => Promise<void>
+  getMaterialMovements: () => Promise<MaterialMovement[]>
+  createMaterialMovement: (input: CreateMaterialMovementInput) => Promise<MaterialMovement>
+  getPhotos: () => Promise<Photo[]>
 }

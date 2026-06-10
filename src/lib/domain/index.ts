@@ -2,6 +2,7 @@ export type {
   BillingStatus,
   CreateExpenseInput,
   CreateInterventionDraftInput,
+  CreateMaterialMovementInput,
   CreateTaskInput,
   Expense,
   ExpenseStatus,

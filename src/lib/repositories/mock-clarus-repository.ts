@@ -3,12 +3,15 @@ import { calculateWorkEntryAmount, calculateWorkEntryDuration } from '@/lib/calc
 import type {
   CreateExpenseInput,
   CreateInterventionDraftInput,
+  CreateMaterialMovementInput,
   CreateTaskInput,
   Expense,
   Intervention,
   InterventionDraft,
+  MaterialMovement,
   Person,
   Phase,
+  Photo,
   Project,
   Task,
   TaskStatus,
@@ -18,8 +21,10 @@ import type {
 import {
   mockExpenses,
   mockInterventions,
+  mockMaterialMovements,
   mockPeople,
   mockPhases,
+  mockPhotos,
   mockProject,
   mockTasks,
   mockWorkEntries,
@@ -40,6 +45,8 @@ export const createMockClarusRepository = (): ClarusRepository => {
   const workEntries = mockWorkEntries.map(cloneWorkEntry)
   const tasks = mockTasks.map(cloneTask)
   const expenses = mockExpenses.map(cloneExpense)
+  const materialMovements = mockMaterialMovements.map(cloneMaterialMovement)
+  const photos = mockPhotos.map(clonePhoto)
   let draftSequence = 0
 
   return {
@@ -165,6 +172,27 @@ export const createMockClarusRepository = (): ClarusRepository => {
         if (exp) exp.status = 'invoiced'
       })
     },
+    getMaterialMovements: async () => materialMovements.map(cloneMaterialMovement),
+    createMaterialMovement: async (input: CreateMaterialMovementInput) => {
+      const movement: MaterialMovement = {
+        id: `movement-${Date.now()}`,
+        projectId: input.projectId,
+        materialId: input.materialId,
+        interventionId: input.interventionId,
+        zoneId: input.zoneId,
+        phaseId: input.phaseId,
+        type: input.type,
+        quantity: input.quantity,
+        unit: input.unit,
+        estimatedCost: input.estimatedCost,
+        realCost: input.realCost,
+        supplier: input.supplier,
+        status: 'on_site',
+      }
+      materialMovements.push(cloneMaterialMovement(movement))
+      return cloneMaterialMovement(movement)
+    },
+    getPhotos: async () => photos.map(clonePhoto),
   }
 }
 
@@ -311,4 +339,12 @@ function cloneTask(task: Task): Task {
 
 function cloneExpense(expense: Expense): Expense {
   return { ...expense }
+}
+
+function cloneMaterialMovement(movement: MaterialMovement): MaterialMovement {
+  return { ...movement }
+}
+
+function clonePhoto(photo: Photo): Photo {
+  return { ...photo }
 }
