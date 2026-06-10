@@ -4,6 +4,7 @@ import { CheckCircle2, Circle } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { Badge } from '@/components/ui'
 import type { Task } from '@/lib/domain'
+import { toast } from '@/lib/hooks/use-toast'
 import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
 
 export function TasksListClient() {
@@ -34,10 +35,15 @@ export function TasksListClient() {
 
     try {
       await mockClarusRepository.updateTaskStatus(task.id, newStatus)
+      toast({
+        title: newStatus === 'done' ? 'Tâche terminée ✓' : 'Tâche réouverte',
+        description: task.title,
+        variant: newStatus === 'done' ? 'success' : 'info',
+      })
       await loadData()
     } catch (e) {
       console.error(e)
-      // Revert on error
+      toast({ title: 'Erreur', description: 'Impossible de mettre à jour la tâche.', variant: 'error' })
       await loadData()
     }
   }

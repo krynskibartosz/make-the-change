@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import type { ReactNode } from 'react'
 
+import { Toaster } from '@/components/ui/toaster'
 import './globals.css'
 
 const geistSans = Geist({
@@ -36,6 +37,7 @@ export default function RootLayout({ children, modal }: RootLayoutProps) {
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {children}
         {modal}
+        <Toaster />
       </body>
     </html>
   )

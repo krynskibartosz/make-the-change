@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import type { Material, Zone } from '@/lib/domain'
+import { toast } from '@/lib/hooks/use-toast'
 import { mockClarusRepository } from '@/lib/repositories'
 import { FullScreenSlideModal } from '../../@modal/_components/full-screen-slide-modal'
 
@@ -33,14 +34,23 @@ export default function AjouterMateriauPage() {
     e.preventDefault()
     if (!selectedMaterialId || !quantity || !unit || !selectedZoneId) return
 
+    const material = materials.find((m) => m.id === selectedMaterialId)
+    const zone = zones.find((z) => z.id === selectedZoneId)
+
     await mockClarusRepository.createMaterialMovement({
-      projectId: 'project-1', // Mock project
+      projectId: 'project-1',
       materialId: selectedMaterialId,
       zoneId: selectedZoneId,
       type: 'used',
       quantity: parseFloat(quantity),
       unit: unit,
       status: 'on_site',
+    })
+
+    toast({
+      title: 'Matériau enregistré ✓',
+      description: `${quantity} ${unit} de ${material?.name ?? ''} → ${zone?.name ?? ''}`,
+      variant: 'success',
     })
 
     router.back()
