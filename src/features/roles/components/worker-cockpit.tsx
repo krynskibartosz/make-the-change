@@ -203,10 +203,10 @@ export function WorkerCockpit() {
             <AlertTriangle className="size-6 text-orange-500" />
             <span className="text-xs font-semibold text-orange-500">Signaler problème</span>
           </Link>
-          <button className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-surface p-4 active:bg-surface-elevated">
+          <Link href="/ajouter-heures" className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-surface p-4 active:bg-surface-elevated">
             <Clock className="size-6 text-foreground" />
             <span className="text-xs font-semibold">Noter mes heures</span>
-          </button>
+          </Link>
           <Link href="/interventions/new" className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-surface p-4 active:bg-surface-elevated opacity-70">
             <span className="text-2xl leading-none font-light mb-1">+</span>
             <span className="text-xs font-semibold">Saisie manuelle</span>
