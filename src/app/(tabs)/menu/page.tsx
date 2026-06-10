@@ -172,7 +172,7 @@ export default function MenuPage() {
             Mode Démonstration
           </h3>
           <div className="mx-4 mb-8 overflow-hidden rounded-xl bg-surface border border-border/50">
-            {(['ouvrier', 'chef', 'admin'] as AppRole[]).map((r, i) => (
+            {(['ouvrier', 'chef', 'admin', 'client'] as AppRole[]).map((r, i) => (
               <div key={r}>
                 <button
                   type="button"
@@ -181,17 +181,17 @@ export default function MenuPage() {
                     role === r ? 'text-primary font-bold bg-primary/5' : 'text-foreground'
                   }`}
                 >
-                  <span className="capitalize">Mode {r === 'ouvrier' ? 'Ouvrier (Hubert)' : r === 'chef' ? 'Chef de chantier (Christophe)' : 'Admin (Grégory)'}</span>
+                  <span className="capitalize">Mode {r === 'ouvrier' ? 'Ouvrier (Hubert)' : r === 'chef' ? 'Chef de chantier (Christophe)' : r === 'client' ? 'Client (Martin)' : 'Admin (Grégory)'}</span>
                   {role === r && <span className="text-primary">✓</span>}
                 </button>
-                {i < 2 ? <div className="border-b border-border/50" /> : null}
+                {i < 3 ? <div className="border-b border-border/50" /> : null}
               </div>
             ))}
           </div>
         </section>
 
-        {role !== 'ouvrier' && <SettingsGroup title="Gestion financière" items={managementItems} />}
-        {role !== 'ouvrier' && <SettingsGroup title="Suivi de chantier" items={projectItems} />}
+        {role !== 'ouvrier' && role !== 'client' && <SettingsGroup title="Gestion financière" items={managementItems} />}
+        {role !== 'ouvrier' && role !== 'client' && <SettingsGroup title="Suivi de chantier" items={projectItems} />}
         <SettingsGroup title="Application" items={appItems} />
       </div>
     </main>

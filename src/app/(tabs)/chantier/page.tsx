@@ -4,12 +4,17 @@ import { TabScreen } from '../_components/tab-screen'
 import { ChantierDashboardClient } from './chantier-dashboard-client'
 import { WorkerCockpit } from '@/features/roles/components/worker-cockpit'
 import { ManagerInbox } from '@/features/roles/components/manager-inbox'
+import { ClientPortal } from '@/features/roles/components/client-portal'
 import { useRole } from '@/lib/role-context'
 
 export default function ProjectPage() {
   const { role, isReady } = useRole()
 
   if (!isReady) return null
+
+  if (role === 'client') {
+    return <ClientPortal />
+  }
 
   if (role === 'ouvrier') {
     // Mode Ouvrier : Pas de header standard, juste le cockpit

@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
 
-export type AppRole = 'ouvrier' | 'chef' | 'admin'
+export type AppRole = 'ouvrier' | 'chef' | 'admin' | 'client'
 
 interface RoleContextType {
   role: AppRole
@@ -18,7 +18,7 @@ export function RoleProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const savedRole = localStorage.getItem('clarus_app_role') as AppRole | null
-    if (savedRole && ['ouvrier', 'chef', 'admin'].includes(savedRole)) {
+    if (savedRole && ['ouvrier', 'chef', 'admin', 'client'].includes(savedRole)) {
       setRoleState(savedRole)
     }
     setIsReady(true)
