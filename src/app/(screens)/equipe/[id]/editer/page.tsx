@@ -2,9 +2,9 @@
 
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { toast } from '@/lib/hooks/use-toast'
 import { mockClarusRepository } from '@/lib/repositories'
 import { FullScreenSlideModal } from '../../../../@modal/_components/full-screen-slide-modal'
-import { toast } from '@/lib/hooks/use-toast'
 
 export default function EditerMembreEquipePage() {
   const router = useRouter()
@@ -21,7 +21,7 @@ export default function EditerMembreEquipePage() {
     const loadPerson = async () => {
       try {
         const people = await mockClarusRepository.getPeople()
-        const person = people.find(p => p.id === personId)
+        const person = people.find((p) => p.id === personId)
         if (person) {
           setName(person.name)
           setRole(person.role || '')

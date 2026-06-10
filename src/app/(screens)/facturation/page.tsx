@@ -75,30 +75,30 @@ export default function FacturationPage() {
           ) : (
             <div className="flex flex-col bg-surface rounded-[var(--radius-card)] border border-border">
               {billableInterventions.map((item) => {
-              const isSelected = selectedInterventionIds.includes(item.id)
-              return (
-                <div
-                  key={item.id}
-                  className={`flex cursor-pointer items-center justify-between p-4 transition-colors border-b border-border last:border-0 ${
-                    isSelected ? 'border-primary bg-primary/5' : ''
-                  }`}
-                  onClick={() => toggleIntervention(item.id)}
-                >
-                  <div className="flex flex-col">
-                    <span className="font-medium">{item.title}</span>
-                    <span className="text-sm text-muted-foreground">{item.date}</span>
+                const isSelected = selectedInterventionIds.includes(item.id)
+                return (
+                  <div
+                    key={item.id}
+                    className={`flex cursor-pointer items-center justify-between p-4 transition-colors border-b border-border last:border-0 ${
+                      isSelected ? 'border-primary bg-primary/5' : ''
+                    }`}
+                    onClick={() => toggleIntervention(item.id)}
+                  >
+                    <div className="flex flex-col">
+                      <span className="font-medium">{item.title}</span>
+                      <span className="text-sm text-muted-foreground">{item.date}</span>
+                    </div>
+                    <div>
+                      <div
+                        className={`size-5 rounded-full border-2 ${
+                          isSelected
+                            ? 'border-primary bg-primary'
+                            : 'border-muted-foreground bg-transparent'
+                        }`}
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <div
-                      className={`size-5 rounded-full border-2 ${
-                        isSelected
-                          ? 'border-primary bg-primary'
-                          : 'border-muted-foreground bg-transparent'
-                      }`}
-                    />
-                  </div>
-                </div>
-              )
+                )
               })}
             </div>
           )}
@@ -109,31 +109,31 @@ export default function FacturationPage() {
           ) : (
             <div className="flex flex-col bg-surface rounded-[var(--radius-card)] border border-border">
               {billableExpenses.map((expense) => {
-              const isSelected = selectedExpenseIds.includes(expense.id)
-              return (
-                <div
-                  key={expense.id}
-                  className={`flex cursor-pointer items-center justify-between p-4 transition-colors border-b border-border last:border-0 ${
-                    isSelected ? 'border-primary bg-primary/5' : ''
-                  }`}
-                  onClick={() => toggleExpense(expense.id)}
-                >
-                  <div className="flex flex-col">
-                    <span className="font-medium">{expense.description}</span>
-                    <span className="text-sm text-muted-foreground">{expense.amount} €</span>
+                const isSelected = selectedExpenseIds.includes(expense.id)
+                return (
+                  <div
+                    key={expense.id}
+                    className={`flex cursor-pointer items-center justify-between p-4 transition-colors border-b border-border last:border-0 ${
+                      isSelected ? 'border-primary bg-primary/5' : ''
+                    }`}
+                    onClick={() => toggleExpense(expense.id)}
+                  >
+                    <div className="flex flex-col">
+                      <span className="font-medium">{expense.description}</span>
+                      <span className="text-sm text-muted-foreground">{expense.amount} €</span>
+                    </div>
+                    <div>
+                      <div
+                        className={`size-5 rounded-full border-2 ${
+                          isSelected
+                            ? 'border-primary bg-primary'
+                            : 'border-muted-foreground bg-transparent'
+                        }`}
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <div
-                      className={`size-5 rounded-full border-2 ${
-                        isSelected
-                          ? 'border-primary bg-primary'
-                          : 'border-muted-foreground bg-transparent'
-                      }`}
-                    />
-                  </div>
-                </div>
-              )
-            })}
+                )
+              })}
             </div>
           )}
         </section>

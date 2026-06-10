@@ -1,12 +1,12 @@
 'use client'
 
 import { ChevronRight, Package, Plus } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { FullScreenSlideModal } from '../../@modal/_components/full-screen-slide-modal'
 import type { Material, MaterialMovement } from '@/lib/domain'
 import { mockClarusRepository } from '@/lib/repositories'
+import { FullScreenSlideModal } from '../../@modal/_components/full-screen-slide-modal'
 
 export default function MateriauxPage() {
   const [materials, setMaterials] = useState<Material[]>([])
@@ -17,7 +17,7 @@ export default function MateriauxPage() {
   useEffect(() => {
     Promise.all([
       mockClarusRepository.getMaterials(),
-      mockClarusRepository.getMaterialMovements()
+      mockClarusRepository.getMaterialMovements(),
     ]).then(([mats, movs]) => {
       setMaterials(mats)
       setMovements(movs)
@@ -27,7 +27,7 @@ export default function MateriauxPage() {
 
   // Calcul du stock pour chaque matériau (somme des mouvements sur site vs utilisés)
   const getStock = (materialId: string) => {
-    const matMovements = movements.filter(m => m.materialId === materialId)
+    const matMovements = movements.filter((m) => m.materialId === materialId)
     let stock = 0
     for (const mov of matMovements) {
       if (mov.type === 'on_site' || mov.type === 'purchased') {
@@ -84,7 +84,9 @@ export default function MateriauxPage() {
                     <div className="flex items-center gap-3 shrink-0">
                       <div className="flex flex-col items-end">
                         <span className="font-bold text-lg text-primary">{stock}</span>
-                        <span className="text-xs text-muted-foreground">{material.defaultUnit || 'pièce'}(s)</span>
+                        <span className="text-xs text-muted-foreground">
+                          {material.defaultUnit || 'pièce'}(s)
+                        </span>
                       </div>
                       <ChevronRight className="h-5 w-5 text-muted-foreground/40" />
                     </div>

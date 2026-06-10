@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
-import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
-import { InterventionQuickView } from '@/features/interventions/components/intervention-quick-view'
 import { FullScreenSlideModal } from '@/app/@modal/_components/full-screen-slide-modal'
+import { InterventionQuickView } from '@/features/interventions/components/intervention-quick-view'
+import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
 
 type InterventionDetailPageProps = Readonly<{
   params: Promise<{

@@ -5,8 +5,8 @@ import {
   Camera,
   CheckCircle2,
   Circle,
-  Clock,
   ClipboardList,
+  Clock,
   Loader2,
   PlusCircle,
 } from 'lucide-react'
@@ -54,23 +54,14 @@ const INTERVENTION_STATUS_LABEL: Record<string, string> = {
   cancelled: 'Annulé',
 }
 
-function TaskItem({
-  task,
-  onToggle,
-}: {
-  task: Task
-  onToggle: () => void
-}) {
+function TaskItem({ task, onToggle }: { task: Task; onToggle: () => void }) {
   const [loading, setLoading] = useState(false)
   const isDone = task.status === 'done'
 
   async function handleToggle() {
     setLoading(true)
     try {
-      await mockClarusRepository.updateTaskStatus(
-        task.id,
-        isDone ? 'to_do' : 'done',
-      )
+      await mockClarusRepository.updateTaskStatus(task.id, isDone ? 'to_do' : 'done')
       onToggle()
     } finally {
       setLoading(false)
@@ -78,9 +69,7 @@ function TaskItem({
   }
 
   return (
-    <div
-      className={`flex items-start gap-3 py-3 px-4 ${isDone ? 'opacity-50' : ''}`}
-    >
+    <div className={`flex items-start gap-3 py-3 px-4 ${isDone ? 'opacity-50' : ''}`}>
       <button
         type="button"
         onClick={handleToggle}
@@ -132,8 +121,7 @@ function TaskItem({
 function InterventionItem({ intervention }: { intervention: Intervention }) {
   const statusColor =
     INTERVENTION_STATUS_COLOR[intervention.status] ?? 'bg-muted text-muted-foreground'
-  const statusLabel =
-    INTERVENTION_STATUS_LABEL[intervention.status] ?? intervention.status
+  const statusLabel = INTERVENTION_STATUS_LABEL[intervention.status] ?? intervention.status
 
   return (
     <div className="flex items-start gap-3 py-3 px-4">
@@ -141,13 +129,9 @@ function InterventionItem({ intervention }: { intervention: Intervention }) {
         <Clock className="h-4 w-4 text-muted-foreground/40" />
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-medium text-foreground leading-snug">
-          {intervention.title}
-        </p>
+        <p className="text-sm font-medium text-foreground leading-snug">{intervention.title}</p>
         <div className="mt-1 flex items-center gap-2 flex-wrap">
-          <span className="text-[11px] text-muted-foreground">
-            {intervention.date}
-          </span>
+          <span className="text-[11px] text-muted-foreground">{intervention.date}</span>
           <span
             className={`inline-block rounded-full px-1.5 py-0.5 text-[10px] font-semibold ${statusColor}`}
           >
@@ -186,9 +170,7 @@ export function ZoneDetailClient({
           <div className="mb-4 flex items-start gap-3 rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3">
             <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
             <div>
-              <p className="text-sm font-semibold text-red-300">
-                Zone sensible
-              </p>
+              <p className="text-sm font-semibold text-red-300">Zone sensible</p>
               <p className="text-[11px] text-red-400/70 mt-0.5 leading-snug">
                 Photo preuve obligatoire · Validation requise avant fermeture
               </p>
@@ -197,9 +179,7 @@ export function ZoneDetailClient({
         )}
 
         {zone.description && (
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            {zone.description}
-          </p>
+          <p className="text-sm text-muted-foreground leading-relaxed">{zone.description}</p>
         )}
 
         {zone.technicalCode && (
@@ -224,9 +204,7 @@ export function ZoneDetailClient({
                 Tâches
               </span>
             </div>
-            <p className="text-2xl font-bold text-foreground">
-              {openTasks.length}
-            </p>
+            <p className="text-2xl font-bold text-foreground">{openTasks.length}</p>
             <p className="text-[11px] text-muted-foreground/60">
               {doneTasks.length} terminée{doneTasks.length > 1 ? 's' : ''}
             </p>
@@ -238,9 +216,7 @@ export function ZoneDetailClient({
                 Interventions
               </span>
             </div>
-            <p className="text-2xl font-bold text-foreground">
-              {interventions.length}
-            </p>
+            <p className="text-2xl font-bold text-foreground">{interventions.length}</p>
             <p className="text-[11px] text-muted-foreground/60">
               enregistrée{interventions.length > 1 ? 's' : ''}
             </p>
@@ -281,9 +257,7 @@ export function ZoneDetailClient({
       {tasks.length === 0 && (
         <div className="mx-4 rounded-xl bg-surface border border-border/50 px-4 py-5 flex items-center gap-3">
           <ClipboardList className="h-5 w-5 text-muted-foreground/30 shrink-0" />
-          <p className="text-sm text-muted-foreground/50">
-            Aucune tâche pour cette zone
-          </p>
+          <p className="text-sm text-muted-foreground/50">Aucune tâche pour cette zone</p>
         </div>
       )}
 

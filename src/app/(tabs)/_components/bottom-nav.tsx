@@ -33,9 +33,7 @@ export function BottomNav() {
               <span
                 className={cn(
                   'flex h-8 w-12 items-center justify-center rounded-xl transition-all duration-200',
-                  isActive
-                    ? 'scale-105 bg-primary/18 ring-1 ring-primary/35'
-                    : 'bg-transparent',
+                  isActive ? 'scale-105 bg-primary/18 ring-1 ring-primary/35' : 'bg-transparent',
                 )}
               >
                 <Icon
@@ -47,7 +45,12 @@ export function BottomNav() {
                   )}
                 />
               </span>
-              <span className={cn('w-full whitespace-nowrap text-center text-[10px] leading-none tracking-wide', isActive ? 'font-bold' : 'font-medium')}>
+              <span
+                className={cn(
+                  'w-full whitespace-nowrap text-center text-[10px] leading-none tracking-wide',
+                  isActive ? 'font-bold' : 'font-medium',
+                )}
+              >
                 {tab.label}
               </span>
             </Link>

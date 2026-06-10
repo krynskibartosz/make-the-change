@@ -6,8 +6,8 @@ import type {
   MaterialMovement,
   Photo,
   Plan,
-  PlanZone,
   PlanPin,
+  PlanZone,
   Task,
   WorkEntry,
 } from '@/lib/domain'
@@ -527,7 +527,8 @@ export const mockTasks: Task[] = [
     phaseId: 'phase-validation',
     zoneId: 'zone-tech-p12-barre',
     title: '⚠️ Clarifier P1.2 HEA140 barré (rouge) — annulé ou modifié ?',
-    description: 'Annotation rouge sur plan haut RDC, côté gauche. P1.2 HEA140 et PR 19x40 h=20cm semblent barrés. Confirmer avec architecte / bureau d\'étude si supprimé, remplacé ou non concerné.',
+    description:
+      "Annotation rouge sur plan haut RDC, côté gauche. P1.2 HEA140 et PR 19x40 h=20cm semblent barrés. Confirmer avec architecte / bureau d'étude si supprimé, remplacé ou non concerné.",
     status: 'to_check',
     priority: 'urgent',
     assignedTo: 'person-hubert',
@@ -539,7 +540,8 @@ export const mockTasks: Task[] = [
     phaseId: 'phase-structure',
     zoneId: 'zone-structure',
     title: 'Confirmer niveaux 2,65 / 2,33 / 2,29 m avant exécution',
-    description: 'Les coupes AA, BB et CC indiquent des niveaux précis. À vérifier sur place et avec le bureau d\'étude avant pose des poutres.',
+    description:
+      "Les coupes AA, BB et CC indiquent des niveaux précis. À vérifier sur place et avec le bureau d'étude avant pose des poutres.",
     status: 'to_check',
     priority: 'urgent',
     assignedTo: 'person-hubert',
@@ -550,8 +552,9 @@ export const mockTasks: Task[] = [
     projectId: SPARRENLAAN_PROJECT_ID,
     phaseId: 'phase-structure',
     zoneId: 'zone-tech-p16',
-    title: 'Valider liaison P1.7 / P1.6 — plats d\'about + mortier K50',
-    description: 'Coupe BB : 2 plats d\'about pour liaisonner P1.7/P1.6 + resserrage mortier sans retrait K50. Point technique critique. Photo preuve obligatoire avant fermeture.',
+    title: "Valider liaison P1.7 / P1.6 — plats d'about + mortier K50",
+    description:
+      "Coupe BB : 2 plats d'about pour liaisonner P1.7/P1.6 + resserrage mortier sans retrait K50. Point technique critique. Photo preuve obligatoire avant fermeture.",
     status: 'to_do',
     priority: 'urgent',
     assignedTo: 'person-hubert',
@@ -563,7 +566,8 @@ export const mockTasks: Task[] = [
     phaseId: 'phase-structure',
     zoneId: 'zone-tech-p18',
     title: 'Photo preuve P1.8 UPN350 + cornière avant fermeture',
-    description: 'Coupe CC : UPN350 + cornière L100x100/10 + plat soudé e=10mm. À documenter en photo avant que la zone soit refermée.',
+    description:
+      'Coupe CC : UPN350 + cornière L100x100/10 + plat soudé e=10mm. À documenter en photo avant que la zone soit refermée.',
     status: 'to_do',
     priority: 'high',
     assignedTo: 'person-hubert',
@@ -575,7 +579,8 @@ export const mockTasks: Task[] = [
     phaseId: 'phase-structure',
     zoneId: 'zone-sous-sol',
     title: 'Confirmer liaisons fondations existantes + ancrage chimique',
-    description: 'Plan haut sous-sol : "liaison aux fondations existantes via ancrage chimique des armatures". Plusieurs éléments indiqués "à confirmer" (S1, S3, S4, S5, S6). Faire valider par ingénieur avant exécution.',
+    description:
+      'Plan haut sous-sol : "liaison aux fondations existantes via ancrage chimique des armatures". Plusieurs éléments indiqués "à confirmer" (S1, S3, S4, S5, S6). Faire valider par ingénieur avant exécution.',
     status: 'to_check',
     priority: 'urgent',
     assignedTo: 'person-hubert',
@@ -586,8 +591,9 @@ export const mockTasks: Task[] = [
     projectId: SPARRENLAAN_PROJECT_ID,
     phaseId: 'phase-validation',
     zoneId: 'zone-terrasse',
-    title: 'Valider surcharges terrasse (1 + 2 + 0,4 kN/m²) avec bureau d\'étude',
-    description: 'Zone A = Terrasse praticable. Surcharges distinctes de la toiture verte. Confirmer que la structure peut supporter ces charges.',
+    title: "Valider surcharges terrasse (1 + 2 + 0,4 kN/m²) avec bureau d'étude",
+    description:
+      'Zone A = Terrasse praticable. Surcharges distinctes de la toiture verte. Confirmer que la structure peut supporter ces charges.',
     status: 'to_do',
     priority: 'high',
     assignedTo: 'person-gregory',
@@ -599,7 +605,8 @@ export const mockTasks: Task[] = [
     phaseId: 'phase-validation',
     zoneId: 'zone-toiture-verte',
     title: 'Valider complexe toiture verte — 2 kN/m² charge permanente',
-    description: 'Zone B = Toiture verte. 2 kN/m² pour le complexe vert seul. Confirmer composition du complexe et impact sur structure.',
+    description:
+      'Zone B = Toiture verte. 2 kN/m² pour le complexe vert seul. Confirmer composition du complexe et impact sur structure.',
     status: 'to_do',
     priority: 'high',
     assignedTo: 'person-gregory',
@@ -611,7 +618,8 @@ export const mockTasks: Task[] = [
     phaseId: 'phase-structure',
     zoneId: 'zone-sous-sol',
     title: 'Vérifier semelle existante 60×30 cm avant travaux',
-    description: 'Plan haut sous-sol mentionne semelle existante. Dimensions et état à contrôler sur place avant toute intervention de fondation.',
+    description:
+      'Plan haut sous-sol mentionne semelle existante. Dimensions et état à contrôler sur place avant toute intervention de fondation.',
     status: 'to_do',
     priority: 'high',
     assignedTo: 'person-hubert',
@@ -623,7 +631,8 @@ export const mockTasks: Task[] = [
     phaseId: 'phase-validation',
     zoneId: 'zone-extension-arriere',
     title: 'Lire et enregistrer annotations bleues côté droit du plan',
-    description: 'Notes manuscrites bleues visibles à droite du plan haut RDC (zone extension arrière). À lire, interpréter et enregistrer comme décisions / annotations dans l\'app.',
+    description:
+      "Notes manuscrites bleues visibles à droite du plan haut RDC (zone extension arrière). À lire, interpréter et enregistrer comme décisions / annotations dans l'app.",
     status: 'to_do',
     priority: 'normal',
     assignedTo: 'person-gregory',
@@ -639,7 +648,8 @@ export const mockMaterials: Material[] = [
     name: 'Protection sols',
     category: 'Protection',
     defaultUnit: 'rouleau',
-    photoUrl: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=200&auto=format&fit=crop',
+    photoUrl:
+      'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=200&auto=format&fit=crop',
   },
   {
     id: 'mat-disque-beton',
@@ -647,7 +657,8 @@ export const mockMaterials: Material[] = [
     name: 'Disques béton',
     category: 'Consommable',
     defaultUnit: 'pièce',
-    photoUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=200&auto=format&fit=crop',
+    photoUrl:
+      'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=200&auto=format&fit=crop',
   },
   {
     id: 'mat-sacs-gravats',
@@ -655,7 +666,8 @@ export const mockMaterials: Material[] = [
     name: 'Sacs gravats',
     category: 'Évacuation',
     defaultUnit: 'pièce',
-    photoUrl: 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=200&auto=format&fit=crop',
+    photoUrl:
+      'https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=200&auto=format&fit=crop',
   },
   {
     id: 'mat-ipe360',
@@ -1171,7 +1183,8 @@ export const mockPlans: Plan[] = [
     projectId: SPARRENLAAN_PROJECT_ID,
     title: 'Plan — Haut rez-de-chaussée',
     url: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2831&auto=format&fit=crop',
-    description: 'Plan haut RDC — zones A, B, C — poutres P1.5, P1.7, P1.8, P1.11, P1.13, P1.15. Annotations rouges côté gauche (P1.2 barré). Notes bleues côté droit.',
+    description:
+      'Plan haut RDC — zones A, B, C — poutres P1.5, P1.7, P1.8, P1.11, P1.13, P1.15. Annotations rouges côté gauche (P1.2 barré). Notes bleues côté droit.',
     createdAt: '2026-06-01T10:00:00.000Z',
   },
   {
@@ -1179,7 +1192,8 @@ export const mockPlans: Plan[] = [
     projectId: SPARRENLAAN_PROJECT_ID,
     title: 'Plan — Haut sous-sol',
     url: 'https://images.unsplash.com/photo-1621251392659-42b781eefcce?q=80&w=2938&auto=format&fit=crop',
-    description: 'Plan sous-sol — semelles S1, S3, S4, S5, S6 — dalle existante — liaisons fondations via ancrage chimique — plusieurs éléments "à confirmer".',
+    description:
+      'Plan sous-sol — semelles S1, S3, S4, S5, S6 — dalle existante — liaisons fondations via ancrage chimique — plusieurs éléments "à confirmer".',
     createdAt: '2026-06-01T10:30:00.000Z',
   },
   {
@@ -1187,7 +1201,8 @@ export const mockPlans: Plan[] = [
     projectId: SPARRENLAAN_PROJECT_ID,
     title: 'Coupe AA — P1.7 / P1.5',
     url: 'https://images.unsplash.com/photo-1541888009-410fb5566f7f?q=80&w=2940&auto=format&fit=crop',
-    description: 'Coupe AA : 2× IPE360 (P1.7) + HEA140 (P1.5). Plats inférieurs soudés. Filière 7/15 a/a40cm. Niveaux : +2,65 m / +2,29 m.',
+    description:
+      'Coupe AA : 2× IPE360 (P1.7) + HEA140 (P1.5). Plats inférieurs soudés. Filière 7/15 a/a40cm. Niveaux : +2,65 m / +2,29 m.',
     createdAt: '2026-06-02T09:00:00.000Z',
   },
   {
@@ -1195,7 +1210,8 @@ export const mockPlans: Plan[] = [
     projectId: SPARRENLAAN_PROJECT_ID,
     title: 'Coupe BB — P1.7 / P1.6',
     url: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2831&auto=format&fit=crop',
-    description: 'Coupe BB : liaison P1.7 (2× IPE360) / P1.6 (L180×180/13mm) via 2 plats d\'about. Resserrage mortier sans retrait K50. Niveaux : +2,33 m / +2,29 m.',
+    description:
+      "Coupe BB : liaison P1.7 (2× IPE360) / P1.6 (L180×180/13mm) via 2 plats d'about. Resserrage mortier sans retrait K50. Niveaux : +2,33 m / +2,29 m.",
     createdAt: '2026-06-02T09:30:00.000Z',
   },
   {
@@ -1203,7 +1219,8 @@ export const mockPlans: Plan[] = [
     projectId: SPARRENLAAN_PROJECT_ID,
     title: 'Coupe CC — P1.8 UPN350',
     url: 'https://images.unsplash.com/photo-1621251392659-42b781eefcce?q=80&w=2938&auto=format&fit=crop',
-    description: 'Coupe CC : UPN350 (P1.8) + cornière L100×100/10 + plat soudé e=10mm. Filière 7/15 a/a40cm. Niveaux : +2,65 m / +2,33 m / +2,29 m.',
+    description:
+      'Coupe CC : UPN350 (P1.8) + cornière L100×100/10 + plat soudé e=10mm. Filière 7/15 a/a40cm. Niveaux : +2,65 m / +2,33 m / +2,29 m.',
     createdAt: '2026-06-02T10:00:00.000Z',
   },
   {
@@ -1211,7 +1228,8 @@ export const mockPlans: Plan[] = [
     projectId: SPARRENLAAN_PROJECT_ID,
     title: 'Plan structure — version annotée terrain',
     url: 'https://images.unsplash.com/photo-1541888009-410fb5566f7f?q=80&w=2940&auto=format&fit=crop',
-    description: 'Version terrain avec annotations manuelles. Matériaux : béton C30/37, acier S235B, boulons 8.8, bois C24/GL24, mortier M12.',
+    description:
+      'Version terrain avec annotations manuelles. Matériaux : béton C30/37, acier S235B, boulons 8.8, bois C24/GL24, mortier M12.',
     createdAt: '2026-06-03T08:00:00.000Z',
   },
 ]

@@ -39,7 +39,7 @@ describe('createDraftInputFromState', () => {
       days: 1,
       hourlyRate: 45,
       isExtra: false,
-      
+
       description: 'Mur retire.',
       notes: 'Mur retire.',
     })
@@ -70,7 +70,6 @@ describe('createDraftInputFromState', () => {
 
     expect(input).toMatchObject({
       isExtra: true,
-      
     })
   })
 
@@ -136,7 +135,11 @@ describe('createDraftInputFromState', () => {
           locationToDefine: false,
         },
         who: { personIds: ['person-hubert'] },
-        status: { isExtra: 'to_check' as AddInterventionStatusState['isExtra'], billingStatus: 'to_check', paymentStatus: 'to_check' },
+        status: {
+          isExtra: 'to_check' as AddInterventionStatusState['isExtra'],
+          billingStatus: 'to_check',
+          paymentStatus: 'to_check',
+        },
       },
     })
 

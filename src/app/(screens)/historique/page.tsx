@@ -40,9 +40,7 @@ export default async function HistoriquePage() {
           <ChevronLeft className="h-6 w-6" />
         </Link>
         <div className="min-w-0 flex-1">
-          <h1 className="text-xl font-semibold leading-tight truncate">
-            Historique
-          </h1>
+          <h1 className="text-xl font-semibold leading-tight truncate">Historique</h1>
           <p className="text-xs text-muted-foreground mt-0.5">
             Toutes les interventions du chantier
           </p>

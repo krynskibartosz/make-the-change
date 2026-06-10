@@ -2,9 +2,9 @@
 
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { toast } from '@/lib/hooks/use-toast'
 import { mockClarusRepository } from '@/lib/repositories'
 import { FullScreenSlideModal } from '../../../../@modal/_components/full-screen-slide-modal'
-import { toast } from '@/lib/hooks/use-toast'
 
 export default function EditerMateriauPage() {
   const router = useRouter()

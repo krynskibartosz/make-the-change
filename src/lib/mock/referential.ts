@@ -161,7 +161,8 @@ export const mockZones: Zone[] = [
     type: 'simple',
     order: 7,
     isSensitive: true,
-    description: 'Zone structurelle centrale avec poutres P1.7, P1.5, P1.6, P1.8. Photo preuve obligatoire.',
+    description:
+      'Zone structurelle centrale avec poutres P1.7, P1.5, P1.6, P1.8. Photo preuve obligatoire.',
   },
   {
     id: 'zone-sous-sol',
@@ -170,7 +171,8 @@ export const mockZones: Zone[] = [
     type: 'simple',
     order: 8,
     isSensitive: true,
-    description: 'Plan haut sous-sol. Semelles, dalle existante, liaisons fondations, niveaux à confirmer.',
+    description:
+      'Plan haut sous-sol. Semelles, dalle existante, liaisons fondations, niveaux à confirmer.',
   },
   {
     id: 'zone-escalier-etage',
@@ -187,7 +189,8 @@ export const mockZones: Zone[] = [
     type: 'simple',
     order: 10,
     isSensitive: true,
-    description: 'Zone A — Terrasse praticable. Surcharges : permanentes 1 kN/m², utiles 2 kN/m², neige 0,4 kN/m².',
+    description:
+      'Zone A — Terrasse praticable. Surcharges : permanentes 1 kN/m², utiles 2 kN/m², neige 0,4 kN/m².',
   },
   {
     id: 'zone-toiture-verte',
@@ -196,7 +199,8 @@ export const mockZones: Zone[] = [
     type: 'simple',
     order: 11,
     isSensitive: true,
-    description: 'Zone B — Toiture verte. Surcharges : permanentes 2,5 kN/m² dont 2 kN/m² complexe vert, utiles 0,75 kN/m².',
+    description:
+      'Zone B — Toiture verte. Surcharges : permanentes 2,5 kN/m² dont 2 kN/m² complexe vert, utiles 0,75 kN/m².',
   },
   {
     id: 'zone-conteneur',
@@ -224,7 +228,8 @@ export const mockZones: Zone[] = [
     technicalCode: 'P1.7',
     planReference: 'Coupe AA / Coupe BB',
     isSensitive: true,
-    description: 'Double poutre IPE360. Plats inférieurs soudés. Filière 7/15 boulonnée. Liaison avec P1.6 (coupe BB) et P1.5 (coupe AA). Niveaux : 2,65 / 2,29 m.',
+    description:
+      'Double poutre IPE360. Plats inférieurs soudés. Filière 7/15 boulonnée. Liaison avec P1.6 (coupe BB) et P1.5 (coupe AA). Niveaux : 2,65 / 2,29 m.',
   },
   {
     id: 'zone-tech-p18',
@@ -236,7 +241,8 @@ export const mockZones: Zone[] = [
     technicalCode: 'P1.8',
     planReference: 'Coupe CC',
     isSensitive: true,
-    description: 'Profilé UPN350 dans épaisseur. Cornière L100×100/10. Plat soudé e=10mm. Filière 7/15 a/a40cm. Extension arrière droite.',
+    description:
+      'Profilé UPN350 dans épaisseur. Cornière L100×100/10. Plat soudé e=10mm. Filière 7/15 a/a40cm. Extension arrière droite.',
   },
   {
     id: 'zone-tech-p15',
@@ -248,7 +254,8 @@ export const mockZones: Zone[] = [
     technicalCode: 'P1.5',
     planReference: 'Coupe AA',
     isSensitive: true,
-    description: 'Support / liaison locale autour de la structure principale. Visible coupe AA près de P1.7.',
+    description:
+      'Support / liaison locale autour de la structure principale. Visible coupe AA près de P1.7.',
   },
   {
     id: 'zone-tech-p16',
@@ -260,7 +267,8 @@ export const mockZones: Zone[] = [
     technicalCode: 'P1.6',
     planReference: 'Coupe BB',
     isSensitive: true,
-    description: 'Cornière / profilé L. Liaison avec P1.7 via 2 plats d\'about. Resserrage mortier sans retrait K50. Niveaux : 2,33 / 2,29 m.',
+    description:
+      "Cornière / profilé L. Liaison avec P1.7 via 2 plats d'about. Resserrage mortier sans retrait K50. Niveaux : 2,33 / 2,29 m.",
   },
   {
     id: 'zone-tech-p111',
@@ -284,7 +292,8 @@ export const mockZones: Zone[] = [
     technicalCode: 'P1.13',
     planReference: 'Plan haut RDC — zone escalier',
     isSensitive: true,
-    description: 'Poutre HEA140 près cage escalier / petite pièce. Hourdis existants. PR 19×40 h=20cm.',
+    description:
+      'Poutre HEA140 près cage escalier / petite pièce. Hourdis existants. PR 19×40 h=20cm.',
   },
   {
     id: 'zone-tech-p115',
@@ -308,7 +317,8 @@ export const mockZones: Zone[] = [
     technicalCode: 'P1.2',
     planReference: 'Plan haut RDC — annotation rouge gauche',
     isSensitive: true,
-    description: 'Élément barré en rouge sur le plan. Statut : annulé ou modifié. À confirmer avec l\'architecte / bureau d\'étude.',
+    description:
+      "Élément barré en rouge sur le plan. Statut : annulé ou modifié. À confirmer avec l'architecte / bureau d'étude.",
   },
   {
     id: 'zone-tech-coupes',
@@ -333,7 +343,7 @@ export const mockZones: Zone[] = [
     parentZoneId: 'zone-structure',
     technicalCode: 'PR-19x40',
     planReference: 'Plan haut RDC',
-    description: 'Élément porteur / renfort selon convention plan. Vérifier avec bureau d\'étude.',
+    description: "Élément porteur / renfort selon convention plan. Vérifier avec bureau d'étude.",
   },
   {
     id: 'zone-tech-pr-14x30',

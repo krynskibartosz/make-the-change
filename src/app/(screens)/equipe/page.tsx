@@ -1,8 +1,8 @@
 'use client'
 
 import { ChevronLeft, ChevronRight, Plus, Users } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { IconButton } from '@/components/ui/button'
 import type { Person } from '@/lib/domain'
@@ -20,7 +20,12 @@ export default function EquipePage() {
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-30 flex items-center justify-between pb-4 px-5 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/70 mb-5">
         <div className="flex items-center gap-4">
-          <IconButton type="button" onClick={() => router.back()} variant="ghost" aria-label="Retour">
+          <IconButton
+            type="button"
+            onClick={() => router.back()}
+            variant="ghost"
+            aria-label="Retour"
+          >
             <ChevronLeft size={24} />
           </IconButton>
           <h1 className="text-xl font-semibold">Équipe du chantier</h1>
@@ -66,7 +71,9 @@ export default function EquipePage() {
                   <div className="flex items-center gap-3">
                     <div className="flex flex-col items-end">
                       <span className="font-medium">{person.defaultHourlyRate} €</span>
-                      <span className="text-[10px] uppercase tracking-wider text-muted-foreground">par heure</span>
+                      <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                        par heure
+                      </span>
                     </div>
                     <ChevronRight className="h-5 w-5 text-muted-foreground/40" />
                   </div>

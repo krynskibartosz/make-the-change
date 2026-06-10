@@ -1,6 +1,17 @@
 'use client'
 
-import { BarChart3, ChevronRight, ClipboardList, Image as ImageIcon, Map, Package, PlusCircle, Settings, Users, type LucideIcon } from 'lucide-react'
+import {
+  BarChart3,
+  ChevronRight,
+  ClipboardList,
+  Image as ImageIcon,
+  type LucideIcon,
+  Map,
+  Package,
+  PlusCircle,
+  Settings,
+  Users,
+} from 'lucide-react'
 import Link from 'next/link'
 
 type SettingsItem = {
@@ -67,7 +78,9 @@ function SettingsGroup({ title, items }: { title: string; items: SettingsItem[] 
                 </button>
               )}
 
-              {index < items.length - 1 ? <div className="ml-[3.25rem] border-b border-border/50" /> : null}
+              {index < items.length - 1 ? (
+                <div className="ml-[3.25rem] border-b border-border/50" />
+              ) : null}
             </div>
           )
         })}
@@ -123,7 +136,7 @@ export default function MenuPage() {
     },
     {
       label: 'Équipe du chantier',
-      description: 'Gérer les membres de l\'équipe',
+      description: "Gérer les membres de l'équipe",
       icon: Users,
       href: '/equipe',
       iconWrapperClassName: 'bg-indigo-500',
@@ -134,7 +147,7 @@ export default function MenuPage() {
   const appItems: SettingsItem[] = [
     {
       label: 'Paramètres',
-      description: 'Configuration de l\'application',
+      description: "Configuration de l'application",
       icon: Settings,
       iconWrapperClassName: 'bg-gray-500',
       iconClassName: 'text-white',

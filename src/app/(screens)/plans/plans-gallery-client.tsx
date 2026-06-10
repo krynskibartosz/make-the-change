@@ -3,9 +3,9 @@
 import { Map, X } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { FullScreenSlideModal } from '@/app/@modal/_components/full-screen-slide-modal'
-import { SmartPlanClient } from './smart-plan-client'
 import type { Plan } from '@/lib/domain'
 import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
+import { SmartPlanClient } from './smart-plan-client'
 
 export function PlansGalleryClient() {
   const [plans, setPlans] = useState<Plan[]>([])
@@ -29,7 +29,9 @@ export function PlansGalleryClient() {
   }, [loadData])
 
   if (isLoading) {
-    return <div className="p-4 text-center text-sm text-muted-foreground">Chargement des plans...</div>
+    return (
+      <div className="p-4 text-center text-sm text-muted-foreground">Chargement des plans...</div>
+    )
   }
 
   if (plans.length === 0) {

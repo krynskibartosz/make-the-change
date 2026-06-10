@@ -30,8 +30,10 @@ export function JournalClient({
 
   const filteredInterventions = interventions.filter((item) => {
     // Filter by zone and phase using the denormalized names on InterventionListItem
-    if (zoneFilter !== 'all' && item.zoneName !== zones.find((z) => z.id === zoneFilter)?.name) return false
-    if (phaseFilter !== 'all' && item.phaseName !== phases.find((p) => p.id === phaseFilter)?.name) return false
+    if (zoneFilter !== 'all' && item.zoneName !== zones.find((z) => z.id === zoneFilter)?.name)
+      return false
+    if (phaseFilter !== 'all' && item.phaseName !== phases.find((p) => p.id === phaseFilter)?.name)
+      return false
     // Note: personFilter is not applicable on InterventionListItem (no personIds field)
 
     switch (filter) {

@@ -68,8 +68,10 @@ export function FullScreenSlideModal({
     <div
       ref={containerRef}
       className={cn(
-        asPage ? 'relative' : 'fixed inset-0 z-50 animate-in slide-in-from-bottom-full duration-300',
-        'h-[100dvh] w-full flex flex-col bg-background text-foreground overflow-y-auto overflow-x-hidden overscroll-y-contain'
+        asPage
+          ? 'relative'
+          : 'fixed inset-0 z-50 animate-in slide-in-from-bottom-full duration-300',
+        'h-[100dvh] w-full flex flex-col bg-background text-foreground overflow-y-auto overflow-x-hidden overscroll-y-contain',
       )}
     >
       <div className="mx-auto flex flex-1 w-full max-w-md flex-col">
@@ -79,7 +81,9 @@ export function FullScreenSlideModal({
               <ArrowLeft className="h-6 w-6 text-foreground" />
             </button>
             <div className="flex-1 min-w-0">
-              {title ? <p className="truncate text-base font-semibold text-foreground">{title}</p> : null}
+              {title ? (
+                <p className="truncate text-base font-semibold text-foreground">{title}</p>
+              ) : null}
             </div>
             {action ? <div className="shrink-0 pr-2">{action}</div> : null}
           </header>

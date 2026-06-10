@@ -6,9 +6,9 @@ import {
   ClipboardList,
   Clock,
   HardHat,
+  type LucideIcon,
   ShieldAlert,
   Wrench,
-  type LucideIcon,
 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { FullScreenSlideModal } from '@/app/@modal/_components/full-screen-slide-modal'
@@ -40,9 +40,7 @@ function buildZoneStats(
     return {
       ...zone,
       urgentTaskCount: zoneTasks.filter(
-        (t) =>
-          (t.priority === 'urgent' || t.priority === 'high') &&
-          t.status !== 'done',
+        (t) => (t.priority === 'urgent' || t.priority === 'high') && t.status !== 'done',
       ).length,
       openTaskCount: zoneTasks.filter((t) => t.status !== 'done').length,
       interventionCount: zoneInterventions.length,
@@ -52,9 +50,7 @@ function buildZoneStats(
 
 function groupZones(zones: ZoneWithStats[]): ZoneGroup[] {
   // Operational zones (simple type, no parent)
-  const operational = zones.filter(
-    (z) => z.type === 'simple' && !z.parentZoneId,
-  )
+  const operational = zones.filter((z) => z.type === 'simple' && !z.parentZoneId)
 
   // Technical refs — structure (parent = zone-structure or zone-extension-arriere or zone-escalier-etage or zone-maison-existante or zone-maison-existante-gauche)
   const structureTechParents = new Set([
@@ -65,10 +61,7 @@ function groupZones(zones: ZoneWithStats[]): ZoneGroup[] {
     'zone-maison-existante-gauche',
   ])
   const techStructure = zones.filter(
-    (z) =>
-      z.type === 'technical' &&
-      z.parentZoneId &&
-      structureTechParents.has(z.parentZoneId),
+    (z) => z.type === 'technical' && z.parentZoneId && structureTechParents.has(z.parentZoneId),
   )
 
   // Technical refs — sous-sol
@@ -137,9 +130,7 @@ function ZoneRow({
 
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-sm font-medium text-foreground leading-snug">
-              {zone.name}
-            </span>
+            <span className="text-sm font-medium text-foreground leading-snug">{zone.name}</span>
             {zone.isSensitive && (
               <span className="inline-flex items-center gap-0.5 rounded-full bg-red-500/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-red-400">
                 <AlertTriangle className="h-2.5 w-2.5" />
@@ -164,9 +155,7 @@ function ZoneRow({
               </span>
             )}
             {zone.openTaskCount === 0 && zone.interventionCount === 0 && (
-              <span className="text-[11px] text-muted-foreground/50">
-                Aucune activité
-              </span>
+              <span className="text-[11px] text-muted-foreground/50">Aucune activité</span>
             )}
           </div>
 
@@ -186,7 +175,6 @@ function ZoneRow({
     </button>
   )
 }
-
 
 export function ZoneChantierClient() {
   const [zones, setZones] = useState<Zone[]>([])
@@ -221,10 +209,7 @@ export function ZoneChantierClient() {
     return (
       <div className="flex flex-col gap-2 px-4 pt-4">
         {[...Array(6)].map((_, i) => (
-          <div
-            key={i}
-            className="h-16 rounded-xl bg-surface animate-pulse"
-          />
+          <div key={i} className="h-16 rounded-xl bg-surface animate-pulse" />
         ))}
       </div>
     )
@@ -234,10 +219,7 @@ export function ZoneChantierClient() {
   const groups = groupZones(zonesWithStats)
 
   // Global urgent count
-  const totalUrgent = zonesWithStats.reduce(
-    (sum, z) => sum + z.urgentTaskCount,
-    0,
-  )
+  const totalUrgent = zonesWithStats.reduce((sum, z) => sum + z.urgentTaskCount, 0)
 
   return (
     <>
@@ -246,8 +228,10 @@ export function ZoneChantierClient() {
         <div className="mx-4 mb-2 mt-1 flex items-center gap-3 rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3">
           <AlertTriangle className="h-4 w-4 shrink-0 text-red-400" />
           <p className="text-sm text-red-300 leading-snug">
-            <span className="font-semibold">{totalUrgent} point{totalUrgent > 1 ? 's' : ''} urgent{totalUrgent > 1 ? 's' : ''}</span>
-            {' '}à traiter sur le chantier
+            <span className="font-semibold">
+              {totalUrgent} point{totalUrgent > 1 ? 's' : ''} urgent{totalUrgent > 1 ? 's' : ''}
+            </span>{' '}
+            à traiter sur le chantier
           </p>
         </div>
       )}
@@ -290,9 +274,7 @@ export function ZoneChantierClient() {
           <ZoneDetailClient
             zone={selectedZone}
             tasks={tasks.filter((t) => t.zoneId === selectedZone.id)}
-            interventions={interventions.filter(
-              (i) => i.zoneId === selectedZone.id,
-            )}
+            interventions={interventions.filter((i) => i.zoneId === selectedZone.id)}
             onTaskUpdated={loadData}
           />
         </FullScreenSlideModal>

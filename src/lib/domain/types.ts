@@ -1,7 +1,7 @@
 import type {
   BillingStatus,
-  CreateInterventionDraftInput,
   CreateExpenseInput,
+  CreateInterventionDraftInput,
   CreateMaterialMovementInput,
   CreatePersonInput,
   CreateTaskInput,
@@ -20,8 +20,8 @@ import type {
   Photo,
   PhotoType,
   Plan,
-  PlanZone,
   PlanPin,
+  PlanZone,
   Project,
   ProjectStatus,
   Task,
@@ -34,8 +34,8 @@ import type {
 
 export type {
   BillingStatus,
-  CreateInterventionDraftInput,
   CreateExpenseInput,
+  CreateInterventionDraftInput,
   CreateMaterialMovementInput,
   CreatePersonInput,
   CreateTaskInput,
@@ -54,8 +54,8 @@ export type {
   Photo,
   PhotoType,
   Plan,
-  PlanZone,
   PlanPin,
+  PlanZone,
   Project,
   ProjectStatus,
   Task,

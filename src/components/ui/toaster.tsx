@@ -2,10 +2,9 @@
 
 import { AlertCircle, AlertTriangle, CheckCircle, Info, X } from 'lucide-react'
 import { useEffect } from 'react'
-
-import { cn } from '@/lib/utils/cn'
 import type { Toast, ToastVariant } from '@/lib/hooks/use-toast'
 import { dismissToast, useToastStore } from '@/lib/hooks/use-toast'
+import { cn } from '@/lib/utils/cn'
 
 const variantConfig: Record<
   ToastVariant,
@@ -54,9 +53,7 @@ function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: (id: string)
       <Icon className={cn('mt-0.5 size-5 shrink-0', iconClass)} />
       <div className="flex-1 min-w-0">
         <p className="text-sm font-semibold leading-tight">{toast.title}</p>
-        {toast.description && (
-          <p className="mt-1 text-xs opacity-80">{toast.description}</p>
-        )}
+        {toast.description && <p className="mt-1 text-xs opacity-80">{toast.description}</p>}
       </div>
       <button
         type="button"

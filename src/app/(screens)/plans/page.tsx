@@ -13,12 +13,8 @@ export default function PlansPage() {
           <ChevronLeft className="h-6 w-6" />
         </Link>
         <div className="min-w-0 flex-1">
-          <h1 className="text-xl font-semibold leading-tight truncate">
-            Chantier
-          </h1>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            Zones &amp; références techniques
-          </p>
+          <h1 className="text-xl font-semibold leading-tight truncate">Chantier</h1>
+          <p className="text-xs text-muted-foreground mt-0.5">Zones &amp; références techniques</p>
         </div>
       </header>
 

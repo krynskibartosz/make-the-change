@@ -2,9 +2,8 @@
 
 import { CheckCircle2, Circle } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
-import { Badge } from '@/components/ui'
+import { Badge, Card } from '@/components/ui'
 import type { Task } from '@/lib/domain'
-import { toast } from '@/lib/hooks/use-toast'
 import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
 
 export function TasksListClient() {
@@ -35,15 +34,10 @@ export function TasksListClient() {
 
     try {
       await mockClarusRepository.updateTaskStatus(task.id, newStatus)
-      toast({
-        title: newStatus === 'done' ? 'Tâche terminée ✓' : 'Tâche réouverte',
-        description: task.title,
-        variant: newStatus === 'done' ? 'success' : 'info',
-      })
       await loadData()
     } catch (e) {
       console.error(e)
-      toast({ title: 'Erreur', description: 'Impossible de mettre à jour la tâche.', variant: 'error' })
+      // Revert on error
       await loadData()
     }
   }
@@ -55,58 +49,52 @@ export function TasksListClient() {
   }
 
   return (
-    <div className="flex flex-col mt-6">
-      <h2 className="text-lg font-semibold text-foreground mb-4">Tâches à faire</h2>
+    <div className="flex flex-col gap-3 mt-6">
+      <h2 className="text-lg font-semibold text-foreground mb-2">Tâches à faire</h2>
       {tasks.length === 0 ? (
         <p className="text-sm text-muted-foreground">Aucune tâche.</p>
       ) : (
-        <div className="flex flex-col divide-y divide-border -mx-4 px-4 sm:mx-0 sm:px-0">
-          {tasks.map((task) => {
-            const isDone = task.status === 'done'
-            const priorityTone =
-              task.priority === 'urgent'
-                ? 'danger'
-                : task.priority === 'high'
-                  ? 'warning'
-                  : 'primary'
+        tasks.map((task) => {
+          const isDone = task.status === 'done'
+          const priorityTone =
+            task.priority === 'urgent' ? 'danger' : task.priority === 'high' ? 'warning' : 'primary'
 
-            return (
-              <div
-                key={task.id}
-                className={`flex items-center gap-3 py-3 transition-all duration-300 active:scale-[0.98] ${isDone ? 'opacity-60' : ''}`}
+          return (
+            <Card
+              key={task.id}
+              className={`flex items-center gap-3 p-3 transition-all duration-300 ${isDone ? 'opacity-60 bg-muted/50' : 'bg-surface'}`}
+            >
+              <button
+                type="button"
+                onClick={() => toggleStatus(task)}
+                className="flex size-6 shrink-0 items-center justify-center rounded-full transition-colors hover:text-primary focus:outline-none"
+                aria-label={isDone ? 'Marquer comme à faire' : 'Marquer comme terminé'}
               >
-                <button
-                  type="button"
-                  onClick={() => toggleStatus(task)}
-                  className="flex size-6 shrink-0 items-center justify-center rounded-full transition-colors hover:text-primary focus:outline-none"
-                  aria-label={isDone ? 'Marquer comme à faire' : 'Marquer comme terminé'}
-                >
-                  {isDone ? (
-                    <CheckCircle2 className="size-6 text-primary" />
-                  ) : (
-                    <Circle className="size-6 text-muted-foreground" />
-                  )}
-                </button>
+                {isDone ? (
+                  <CheckCircle2 className="size-6 text-primary" />
+                ) : (
+                  <Circle className="size-6 text-muted-foreground" />
+                )}
+              </button>
 
-                <div
-                  className={`flex flex-1 flex-col transition-all duration-300 ${isDone ? 'line-through text-muted-foreground' : ''}`}
-                >
-                  <span className="text-sm font-medium">{task.title}</span>
-                  {task.description && (
-                    <span className="text-xs text-muted-foreground mt-0.5">{task.description}</span>
-                  )}
-                </div>
-
-                <Badge
-                  tone={isDone ? 'neutral' : priorityTone}
-                  className={isDone ? 'opacity-50' : ''}
-                >
-                  {task.priority}
-                </Badge>
+              <div
+                className={`flex flex-1 flex-col transition-all duration-300 ${isDone ? 'line-through text-muted-foreground' : ''}`}
+              >
+                <span className="text-sm font-medium">{task.title}</span>
+                {task.description && (
+                  <span className="text-xs text-muted-foreground mt-0.5">{task.description}</span>
+                )}
               </div>
-            )
-          })}
-        </div>
+
+              <Badge
+                tone={isDone ? 'neutral' : priorityTone}
+                className={isDone ? 'opacity-50' : ''}
+              >
+                {task.priority}
+              </Badge>
+            </Card>
+          )
+        })
       )}
     </div>
   )

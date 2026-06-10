@@ -1,7 +1,7 @@
-import Link from 'next/link'
-import { AlertTriangle, Clock } from 'lucide-react'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
+import { AlertTriangle, Clock } from 'lucide-react'
+import Link from 'next/link'
 
 import { mockClarusRepository } from '@/lib/repositories'
 import { TabScreen } from '../_components/tab-screen'
@@ -13,24 +13,26 @@ export default async function TodayPage() {
   const formattedDate = format(new Date(), 'EEEE d MMMM', { locale: fr })
 
   return (
-    <TabScreen
-      eyebrow={formattedDate}
-
-      title="Aujourd'hui"
-    >
+    <TabScreen eyebrow={formattedDate} title="Aujourd'hui">
       {/* Métriques du jour */}
       <section className="grid grid-cols-2 gap-3">
         <div className="flex flex-col gap-1 rounded-[var(--radius-card)] border border-border bg-surface p-4">
           <span className="text-xs font-medium text-muted-foreground">Interventions</span>
-          <span className="text-2xl font-bold text-foreground">{summary.metrics.interventionCount}</span>
+          <span className="text-2xl font-bold text-foreground">
+            {summary.metrics.interventionCount}
+          </span>
         </div>
         <div className="flex flex-col gap-1 rounded-[var(--radius-card)] border border-border bg-surface p-4">
           <span className="text-xs font-medium text-muted-foreground">Heures</span>
-          <span className="text-2xl font-bold text-foreground">{summary.metrics.hours.toFixed(1)}h</span>
+          <span className="text-2xl font-bold text-foreground">
+            {summary.metrics.hours.toFixed(1)}h
+          </span>
         </div>
         <div className="flex flex-col gap-1 rounded-[var(--radius-card)] border border-border bg-surface p-4">
           <span className="text-xs font-medium text-muted-foreground">Montant estimé</span>
-          <span className="text-2xl font-bold text-foreground">{summary.metrics.estimatedAmount.toFixed(0)} €</span>
+          <span className="text-2xl font-bold text-foreground">
+            {summary.metrics.estimatedAmount.toFixed(0)} €
+          </span>
         </div>
         <div className="flex flex-col gap-1 rounded-[var(--radius-card)] border border-border bg-surface p-4">
           <span className="text-xs font-medium text-muted-foreground">À vérifier</span>
@@ -74,7 +76,9 @@ export default async function TodayPage() {
               >
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold text-foreground">{item.title}</p>
-                  <p className="truncate text-xs text-muted-foreground">{item.zoneName} · {item.phaseName}</p>
+                  <p className="truncate text-xs text-muted-foreground">
+                    {item.zoneName} · {item.phaseName}
+                  </p>
                 </div>
                 <div className="flex shrink-0 items-center gap-1 text-xs text-muted-foreground">
                   <Clock className="size-3" />
@@ -98,7 +102,21 @@ export default async function TodayPage() {
           className="pointer-events-auto flex h-14 w-full max-w-sm items-center justify-center gap-2 rounded-full bg-primary font-semibold text-primary-foreground shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-transform active:scale-[0.98]"
           href="/interventions/new"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="size-5"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="size-5"
+          >
+            <path d="M5 12h14" />
+            <path d="M12 5v14" />
+          </svg>
           Ajouter une intervention
         </Link>
       </div>

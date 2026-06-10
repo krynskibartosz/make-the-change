@@ -61,65 +61,65 @@ export default function AjouterMateriauPage() {
       <div className="flex-1 overflow-y-auto pb-[calc(env(safe-area-inset-bottom)+80px)]">
         <section className="p-5">
           <form id="add-material-form" onSubmit={handleSubmit} className="flex flex-col gap-5">
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium">Matériau</label>
-            <select
-              value={selectedMaterialId}
-              onChange={(e) => setSelectedMaterialId(e.target.value)}
-              className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
-              required
-            >
-              <option value="">Sélectionner un matériau</option>
-              {materials.map((m) => (
-                <option key={m.id} value={m.id}>
-                  {m.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium">Zone</label>
-            <select
-              value={selectedZoneId}
-              onChange={(e) => setSelectedZoneId(e.target.value)}
-              className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
-              required
-            >
-              <option value="">Sélectionner une zone</option>
-              {zones.map((z) => (
-                <option key={z.id} value={z.id}>
-                  {z.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="flex gap-4">
-            <div className="flex flex-col gap-2 flex-1">
-              <label className="text-sm font-medium">Quantité</label>
-              <input
-                type="number"
-                step="0.01"
-                min="0.01"
-                value={quantity}
-                onChange={(e) => setQuantity(e.target.value)}
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium">Matériau</label>
+              <select
+                value={selectedMaterialId}
+                onChange={(e) => setSelectedMaterialId(e.target.value)}
                 className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
                 required
-              />
+              >
+                <option value="">Sélectionner un matériau</option>
+                {materials.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.name}
+                  </option>
+                ))}
+              </select>
             </div>
-            <div className="flex flex-col gap-2 flex-1">
-              <label className="text-sm font-medium">Unité</label>
-              <input
-                type="text"
-                value={unit}
-                onChange={(e) => setUnit(e.target.value)}
+
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium">Zone</label>
+              <select
+                value={selectedZoneId}
+                onChange={(e) => setSelectedZoneId(e.target.value)}
                 className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
-                placeholder="Ex: kg, m²"
                 required
-              />
+              >
+                <option value="">Sélectionner une zone</option>
+                {zones.map((z) => (
+                  <option key={z.id} value={z.id}>
+                    {z.name}
+                  </option>
+                ))}
+              </select>
             </div>
-          </div>
+
+            <div className="flex gap-4">
+              <div className="flex flex-col gap-2 flex-1">
+                <label className="text-sm font-medium">Quantité</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0.01"
+                  value={quantity}
+                  onChange={(e) => setQuantity(e.target.value)}
+                  className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
+                  required
+                />
+              </div>
+              <div className="flex flex-col gap-2 flex-1">
+                <label className="text-sm font-medium">Unité</label>
+                <input
+                  type="text"
+                  value={unit}
+                  onChange={(e) => setUnit(e.target.value)}
+                  className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
+                  placeholder="Ex: kg, m²"
+                  required
+                />
+              </div>
+            </div>
           </form>
         </section>
       </div>

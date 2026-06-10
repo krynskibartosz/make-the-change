@@ -1,16 +1,16 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState, Suspense } from 'react'
-import { FullScreenSlideModal } from '../../@modal/_components/full-screen-slide-modal'
+import { Suspense, useEffect, useState } from 'react'
 import type { Person, Zone } from '@/lib/domain'
 import { toast } from '@/lib/hooks/use-toast'
 import { mockClarusRepository } from '@/lib/repositories'
+import { FullScreenSlideModal } from '../../@modal/_components/full-screen-slide-modal'
 
 function AjouterTacheForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  
+
   const [zones, setZones] = useState<Zone[]>([])
   const [people, setPeople] = useState<Person[]>([])
 
@@ -54,7 +54,9 @@ function AjouterTacheForm() {
         <section className="p-5">
           <form id="add-task-form" onSubmit={handleSubmit} className="flex flex-col gap-5">
             <div className="flex flex-col gap-2">
-              <label htmlFor="title" className="text-sm font-medium">Titre de la tâche</label>
+              <label htmlFor="title" className="text-sm font-medium">
+                Titre de la tâche
+              </label>
               <input
                 id="title"
                 type="text"
@@ -67,7 +69,9 @@ function AjouterTacheForm() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label htmlFor="description" className="text-sm font-medium">Description (optionnelle)</label>
+              <label htmlFor="description" className="text-sm font-medium">
+                Description (optionnelle)
+              </label>
               <textarea
                 id="description"
                 value={description}
@@ -78,7 +82,9 @@ function AjouterTacheForm() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label htmlFor="priority" className="text-sm font-medium">Priorité</label>
+              <label htmlFor="priority" className="text-sm font-medium">
+                Priorité
+              </label>
               <select
                 id="priority"
                 value={priority}
@@ -92,7 +98,9 @@ function AjouterTacheForm() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label htmlFor="zone" className="text-sm font-medium">Zone concernée (optionnelle)</label>
+              <label htmlFor="zone" className="text-sm font-medium">
+                Zone concernée (optionnelle)
+              </label>
               <select
                 id="zone"
                 value={selectedZoneId}
@@ -109,7 +117,9 @@ function AjouterTacheForm() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label htmlFor="assignee" className="text-sm font-medium">Assigner à (optionnel)</label>
+              <label htmlFor="assignee" className="text-sm font-medium">
+                Assigner à (optionnel)
+              </label>
               <select
                 id="assignee"
                 value={assignedTo}

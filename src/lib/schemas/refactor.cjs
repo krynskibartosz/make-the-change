@@ -9,7 +9,7 @@ content = content.replace(
   address: z.string().min(1),
   description: z.string(),
   status: projectStatusSchema,
-})`
+})`,
 )
 
 content = content.replace(
@@ -18,7 +18,7 @@ content = content.replace(
   name: z.string().min(1),
   order: z.number().int().positive(),
   description: z.string().optional(),
-})`
+})`,
 )
 
 content = content.replace(
@@ -31,7 +31,7 @@ content = content.replace(
   technicalCode: z.string().nullish(),
   planReference: z.string().nullish(),
   description: z.string().optional(),
-})`
+})`,
 )
 
 content = content.replace(
@@ -41,7 +41,7 @@ content = content.replace(
   role: z.string().optional(),
   defaultHourlyRate: nonNegativeMoneySchema,
   active: z.boolean(),
-})`
+})`,
 )
 
 content = content.replace(
@@ -58,7 +58,7 @@ content = content.replace(
   billingStatus: billingStatusSchema,
   paymentStatus: paymentStatusSchema,
   sourceNote: z.string().optional(),
-}).merge(timestampedSchema)`
+}).merge(timestampedSchema)`,
 )
 
 content = content.replace(
@@ -75,7 +75,7 @@ content = content.replace(
   durationMinutes: z.number().int().nonnegative(),
   amount: nonNegativeMoneySchema,
   notes: z.string().optional(),
-})`
+})`,
 )
 
 content = content.replace(
@@ -88,7 +88,7 @@ content = content.replace(
   assignedTo: idSchema.nullish(),
   dueDate: isoDateSchema.nullish(),
   createdAt: isoDateTimeSchema,
-})`
+})`,
 )
 
 content = content.replace(
@@ -97,7 +97,7 @@ content = content.replace(
   name: z.string().min(1),
   category: z.string().optional(),
   defaultUnit: z.string().optional(),
-})`
+})`,
 )
 
 content = content.replace(
@@ -111,7 +111,7 @@ content = content.replace(
   realCost: nonNegativeMoneySchema.nullish(),
   supplier: z.string().nullish(),
   status: materialMovementStatusSchema,
-})`
+})`,
 )
 
 content = content.replace(
@@ -126,7 +126,7 @@ content = content.replace(
   status: expenseStatusSchema,
   isRebillable: toCheckBooleanSchema,
   receiptPhotoId: idSchema.nullish(),
-})`
+})`,
 )
 
 content = content.replace(
@@ -136,7 +136,7 @@ content = content.replace(
   url: z.string().min(1),
   comment: z.string().optional(),
   takenAt: isoDateTimeSchema,
-})`
+})`,
 )
 
 content = content.replace(
@@ -146,7 +146,7 @@ content = content.replace(
   url: z.string().min(1),
   description: z.string().optional(),
   createdAt: isoDateTimeSchema,
-})`
+})`,
 )
 
 // Add new create schemas
@@ -159,7 +159,8 @@ export const createPersonInputSchema = personSchema.omit({ id: true, active: tru
 
 content = content.replace(
   /export type CreateInterventionDraftInput = z\.infer<typeof createInterventionDraftInputSchema>/g,
-  `export type CreateInterventionDraftInput = z.infer<typeof createInterventionDraftInputSchema>` + createSchemas
+  `export type CreateInterventionDraftInput = z.infer<typeof createInterventionDraftInputSchema>` +
+    createSchemas,
 )
 
 fs.writeFileSync('clarus.ts', content, 'utf-8')

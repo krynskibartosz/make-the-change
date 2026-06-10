@@ -1,13 +1,13 @@
 'use client'
 
+import { ArrowDownRight, ArrowUpRight, Clock, History, Package, Pencil, Plus } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { ArrowDownRight, ArrowUpRight, Clock, Package, Pencil, Plus, History } from 'lucide-react'
-import { mockClarusRepository } from '@/lib/repositories'
-import { FullScreenSlideModal } from '../../../@modal/_components/full-screen-slide-modal'
 import { IconButton } from '@/components/ui/button'
 import type { Material, MaterialMovement } from '@/lib/domain'
 import { toast } from '@/lib/hooks/use-toast'
+import { mockClarusRepository } from '@/lib/repositories'
+import { FullScreenSlideModal } from '../../../@modal/_components/full-screen-slide-modal'
 
 export default function MaterialDetailsPage() {
   const router = useRouter()
@@ -30,7 +30,7 @@ export default function MaterialDetailsPage() {
         setMaterial(mat)
 
         const allMovs = await mockClarusRepository.getMaterialMovements()
-        const matMovs = allMovs.filter(m => m.materialId === materialId)
+        const matMovs = allMovs.filter((m) => m.materialId === materialId)
         setMovements(matMovs.reverse()) // newest first
       } finally {
         setIsLoading(false)
@@ -76,30 +76,40 @@ export default function MaterialDetailsPage() {
 
   const getMovementLabel = (type: MaterialMovement['type']) => {
     switch (type) {
-      case 'on_site': return 'Arrivé sur site'
-      case 'purchased': return 'Acheté'
-      case 'used': return 'Utilisé'
-      case 'returned': return 'Retourné'
-      case 'wasted': return 'Perdu/Cassé'
-      case 'needed': return 'Besoin'
-      default: return type
+      case 'on_site':
+        return 'Arrivé sur site'
+      case 'purchased':
+        return 'Acheté'
+      case 'used':
+        return 'Utilisé'
+      case 'returned':
+        return 'Retourné'
+      case 'wasted':
+        return 'Perdu/Cassé'
+      case 'needed':
+        return 'Besoin'
+      default:
+        return type
     }
   }
 
   return (
-    <FullScreenSlideModal 
-      asPage 
-      headerMode="back" 
+    <FullScreenSlideModal
+      asPage
+      headerMode="back"
       title={material.name}
       action={
-        <IconButton onClick={() => router.push(`/materiaux/${material.id}/editer`)} variant="ghost" aria-label="Modifier">
+        <IconButton
+          onClick={() => router.push(`/materiaux/${material.id}/editer`)}
+          variant="ghost"
+          aria-label="Modifier"
+        >
           <Pencil size={20} />
         </IconButton>
       }
     >
       <div className="flex-1 overflow-y-auto pb-[calc(env(safe-area-inset-bottom)+100px)]">
         <div className="p-4 flex flex-col gap-6">
-          
           {/* Dashboard Hero */}
           <section className="bg-surface rounded-[var(--radius-card)] border border-border p-6 flex flex-col items-center justify-center text-center shadow-sm">
             {material.photoUrl ? (
@@ -113,10 +123,12 @@ export default function MaterialDetailsPage() {
             )}
             <h2 className="text-2xl font-bold">{material.name}</h2>
             <p className="text-muted-foreground mb-6">{material.category || 'Sans catégorie'}</p>
-            
+
             <div className="bg-background rounded-2xl px-8 py-4 border border-border/50">
               <span className="text-4xl font-black text-primary">{stock}</span>
-              <span className="ml-2 text-muted-foreground uppercase text-xs tracking-wider">{material.defaultUnit || 'pièce'}(s) en stock</span>
+              <span className="ml-2 text-muted-foreground uppercase text-xs tracking-wider">
+                {material.defaultUnit || 'pièce'}(s) en stock
+              </span>
             </div>
           </section>
 
@@ -126,7 +138,7 @@ export default function MaterialDetailsPage() {
               <History size={14} />
               Historique des mouvements
             </h3>
-            
+
             {movements.length === 0 ? (
               <div className="bg-surface rounded-[var(--radius-card)] border border-border p-6 text-center text-muted-foreground text-sm">
                 Aucun mouvement enregistré pour le moment.
@@ -134,7 +146,10 @@ export default function MaterialDetailsPage() {
             ) : (
               <div className="bg-surface rounded-[var(--radius-card)] border border-border overflow-hidden">
                 {movements.map((mov) => (
-                  <div key={mov.id} className="flex items-center justify-between p-4 border-b border-border last:border-0">
+                  <div
+                    key={mov.id}
+                    className="flex items-center justify-between p-4 border-b border-border last:border-0"
+                  >
                     <div className="flex items-center gap-3">
                       <div className="h-10 w-10 rounded-full bg-background flex items-center justify-center border border-border">
                         {getMovementIcon(mov.type)}
@@ -142,14 +157,21 @@ export default function MaterialDetailsPage() {
                       <div className="flex flex-col">
                         <span className="font-medium text-sm">{getMovementLabel(mov.type)}</span>
                         {/* You could add date here if it was on the model, e.g. <span className="text-xs text-muted-foreground">{date}</span> */}
-                        <span className="text-xs text-muted-foreground capitalize">{mov.status.replace('_', ' ')}</span>
+                        <span className="text-xs text-muted-foreground capitalize">
+                          {mov.status.replace('_', ' ')}
+                        </span>
                       </div>
                     </div>
                     <div className="flex flex-col items-end">
-                      <span className={`font-semibold ${['on_site', 'purchased'].includes(mov.type) ? 'text-success' : 'text-destructive'}`}>
-                        {['on_site', 'purchased'].includes(mov.type) ? '+' : '-'}{mov.quantity}
+                      <span
+                        className={`font-semibold ${['on_site', 'purchased'].includes(mov.type) ? 'text-success' : 'text-destructive'}`}
+                      >
+                        {['on_site', 'purchased'].includes(mov.type) ? '+' : '-'}
+                        {mov.quantity}
                       </span>
-                      <span className="text-[10px] text-muted-foreground uppercase">{mov.unit}</span>
+                      <span className="text-[10px] text-muted-foreground uppercase">
+                        {mov.unit}
+                      </span>
                     </div>
                   </div>
                 ))}

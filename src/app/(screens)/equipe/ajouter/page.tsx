@@ -32,66 +32,65 @@ export default function AjouterMembreEquipePage() {
       <div className="flex-1 overflow-y-auto pb-[calc(env(safe-area-inset-bottom)+80px)]">
         <section className="p-5">
           <form id="add-team-member-form" onSubmit={handleSubmit} className="flex flex-col gap-5">
-          <div className="flex flex-col gap-2">
-            <label htmlFor="name" className="text-sm font-medium">
-              Nom
-            </label>
-            <input
-              id="name"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
-              placeholder="Ex: Jean Dupont"
-              required
-            />
-          </div>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="name" className="text-sm font-medium">
+                Nom
+              </label>
+              <input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
+                placeholder="Ex: Jean Dupont"
+                required
+              />
+            </div>
 
-          <div className="flex flex-col gap-2">
-            <label htmlFor="avatarUrl" className="text-sm font-medium">
-              Photo de profil (URL optionnelle)
-            </label>
-            <input
-              id="avatarUrl"
-              type="url"
-              value={avatarUrl}
-              onChange={(e) => setAvatarUrl(e.target.value)}
-              className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
-              placeholder="https://..."
-            />
-          </div>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="avatarUrl" className="text-sm font-medium">
+                Photo de profil (URL optionnelle)
+              </label>
+              <input
+                id="avatarUrl"
+                type="url"
+                value={avatarUrl}
+                onChange={(e) => setAvatarUrl(e.target.value)}
+                className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
+                placeholder="https://..."
+              />
+            </div>
 
-          <div className="flex flex-col gap-2">
-            <label htmlFor="role" className="text-sm font-medium">
-              Rôle
-            </label>
-            <input
-              id="role"
-              type="text"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
-              placeholder="Ex: Électricien"
-            />
-          </div>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="role" className="text-sm font-medium">
+                Rôle
+              </label>
+              <input
+                id="role"
+                type="text"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
+                placeholder="Ex: Électricien"
+              />
+            </div>
 
-          <div className="flex flex-col gap-2">
-            <label htmlFor="rate" className="text-sm font-medium">
-              Taux horaire par défaut (€/h)
-            </label>
-            <input
-              id="rate"
-              type="number"
-              step="0.01"
-              min="0"
-              value={defaultHourlyRate}
-              onChange={(e) => setDefaultHourlyRate(e.target.value)}
-              className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
-              placeholder="Ex: 45"
-              required
-            />
-          </div>
-
+            <div className="flex flex-col gap-2">
+              <label htmlFor="rate" className="text-sm font-medium">
+                Taux horaire par défaut (€/h)
+              </label>
+              <input
+                id="rate"
+                type="number"
+                step="0.01"
+                min="0"
+                value={defaultHourlyRate}
+                onChange={(e) => setDefaultHourlyRate(e.target.value)}
+                className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
+                placeholder="Ex: 45"
+                required
+              />
+            </div>
           </form>
         </section>
       </div>

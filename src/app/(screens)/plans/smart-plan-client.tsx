@@ -152,7 +152,9 @@ export function SmartPlanClient({ plan }: { plan: Plan }) {
                   <button
                     key={pin.id}
                     className={`absolute flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full shadow-lg backdrop-blur-md transition-transform ${
-                      isSelected ? 'scale-125 bg-background border-2 border-primary' : 'bg-background/90 hover:scale-110'
+                      isSelected
+                        ? 'scale-125 bg-background border-2 border-primary'
+                        : 'bg-background/90 hover:scale-110'
                     }`}
                     style={{ left: `${pin.x}%`, top: `${pin.y}%` }}
                     onClick={() => setSelectedPinId(pin.id)}
@@ -170,7 +172,9 @@ export function SmartPlanClient({ plan }: { plan: Plan }) {
         <div className="absolute bottom-0 left-0 right-0 animate-in slide-in-from-bottom-full bg-surface p-6 border-t border-border rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
           <div className="mb-4">
             <h3 className="text-xl font-bold">{selectedZone.label}</h3>
-            <p className="text-sm text-muted-foreground mt-1">3 interventions • 2 tâches ouvertes</p>
+            <p className="text-sm text-muted-foreground mt-1">
+              3 interventions • 2 tâches ouvertes
+            </p>
           </div>
           <Button className="w-full" size="primary">
             Ajouter intervention ici
@@ -194,7 +198,7 @@ export function SmartPlanClient({ plan }: { plan: Plan }) {
           </Button>
         </div>
       )}
-      
+
       {/* Plan description fallback if nothing is selected and in view mode */}
       {mode === 'view' && plan.description && (
         <div className="absolute bottom-0 left-0 right-0 bg-black/80 backdrop-blur-md p-6 border-t border-white/10 pointer-events-none">

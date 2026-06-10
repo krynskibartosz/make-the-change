@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
+import { useEffect, useState } from 'react'
 
 import { mockClarusRepository } from '@/lib/repositories'
 import { cn } from '@/lib/utils/cn'
@@ -42,9 +42,7 @@ export function TabScreen({
         className,
       )}
     >
-      <header
-        className="flex items-start justify-between gap-4 pb-4 px-5 pt-[max(env(safe-area-inset-top),1.25rem)] mb-5"
-      >
+      <header className="flex items-start justify-between gap-4 pb-4 px-5 pt-[max(env(safe-area-inset-top),1.25rem)] mb-5">
         <div className="min-w-0">
           <p className="text-sm font-medium text-muted-foreground">{displayEyebrow}</p>
           <h1 className="mt-1 text-3xl font-semibold leading-tight">{title}</h1>

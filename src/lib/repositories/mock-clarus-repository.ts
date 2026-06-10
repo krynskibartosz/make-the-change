@@ -28,9 +28,9 @@ import {
   mockPeople,
   mockPhases,
   mockPhotos,
+  mockPlanPins,
   mockPlans,
   mockPlanZones,
-  mockPlanPins,
   mockProject,
   mockTasks,
   mockWorkEntries,
@@ -47,7 +47,7 @@ export const createMockClarusRepository = (): ClarusRepository => {
   let tasks: Task[] = [...mockTasks] as Task[]
   let expenses: Expense[] = [...mockExpenses] as Expense[]
   let materialMovements: MaterialMovement[] = [...mockMaterialMovements] as MaterialMovement[]
-  let materials: Material[] = [...mockMaterials]
+  const materials: Material[] = [...mockMaterials]
   const people = mockPeople.map(clonePerson)
 
   return {
@@ -92,10 +92,10 @@ export const createMockClarusRepository = (): ClarusRepository => {
       const idx = materials.findIndex((m) => m.id === id)
       if (idx === -1) throw new Error('Material not found')
       const current = materials[idx]!
-      materials[idx] = { 
-        ...current, 
+      materials[idx] = {
+        ...current,
         ...input,
-        photoUrl: input.photoUrl !== undefined ? input.photoUrl : current.photoUrl 
+        photoUrl: input.photoUrl !== undefined ? input.photoUrl : current.photoUrl,
       } as Material
       return materials[idx]
     },
