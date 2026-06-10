@@ -32,6 +32,7 @@ export default function AjouterTachePage() {
       title,
       description,
       priority,
+      status: 'to_do',
       zoneId: selectedZoneId || undefined,
       assignedTo: assignedTo || undefined,
     })
