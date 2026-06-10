@@ -2,7 +2,7 @@
 
 import type { Dispatch } from 'react'
 
-import { Input, Textarea } from '@/components/ui'
+import { Input, Textarea, Card } from '@/components/ui'
 
 import { INTERVENTION_TYPE_OPTIONS } from './options'
 import type { AddInterventionAction } from './reducer'
