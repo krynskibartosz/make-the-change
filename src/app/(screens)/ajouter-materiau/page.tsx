@@ -58,8 +58,9 @@ export default function AjouterMateriauPage() {
 
   return (
     <FullScreenSlideModal asPage headerMode="back" title="Ajouter un matériau">
-      <section className="rounded-[var(--radius-card)] border border-border bg-surface p-4 flex-1 overflow-hidden flex flex-col">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <div className="flex-1 overflow-y-auto pb-[calc(env(safe-area-inset-bottom)+80px)]">
+        <section className="p-5">
+          <form id="add-material-form" onSubmit={handleSubmit} className="flex flex-col gap-5">
           <div className="flex flex-col gap-2">
             <label className="text-sm font-medium">Matériau</label>
             <select
@@ -119,15 +120,21 @@ export default function AjouterMateriauPage() {
               />
             </div>
           </div>
+          </form>
+        </section>
+      </div>
 
+      <div className="fixed bottom-0 left-0 right-0 p-4 pb-[max(env(safe-area-inset-bottom),1rem)] bg-background/90 backdrop-blur-md border-t border-border/50 z-40">
+        <div className="max-w-md mx-auto">
           <button
             type="submit"
-            className="mt-6 p-4 bg-brand-primary text-brand-primary-foreground rounded-[var(--radius-button)] font-semibold text-lg"
+            form="add-material-form"
+            className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground py-3.5 font-semibold active:scale-[0.98] transition-all shadow-lg shadow-primary/20"
           >
             Enregistrer l'utilisation
           </button>
-        </form>
-      </section>
+        </div>
+      </div>
     </FullScreenSlideModal>
   )
 }

@@ -1,6 +1,5 @@
-import { Image as ImageIcon, Map } from 'lucide-react'
+import { Image as ImageIcon, Map, Plus } from 'lucide-react'
 import Link from 'next/link'
-import { CreateTaskModal } from '@/features/tasks/components/create-task-modal'
 import { TabScreen } from '../_components/tab-screen'
 import { TasksListClient } from './tasks-list-client'
 
@@ -30,9 +29,19 @@ export default function ProjectPage() {
       </section>
 
       <section>
-        <CreateTaskModal />
         <TasksListClient />
       </section>
+
+      {/* Bouton flottant Ajouter une tâche */}
+      <div className="fixed bottom-[calc(max(env(safe-area-inset-bottom),0.75rem)+5.5rem)] inset-x-0 z-40 flex justify-center px-5 pointer-events-none">
+        <Link 
+          href="/ajouter-tache"
+          className="pointer-events-auto flex items-center justify-center gap-2 h-14 w-full max-w-sm rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-transform active:scale-[0.98] bg-primary text-primary-foreground font-medium text-base"
+        >
+          <Plus className="size-5" />
+          Ajouter une tâche
+        </Link>
+      </div>
     </TabScreen>
   )
 }
