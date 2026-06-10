@@ -36,6 +36,7 @@ export type ClarusRepository = {
   updateMaterial: (id: string, input: Partial<Material>) => Promise<Material>
   getMaterialMovements: () => Promise<MaterialMovement[]>
   getPhotos: () => Promise<Photo[]>
+  createPhoto: (input: Omit<Photo, 'id'>) => Promise<Photo>
   getPlans: () => Promise<Plan[]>
   getPlanZones: (planId: string) => Promise<PlanZone[]>
   getPlanPins: (planId: string) => Promise<PlanPin[]>

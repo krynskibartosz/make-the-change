@@ -101,6 +101,11 @@ export const createMockClarusRepository = (): ClarusRepository => {
     },
     getMaterialMovements: async () => [...materialMovements],
     getPhotos: async () => [...mockPhotos],
+    createPhoto: async (input: Omit<Photo, 'id'>) => {
+      const newPhoto: Photo = { ...input, id: `photo-${Date.now()}` }
+      mockPhotos.push(newPhoto)
+      return newPhoto
+    },
     getPlans: async () => [...mockPlans],
     getPlanZones: async (planId: string) => mockPlanZones.filter((z) => z.planId === planId),
     getPlanPins: async (planId: string) => mockPlanPins.filter((p) => p.planId === planId),
