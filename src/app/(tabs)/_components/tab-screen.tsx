@@ -40,7 +40,7 @@ export function TabScreen({
   return (
     <main
       className={cn(
-        'mx-auto flex min-h-dvh w-full max-w-md flex-col pb-32 text-foreground',
+        'mx-auto flex min-h-dvh w-full max-w-md flex-col pb-40 text-foreground',
         className,
       )}
     >

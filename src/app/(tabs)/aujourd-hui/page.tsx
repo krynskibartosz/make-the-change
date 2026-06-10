@@ -15,14 +15,7 @@ export default async function TodayPage() {
   return (
     <TabScreen
       eyebrow={formattedDate}
-      action={
-        <Link
-          className="inline-flex min-h-12 items-center rounded-[var(--radius-control)] bg-primary px-4 text-sm font-semibold text-primary-foreground"
-          href="/interventions/new"
-        >
-          Ajouter
-        </Link>
-      }
+
       title="Aujourd'hui"
     >
       {/* Métriques du jour */}
@@ -98,6 +91,17 @@ export default async function TodayPage() {
           Aucune intervention enregistrée aujourd'hui.
         </p>
       )}
+
+      {/* Bouton flottant Ajouter */}
+      <div className="fixed bottom-[calc(max(env(safe-area-inset-bottom),0.75rem)+5.5rem)] inset-x-0 z-40 flex justify-center px-5 pointer-events-none">
+        <Link
+          className="pointer-events-auto flex h-14 w-full max-w-sm items-center justify-center gap-2 rounded-full bg-primary font-semibold text-primary-foreground shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-transform active:scale-95"
+          href="/interventions/new"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="size-5"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          Ajouter une intervention
+        </Link>
+      </div>
     </TabScreen>
   )
 }
