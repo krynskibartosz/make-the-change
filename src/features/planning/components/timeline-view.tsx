@@ -99,11 +99,22 @@ const EVENT_CONFIG: Record<string, EventConfig> = {
   },
 }
 
+const DEFAULT_CONFIG: EventConfig = {
+  color: 'text-muted-foreground',
+  bgColor: 'bg-muted',
+  borderColor: 'border-l-muted-foreground/40',
+  badgeColor: 'bg-muted text-muted-foreground border-muted-foreground/20',
+}
+
+function getEventConfig(type: string): EventConfig {
+  return EVENT_CONFIG[type] ?? DEFAULT_CONFIG
+}
+
 // ─── Individual event card ─────────────────────────────────────────────────
 
 function InterventionCard({ event }: { event: Extract<TimelineEvent, { type: 'intervention' }> }) {
   const { data } = event
-  const cfg = EVENT_CONFIG.intervention
+  const cfg = getEventConfig('intervention')
   const Icon = getInterventionTypeIcon(data.type)
 
   return (
@@ -138,7 +149,7 @@ function InterventionCard({ event }: { event: Extract<TimelineEvent, { type: 'in
 
 function TaskCard({ event }: { event: Extract<TimelineEvent, { type: 'task' }> }) {
   const { data } = event
-  const cfg = EVENT_CONFIG.task
+  const cfg = getEventConfig('task')
   const isDone = data.status === 'done'
 
   return (
@@ -165,7 +176,7 @@ function TaskCard({ event }: { event: Extract<TimelineEvent, { type: 'task' }> }
 
 function ExpenseCard({ event }: { event: Extract<TimelineEvent, { type: 'expense' }> }) {
   const { data } = event
-  const cfg = EVENT_CONFIG.expense
+  const cfg = getEventConfig('expense')
 
   return (
     <div className={`flex items-start gap-3 rounded-xl border border-border border-l-[3px] ${cfg.borderColor} bg-surface p-4 shadow-sm`}>
@@ -190,7 +201,7 @@ function ExpenseCard({ event }: { event: Extract<TimelineEvent, { type: 'expense
 
 function PhotoCard({ event }: { event: Extract<TimelineEvent, { type: 'photo' }> }) {
   const { data } = event
-  const cfg = EVENT_CONFIG.photo
+  const cfg = getEventConfig('photo')
 
   const photoTypeLabel: Record<string, string> = {
     before: 'Avant',
@@ -240,7 +251,7 @@ function EventCard({ event }: { event: TimelineEvent }) {
 // ─── Event type icon for the timeline dot ─────────────────────────────────
 
 function TimelineDot({ event }: { event: TimelineEvent }) {
-  const cfg = EVENT_CONFIG[event.type]
+  const cfg = getEventConfig(event.type)
 
   const iconMap = {
     intervention: Clock,
