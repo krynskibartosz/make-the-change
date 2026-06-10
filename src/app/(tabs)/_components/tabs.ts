@@ -1,4 +1,4 @@
-import { CalendarDays, ClipboardList, type LucideIcon, MapPinned, Menu } from 'lucide-react'
+import { CalendarDays, type LucideIcon, MapPinned, Menu } from 'lucide-react'
 
 export type ClarusTab = Readonly<{
   href: string
@@ -11,11 +11,6 @@ export const clarusTabs = [
     href: '/aujourd-hui',
     label: "Aujourd'hui",
     icon: CalendarDays,
-  },
-  {
-    href: '/journal',
-    label: 'Journal',
-    icon: ClipboardList,
   },
   {
     href: '/chantier',
