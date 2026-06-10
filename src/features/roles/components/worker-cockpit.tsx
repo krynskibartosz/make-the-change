@@ -1,6 +1,6 @@
 'use client'
 
-import { Camera, Clock, Mic, AlertTriangle, CheckCircle2, Loader2, X, Send } from 'lucide-react'
+import { Camera, Clock, Mic, AlertTriangle, CheckCircle2, Loader2, X, Send, Receipt } from 'lucide-react'
 import Link from 'next/link'
 import { useState, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui'
@@ -207,9 +207,9 @@ export function WorkerCockpit() {
             <Clock className="size-6 text-foreground" />
             <span className="text-xs font-semibold">Noter mes heures</span>
           </Link>
-          <Link href="/interventions/new" className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-surface p-4 active:bg-surface-elevated opacity-70">
-            <span className="text-2xl leading-none font-light mb-1">+</span>
-            <span className="text-xs font-semibold">Saisie manuelle</span>
+          <Link href="/ajouter-ticket" className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-surface p-4 active:bg-surface-elevated">
+            <Receipt className="size-6 text-foreground" />
+            <span className="text-xs font-semibold">Scanner un ticket</span>
           </Link>
         </div>
       </div>

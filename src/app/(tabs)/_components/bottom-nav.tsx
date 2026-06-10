@@ -17,7 +17,7 @@ export function BottomNav() {
   // Filtre les tabs selon le rôle
   const visibleTabs = clarusTabs.filter((tab) => {
     if (role === 'ouvrier') {
-      return tab.href === '/chantier' || tab.href === '/menu'
+      return tab.href === '/chantier' || tab.href === '/ajouter-ticket' || tab.href === '/menu'
     }
     if (role === 'client') {
       return tab.href === '/chantier' || tab.href === '/validations' || tab.href === '/menu'
