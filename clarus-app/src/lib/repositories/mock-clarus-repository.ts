@@ -1,16 +1,30 @@
 import { selectTodaySummary } from '@/features/dashboard'
 import { calculateWorkEntryAmount, calculateWorkEntryDuration } from '@/lib/calculations'
 import type {
+  CreateExpenseInput,
   CreateInterventionDraftInput,
+  CreateMaterialMovementInput,
+  CreateTaskInput,
+  Expense,
   Intervention,
   InterventionDraft,
+  Material,
+  MaterialMovement,
+  Photo,
+  Task,
+  TaskStatus,
   WorkEntry,
 } from '@/lib/domain'
 import {
+  mockExpenses,
   mockInterventions,
+  mockMaterialMovements,
+  mockMaterials,
   mockPeople,
   mockPhases,
+  mockPhotos,
   mockProject,
+  mockTasks,
   mockWorkEntries,
   mockZones,
 } from '@/lib/mock'
@@ -20,27 +34,106 @@ import type { ClarusRepository } from './clarus-repository'
 const FALLBACK_PHASE_ID = 'phase-admin'
 const FALLBACK_ZONE_ID = 'zone-maison-existante'
 
-export const createMockClarusRepository = (): ClarusRepository => ({
-  getProject: async () => mockProject,
-  getPeople: async () => [...mockPeople],
-  getPhases: async () => [...mockPhases],
-  getZones: async () => [...mockZones],
-  getInterventions: async () => [...mockInterventions],
-  getInterventionById: async (id: string) =>
-    mockInterventions.find((intervention) => intervention.id === id) ?? null,
-  getWorkEntries: async () => [...mockWorkEntries],
-  getTodaySummary: async (date: string) =>
-    selectTodaySummary({
-      date,
-      interventions: mockInterventions,
-      workEntries: mockWorkEntries,
-      people: mockPeople,
-      zones: mockZones,
-      phases: mockPhases,
-    }),
-  createInterventionDraft: async (input: CreateInterventionDraftInput) =>
-    createInterventionDraft(input),
-})
+export const createMockClarusRepository = (): ClarusRepository => {
+  let interventions: Intervention[] = [...mockInterventions]
+  let tasks: Task[] = [...mockTasks] as Task[]
+  let expenses: Expense[] = [...mockExpenses] as Expense[]
+  let materialMovements: MaterialMovement[] = [...mockMaterialMovements] as MaterialMovement[]
+
+  return {
+    getProject: async () => mockProject,
+    getPeople: async () => [...mockPeople],
+    getPhases: async () => [...mockPhases],
+    getZones: async () => [...mockZones],
+    getMaterials: async () => [...mockMaterials],
+    getPhotos: async () => [...mockPhotos],
+    getTasks: async () => [...tasks],
+    getInterventions: async () => [...interventions],
+    getInterventionById: async (id: string) =>
+      interventions.find((intervention) => intervention.id === id) ?? null,
+    getWorkEntries: async () => [...mockWorkEntries],
+    getTodaySummary: async (date: string) =>
+      selectTodaySummary({
+        date,
+        interventions,
+        workEntries: mockWorkEntries,
+        people: mockPeople,
+        zones: mockZones,
+        phases: mockPhases,
+      }),
+    createInterventionDraft: async (input: CreateInterventionDraftInput) =>
+      createInterventionDraft(input),
+    createTask: async (input: CreateTaskInput) => {
+      const now = new Date().toISOString()
+      const task: Task = {
+        id: `task-${Date.now()}`,
+        projectId: input.projectId,
+        interventionId: input.interventionId,
+        phaseId: input.phaseId,
+        zoneId: input.zoneId,
+        title: input.title,
+        description: input.description,
+        status: 'to_do',
+        priority: input.priority ?? 'normal',
+        assignedTo: input.assignedTo,
+        dueDate: input.dueDate,
+        createdAt: now,
+      }
+      tasks = [...tasks, task]
+      return task
+    },
+    updateTaskStatus: async (id: string, status: TaskStatus) => {
+      const index = tasks.findIndex((t) => t.id === id)
+      if (index === -1) throw new Error('Task not found')
+      const updatedTask: Task = { ...tasks[index], status } as Task
+      tasks = [...tasks.slice(0, index), updatedTask, ...tasks.slice(index + 1)]
+      return updatedTask
+    },
+    createExpense: async (input: CreateExpenseInput) => {
+      const expense: Expense = {
+        id: `expense-${Date.now()}`,
+        projectId: input.projectId,
+        interventionId: input.interventionId,
+        materialMovementId: input.materialMovementId,
+        supplier: input.supplier,
+        description: input.description,
+        amount: input.amount,
+        date: input.date,
+        status: 'to_pay',
+        isRebillable: input.isRebillable,
+        receiptPhotoId: input.receiptPhotoId,
+      }
+      expenses = [...expenses, expense]
+      return expense
+    },
+    createMaterialMovement: async (input: CreateMaterialMovementInput) => {
+      const movement: MaterialMovement = {
+        id: `movement-${Date.now()}`,
+        projectId: input.projectId,
+        materialId: input.materialId,
+        interventionId: input.interventionId,
+        zoneId: input.zoneId,
+        phaseId: input.phaseId,
+        type: input.type,
+        quantity: input.quantity,
+        unit: input.unit,
+        status: input.status,
+      }
+      materialMovements = [...materialMovements, movement]
+      return movement
+    },
+    markAsInvoiced: async (interventionIds: string[], expenseIds: string[]) => {
+      interventions = interventions.map((intervention) =>
+        interventionIds.includes(intervention.id)
+          ? { ...intervention, billingStatus: 'invoiced' }
+          : intervention,
+      )
+      expenses = expenses.map((expense) =>
+        expenseIds.includes(expense.id) ? { ...expense, status: 'invoiced' } : expense,
+      )
+    },
+  }
+}
 
 export const mockClarusRepository = createMockClarusRepository()
 

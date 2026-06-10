@@ -51,7 +51,7 @@ export type MaterialMovementStatus =
   | 'missing'
   | 'to_check'
 
-export type ExpenseStatus = 'to_pay' | 'paid' | 'to_rebill' | 'rebilled' | 'to_check'
+export type ExpenseStatus = 'to_pay' | 'paid' | 'to_rebill' | 'rebilled' | 'to_check' | 'invoiced'
 
 export type PhotoType =
   | 'before'
@@ -219,6 +219,42 @@ export type CreateInterventionDraftInput = {
   hourlyRate: number
   isExtra: boolean | 'to_check'
   notes?: string
+}
+
+export type CreateTaskInput = {
+  projectId: string
+  interventionId?: string | null
+  phaseId?: string | null
+  zoneId?: string | null
+  title: string
+  description?: string
+  priority?: TaskPriority
+  assignedTo?: string | null
+  dueDate?: string | null
+}
+
+export type CreateExpenseInput = {
+  projectId: string
+  interventionId?: string | null
+  materialMovementId?: string | null
+  supplier: string
+  description: string
+  amount?: number | null
+  date: string
+  isRebillable: boolean | 'to_check'
+  receiptPhotoId?: string | null
+}
+
+export type CreateMaterialMovementInput = {
+  projectId: string
+  materialId: string
+  interventionId?: string | null
+  zoneId?: string | null
+  phaseId?: string | null
+  type: MaterialMovementType
+  quantity: number
+  unit: string
+  status: MaterialMovementStatus
 }
 
 export type InterventionDraft = {

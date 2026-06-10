@@ -1,0 +1,260 @@
+diff --git a/clarus-app/src/app/(tabs)/chantier/page.tsx b/clarus-app/src/app/(tabs)/chantier/page.tsx
+index 4e7c710f..511c7ece 100644
+--- a/clarus-app/src/app/(tabs)/chantier/page.tsx
++++ b/clarus-app/src/app/(tabs)/chantier/page.tsx
+@@ -1,4 +1,5 @@
+ import { TabScreen } from '../_components/tab-screen'
++import { CreateTaskModal } from '@/features/tasks/components/create-task-modal'
+ 
+ export default function ProjectPage() {
+   return (
+@@ -8,6 +9,10 @@ export default function ProjectPage() {
+           Shell pret pour zones, phases, personnes et blocs chantier.
+         </p>
+       </section>
++
++      <section className="mt-4">
++        <CreateTaskModal />
++      </section>
+     </TabScreen>
+   )
+ }
+diff --git a/clarus-app/src/app/(tabs)/couts/page.tsx b/clarus-app/src/app/(tabs)/couts/page.tsx
+index d8eeb4e1..8d497d19 100644
+--- a/clarus-app/src/app/(tabs)/couts/page.tsx
++++ b/clarus-app/src/app/(tabs)/couts/page.tsx
+@@ -1,3 +1,4 @@
++import Link from 'next/link'
+ import { TabScreen } from '../_components/tab-screen'
+ 
+ export default function CostsPage() {
+@@ -8,6 +9,22 @@ export default function CostsPage() {
+           Shell pret pour les totaux heures, main d'oeuvre et repartitions.
+         </p>
+       </section>
++
++      <section className="mt-6 flex flex-col gap-4">
++        <Link
++          href="/ajouter-depense"
++          className="inline-flex min-h-[var(--size-primary-button)] items-center justify-center rounded-[var(--radius-control)] bg-primary px-5 text-base font-semibold text-primary-foreground shadow-[var(--shadow-elevated)] transition-colors"
++        >
++          Ajouter une dépense
++        </Link>
++        
++        <Link
++          href="/facturation"
++          className="inline-flex min-h-[var(--size-primary-button)] items-center justify-center rounded-[var(--radius-control)] border border-border bg-surface-elevated px-5 text-base font-semibold text-foreground transition-colors"
++        >
++          Gérer la facturation
++        </Link>
++      </section>
+     </TabScreen>
+   )
+ }
+diff --git a/clarus-app/src/lib/domain/types.ts b/clarus-app/src/lib/domain/types.ts
+index a68fdc63..501ed88f 100644
+--- a/clarus-app/src/lib/domain/types.ts
++++ b/clarus-app/src/lib/domain/types.ts
+@@ -51,7 +51,7 @@ export type MaterialMovementStatus =
+   | 'missing'
+   | 'to_check'
+ 
+-export type ExpenseStatus = 'to_pay' | 'paid' | 'to_rebill' | 'rebilled' | 'to_check'
++export type ExpenseStatus = 'to_pay' | 'paid' | 'to_rebill' | 'rebilled' | 'to_check' | 'invoiced'
+ 
+ export type PhotoType =
+   | 'before'
+@@ -221,6 +221,30 @@ export type CreateInterventionDraftInput = {
+   notes?: string
+ }
+ 
++export type CreateTaskInput = {
++  projectId: string
++  interventionId?: string | null
++  phaseId?: string | null
++  zoneId?: string | null
++  title: string
++  description?: string
++  priority?: TaskPriority
++  assignedTo?: string | null
++  dueDate?: string | null
++}
++
++export type CreateExpenseInput = {
++  projectId: string
++  interventionId?: string | null
++  materialMovementId?: string | null
++  supplier: string
++  description: string
++  amount?: number | null
++  date: string
++  isRebillable: boolean | 'to_check'
++  receiptPhotoId?: string | null
++}
++
+ export type InterventionDraft = {
+   intervention: Intervention
+   workEntries: WorkEntry[]
+diff --git a/clarus-app/src/lib/repositories/clarus-repository.ts b/clarus-app/src/lib/repositories/clarus-repository.ts
+index e5926c7d..224f0e91 100644
+--- a/clarus-app/src/lib/repositories/clarus-repository.ts
++++ b/clarus-app/src/lib/repositories/clarus-repository.ts
+@@ -8,6 +8,11 @@ import type {
+   TodaySummary,
+   WorkEntry,
+   Zone,
++  CreateTaskInput,
++  Task,
++  TaskStatus,
++  CreateExpenseInput,
++  Expense,
+ } from '@/lib/domain'
+ 
+ export type ClarusRepository = {
+@@ -20,4 +25,8 @@ export type ClarusRepository = {
+   getWorkEntries: () => Promise<WorkEntry[]>
+   getTodaySummary: (date: string) => Promise<TodaySummary>
+   createInterventionDraft: (input: CreateInterventionDraftInput) => Promise<InterventionDraft>
++  createTask: (input: CreateTaskInput) => Promise<Task>
++  updateTaskStatus: (id: string, status: TaskStatus) => Promise<Task>
++  createExpense: (input: CreateExpenseInput) => Promise<Expense>
++  markAsInvoiced: (interventionIds: string[], expenseIds: string[]) => Promise<void>
+ }
+diff --git a/clarus-app/src/lib/repositories/mock-clarus-repository.ts b/clarus-app/src/lib/repositories/mock-clarus-repository.ts
+index 17ce4a31..445d05b7 100644
+--- a/clarus-app/src/lib/repositories/mock-clarus-repository.ts
++++ b/clarus-app/src/lib/repositories/mock-clarus-repository.ts
+@@ -2,9 +2,14 @@ import { selectTodaySummary } from '@/features/dashboard'
+ import { calculateWorkEntryAmount, calculateWorkEntryDuration } from '@/lib/calculations'
+ import type {
+   CreateInterventionDraftInput,
++  CreateTaskInput,
++  CreateExpenseInput,
+   Intervention,
+   InterventionDraft,
+   WorkEntry,
++  Task,
++  TaskStatus,
++  Expense,
+ } from '@/lib/domain'
+ import {
+   mockInterventions,
+@@ -13,6 +18,8 @@ import {
+   mockProject,
+   mockWorkEntries,
+   mockZones,
++  mockTasks,
++  mockExpenses,
+ } from '@/lib/mock'
+ import { createInterventionDraftInputSchema } from '@/lib/schemas'
+ import type { ClarusRepository } from './clarus-repository'
+@@ -20,27 +27,88 @@ import type { ClarusRepository } from './clarus-repository'
+ const FALLBACK_PHASE_ID = 'phase-admin'
+ const FALLBACK_ZONE_ID = 'zone-maison-existante'
+ 
+-export const createMockClarusRepository = (): ClarusRepository => ({
+-  getProject: async () => mockProject,
+-  getPeople: async () => [...mockPeople],
+-  getPhases: async () => [...mockPhases],
+-  getZones: async () => [...mockZones],
+-  getInterventions: async () => [...mockInterventions],
+-  getInterventionById: async (id: string) =>
+-    mockInterventions.find((intervention) => intervention.id === id) ?? null,
+-  getWorkEntries: async () => [...mockWorkEntries],
+-  getTodaySummary: async (date: string) =>
+-    selectTodaySummary({
+-      date,
+-      interventions: mockInterventions,
+-      workEntries: mockWorkEntries,
+-      people: mockPeople,
+-      zones: mockZones,
+-      phases: mockPhases,
+-    }),
+-  createInterventionDraft: async (input: CreateInterventionDraftInput) =>
+-    createInterventionDraft(input),
+-})
++export const createMockClarusRepository = (): ClarusRepository => {
++  let interventions: Intervention[] = [...mockInterventions]
++  let tasks: Task[] = [...mockTasks] as Task[]
++  let expenses: Expense[] = [...mockExpenses] as Expense[]
++
++  return {
++    getProject: async () => mockProject,
++    getPeople: async () => [...mockPeople],
++    getPhases: async () => [...mockPhases],
++    getZones: async () => [...mockZones],
++    getInterventions: async () => [...interventions],
++    getInterventionById: async (id: string) =>
++      interventions.find((intervention) => intervention.id === id) ?? null,
++    getWorkEntries: async () => [...mockWorkEntries],
++    getTodaySummary: async (date: string) =>
++      selectTodaySummary({
++        date,
++        interventions,
++        workEntries: mockWorkEntries,
++        people: mockPeople,
++        zones: mockZones,
++        phases: mockPhases,
++      }),
++    createInterventionDraft: async (input: CreateInterventionDraftInput) =>
++      createInterventionDraft(input),
++    createTask: async (input: CreateTaskInput) => {
++      const now = new Date().toISOString()
++      const task: Task = {
++        id: `task-${Date.now()}`,
++        projectId: input.projectId,
++        interventionId: input.interventionId,
++        phaseId: input.phaseId,
++        zoneId: input.zoneId,
++        title: input.title,
++        description: input.description,
++        status: 'to_do',
++        priority: input.priority ?? 'normal',
++        assignedTo: input.assignedTo,
++        dueDate: input.dueDate,
++        createdAt: now,
++      }
++      tasks = [...tasks, task]
++      return task
++    },
++    updateTaskStatus: async (id: string, status: TaskStatus) => {
++      const index = tasks.findIndex((t) => t.id === id)
++      if (index === -1) throw new Error('Task not found')
++      const updatedTask: Task = { ...tasks[index], status } as Task
++      tasks = [...tasks.slice(0, index), updatedTask, ...tasks.slice(index + 1)]
++      return updatedTask
++    },
++    createExpense: async (input: CreateExpenseInput) => {
++      const expense: Expense = {
++        id: `expense-${Date.now()}`,
++        projectId: input.projectId,
++        interventionId: input.interventionId,
++        materialMovementId: input.materialMovementId,
++        supplier: input.supplier,
++        description: input.description,
++        amount: input.amount,
++        date: input.date,
++        status: 'to_pay',
++        isRebillable: input.isRebillable,
++        receiptPhotoId: input.receiptPhotoId,
++      }
++      expenses = [...expenses, expense]
++      return expense
++    },
++    markAsInvoiced: async (interventionIds: string[], expenseIds: string[]) => {
++      interventions = interventions.map((intervention) =>
++        interventionIds.includes(intervention.id)
++          ? { ...intervention, billingStatus: 'invoiced' }
++          : intervention,
++      )
++      expenses = expenses.map((expense) =>
++        expenseIds.includes(expense.id)
++          ? { ...expense, status: 'invoiced' }
++          : expense,
++      )
++    },
++  }
++}
+ 
+ export const mockClarusRepository = createMockClarusRepository()
+ 
