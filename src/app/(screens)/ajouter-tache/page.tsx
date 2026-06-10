@@ -1,22 +1,24 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState, Suspense } from 'react'
 import { FullScreenSlideModal } from '../../@modal/_components/full-screen-slide-modal'
 import type { Person, Zone } from '@/lib/domain'
 import { toast } from '@/lib/hooks/use-toast'
 import { mockClarusRepository } from '@/lib/repositories'
 
-export default function AjouterTachePage() {
+function AjouterTacheForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  
   const [zones, setZones] = useState<Zone[]>([])
   const [people, setPeople] = useState<Person[]>([])
 
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [priority, setPriority] = useState<'normal' | 'high' | 'urgent'>('normal')
-  const [selectedZoneId, setSelectedZoneId] = useState('')
-  const [assignedTo, setAssignedTo] = useState('')
+  const [selectedZoneId, setSelectedZoneId] = useState(searchParams.get('zoneId') || '')
+  const [assignedTo, setAssignedTo] = useState(searchParams.get('assignedTo') || '')
 
   useEffect(() => {
     mockClarusRepository.getZones().then(setZones)
@@ -138,5 +140,13 @@ export default function AjouterTachePage() {
         </div>
       </div>
     </FullScreenSlideModal>
+  )
+}
+
+export default function AjouterTachePage() {
+  return (
+    <Suspense fallback={<div className="p-4">Chargement...</div>}>
+      <AjouterTacheForm />
+    </Suspense>
   )
 }

@@ -10,6 +10,7 @@ import {
   Loader2,
   PlusCircle,
 } from 'lucide-react'
+import Link from 'next/link'
 import { useState } from 'react'
 import type { Intervention, Task, Zone } from '@/lib/domain'
 import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
@@ -311,13 +312,13 @@ export function ZoneDetailClient({
           Actions rapides
         </h3>
         <div className="grid grid-cols-2 gap-3">
-          <button
-            type="button"
+          <Link
+            href={`/ajouter-tache?zoneId=${zone.id}`}
             className="flex items-center gap-2 rounded-xl bg-surface border border-border/50 px-4 py-3 text-sm font-medium text-foreground transition-colors active:bg-surface-elevated"
           >
             <PlusCircle className="h-4 w-4 text-primary shrink-0" />
             Ajouter tâche
-          </button>
+          </Link>
           <button
             type="button"
             className="flex items-center gap-2 rounded-xl bg-surface border border-border/50 px-4 py-3 text-sm font-medium text-foreground transition-colors active:bg-surface-elevated"
