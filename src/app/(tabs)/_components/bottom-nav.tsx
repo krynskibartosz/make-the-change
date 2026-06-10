@@ -6,9 +6,22 @@ import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils/cn'
 
 import { clarusTabs } from './tabs'
+import { useRole } from '@/lib/role-context'
 
 export function BottomNav() {
   const pathname = usePathname()
+  const { role, isReady } = useRole()
+
+  if (!isReady) return null
+
+  // Filtre les tabs selon le rôle
+  const visibleTabs = clarusTabs.filter((tab) => {
+    if (role === 'ouvrier') {
+      return tab.href === '/chantier' || tab.href === '/menu'
+    }
+    // Chef ou Admin voient tout pour l'instant
+    return true
+  })
 
   return (
     <nav
@@ -16,7 +29,7 @@ export function BottomNav() {
       className="fixed inset-x-0 bottom-0 z-40 border-t border-border/70 bg-background/85 px-3 pb-[max(env(safe-area-inset-bottom),0.75rem)] pt-2 backdrop-blur-xl"
     >
       <div className="mx-auto flex max-w-md items-center justify-evenly h-[4.5rem]">
-        {clarusTabs.map((tab) => {
+        {visibleTabs.map((tab) => {
           const isActive = pathname === tab.href || pathname.startsWith(`${tab.href}/`)
           const Icon = tab.icon
 

@@ -13,6 +13,7 @@ import {
   Users,
 } from 'lucide-react'
 import Link from 'next/link'
+import { useRole, type AppRole } from '@/lib/role-context'
 
 type SettingsItem = {
   label: string
@@ -90,6 +91,8 @@ function SettingsGroup({ title, items }: { title: string; items: SettingsItem[] 
 }
 
 export default function MenuPage() {
+  const { role, setRole, isReady } = useRole()
+
   const managementItems: SettingsItem[] = [
     {
       label: 'Coûts',
@@ -163,8 +166,32 @@ export default function MenuPage() {
       </header>
 
       <div className="flex flex-col">
-        <SettingsGroup title="Gestion financière" items={managementItems} />
-        <SettingsGroup title="Suivi de chantier" items={projectItems} />
+        {/* Role Switcher */}
+        <section>
+          <h3 className="ml-8 mb-2 mt-6 text-[11px] font-medium uppercase tracking-widest text-muted-foreground/70">
+            Mode Démonstration
+          </h3>
+          <div className="mx-4 mb-8 overflow-hidden rounded-xl bg-surface border border-border/50">
+            {(['ouvrier', 'chef', 'admin'] as AppRole[]).map((r, i) => (
+              <div key={r}>
+                <button
+                  type="button"
+                  onClick={() => setRole(r)}
+                  className={`flex w-full items-center justify-between bg-transparent px-4 py-3 transition-colors active:bg-surface-elevated ${
+                    role === r ? 'text-primary font-bold bg-primary/5' : 'text-foreground'
+                  }`}
+                >
+                  <span className="capitalize">Mode {r === 'ouvrier' ? 'Ouvrier (Hubert)' : r === 'chef' ? 'Chef de chantier (Christophe)' : 'Admin (Grégory)'}</span>
+                  {role === r && <span className="text-primary">✓</span>}
+                </button>
+                {i < 2 ? <div className="border-b border-border/50" /> : null}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {role !== 'ouvrier' && <SettingsGroup title="Gestion financière" items={managementItems} />}
+        {role !== 'ouvrier' && <SettingsGroup title="Suivi de chantier" items={projectItems} />}
         <SettingsGroup title="Application" items={appItems} />
       </div>
     </main>

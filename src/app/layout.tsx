@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import type { ReactNode } from 'react'
 
 import { Toaster } from '@/components/ui/toaster'
+import { RoleProvider } from '@/lib/role-context'
 import './globals.css'
 
 const geistSans = Geist({
@@ -36,9 +37,11 @@ export default function RootLayout({ children, modal }: RootLayoutProps) {
   return (
     <html lang="fr" data-theme="dark">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
-        {modal}
-        <Toaster />
+        <RoleProvider>
+          {children}
+          {modal}
+          <Toaster />
+        </RoleProvider>
       </body>
     </html>
   )
