@@ -25,7 +25,7 @@ export function CreateTaskModal() {
       {/* Bouton flottant Ajouter une tâche */}
       <div className="fixed bottom-[calc(max(env(safe-area-inset-bottom),0.75rem)+5.5rem)] inset-x-0 z-40 flex justify-center px-5 pointer-events-none">
         <Button 
-          className="pointer-events-auto h-14 w-full max-w-sm rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-transform active:scale-95 text-base"
+          className="pointer-events-auto h-14 w-full max-w-sm rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-transform active:scale-[0.98] text-base"
           leftIcon={<Plus className="size-5" />} 
           onClick={() => setIsOpen(true)}
         >

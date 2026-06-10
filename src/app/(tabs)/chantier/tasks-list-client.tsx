@@ -73,7 +73,7 @@ export function TasksListClient() {
             return (
               <div
                 key={task.id}
-                className={`flex items-center gap-3 py-3 transition-all duration-300 ${isDone ? 'opacity-60' : ''}`}
+                className={`flex items-center gap-3 py-3 transition-all duration-300 active:scale-[0.98] ${isDone ? 'opacity-60' : ''}`}
               >
                 <button
                   type="button"

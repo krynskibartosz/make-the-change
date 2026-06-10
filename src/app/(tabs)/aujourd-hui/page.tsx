@@ -70,7 +70,7 @@ export default async function TodayPage() {
               <Link
                 key={item.id}
                 href={`/interventions/${item.id}`}
-                className="flex items-center justify-between gap-3 py-3 active:opacity-70 transition-opacity"
+                className="flex items-center justify-between gap-3 py-3 active:scale-[0.98] transition-transform duration-200"
               >
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold text-foreground">{item.title}</p>
@@ -95,7 +95,7 @@ export default async function TodayPage() {
       {/* Bouton flottant Ajouter */}
       <div className="fixed bottom-[calc(max(env(safe-area-inset-bottom),0.75rem)+5.5rem)] inset-x-0 z-40 flex justify-center px-5 pointer-events-none">
         <Link
-          className="pointer-events-auto flex h-14 w-full max-w-sm items-center justify-center gap-2 rounded-full bg-primary font-semibold text-primary-foreground shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-transform active:scale-95"
+          className="pointer-events-auto flex h-14 w-full max-w-sm items-center justify-center gap-2 rounded-full bg-primary font-semibold text-primary-foreground shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-transform active:scale-[0.98]"
           href="/interventions/new"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="size-5"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
