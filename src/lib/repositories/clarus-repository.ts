@@ -1,4 +1,5 @@
 import type {
+  Client,
   CreateExpenseInput,
   CreateInterventionDraftInput,
   CreateMaterialMovementInput,
@@ -30,10 +31,15 @@ import type {
 
 export type ClarusRepository = {
   getProject: () => Promise<Project>
+  getProjects: () => Promise<Project[]>
+  getClient: (id: string) => Promise<Client | null>
+  getClients: () => Promise<Client[]>
   getPeople: () => Promise<Person[]>
   createPerson: (input: CreatePersonInput) => Promise<Person>
   updatePerson: (id: string, input: UpdatePersonInput) => Promise<Person>
   getPhases: () => Promise<Phase[]>
+  getProjectPhases: (projectId: string) => Promise<Phase[]>
+  updatePhase: (id: string, input: Partial<Phase>) => Promise<Phase>
   getZones: () => Promise<Zone[]>
   getMaterials: () => Promise<Material[]>
   getMaterialById: (id: string) => Promise<Material | null>

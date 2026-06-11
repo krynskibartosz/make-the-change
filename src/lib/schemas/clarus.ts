@@ -114,18 +114,33 @@ export const timestampedSchema = z.object({
   updatedAt: isoDateTimeSchema.optional(),
 })
 
+export const clientSchema = baseEntitySchema.extend({
+  name: z.string().min(1),
+  email: z.string().email().optional(),
+  phone: z.string().optional(),
+  company: z.string().optional(),
+  notes: z.string().optional(),
+})
+
 export const projectSchema = z.object({
   id: idSchema,
+  clientId: idSchema.nullish(),
   name: z.string().min(1),
   address: z.string().min(1),
   description: z.string(),
   status: projectStatusSchema,
 })
 
+export const phaseStatusSchema = z.enum(['not_started', 'in_progress', 'completed', 'delayed'])
+
 export const phaseSchema = baseEntitySchema.extend({
   name: z.string().min(1),
   order: z.number().int().positive(),
   description: z.string().optional(),
+  startDate: isoDateSchema.optional(),
+  endDate: isoDateSchema.optional(),
+  status: phaseStatusSchema.optional(),
+  progress: z.number().min(0).max(100).optional(),
 })
 
 export const zoneSchema = baseEntitySchema.extend({
@@ -297,6 +312,7 @@ export type ExpenseStatus = z.infer<typeof expenseStatusSchema>
 export type PhotoType = z.infer<typeof photoTypeSchema>
 
 export type Project = z.infer<typeof projectSchema>
+export type Client = z.infer<typeof clientSchema>
 export type Phase = z.infer<typeof phaseSchema>
 export type Zone = z.infer<typeof zoneSchema>
 export type Person = z.infer<typeof personSchema>
@@ -452,12 +468,14 @@ export const mockDatasetSchema = z
 
 export type MockDataset = z.infer<typeof mockDatasetSchema>
 export type CreateInterventionDraftInput = z.infer<typeof createInterventionDraftInputSchema>
+export const createClientInputSchema = clientSchema.omit({ id: true })
 export const createTaskInputSchema = taskSchema.omit({ id: true, createdAt: true })
 export const createExpenseInputSchema = expenseSchema.omit({ id: true, status: true })
 export const createMaterialMovementInputSchema = materialMovementSchema.omit({ id: true })
 export const createPersonInputSchema = personSchema.omit({ id: true, active: true })
 
 export type CreateTaskInput = z.infer<typeof createTaskInputSchema>
+export type CreateClientInput = z.infer<typeof createClientInputSchema>
 export type CreateExpenseInput = z.infer<typeof createExpenseInputSchema>
 export type CreateMaterialMovementInput = z.infer<typeof createMaterialMovementInputSchema>
 export type CreatePersonInput = z.infer<typeof createPersonInputSchema>

@@ -7,6 +7,10 @@ import { Card } from '@/components/ui'
 import type { Intervention, Task, Zone, Plan } from '@/lib/domain'
 import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
 import { ZoneRowCard } from './_components/zone-row-card'
+import { ProjectSwitcher } from '@/features/projects/components/project-switcher'
+import { ProjectRoadmap } from '@/features/projects/components/project-roadmap'
+import { TasksListClient } from './tasks-list-client'
+import type { Phase } from '@/lib/domain'
 import Link from 'next/link'
 
 export function ChantierDashboardClient() {
@@ -17,21 +21,25 @@ export function ChantierDashboardClient() {
   const [tasks, setTasks] = useState<Task[]>([])
   const [interventions, setInterventions] = useState<Intervention[]>([])
   const [plans, setPlans] = useState<Plan[]>([])
+  const [phases, setPhases] = useState<Phase[]>([])
+  const [mainView, setMainView] = useState('structure')
 
   useEffect(() => {
     async function loadData() {
       setIsLoading(true)
       try {
-        const [z, t, i, p] = await Promise.all([
+        const [z, t, i, p, ph] = await Promise.all([
           mockClarusRepository.getZones(),
           mockClarusRepository.getTasks(),
           mockClarusRepository.getInterventions(),
           mockClarusRepository.getPlans(),
+          mockClarusRepository.getPhases(),
         ])
         setZones(z)
         setTasks(t)
         setInterventions(i)
         setPlans(p)
+        setPhases(ph)
       } catch (e) {
         console.error(e)
       } finally {
@@ -95,6 +103,10 @@ export function ChantierDashboardClient() {
 
   return (
     <div className="flex flex-col gap-4 mt-2">
+      <div className="flex justify-end -mt-10 mb-2 relative z-20 px-4">
+        <ProjectSwitcher />
+      </div>
+
       {/* Red Alert Banner */}
       {urgentTasksCount > 0 && (
         <div className="flex items-center gap-2 rounded-[var(--radius-card)] border border-danger/50 bg-danger/10 px-4 py-3 text-danger shadow-[0_0_15px_rgba(var(--color-danger),0.1)] active:scale-[0.98] transition-transform cursor-pointer">
@@ -107,19 +119,44 @@ export function ChantierDashboardClient() {
         </div>
       )}
 
-      {/* Sticky Segmented Control */}
-      <div className="sticky top-0 z-10 -mx-4 px-4 py-2 bg-background/95 backdrop-blur-md">
+      {/* Main View Segmented Control */}
+      <div className="sticky top-0 z-20 -mx-4 px-4 py-2 bg-background/95 backdrop-blur-md">
         <SegmentedControl
-          ariaLabel="Filtre d'affichage"
-          options={filterOptions}
-          value={currentFilter}
-          onValueChange={setFilter}
+          ariaLabel="Vue du chantier"
+          options={[
+            { label: 'Structure', value: 'structure' },
+            { label: 'Roadmap', value: 'roadmap' },
+            { label: 'Tâches', value: 'tasks' },
+          ]}
+          value={mainView}
+          onValueChange={setMainView}
         />
       </div>
 
       <div className="flex flex-col gap-8 pb-10">
         
-        {/* Plans */}
+        {mainView === 'roadmap' && (
+          <div className="-mx-4">
+            <ProjectRoadmap phases={phases} />
+          </div>
+        )}
+
+        {mainView === 'tasks' && (
+          <TasksListClient />
+        )}
+
+        {/* Structure View (Plans/Zones) */}
+        {mainView === 'structure' && (
+          <>
+            {/* Secondary Filter for Structure */}
+            <div className="mb-2">
+              <SegmentedControl
+                ariaLabel="Filtre de structure"
+                options={filterOptions}
+                value={currentFilter}
+                onValueChange={setFilter}
+              />
+            </div>
         {currentFilter === 'plans' && (
           <section className="flex flex-col gap-4">
             <div className="flex items-center gap-2 mb-1 text-sm font-bold tracking-wider text-muted-foreground uppercase">
@@ -258,6 +295,8 @@ export function ChantierDashboardClient() {
               </div>
             </div>
           </section>
+        )}
+          </>
         )}
       </div>
     </div>

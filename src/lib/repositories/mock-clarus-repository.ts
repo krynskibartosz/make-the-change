@@ -6,6 +6,7 @@ import type {
   CreateMaterialMovementInput,
   CreatePersonInput,
   CreateTaskInput,
+  Client,
   Expense,
   Intervention,
   InterventionDraft,
@@ -32,6 +33,8 @@ import {
   mockPlans,
   mockPlanZones,
   mockProject,
+  mockProjects,
+  mockClient,
   mockTasks,
   mockWorkEntries,
   mockZones,
@@ -52,7 +55,18 @@ export const createMockClarusRepository = (): ClarusRepository => {
 
   return {
     getProject: async () => mockProject,
+    getProjects: async () => mockProjects,
+    getClient: async (id: string) => (id === mockClient.id ? mockClient : null),
+    getClients: async () => [mockClient],
     getPeople: async () => people.map(clonePerson),
+    getPhases: async () => [...mockPhases],
+    getProjectPhases: async (projectId: string) => mockPhases.filter(p => p.projectId === projectId),
+    updatePhase: async (id: string, input: Partial<Phase>) => {
+      const idx = mockPhases.findIndex(p => p.id === id)
+      if (idx === -1) throw new Error('Phase not found')
+      mockPhases[idx] = { ...mockPhases[idx], ...input } as Phase
+      return { ...mockPhases[idx] } as Phase
+    },
     createPerson: async (input: CreatePersonInput) => {
       const person: Person = {
         id: `person-${Date.now()}`,
@@ -84,7 +98,6 @@ export const createMockClarusRepository = (): ClarusRepository => {
       people[idx] = updated
       return clonePerson(updated)
     },
-    getPhases: async () => mockPhases.map((p) => ({ ...p })),
     getZones: async () => [...mockZones],
     getMaterials: async () => [...materials],
     getMaterialById: async (id: string) => materials.find((m) => m.id === id) ?? null,

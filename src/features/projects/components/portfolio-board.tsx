@@ -1,6 +1,6 @@
 'use client'
 
-import { AlertTriangle, Briefcase, Building2, ChevronRight, Euro, Search, Clock } from 'lucide-react'
+import { AlertTriangle, Briefcase, Building2, ChevronRight, Euro, Search, User } from 'lucide-react'
 import Link from 'next/link'
 import type { DashboardKPIs, Project } from '@/lib/domain'
 import { cn } from '@/lib/utils/cn'
@@ -92,10 +92,18 @@ export function PortfolioBoard({ projects }: PortfolioBoardProps) {
             </div>
 
             {/* Action footer */}
-            <Link href="/dashboard" className="bg-background/50 hover:bg-surface-elevated transition-colors border-t border-border/50 p-3 flex justify-center items-center gap-2 text-sm font-semibold text-foreground">
-              Ouvrir le projet
-              <ChevronRight className="size-4" />
-            </Link>
+            <div className="flex bg-background/50 border-t border-border/50">
+              {project.clientId && (
+                <Link href={`/client/${project.clientId}`} className="flex-1 hover:bg-surface-elevated transition-colors p-3 flex justify-center items-center gap-2 text-xs font-bold text-muted-foreground border-r border-border/50">
+                  <User className="size-4" />
+                  Client
+                </Link>
+              )}
+              <Link href="/projet-info" className="flex-[2] hover:bg-surface-elevated transition-colors p-3 flex justify-center items-center gap-2 text-sm font-semibold text-foreground">
+                Infos Chantier
+                <ChevronRight className="size-4" />
+              </Link>
+            </div>
           </div>
         ))}
 

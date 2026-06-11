@@ -1,5 +1,7 @@
 import type {
   BillingStatus,
+  Client,
+  CreateClientInput,
   CreateExpenseInput,
   CreateInterventionDraftInput,
   CreateMaterialMovementInput,
@@ -36,6 +38,8 @@ import type {
 
 export type {
   BillingStatus,
+  Client,
+  CreateClientInput,
   CreateExpenseInput,
   CreateInterventionDraftInput,
   CreateMaterialMovementInput,

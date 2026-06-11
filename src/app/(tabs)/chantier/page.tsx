@@ -24,8 +24,6 @@ export default function ProjectPage() {
     )
   }
 
-
-
   // Mode Admin par défaut
   return (
     <TabScreen title="Chantier" subtitle="Zones & références techniques">

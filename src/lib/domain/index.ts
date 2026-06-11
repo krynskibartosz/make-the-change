@@ -1,5 +1,7 @@
 export type {
   BillingStatus,
+  Client,
+  CreateClientInput,
   CreateExpenseInput,
   CreateInterventionDraftInput,
   CreateMaterialMovementInput,

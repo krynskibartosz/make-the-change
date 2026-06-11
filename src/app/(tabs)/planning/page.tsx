@@ -4,6 +4,7 @@ import { fr } from 'date-fns/locale'
 import { mockClarusRepository } from '@/lib/repositories'
 import { TabScreen } from '../_components/tab-screen'
 import { PlanningClient } from '@/features/planning/components/planning-client'
+import { ProjectSwitcher } from '@/features/projects/components/project-switcher'
 
 export default async function PlanningPage() {
   const now = new Date()
@@ -19,7 +20,14 @@ export default async function PlanningPage() {
   const formattedDate = format(now, 'EEEE d MMMM', { locale: fr })
 
   return (
-    <TabScreen eyebrow={formattedDate} title="Suivi Chantier" contentClassName="px-0 sm:px-5">
+    <TabScreen 
+      eyebrow={formattedDate} 
+      title="Suivi Chantier" 
+      contentClassName="px-0 sm:px-5"
+    >
+      <div className="flex justify-end px-4 -mt-2 mb-4 relative z-20">
+        <ProjectSwitcher />
+      </div>
       <PlanningClient 
         summary={summary}
         timelineEvents={timelineEvents}

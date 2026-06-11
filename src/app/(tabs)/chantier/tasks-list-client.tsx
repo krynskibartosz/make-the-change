@@ -5,10 +5,15 @@ import { useCallback, useEffect, useState } from 'react'
 import { Badge, Card } from '@/components/ui'
 import type { Task } from '@/lib/domain'
 import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
+import { KanbanBoard } from '@/features/board/components/kanban-board'
+import { SegmentedControl } from '@/components/ui/segmented-control'
+import { Kanban, List } from 'lucide-react'
+import type { TaskStatus } from '@/lib/domain'
 
 export function TasksListClient() {
   const [tasks, setTasks] = useState<Task[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [viewMode, setViewMode] = useState('list')
 
   const loadData = useCallback(async () => {
     setIsLoading(true)
@@ -26,20 +31,23 @@ export function TasksListClient() {
     loadData()
   }, [loadData])
 
-  const toggleStatus = async (task: Task) => {
-    const newStatus = task.status === 'done' ? 'to_do' : 'done'
-
+  const updateTaskStatus = async (taskId: string, newStatus: TaskStatus) => {
     // Optimistic update
-    setTasks((current) => current.map((t) => (t.id === task.id ? { ...t, status: newStatus } : t)))
+    setTasks((current) => current.map((t) => (t.id === taskId ? { ...t, status: newStatus } : t)))
 
     try {
-      await mockClarusRepository.updateTaskStatus(task.id, newStatus)
+      await mockClarusRepository.updateTaskStatus(taskId, newStatus)
       await loadData()
     } catch (e) {
       console.error(e)
       // Revert on error
       await loadData()
     }
+  }
+
+  const toggleStatus = async (task: Task) => {
+    const newStatus = task.status === 'done' ? 'to_do' : 'done'
+    await updateTaskStatus(task.id, newStatus)
   }
 
   if (isLoading && tasks.length === 0) {
@@ -50,7 +58,24 @@ export function TasksListClient() {
 
   return (
     <div className="flex flex-col gap-3 mt-6">
-      <h2 className="text-lg font-semibold text-foreground mb-2">Tâches à faire</h2>
+      <div className="flex items-center justify-between mb-2">
+        <h2 className="text-lg font-semibold text-foreground">Tâches</h2>
+        <SegmentedControl
+          ariaLabel="Vue des tâches"
+          options={[
+            { label: <List className="size-4" />, value: 'list' },
+            { label: <Kanban className="size-4" />, value: 'board' },
+          ]}
+          value={viewMode}
+          onValueChange={setViewMode}
+        />
+      </div>
+
+      {viewMode === 'board' ? (
+        <div className="-mx-4">
+          <KanbanBoard initialTasks={tasks} onStatusChange={updateTaskStatus} />
+        </div>
+      ) : (
       {tasks.length === 0 ? (
         <p className="text-sm text-muted-foreground">Aucune tâche.</p>
       ) : (
@@ -95,6 +120,7 @@ export function TasksListClient() {
             </Card>
           )
         })
+      )}
       )}
     </div>
   )

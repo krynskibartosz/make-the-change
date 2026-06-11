@@ -10,5 +10,14 @@ export {
   mockTasks,
   mockWorkEntries,
 } from './interventions'
-export { mockProject, SPARRENLAAN_PROJECT_ID } from './project'
+export {
+  APPARTEMENT_LYON_PROJECT_ID,
+  DUPONT_CLIENT_ID,
+  MARTIN_CLIENT_ID,
+  SPARRENLAAN_PROJECT_ID,
+  mockClient,
+  mockProject,
+  mockProject2,
+  mockProjects,
+} from './project'
 export { mockPeople, mockPhases, mockZones } from './referential'
