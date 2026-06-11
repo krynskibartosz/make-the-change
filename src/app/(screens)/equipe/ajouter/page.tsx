@@ -11,6 +11,10 @@ export default function AjouterMembreEquipePage() {
   const [role, setRole] = useState('')
   const [defaultHourlyRate, setDefaultHourlyRate] = useState('')
   const [avatarUrl, setAvatarUrl] = useState('')
+  const [phone, setPhone] = useState('')
+  const [email, setEmail] = useState('')
+  const [company, setCompany] = useState('')
+  const [skillsStr, setSkillsStr] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -22,6 +26,10 @@ export default function AjouterMembreEquipePage() {
       role,
       defaultHourlyRate: parseFloat(defaultHourlyRate),
       avatarUrl: avatarUrl || undefined,
+      phone: phone || undefined,
+      email: email || undefined,
+      company: company || undefined,
+      skills: skillsStr ? skillsStr.split(',').map(s => s.trim()).filter(Boolean) : undefined,
     })
 
     router.back()
@@ -89,6 +97,61 @@ export default function AjouterMembreEquipePage() {
                 className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
                 placeholder="Ex: 45"
                 required
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="company" className="text-sm font-medium">
+                Entreprise / Sous-traitant
+              </label>
+              <input
+                id="company"
+                type="text"
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+                className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
+                placeholder="Ex: Plomberie Dupont ou Interne"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label htmlFor="phone" className="text-sm font-medium">
+                Téléphone
+              </label>
+              <input
+                id="phone"
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
+                placeholder="Ex: 06 12 34 56 78"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label htmlFor="email" className="text-sm font-medium">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
+                placeholder="Ex: jean@dupont.fr"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label htmlFor="skills" className="text-sm font-medium">
+                Compétences (séparées par des virgules)
+              </label>
+              <input
+                id="skills"
+                type="text"
+                value={skillsStr}
+                onChange={(e) => setSkillsStr(e.target.value)}
+                className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
+                placeholder="Ex: Plomberie, Chauffage"
               />
             </div>
           </form>

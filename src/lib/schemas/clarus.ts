@@ -145,6 +145,10 @@ export const personSchema = baseEntitySchema.extend({
   defaultHourlyRate: nonNegativeMoneySchema,
   active: z.boolean(),
   avatarUrl: z.string().url().nullish(),
+  phone: z.string().optional(),
+  email: z.string().email().optional(),
+  company: z.string().optional(),
+  skills: z.array(z.string()).optional(),
 })
 
 export const interventionSchema = baseEntitySchema
