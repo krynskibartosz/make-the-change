@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { AlertTriangle, Camera, CheckCircle2, Circle, Clock, Euro, ListTodo, Package } from 'lucide-react'
 import Link from 'next/link'
-import type { Task, TodaySummary } from '@/lib/domain'
+import type { Task, TodaySummary, InterventionListItem } from '@/lib/domain'
 import { mockClarusRepository } from '@/lib/repositories'
 
 function PriorityIcon({ priority }: { priority: Task['priority'] }) {
@@ -13,20 +13,32 @@ function PriorityIcon({ priority }: { priority: Task['priority'] }) {
 }
 
 function StatusBadge({ status }: { status: Task['status'] }) {
-  const label = status === 'to_check' ? 'À vérifier' : 'À faire'
-  const cls =
-    status === 'to_check'
-      ? 'bg-yellow-500/15 text-yellow-700 dark:text-yellow-400'
-      : 'bg-primary/10 text-primary'
+  const labels: Record<Task['status'], string> = {
+    to_do: 'À faire',
+    in_progress: 'En cours',
+    done: 'Terminé',
+    to_check: 'À vérifier',
+    blocked: 'Bloquant'
+  }
+  
+  const colors: Record<Task['status'], string> = {
+    to_do: 'bg-primary/10 text-primary',
+    in_progress: 'bg-blue-500/15 text-blue-700 dark:text-blue-400',
+    done: 'bg-success/15 text-success',
+    to_check: 'bg-yellow-500/15 text-yellow-700 dark:text-yellow-400',
+    blocked: 'bg-red-500/15 text-red-700 dark:text-red-400',
+  }
+
   return (
-    <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${cls}`}>
-      {label}
+    <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${colors[status]}`}>
+      {labels[status]}
     </span>
   )
 }
 
 export function TodayView({ summary }: { summary: TodaySummary }) {
   const [tasks, setTasks] = useState<Task[]>([])
+  const [toCheckItems, setToCheckItems] = useState<InterventionListItem[]>([])
 
   useEffect(() => {
     mockClarusRepository.getTasks().then((allTasks) => {
@@ -35,6 +47,29 @@ export function TodayView({ summary }: { summary: TodaySummary }) {
       )
       setTasks(pending)
     })
+    
+    // Simulate fetching items to verify
+    mockClarusRepository.getInterventions().then((allInterventions) => {
+      // In a real app we'd fetch actual AI review items or to_check items
+      // We map Intervention to InterventionListItem for the UI
+      const toCheck = allInterventions
+        .filter(i => i.status === 'to_check')
+        .map(i => ({
+          id: i.id,
+          title: i.title,
+          date: i.date,
+          type: i.type,
+          status: i.status,
+          verificationStatus: 'to_check' as const,
+          isExtra: i.isExtra,
+          zoneName: 'Zone inconnue',
+          phaseName: 'Phase inconnue',
+          hours: 0,
+          amount: 0,
+          updatedAt: i.updatedAt || new Date().toISOString()
+        }))
+      setToCheckItems(toCheck)
+    })
   }, [])
 
   const topTasks = tasks.slice(0, 4)
@@ -42,6 +77,44 @@ export function TodayView({ summary }: { summary: TodaySummary }) {
 
   return (
     <div className="flex flex-col gap-6 pb-24">
+      {/* 0. À vérifier maintenant */}
+      <section className="flex flex-col gap-3">
+        <div className="flex items-center gap-2">
+          <AlertTriangle className="size-4 text-yellow-500" />
+          <h2 className="text-sm font-bold text-foreground">À vérifier maintenant</h2>
+          {toCheckItems.length > 0 && (
+            <span className="bg-yellow-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+              {toCheckItems.length}
+            </span>
+          )}
+        </div>
+        
+        {toCheckItems.length === 0 ? (
+          <p className="rounded-[var(--radius-card)] border border-border bg-surface px-4 py-5 text-center text-sm text-muted-foreground">
+            Rien à vérifier pour le moment.
+          </p>
+        ) : (
+          <div className="flex flex-col gap-2">
+            {toCheckItems.slice(0, 2).map((item) => (
+              <div key={item.id} className="flex items-center justify-between rounded-[var(--radius-card)] border border-yellow-500/30 bg-yellow-500/10 p-3">
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold text-foreground">{item.title}</p>
+                  <p className="truncate text-xs text-muted-foreground">Note terrain ou IA à valider</p>
+                </div>
+                <Link href="/a-verifier" className="shrink-0 rounded-full bg-surface px-3 py-1 text-xs font-semibold text-primary border border-border">
+                  Voir
+                </Link>
+              </div>
+            ))}
+            {toCheckItems.length > 2 && (
+              <Link href="/a-verifier" className="text-center text-xs font-semibold text-primary pt-1">
+                Voir les {toCheckItems.length} éléments à vérifier
+              </Link>
+            )}
+          </div>
+        )}
+      </section>
+
       {/* 1. À faire aujourd'hui */}
       <section className="flex flex-col gap-3">
         <div className="flex items-center gap-2">
@@ -180,8 +253,9 @@ export function TodayView({ summary }: { summary: TodaySummary }) {
       )}
 
       {summary.latestInterventions.length === 0 && (
-        <p className="py-8 text-center text-sm text-muted-foreground">
-          Aucun travail enregistré aujourd'hui.
+        <p className="rounded-[var(--radius-card)] border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
+          Aucun travail enregistré aujourd'hui.<br/>
+          <span className="mt-2 block text-xs">Ajoute un travail réalisé ou valide une note terrain.</span>
         </p>
       )}
     </div>

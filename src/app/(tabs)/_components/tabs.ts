@@ -1,4 +1,4 @@
-import { CalendarDays, type LucideIcon, MapPinned, Menu, CheckSquare, ClipboardCheck, Receipt, PieChart, Send } from 'lucide-react'
+import { CalendarDays, type LucideIcon, MapPinned, Menu, CheckSquare, ClipboardCheck, Receipt, PieChart, Send, ImageIcon, Kanban, Briefcase } from 'lucide-react'
 
 export type ClarusTab = Readonly<{
   href: string
@@ -46,5 +46,20 @@ export const clarusTabs = [
     href: '/historique',
     label: 'Envoyés',
     icon: Send,
+  },
+  {
+    href: '/photos',
+    label: 'Photos',
+    icon: ImageIcon,
+  },
+  {
+    href: '/board',
+    label: 'Tableau',
+    icon: Kanban,
+  },
+  {
+    href: '/projets',
+    label: 'Projets',
+    icon: Briefcase,
   },
 ] as const satisfies readonly ClarusTab[]

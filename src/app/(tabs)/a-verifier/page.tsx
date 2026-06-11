@@ -14,6 +14,8 @@ type Draft = {
     materials?: string[]
     task?: string
     status?: 'Terminé' | 'En cours' | 'Problème'
+    confidence: 'Élevée' | 'Moyenne' | 'Faible'
+    missingFields?: string[]
   }
 }
 
@@ -27,7 +29,8 @@ const mockDrafts: Draft[] = [
       task: 'Démolition terrasse extérieure',
       status: 'Terminé',
       hours: '08:00 - 16:30',
-      materials: ['12x Sacs de gravats']
+      materials: ['12x Sacs de gravats'],
+      confidence: 'Élevée'
     }
   },
   {
@@ -38,6 +41,8 @@ const mockDrafts: Draft[] = [
     extracted: {
       task: 'Choix technique P1.7',
       status: 'Problème',
+      confidence: 'Moyenne',
+      missingFields: ['Zone à confirmer', 'Impact planning']
     }
   }
 ]
@@ -111,11 +116,14 @@ export default function AVerifierPage() {
 
       <main className="flex-1 flex flex-col gap-6 p-5 max-w-md mx-auto w-full">
         {drafts.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-48 text-center gap-3">
-            <div className="p-4 bg-emerald-500/10 rounded-full">
-              <Check className="size-8 text-emerald-500" />
+          <div className="flex flex-col items-center justify-center h-64 text-center gap-3">
+            <div className="p-4 bg-emerald-500/10 rounded-full mb-2">
+              <Check className="size-10 text-emerald-500" />
             </div>
-            <p className="font-medium text-muted-foreground">Tout est validé !</p>
+            <p className="font-semibold text-lg text-foreground">Rien à vérifier</p>
+            <p className="text-sm text-muted-foreground px-4">
+              Les notes terrain, tickets et photos à valider apparaîtront ici.
+            </p>
           </div>
         ) : (
           <div className="flex flex-col gap-6">
@@ -210,9 +218,25 @@ export default function AVerifierPage() {
                       <div className="absolute top-3 right-3">
                         <Bot className="size-5 text-primary opacity-50" />
                       </div>
-                      <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-wider mb-1">
-                        Extraction IA
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-wider">
+                          Extraction IA
+                        </div>
+                        {draft.extracted.confidence === 'Élevée' ? (
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">Confiance Élevée</span>
+                        ) : draft.extracted.confidence === 'Moyenne' ? (
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-yellow-500/15 text-yellow-600 dark:text-yellow-400">À compléter</span>
+                        ) : (
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-500/15 text-orange-600 dark:text-orange-400">Doute IA</span>
+                        )}
                       </div>
+
+                      {draft.extracted.missingFields && draft.extracted.missingFields.length > 0 && (
+                        <div className="flex flex-col gap-1 mb-2 p-2 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
+                          <span className="text-[10px] font-bold uppercase text-yellow-700 dark:text-yellow-400">Points à vérifier :</span>
+                          {draft.extracted.missingFields.map((f, i) => <span key={i} className="text-xs font-medium text-yellow-700 dark:text-yellow-400">- {f}</span>)}
+                        </div>
+                      )}
                       
                       {draft.extracted.task && (
                         <div className="flex flex-col">

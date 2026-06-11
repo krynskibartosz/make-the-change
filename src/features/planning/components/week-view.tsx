@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import { CheckCircle2, Circle, Loader2, Target, XCircle } from 'lucide-react'
+import { AlertTriangle, CheckCircle2, Circle, Loader2, Target, XCircle } from 'lucide-react'
 import type { WeeklyPlan } from '@/lib/domain'
 
 function GoalStatusBadge({ status }: { status: string }) {
@@ -38,7 +38,13 @@ function GoalStatusBadge({ status }: { status: string }) {
 
 export function WeekView({ plan }: { plan: WeeklyPlan | null }) {
   if (!plan) {
-    return <p className="py-8 text-center text-sm text-muted-foreground">Aucun plan pour cette semaine.</p>
+    return (
+      <div className="flex flex-col items-center justify-center p-8 text-center gap-2 border border-dashed border-border rounded-[var(--radius-card)] mt-4">
+        <Target className="size-8 text-muted-foreground opacity-50" />
+        <p className="font-semibold text-foreground">Aucun objectif défini</p>
+        <p className="text-sm text-muted-foreground">Crée une priorité de semaine pour suivre l'avancement.</p>
+      </div>
+    )
   }
 
   const completedGoals = plan.goals?.filter(g => g.status === 'completed').length || 0
@@ -77,8 +83,24 @@ export function WeekView({ plan }: { plan: WeeklyPlan | null }) {
           <div className="flex-1">
             <p className="text-sm font-semibold">Objectifs atteints</p>
             <p className="text-xs text-muted-foreground">Encore {totalGoals - completedGoals} à terminer</p>
+            <div className="mt-2 text-[10px] font-bold uppercase text-orange-600 dark:text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded w-fit">
+              Rythme : léger retard
+            </div>
           </div>
         </div>
+      </section>
+
+      {/* À surveiller cette semaine */}
+      <section className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-orange-500/20 bg-orange-500/5 p-4">
+        <div className="flex items-center gap-2 text-orange-600 dark:text-orange-400">
+          <AlertTriangle className="size-4" />
+          <span className="text-xs font-bold uppercase tracking-wider">À surveiller cette semaine</span>
+        </div>
+        <ul className="list-disc list-inside text-sm font-medium text-foreground space-y-1">
+          <li>Conteneur presque plein</li>
+          <li>P1.7 en attente de validation</li>
+          <li>Évacuation gravats pas commencée</li>
+        </ul>
       </section>
 
       {/* Liste des objectifs */}

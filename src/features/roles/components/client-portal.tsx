@@ -16,9 +16,14 @@ export function ClientPortal() {
 
       {/* Avancement */}
       <section className="flex flex-col gap-3">
-        <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
-          Avancement
-        </h2>
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
+            Avancement
+          </h2>
+        </div>
+        <p className="text-sm font-medium mb-1">
+          La démolition est presque terminée. L'évacuation des gravats est en cours.
+        </p>
         <div className="rounded-2xl border border-border bg-surface p-4 flex flex-col gap-4">
           <div className="flex flex-col gap-1">
             <div className="flex justify-between items-center text-sm font-semibold">
@@ -57,14 +62,17 @@ export function ClientPortal() {
             <AlertCircle className="size-5 text-orange-500" />
           </div>
           <div className="flex flex-col gap-1 pr-8">
-            <span className="text-xs font-bold text-orange-600 uppercase tracking-wider">Action requise</span>
+            <span className="text-xs font-bold text-orange-600 uppercase tracking-wider">À décider</span>
             <h3 className="font-semibold text-foreground">Choix technique P1.7</h3>
             <p className="text-sm text-muted-foreground mt-1">
               Avant de continuer la structure, nous devons confirmer cette option pour garantir la stabilité de la dalle.
             </p>
+            <p className="text-sm font-semibold mt-2 text-foreground">
+              Impact estimé : <span className="text-blue-500">+1 jour</span> · <span className="text-red-500">+540 €</span>
+            </p>
           </div>
           <Link href="/validations" className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold py-2.5 px-4 rounded-xl transition-colors w-full text-center">
-            Voir et Valider
+            Voir la demande
           </Link>
         </div>
       </section>

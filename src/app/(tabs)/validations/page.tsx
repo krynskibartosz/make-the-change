@@ -34,11 +34,19 @@ export default function ValidationsPage() {
 
             {/* Contenu */}
             <div className="p-5 flex flex-col gap-5">
-              <div className="flex flex-col gap-2">
-                <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Explication</h3>
-                <p className="text-sm leading-relaxed">
-                  Lors de la démolition de la terrasse extérieure, nous avons constaté que la dalle de béton existante était plus épaisse que prévu. Avant de continuer la structure, nous devons confirmer cette option technique pour garantir la stabilité de la nouvelle dalle.
-                </p>
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-1">
+                  <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Situation</h3>
+                  <p className="text-sm leading-relaxed text-foreground">
+                    Lors de la démolition de la terrasse extérieure, nous avons constaté que la dalle de béton existante était plus épaisse que prévu.
+                  </p>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Pourquoi votre accord est nécessaire</h3>
+                  <p className="text-sm leading-relaxed text-foreground">
+                    Avant de continuer la structure, nous devons confirmer cette option technique pour garantir la stabilité de la nouvelle dalle.
+                  </p>
+                </div>
               </div>
 
               {/* Preuves / Photos */}
@@ -47,11 +55,11 @@ export default function ValidationsPage() {
                 <div className="flex gap-3 overflow-x-auto pb-2 snap-x">
                   <div className="h-24 w-32 shrink-0 bg-surface-elevated rounded-xl border border-border/50 flex flex-col items-center justify-center gap-2 snap-center">
                     <ImageIcon className="size-6 text-muted-foreground/50" />
-                    <span className="text-[10px] text-muted-foreground font-medium">Épaisseur dalle</span>
+                    <span className="text-[10px] text-muted-foreground font-medium text-center px-1">Épaisseur de la dalle</span>
                   </div>
                   <div className="h-24 w-32 shrink-0 bg-surface-elevated rounded-xl border border-border/50 flex flex-col items-center justify-center gap-2 snap-center">
                     <ImageIcon className="size-6 text-muted-foreground/50" />
-                    <span className="text-[10px] text-muted-foreground font-medium">Plan technique</span>
+                    <span className="text-[10px] text-muted-foreground font-medium text-center px-1">Option technique P1.7</span>
                   </div>
                 </div>
               </div>
@@ -81,7 +89,7 @@ export default function ValidationsPage() {
               <div className="flex flex-col gap-3 mt-2">
                 <button className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3.5 px-4 rounded-xl transition-colors flex items-center justify-center gap-2">
                   <CheckCircle2 className="size-5" />
-                  Accepter le supplément
+                  Accepter l'option et le supplément
                 </button>
                 <button className="w-full bg-surface hover:bg-surface-elevated border border-border text-foreground font-medium py-3 px-4 rounded-xl transition-colors">
                   Demander une précision
@@ -102,7 +110,14 @@ export default function ValidationsPage() {
                 <CheckCircle2 className="size-5 text-emerald-500" />
                 <span className="text-sm font-medium">Protection de l'escalier</span>
               </div>
-              <span className="text-xs text-muted-foreground">Validé le 12 juin</span>
+              <span className="text-xs text-muted-foreground shrink-0">Validé le 8 juin</span>
+            </div>
+            <div className="flex items-center justify-between p-4 rounded-xl border border-border bg-surface opacity-75">
+              <div className="flex items-center gap-3">
+                <CheckCircle2 className="size-5 text-emerald-500" />
+                <span className="text-sm font-medium">Enlèvement conteneur</span>
+              </div>
+              <span className="text-xs text-muted-foreground shrink-0">Validé le 9 juin</span>
             </div>
           </div>
         </section>

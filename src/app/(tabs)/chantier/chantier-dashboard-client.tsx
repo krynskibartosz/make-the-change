@@ -148,6 +148,33 @@ export function ChantierDashboardClient() {
                       {plan.description && (
                         <p className="text-sm text-muted-foreground mt-0.5 line-clamp-2">{plan.description}</p>
                       )}
+                      <div className="mt-3 flex flex-wrap items-center gap-2">
+                        {plan.id === 'plan-1' ? (
+                          <>
+                            <span className="flex items-center gap-1 rounded bg-red-500/10 px-1.5 py-0.5 text-[10px] font-bold uppercase text-red-600 dark:text-red-400">
+                              <AlertTriangle className="size-3" /> 3 urgents
+                            </span>
+                            <span className="flex items-center gap-1 rounded bg-surface-elevated border border-border px-1.5 py-0.5 text-[10px] font-bold uppercase text-muted-foreground">
+                              2 tâches
+                            </span>
+                            <span className="flex items-center gap-1 rounded bg-surface-elevated border border-border px-1.5 py-0.5 text-[10px] font-bold uppercase text-muted-foreground">
+                              5 réf.
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <span className="flex items-center gap-1 rounded bg-surface-elevated border border-border px-1.5 py-0.5 text-[10px] font-bold uppercase text-muted-foreground">
+                              0 urgent
+                            </span>
+                            <span className="flex items-center gap-1 rounded bg-surface-elevated border border-border px-1.5 py-0.5 text-[10px] font-bold uppercase text-muted-foreground">
+                              1 tâche
+                            </span>
+                            <span className="flex items-center gap-1 rounded bg-surface-elevated border border-border px-1.5 py-0.5 text-[10px] font-bold uppercase text-muted-foreground">
+                              2 réf.
+                            </span>
+                          </>
+                        )}
+                      </div>
                     </div>
                   </Card>
                 </Link>

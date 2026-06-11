@@ -7,10 +7,13 @@ import type { Photo } from '@/lib/domain'
 import { mockClarusRepository } from '@/lib/repositories'
 import { FullScreenSlideModal } from '../../@modal/_components/full-screen-slide-modal'
 
+import { useRole } from '@/lib/role-context'
+
 type FilterType = 'all' | 'before' | 'during' | 'after'
 
 export default function PhotosPage() {
   const router = useRouter()
+  const { role, isReady } = useRole()
   const [photos, setPhotos] = useState<Photo[]>([])
   const [loading, setLoading] = useState(true)
   const [activeFilter, setActiveFilter] = useState<FilterType>('all')
@@ -62,9 +65,11 @@ export default function PhotosPage() {
     </button>
   )
 
+  if (!isReady) return null
+
   return (
     <>
-      <FullScreenSlideModal asPage headerMode="back" title="Photos">
+      <FullScreenSlideModal asPage headerMode="back" title={role === 'client' ? "Photos validées" : "Photos"}>
         <div className="flex-1 overflow-y-auto pb-[calc(env(safe-area-inset-bottom)+100px)]">
           {/* Segmented Control / Filters */}
           <div className="sticky top-0 z-20 bg-background/90 backdrop-blur-md border-b border-border p-4 pb-3 flex gap-2 overflow-x-auto no-scrollbar">
@@ -132,18 +137,20 @@ export default function PhotosPage() {
           </section>
         </div>
 
-        {/* Fixed Bottom CTA */}
-        <div className="fixed bottom-0 left-0 right-0 p-4 pb-[max(env(safe-area-inset-bottom),1rem)] bg-background/90 backdrop-blur-md border-t border-border/50 z-40">
-          <div className="max-w-md mx-auto flex gap-3">
-            <button
-              onClick={() => router.push('/photos/ajouter')}
-              className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground py-3.5 font-semibold active:scale-[0.98] transition-all shadow-lg shadow-primary/20"
-            >
-              <Camera className="size-5" />
-              Prendre une photo
-            </button>
+        {/* Fixed Bottom CTA - Masqué pour le client en V1 */}
+        {role !== 'client' && (
+          <div className="fixed bottom-0 left-0 right-0 p-4 pb-[max(env(safe-area-inset-bottom),1rem)] bg-background/90 backdrop-blur-md border-t border-border/50 z-40">
+            <div className="max-w-md mx-auto flex gap-3">
+              <button
+                onClick={() => router.push('/photos/ajouter')}
+                className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground py-3.5 font-semibold active:scale-[0.98] transition-all shadow-lg shadow-primary/20"
+              >
+                <Camera className="size-5" />
+                Prendre une photo
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </FullScreenSlideModal>
 
       {/* Lightbox / Full Screen View */}
@@ -161,7 +168,9 @@ export default function PhotosPage() {
                   minute: '2-digit',
                 })}
               </span>
-              <span className="text-white/60 text-xs">Auteur inconnu</span>
+              <span className="text-white/60 text-xs">
+                {role === 'client' ? 'Validée par le chef de chantier' : 'Auteur inconnu'}
+              </span>
             </div>
             <button
               onClick={() => setSelectedPhoto(null)}
