@@ -246,6 +246,39 @@ export const createMockClarusRepository = (): ClarusRepository => {
         expenseIds.includes(expense.id) ? { ...expense, status: 'invoiced' } : expense,
       )
     },
+    getDashboardKPIs: async () => {
+      const budgetHours = 200
+      const budgetCost = 15000
+
+      const totalHours = mockWorkEntries.reduce((acc, entry) => acc + (entry.durationMinutes / 60), 0)
+      const totalCost = mockWorkEntries.reduce((acc, entry) => acc + entry.amount, 0) +
+        expenses.filter(e => e.status !== 'to_check').reduce((acc, e) => acc + (e.amount || 0), 0)
+
+      const billableInterventions = interventions.filter(
+        (i) => i.billingStatus === 'to_invoice' || i.isExtra === true
+      )
+      const billableExpenses = expenses.filter(
+        (e) => e.isRebillable === true && e.status !== 'invoiced'
+      )
+      
+      const toInvoiceAmount = 
+        billableInterventions.reduce((acc, i) => {
+          const entrySum = mockWorkEntries.filter(we => we.interventionId === i.id).reduce((sum, we) => sum + we.amount, 0)
+          return acc + entrySum
+        }, 0) +
+        billableExpenses.reduce((acc, e) => acc + (e.amount || 0), 0)
+
+      const blockedTasksCount = tasks.filter(t => t.status === 'blocked').length
+
+      return {
+        totalHours: Math.round(totalHours),
+        totalCost: Math.round(totalCost),
+        toInvoiceAmount: Math.round(toInvoiceAmount),
+        budgetHours,
+        budgetCost,
+        blockedTasksCount,
+      }
+    },
   }
 }
 

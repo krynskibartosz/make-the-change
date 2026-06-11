@@ -25,6 +25,7 @@ import type {
   WeeklyPlan,
   WorkEntry,
   Zone,
+  DashboardKPIs,
 } from '@/lib/domain'
 
 export type ClarusRepository = {
@@ -58,4 +59,5 @@ export type ClarusRepository = {
   
   getTimelineEvents: () => Promise<TimelineEvent[]>
   getWeeklyPlan: (weekStart: string) => Promise<WeeklyPlan | null>
+  getDashboardKPIs: () => Promise<DashboardKPIs>
 }

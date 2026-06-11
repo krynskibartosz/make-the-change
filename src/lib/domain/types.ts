@@ -119,3 +119,12 @@ export type TimelineEvent =
   | { type: 'task'; data: Task; date: string }
   | { type: 'expense'; data: Expense; date: string }
   | { type: 'photo'; data: Photo; date: string }
+
+export type DashboardKPIs = {
+  totalHours: number
+  totalCost: number
+  toInvoiceAmount: number
+  budgetHours: number
+  budgetCost: number
+  blockedTasksCount: number
+}
