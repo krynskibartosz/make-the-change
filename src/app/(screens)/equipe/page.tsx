@@ -29,7 +29,7 @@ export default function EquipePage() {
           {people.map((person) => (
             <Link
               key={person.id}
-              href={`/equipe/${person.id}/editer`}
+              href={`/equipe/${person.id}`}
               className="flex flex-col p-4 transition-colors border-b border-border last:border-0 active:bg-surface-elevated gap-3"
             >
               <div className="flex items-start justify-between">

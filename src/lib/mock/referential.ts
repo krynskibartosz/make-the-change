@@ -52,7 +52,7 @@ export const mockPeople: Person[] = [
     avatarUrl:
       'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop',
     email: 'martin@clarus.com',
-    company: 'Bureau d\'études',
+    company: "Bureau d'études",
     skills: ['Ingénierie', 'Suivi de chantier'],
   },
 ]

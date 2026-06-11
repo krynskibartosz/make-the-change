@@ -34,6 +34,7 @@ export type ClarusRepository = {
   getClient: (id: string) => Promise<Client | null>
   getClients: () => Promise<Client[]>
   getPeople: () => Promise<Person[]>
+  getPersonById: (id: string) => Promise<Person | null>
   createPerson: (input: CreatePersonInput) => Promise<Person>
   updatePerson: (id: string, input: UpdatePersonInput) => Promise<Person>
   getPhases: () => Promise<Phase[]>

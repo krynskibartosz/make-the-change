@@ -57,6 +57,7 @@ export const createMockClarusRepository = (): ClarusRepository => {
     getClient: async (id: string) => (id === mockClient.id ? mockClient : null),
     getClients: async () => [mockClient],
     getPeople: async () => people.map(clonePerson),
+    getPersonById: async (id: string) => people.find((p) => p.id === id) || null,
     getPhases: async () => [...mockPhases],
     getProjectPhases: async (projectId: string) =>
       mockPhases.filter((p) => p.projectId === projectId),
