@@ -6,10 +6,12 @@ import type { Person, Zone } from '@/lib/domain'
 import { toast } from '@/lib/hooks/use-toast'
 import { mockClarusRepository } from '@/lib/repositories'
 import { FullScreenSlideModal } from '../../@modal/_components/full-screen-slide-modal'
+import { useRole } from '@/lib/role-context'
 
 function AjouterTacheForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const { role, isReady } = useRole()
 
   const [zones, setZones] = useState<Zone[]>([])
   const [people, setPeople] = useState<Person[]>([])
@@ -48,14 +50,18 @@ function AjouterTacheForm() {
     router.back()
   }
 
+  if (!isReady) return null
+
+  const isOuvrier = role === 'ouvrier'
+
   return (
-    <FullScreenSlideModal asPage headerMode="back" title="Ajouter une tâche">
+    <FullScreenSlideModal asPage headerMode="back" title={isOuvrier ? "Signaler / À prévoir" : "Ajouter une tâche"}>
       <div className="flex-1 overflow-y-auto pb-[calc(env(safe-area-inset-bottom)+80px)]">
         <section className="p-5">
           <form id="add-task-form" onSubmit={handleSubmit} className="flex flex-col gap-5">
             <div className="flex flex-col gap-2">
               <label htmlFor="title" className="text-sm font-medium">
-                Titre de la tâche
+                {isOuvrier ? "Qu'y a-t-il à prévoir ?" : "Titre de la tâche"}
               </label>
               <input
                 id="title"
@@ -116,24 +122,26 @@ function AjouterTacheForm() {
               </select>
             </div>
 
-            <div className="flex flex-col gap-2">
-              <label htmlFor="assignee" className="text-sm font-medium">
-                Assigner à (optionnel)
-              </label>
-              <select
-                id="assignee"
-                value={assignedTo}
-                onChange={(e) => setAssignedTo(e.target.value)}
-                className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
-              >
-                <option value="">Non assigné</option>
-                {people.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.name} ({p.role || 'Sans rôle'})
-                  </option>
-                ))}
-              </select>
-            </div>
+            {!isOuvrier && (
+              <div className="flex flex-col gap-2">
+                <label htmlFor="assignee" className="text-sm font-medium">
+                  Assigner à (optionnel)
+                </label>
+                <select
+                  id="assignee"
+                  value={assignedTo}
+                  onChange={(e) => setAssignedTo(e.target.value)}
+                  className="p-3 rounded-[var(--radius-control)] border border-border bg-surface text-base"
+                >
+                  <option value="">Non assigné</option>
+                  {people.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.name} ({p.role || 'Sans rôle'})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </form>
         </section>
       </div>
@@ -145,7 +153,7 @@ function AjouterTacheForm() {
             form="add-task-form"
             className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground py-3.5 font-semibold active:scale-[0.98] transition-all shadow-lg shadow-primary/20"
           >
-            Enregistrer la tâche
+            {isOuvrier ? "Envoyer à Christophe" : "Enregistrer la tâche"}
           </button>
         </div>
       </div>

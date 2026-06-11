@@ -94,8 +94,8 @@ export default function AjouterTicketPage() {
             </div>
             
             <div className="text-center">
-              <h2 className="text-2xl font-bold mb-2">Ticket enregistré !</h2>
-              <p className="text-muted-foreground mb-6">La dépense a été envoyée au chef de chantier pour validation.</p>
+              <h2 className="text-2xl font-bold mb-2">Ticket lu par l'IA !</h2>
+              <p className="text-muted-foreground mb-6">Vérifiez les informations ci-dessous. Elles seront envoyées à Christophe pour validation.</p>
               
               <div className="bg-surface border border-border rounded-2xl p-5 text-left flex flex-col gap-3 shadow-sm mb-8 w-full max-w-[280px]">
                 <div className="flex justify-between items-center border-b border-border/50 pb-3">
@@ -112,17 +112,23 @@ export default function AjouterTicketPage() {
                 </div>
               </div>
 
-              <StickyActionBar 
-                primaryAction={
-                  <Button 
-                    size="primary" 
-                    className="w-full rounded-xl"
-                    onClick={handleFinish}
-                  >
-                    Retour au menu
-                  </Button>
-                }
-              />
+              <div className="flex flex-col gap-3 mt-4 w-full px-5">
+                <Button 
+                  size="primary" 
+                  className="w-full rounded-xl"
+                  onClick={handleFinish}
+                >
+                  Envoyer à Christophe
+                </Button>
+                <Button 
+                  size="primary"
+                  variant="secondary"
+                  className="w-full rounded-xl border-border bg-surface text-foreground"
+                  onClick={() => setStatus('idle')}
+                >
+                  Corriger
+                </Button>
+              </div>
             </div>
           </div>
         )}

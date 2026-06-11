@@ -84,58 +84,62 @@ function AjouterPhotoForm() {
             />
           </div>
 
-          <hr className="border-border/50" />
+          {url && (
+            <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-4">
+              <hr className="border-border/50" />
 
-          {/* Metadata */}
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold">Type de photo</label>
-            <div className="grid grid-cols-3 gap-2">
-              {[
-                { value: 'before', label: 'Avant' },
-                { value: 'during', label: 'En cours' },
-                { value: 'after', label: 'Après' },
-              ].map((t) => (
-                <button
-                  key={t.value}
-                  type="button"
-                  onClick={() => setType(type === t.value ? '' : (t.value as any))}
-                  className={`p-3 rounded-xl border text-sm font-medium transition-all ${
-                    type === t.value
-                      ? 'border-primary bg-primary/10 text-primary'
-                      : 'border-border bg-surface text-foreground hover:bg-surface-elevated'
-                  }`}
+              {/* Metadata */}
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-semibold">Type de photo</label>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { value: 'before', label: 'Avant' },
+                    { value: 'during', label: 'En cours' },
+                    { value: 'after', label: 'Après' },
+                  ].map((t) => (
+                    <button
+                      key={t.value}
+                      type="button"
+                      onClick={() => setType(type === t.value ? '' : (t.value as any))}
+                      className={`p-3 rounded-xl border text-sm font-medium transition-all ${
+                        type === t.value
+                          ? 'border-primary bg-primary/10 text-primary'
+                          : 'border-border bg-surface text-foreground hover:bg-surface-elevated'
+                      }`}
+                    >
+                      {t.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-semibold">Zone concernée (Optionnel)</label>
+                <select
+                  value={zoneId}
+                  onChange={(e) => setZoneId(e.target.value)}
+                  className="p-3.5 rounded-xl border border-border bg-surface text-base focus:ring-2 focus:ring-primary/20 outline-none"
                 >
-                  {t.label}
-                </button>
-              ))}
+                  <option value="">Aucune zone spécifique</option>
+                  {zones.map((z) => (
+                    <option key={z.id} value={z.id}>
+                      {z.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-semibold">Commentaire (Optionnel)</label>
+                <textarea
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  placeholder="Détails, anomalies constatées..."
+                  className="p-3.5 rounded-xl border border-border bg-surface text-base min-h-[100px] resize-none focus:ring-2 focus:ring-primary/20 outline-none"
+                />
+              </div>
             </div>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold">Zone concernée (Optionnel)</label>
-            <select
-              value={zoneId}
-              onChange={(e) => setZoneId(e.target.value)}
-              className="p-3.5 rounded-xl border border-border bg-surface text-base focus:ring-2 focus:ring-primary/20 outline-none"
-            >
-              <option value="">Aucune zone spécifique</option>
-              {zones.map((z) => (
-                <option key={z.id} value={z.id}>
-                  {z.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold">Commentaire (Optionnel)</label>
-            <textarea
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder="Détails, anomalies constatées..."
-              className="p-3.5 rounded-xl border border-border bg-surface text-base min-h-[100px] resize-none focus:ring-2 focus:ring-primary/20 outline-none"
-            />
-          </div>
+          )}
         </form>
       </div>
 

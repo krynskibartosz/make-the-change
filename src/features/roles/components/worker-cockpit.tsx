@@ -46,7 +46,7 @@ export function WorkerCockpit() {
       setStatus('recording')
     } catch (err) {
       console.error('Erreur accès micro:', err)
-      setErrorMsg('Impossible d\'accéder au microphone. Veuillez autoriser l\'accès.')
+      setErrorMsg('Le micro est bloqué')
       setStatus('error')
     }
   }
@@ -94,15 +94,15 @@ export function WorkerCockpit() {
         {status === 'analyzing' && (
           <div className="flex flex-col items-center justify-center h-40">
             <Loader2 className="size-12 animate-spin text-primary mb-4" />
-            <p className="text-sm font-semibold animate-pulse">Analyse IA en cours...</p>
-            <p className="text-xs text-muted-foreground mt-2 text-center">Transcription et extraction<br/>des données chantier</p>
+            <p className="text-sm font-semibold animate-pulse">Analyse de la note...</p>
+            <p className="text-xs text-muted-foreground mt-2 text-center">Extraction des infos</p>
           </div>
         )}
 
         {status === 'success' && result && (
           <div className="w-full bg-surface border border-primary/30 rounded-2xl p-4 shadow-sm relative overflow-hidden animate-in zoom-in-95">
             <div className="absolute top-0 right-0 bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-bl-lg">
-              Brouillon IA
+              J'ai compris :
             </div>
             
             <h3 className="font-bold text-lg mb-1">{result.workType !== 'Non précisé' ? result.workType : 'Travail'}</h3>
@@ -112,8 +112,8 @@ export function WorkerCockpit() {
               <div className="text-muted-foreground text-xs">Zone</div>
               <div className="font-medium text-right">{result.zone}</div>
               
-              <div className="text-muted-foreground text-xs">Ouvriers</div>
-              <div className="font-medium text-right">{result.workers.join(', ') || 'Hubert'}</div>
+              <div className="text-muted-foreground text-xs">Avec</div>
+              <div className="font-medium text-right">{result.workers.join(', ') || 'Moi seul'}</div>
               
               <div className="text-muted-foreground text-xs">Durée</div>
               <div className="font-medium text-right">{result.time}</div>
@@ -136,10 +136,10 @@ export function WorkerCockpit() {
 
             <div className="flex gap-2">
               <Button size="secondary" className="flex-1" variant="primary" leftIcon={<Send className="size-4" />}>
-                Envoyer au Chef
+                Envoyer à Christophe
               </Button>
               <Button size="secondary" variant="secondary" className="flex-1" onClick={resetState}>
-                Annuler
+                Corriger
               </Button>
             </div>
           </div>
@@ -170,7 +170,7 @@ export function WorkerCockpit() {
             >
               <Mic className={`size-12 mb-2 ${status === 'recording' ? 'animate-pulse' : ''}`} />
               <span className="text-sm font-bold text-center px-4">
-                {status === 'recording' ? 'Enregistrement... Relâcher pour stop' : 'Maintenir pour dicter'}
+                {status === 'recording' ? 'Je t\'écoute...' : 'Maintiens pour dicter'}
               </span>
             </button>
             <p className="text-center text-xs text-muted-foreground mt-6 max-w-[250px]">
@@ -181,12 +181,19 @@ export function WorkerCockpit() {
         )}
 
         {status === 'error' && (
-          <div className="mt-4 text-center text-sm text-danger bg-danger/10 border border-danger/20 p-3 rounded-xl max-w-xs animate-in zoom-in-95">
-            <p className="font-semibold mb-1">Oups !</p>
-            <p>{errorMsg}</p>
-            <Button size="compact" variant="ghost" className="mt-2 text-danger hover:bg-danger/20" onClick={resetState}>
-              Réessayer
-            </Button>
+          <div className="mt-4 text-center text-sm text-danger bg-danger/10 border border-danger/20 p-4 rounded-xl max-w-xs animate-in zoom-in-95 w-full">
+            <p className="font-bold mb-1 text-base">{errorMsg}</p>
+            <p className="text-xs text-danger/80 mb-4">Pour dicter, autorisez le micro dans votre navigateur ou les réglages du téléphone.</p>
+            <div className="flex flex-col gap-2">
+              <Button size="secondary" variant="primary" className="w-full bg-danger text-danger-foreground hover:bg-danger/90" onClick={handleRecordStart}>
+                Réessayer
+              </Button>
+              <Link href="/ajouter-tache" className="w-full">
+                <Button size="secondary" variant="secondary" className="w-full border-danger/30 text-danger hover:bg-danger/10">
+                  Écrire une note
+                </Button>
+              </Link>
+            </div>
           </div>
         )}
       </div>

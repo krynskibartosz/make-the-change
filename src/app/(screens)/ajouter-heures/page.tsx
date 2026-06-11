@@ -15,6 +15,16 @@ function AjouterHeuresForm() {
   const [comment, setComment] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  // Calcul du temps total
+  const start = new Date(`1970-01-01T${startTime || '00:00'}:00`)
+  const end = new Date(`1970-01-01T${endTime || '00:00'}:00`)
+  let diffMinutes = (end.getTime() - start.getTime()) / 60000
+  if (diffMinutes < 0) diffMinutes += 24 * 60 // Gérer le passage minuit
+  diffMinutes -= parseInt(pauseMinutes, 10) || 0
+  const totalHours = Math.max(0, Math.floor(diffMinutes / 60))
+  const totalMins = Math.max(0, diffMinutes % 60)
+  const totalString = `${totalHours}h${totalMins > 0 ? totalMins.toString().padStart(2, '0') : '00'}`
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -118,6 +128,16 @@ function AjouterHeuresForm() {
 
       <div className="fixed bottom-0 left-0 right-0 p-4 pb-[max(env(safe-area-inset-bottom),1rem)] bg-background/90 backdrop-blur-md border-t border-border/50 z-40">
         <div className="max-w-md mx-auto">
+          <div className="bg-surface border border-primary/20 p-3 rounded-xl mb-3 flex items-center justify-between shadow-sm">
+            <div className="text-sm">
+              <p className="font-semibold text-muted-foreground mb-0.5">Total calculé</p>
+              <p className="font-bold text-lg leading-none">{totalString}</p>
+            </div>
+            <div className="text-right">
+              <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider mb-1">Envoi à Christophe</p>
+              <p className="text-xs text-primary font-medium">Pour validation</p>
+            </div>
+          </div>
           <button
             type="submit"
             form="add-hours-form"
