@@ -53,11 +53,6 @@ export const clarusTabs = [
     icon: ImageIcon,
   },
   {
-    href: '/board',
-    label: 'Tableau',
-    icon: Kanban,
-  },
-  {
     href: '/projets',
     label: 'Projets',
     icon: Briefcase,

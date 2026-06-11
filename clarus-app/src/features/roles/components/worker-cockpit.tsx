@@ -1,6 +1,6 @@
 'use client'
 
-import { Camera, Clock, Mic, AlertTriangle, CheckCircle2, Loader2, X, Send, Receipt } from 'lucide-react'
+import { Camera, Clock, Mic, AlertTriangle, CheckCircle2, Loader2, X, Send, Receipt, CalendarDays, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { useState, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui'
@@ -236,6 +236,25 @@ export function WorkerCockpit() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Accès Roadmap Secondaire */}
+      <div className="mt-2 pb-12">
+        <Link 
+          href="/roadmap-viewer" 
+          className="flex items-center justify-between gap-3 rounded-2xl border border-primary/20 bg-primary/5 p-4 active:bg-primary/10 transition-colors"
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+              <CalendarDays className="size-5" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm font-bold text-foreground">Planning global</span>
+              <span className="text-xs text-muted-foreground">Voir le diagramme du chantier</span>
+            </div>
+          </div>
+          <ChevronRight className="size-5 text-muted-foreground" />
+        </Link>
       </div>
     </div>
   )
