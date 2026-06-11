@@ -18,6 +18,7 @@ import { cn } from '@/lib/utils/cn'
 type KanbanBoardProps = {
   initialTasks: Task[]
   onStatusChange: (taskId: string, newStatus: TaskStatus) => Promise<void>
+  onTaskClick?: (task: Task) => void
 }
 
 type ColumnDef = {
@@ -66,7 +67,7 @@ const COLUMNS: ColumnDef[] = [
   },
 ]
 
-export function KanbanBoard({ initialTasks, onStatusChange }: KanbanBoardProps) {
+export function KanbanBoard({ initialTasks, onStatusChange, onTaskClick }: KanbanBoardProps) {
   const [tasks, setTasks] = useState<Task[]>(initialTasks)
   const [loadingId, setLoadingId] = useState<string | null>(null)
 
@@ -77,20 +78,6 @@ export function KanbanBoard({ initialTasks, onStatusChange }: KanbanBoardProps) 
       setTasks((prev) => prev.map((t) => (t.id === taskId ? { ...t, status: newStatus } : t)))
     } finally {
       setLoadingId(null)
-    }
-  }
-
-  // Quick next status logic for simple mobile interaction
-  const getNextStatus = (current: TaskStatus): TaskStatus | null => {
-    switch (current) {
-      case 'to_check':
-        return 'to_do'
-      case 'to_do':
-        return 'in_progress'
-      case 'in_progress':
-        return 'done'
-      default:
-        return null
     }
   }
 
@@ -127,13 +114,12 @@ export function KanbanBoard({ initialTasks, onStatusChange }: KanbanBoardProps) 
               ) : (
                 columnTasks.map((task) => {
                   const isBlocked = task.status === 'blocked'
-                  const nextStatus = getNextStatus(task.status)
-
                   return (
                     <div
                       key={task.id}
+                      onClick={() => onTaskClick?.(task)}
                       className={cn(
-                        'relative bg-surface border border-border rounded-xl p-4 flex flex-col gap-3 shadow-sm transition-all',
+                        'relative bg-surface border border-border rounded-xl p-4 flex flex-col gap-3 shadow-sm transition-all cursor-pointer active:scale-[0.98]',
                         loadingId === task.id ? 'opacity-50 scale-95' : 'hover:border-border/80',
                         isBlocked && 'border-red-500/30 bg-red-500/5',
                       )}
@@ -158,46 +144,6 @@ export function KanbanBoard({ initialTasks, onStatusChange }: KanbanBoardProps) 
                           <MapPin className="size-3.5" />
                           <span>Zone {task.zoneId?.slice(0, 4) || 'Générale'}</span>
                         </div>
-                      </div>
-
-                      {/* Actions */}
-                      <div className="flex items-center gap-2 mt-2 pt-3 border-t border-border/50">
-                        {/* Dropdown-like statuts for mobile prototype */}
-                        <select
-                          className="flex-1 bg-surface-elevated text-xs font-medium border-none rounded-lg p-2 focus:ring-0 appearance-none"
-                          value={task.status}
-                          onChange={(e) =>
-                            handleStatusChange(task.id, e.target.value as TaskStatus)
-                          }
-                          disabled={loadingId === task.id}
-                        >
-                          <option value="to_check">Inbox</option>
-                          <option value="to_do">À faire</option>
-                          <option value="in_progress">En cours</option>
-                          <option value="blocked">Bloquant</option>
-                          <option value="done">Terminé</option>
-                        </select>
-
-                        {nextStatus && (
-                          <button
-                            onClick={() => handleStatusChange(task.id, nextStatus)}
-                            disabled={loadingId === task.id}
-                            className="bg-primary/10 text-primary hover:bg-primary/20 p-2 rounded-lg transition-colors"
-                            aria-label="Avancer"
-                          >
-                            <ChevronRight className="size-4" />
-                          </button>
-                        )}
-                        {!isBlocked && task.status !== 'done' && (
-                          <button
-                            onClick={() => handleStatusChange(task.id, 'blocked')}
-                            disabled={loadingId === task.id}
-                            className="bg-red-500/10 text-red-500 hover:bg-red-500/20 p-2 rounded-lg transition-colors"
-                            aria-label="Signaler un blocage"
-                          >
-                            <AlertTriangle className="size-4" />
-                          </button>
-                        )}
                       </div>
                     </div>
                   )

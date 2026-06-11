@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Badge, Card } from '@/components/ui'
 import { SegmentedControl } from '@/components/ui/segmented-control'
 import { KanbanBoard } from '@/features/board/components/kanban-board'
+import { TaskStatusSheet } from '@/features/board/components/task-status-sheet'
 import { ProjectRoadmap } from '@/features/projects/components/project-roadmap'
 import type { Phase, Task, TaskStatus } from '@/lib/domain'
 import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
@@ -16,6 +17,7 @@ export default function RoadmapViewerPage() {
   const [tasks, setTasks] = useState<Task[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [viewMode, setViewMode] = useState('roadmap')
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null)
 
   const loadData = useCallback(async () => {
     setIsLoading(true)
@@ -122,11 +124,15 @@ export default function RoadmapViewerPage() {
                     return (
                       <Card
                         key={task.id}
-                        className={`flex items-center gap-3 p-3 transition-all duration-300 ${isDone ? 'opacity-60 bg-muted/50' : 'bg-surface'}`}
+                        className={`flex items-center gap-3 p-3 transition-all duration-300 cursor-pointer active:scale-[0.98] ${isDone ? 'opacity-60 bg-muted/50' : 'bg-surface'}`}
+                        onClick={() => setSelectedTask(task)}
                       >
                         <button
                           type="button"
-                          onClick={() => toggleStatus(task)}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            toggleStatus(task)
+                          }}
                           className="flex size-6 shrink-0 items-center justify-center rounded-full transition-colors hover:text-primary focus:outline-none"
                           aria-label={isDone ? 'Marquer comme à faire' : 'Marquer comme terminé'}
                         >
@@ -163,11 +169,22 @@ export default function RoadmapViewerPage() {
 
             {viewMode === 'board' && (
               <div className="flex-1 w-full overflow-hidden mt-4">
-                <KanbanBoard initialTasks={tasks} onStatusChange={updateTaskStatus} />
+                <KanbanBoard
+                  initialTasks={tasks}
+                  onStatusChange={updateTaskStatus}
+                  onTaskClick={setSelectedTask}
+                />
               </div>
             )}
           </>
         )}
+
+        <TaskStatusSheet
+          task={selectedTask}
+          isOpen={!!selectedTask}
+          onClose={() => setSelectedTask(null)}
+          onStatusChange={updateTaskStatus}
+        />
       </main>
     </div>
   )
