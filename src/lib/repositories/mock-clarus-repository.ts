@@ -201,7 +201,7 @@ export const createMockClarusRepository = (): ClarusRepository => {
         zoneId: input.zoneId,
         title: input.title,
         description: input.description,
-        status: 'to_do',
+        status: input.status,
         priority: input.priority ?? 'normal',
         assignedTo: input.assignedTo,
         dueDate: input.dueDate,

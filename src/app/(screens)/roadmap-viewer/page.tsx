@@ -55,6 +55,20 @@ export default function RoadmapViewerPage() {
     await updateTaskStatus(task.id, newStatus)
   }
 
+  const handleTaskCreate = async (title: string, status: TaskStatus = 'to_do') => {
+    try {
+      await mockClarusRepository.createTask({
+        projectId: 'proj-1', // Mock project
+        title,
+        status,
+        priority: 'normal',
+      })
+      await loadData()
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   return (
     <div className="flex min-h-dvh flex-col bg-background text-foreground pb-20">
       <header className="sticky top-0 z-40 flex flex-col border-b border-border/30 bg-background/80 backdrop-blur-xl pt-[max(env(safe-area-inset-top),1rem)]">
@@ -164,6 +178,27 @@ export default function RoadmapViewerPage() {
                     )
                   })
                 )}
+
+                {/* Quick Add List */}
+                <form
+                  onSubmit={async (e) => {
+                    e.preventDefault()
+                    const input = e.currentTarget.elements.namedItem('title') as HTMLInputElement
+                    if (input.value.trim()) {
+                      const val = input.value.trim()
+                      input.value = ''
+                      await handleTaskCreate(val, 'to_do')
+                    }
+                  }}
+                  className="mt-2"
+                >
+                  <input
+                    name="title"
+                    type="text"
+                    placeholder="+ Ajouter une tâche..."
+                    className="w-full bg-surface border border-border/50 rounded-xl px-4 py-3.5 text-sm font-medium placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all shadow-sm"
+                  />
+                </form>
               </div>
             )}
 
@@ -173,6 +208,7 @@ export default function RoadmapViewerPage() {
                   initialTasks={tasks}
                   onStatusChange={updateTaskStatus}
                   onTaskClick={setSelectedTask}
+                  onTaskCreate={handleTaskCreate}
                 />
               </div>
             )}

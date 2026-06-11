@@ -19,6 +19,7 @@ type KanbanBoardProps = {
   initialTasks: Task[]
   onStatusChange: (taskId: string, newStatus: TaskStatus) => Promise<void>
   onTaskClick?: (task: Task) => void
+  onTaskCreate?: (title: string, status: TaskStatus) => Promise<void>
 }
 
 type ColumnDef = {
@@ -67,7 +68,12 @@ const COLUMNS: ColumnDef[] = [
   },
 ]
 
-export function KanbanBoard({ initialTasks, onStatusChange, onTaskClick }: KanbanBoardProps) {
+export function KanbanBoard({
+  initialTasks,
+  onStatusChange,
+  onTaskClick,
+  onTaskCreate,
+}: KanbanBoardProps) {
   const [tasks, setTasks] = useState<Task[]>(initialTasks)
   const [loadingId, setLoadingId] = useState<string | null>(null)
 
@@ -148,6 +154,29 @@ export function KanbanBoard({ initialTasks, onStatusChange, onTaskClick }: Kanba
                     </div>
                   )
                 })
+              )}
+
+              {/* Quick Add Input */}
+              {onTaskCreate && (
+                <form
+                  onSubmit={async (e) => {
+                    e.preventDefault()
+                    const input = e.currentTarget.elements.namedItem('title') as HTMLInputElement
+                    if (input.value.trim()) {
+                      const val = input.value.trim()
+                      input.value = ''
+                      await onTaskCreate(val, col.id)
+                    }
+                  }}
+                  className="mt-1"
+                >
+                  <input
+                    name="title"
+                    type="text"
+                    placeholder="Nouvelle tâche..."
+                    className="w-full bg-surface/50 border border-border/50 rounded-xl px-4 py-3 text-sm font-medium placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all"
+                  />
+                </form>
               )}
             </div>
           </div>
