@@ -10,11 +10,7 @@ import { mockClarusRepository } from '@/lib/repositories'
 
 import { createDraftInputFromState } from './draft'
 import { ADD_INTERVENTION_STEPS } from './options'
-import {
-  type AddInterventionAction,
-  createInitialAddInterventionState,
-  reduceAddInterventionState,
-} from './reducer'
+import { createInitialAddInterventionState, reduceAddInterventionState } from './reducer'
 import { StepQuickForm } from './step-quick-form'
 import { StepSummary } from './step-summary'
 import { validateAddInterventionState } from './validation'

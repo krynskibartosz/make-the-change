@@ -3,7 +3,7 @@
 import { User2 } from 'lucide-react'
 import type { Dispatch } from 'react'
 
-import { Badge, Button, Input, NumberStepper, SelectableCard, Textarea } from '@/components/ui'
+import { Input, NumberStepper, Textarea } from '@/components/ui'
 import { calculateWorkEntryAmount, calculateWorkEntryDuration } from '@/lib/calculations'
 import type { Person, Phase, Zone } from '@/lib/domain'
 

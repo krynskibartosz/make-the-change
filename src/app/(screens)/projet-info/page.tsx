@@ -16,7 +16,7 @@ export default function ProjetInfoPage() {
 
   useEffect(() => {
     loadData()
-  }, [])
+  }, [loadData])
 
   const loadData = async () => {
     const p = await mockClarusRepository.getProject()

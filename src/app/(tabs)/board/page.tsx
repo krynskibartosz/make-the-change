@@ -13,7 +13,7 @@ export default function BoardPage() {
 
   useEffect(() => {
     loadTasks()
-  }, [])
+  }, [loadTasks])
 
   const loadTasks = async () => {
     const data = await mockClarusRepository.getTasks()

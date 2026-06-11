@@ -1,11 +1,4 @@
-import {
-  AlertTriangle,
-  BadgeCheck,
-  Clock,
-  Image as ImageIcon,
-  MapPin,
-  PackageCheck,
-} from 'lucide-react'
+import { BadgeCheck, Clock, Image as ImageIcon, PackageCheck } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import type {

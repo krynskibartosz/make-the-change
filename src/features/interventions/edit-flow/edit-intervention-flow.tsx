@@ -10,9 +10,7 @@ import { mockClarusRepository } from '@/lib/repositories'
 
 import {
   ADD_INTERVENTION_STEPS,
-  type AddInterventionAction,
   createDraftInputFromState,
-  createEditInterventionState,
   reduceAddInterventionState,
   StepQuickForm,
   StepSummary,

@@ -32,7 +32,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
       setIsReady(true)
     }
     loadProjects()
-  }, [])
+  }, [activeProjectId])
 
   const activeProject = projects.find((p) => p.id === activeProjectId) || null
 

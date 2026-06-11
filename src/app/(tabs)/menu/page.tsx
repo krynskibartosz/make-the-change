@@ -9,7 +9,6 @@ import {
   type LucideIcon,
   Map,
   Package,
-  PlusCircle,
   Settings,
   Users,
 } from 'lucide-react'

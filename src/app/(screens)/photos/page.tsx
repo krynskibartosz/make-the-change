@@ -1,6 +1,6 @@
 'use client'
 
-import { Camera, Clock, Filter, ImageIcon, MapPin, User, X } from 'lucide-react'
+import { Camera, Filter, MapPin, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import type { Photo } from '@/lib/domain'

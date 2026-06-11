@@ -1,7 +1,6 @@
 import { selectTodaySummary } from '@/features/dashboard'
 import { calculateWorkEntryAmount, calculateWorkEntryDuration } from '@/lib/calculations'
 import type {
-  Client,
   CreateExpenseInput,
   CreateInterventionDraftInput,
   CreateMaterialMovementInput,
@@ -15,7 +14,6 @@ import type {
   Person,
   Phase,
   Photo,
-  Project,
   Task,
   TaskStatus,
   UpdatePersonInput,
@@ -408,6 +406,6 @@ const slugify = (value: string): string =>
 function clonePerson(person: Person): Person {
   return { ...person }
 }
-function clonePhoto(photo: Photo): Photo {
+function _clonePhoto(photo: Photo): Photo {
   return { ...photo }
 }

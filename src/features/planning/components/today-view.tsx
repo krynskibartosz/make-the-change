@@ -1,15 +1,6 @@
 'use client'
 
-import {
-  AlertTriangle,
-  Camera,
-  CheckCircle2,
-  Circle,
-  Clock,
-  Euro,
-  ListTodo,
-  Package,
-} from 'lucide-react'
+import { AlertTriangle, Camera, Circle, Clock, Euro, ListTodo, Package } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import type { InterventionListItem, Task, TodaySummary } from '@/lib/domain'

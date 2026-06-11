@@ -11,10 +11,9 @@ import {
   Mic,
   Receipt,
   Send,
-  X,
 } from 'lucide-react'
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { Button } from '@/components/ui'
 import { ProjectSwitcher } from '@/features/projects/components/project-switcher'
 import {
@@ -188,7 +187,7 @@ export function WorkerCockpit() {
                 e.preventDefault()
                 handleRecordStop()
               }}
-              onPointerLeave={(e) => {
+              onPointerLeave={(_e) => {
                 if (status === 'recording') {
                   handleRecordStop()
                 }

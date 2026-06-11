@@ -1,7 +1,6 @@
 'use client'
 
-import { AlertCircle, CheckCircle2, ChevronLeft, Clock, Euro, ImageIcon } from 'lucide-react'
-import Link from 'next/link'
+import { AlertCircle, CheckCircle2, Clock, Euro, ImageIcon } from 'lucide-react'
 import { useRole } from '@/lib/role-context'
 
 export default function ValidationsPage() {

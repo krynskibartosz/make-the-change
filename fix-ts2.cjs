@@ -1,11 +1,11 @@
-const fs = require('fs')
+const fs = require('node:fs')
 
 function rep(file, search, replaceStr) {
   try {
     let text = fs.readFileSync(file, 'utf8')
     text = text.replace(search, replaceStr)
     fs.writeFileSync(file, text)
-  } catch (e) {}
+  } catch (_e) {}
 }
 
 const base =

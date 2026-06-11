@@ -1,12 +1,12 @@
-const fs = require('fs')
+const fs = require('node:fs')
 
 const rep = (f, a, b) => {
   try {
     let content = fs.readFileSync(f, 'utf8')
     content = content.replace(a, b)
     fs.writeFileSync(f, content)
-  } catch (e) {
-    console.error('Failed on ' + f)
+  } catch (_e) {
+    console.error(`Failed on ${f}`)
   }
 }
 

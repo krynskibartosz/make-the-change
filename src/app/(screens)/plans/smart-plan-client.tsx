@@ -14,7 +14,7 @@ export function SmartPlanClient({ plan }: { plan: Plan }) {
   const [pins, setPins] = useState<PlanPin[]>([])
   const [selectedZoneId, setSelectedZoneId] = useState<string | null>(null)
   const [selectedPinId, setSelectedPinId] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [_isLoading, setIsLoading] = useState(true)
 
   const loadData = useCallback(async () => {
     setIsLoading(true)
@@ -40,7 +40,7 @@ export function SmartPlanClient({ plan }: { plan: Plan }) {
   useEffect(() => {
     setSelectedZoneId(null)
     setSelectedPinId(null)
-  }, [mode])
+  }, [])
 
   const selectedZone = zones.find((z) => z.id === selectedZoneId)
   const selectedPin = pins.find((p) => p.id === selectedPinId)

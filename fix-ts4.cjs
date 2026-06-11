@@ -1,5 +1,5 @@
-const fs = require('fs')
-const path = require('path')
+const fs = require('node:fs')
+const path = require('node:path')
 
 const base =
   'c:\\Users\\utilisateur\\Downloads\\make-the-change-main\\make-the-change-main\\clarus-standalone'
@@ -13,7 +13,7 @@ function replaceInFile(filePath, replacements) {
     }
     fs.writeFileSync(fullPath, content)
   } catch (e) {
-    console.error('Error in ' + filePath, e)
+    console.error(`Error in ${filePath}`, e)
   }
 }
 

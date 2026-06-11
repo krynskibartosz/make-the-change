@@ -19,7 +19,6 @@ import type {
   PlanZone,
   Project,
   Task,
-  TaskPriority,
   TaskStatus,
   TimelineEvent,
   TodaySummary,

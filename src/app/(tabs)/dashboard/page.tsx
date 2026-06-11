@@ -1,16 +1,6 @@
 'use client'
 
-import {
-  Activity,
-  AlertTriangle,
-  Briefcase,
-  CheckCircle2,
-  Clock,
-  DollarSign,
-  Euro,
-  TrendingUp,
-  Users,
-} from 'lucide-react'
+import { Activity, AlertTriangle, Briefcase, Clock, DollarSign, Euro, Users } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import type { DashboardKPIs } from '@/lib/domain'

@@ -12,7 +12,7 @@ export default function ProjetsPage() {
 
   useEffect(() => {
     loadData()
-  }, [])
+  }, [loadData])
 
   const loadData = async () => {
     const project = await mockClarusRepository.getProject()

@@ -1,6 +1,6 @@
 'use client'
 
-import { Building2, ChevronRight, Phone, Plus, Users, Wrench } from 'lucide-react'
+import { Building2, ChevronRight, Phone, Plus, Users } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'

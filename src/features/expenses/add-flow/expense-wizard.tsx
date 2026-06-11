@@ -12,7 +12,7 @@ import { expenseAddFlowReducer, initialExpenseAddFlowState } from './reducer'
 export function ExpenseWizard() {
   const router = useRouter()
   const [state, dispatch] = useReducer(expenseAddFlowReducer, initialExpenseAddFlowState)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [_isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSave = async (finalState: typeof state) => {
     setIsSubmitting(true)

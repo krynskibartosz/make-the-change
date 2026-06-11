@@ -1,16 +1,6 @@
 'use client'
 
-import {
-  AlertCircle,
-  AlertTriangle,
-  CheckCircle2,
-  ChevronRight,
-  Clock,
-  HelpCircle,
-  Inbox,
-  ListTodo,
-  MapPin,
-} from 'lucide-react'
+import { AlertTriangle, CheckCircle2, Clock, Inbox, ListTodo, MapPin } from 'lucide-react'
 import { useState } from 'react'
 import type { Task, TaskStatus } from '@/lib/domain'
 import { cn } from '@/lib/utils/cn'
@@ -77,7 +67,7 @@ export function KanbanBoard({
   const [tasks, setTasks] = useState<Task[]>(initialTasks)
   const [loadingId, setLoadingId] = useState<string | null>(null)
 
-  const handleStatusChange = async (taskId: string, newStatus: TaskStatus) => {
+  const _handleStatusChange = async (taskId: string, newStatus: TaskStatus) => {
     setLoadingId(taskId)
     try {
       await onStatusChange(taskId, newStatus)

@@ -4,7 +4,6 @@ import {
   CheckSquare,
   ClipboardCheck,
   ImageIcon,
-  Kanban,
   type LucideIcon,
   MapPinned,
   Menu,

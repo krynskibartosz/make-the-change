@@ -54,7 +54,7 @@ function AjouterHeuresForm() {
 
       toast({ title: 'Heures enregistrées ✓', variant: 'success' })
       router.back()
-    } catch (error) {
+    } catch (_error) {
       toast({ title: "Erreur lors de l'enregistrement", variant: 'error' })
     } finally {
       setIsSubmitting(false)

@@ -7,7 +7,6 @@ import {
   Euro,
   FileText,
   Mail,
-  MapPin,
   Phone,
   User,
 } from 'lucide-react'
@@ -28,7 +27,7 @@ export default function ClientProfilePage() {
 
   useEffect(() => {
     loadData()
-  }, [id])
+  }, [loadData])
 
   const loadData = async () => {
     const c = await mockClarusRepository.getClient(id)

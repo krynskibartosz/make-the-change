@@ -2,7 +2,7 @@
 
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import { ArrowRight, ChevronRight, Euro, HardHat, Receipt, ShoppingCart } from 'lucide-react'
+import { ChevronRight, Euro, HardHat, Receipt, ShoppingCart } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
