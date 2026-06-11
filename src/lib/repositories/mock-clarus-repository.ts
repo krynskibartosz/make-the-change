@@ -173,6 +173,7 @@ export const createMockClarusRepository = (): ClarusRepository => {
     getPlanZones: async (planId: string) => mockPlanZones.filter((z) => z.planId === planId),
     getPlanPins: async (planId: string) => mockPlanPins.filter((p) => p.planId === planId),
     getTasks: async () => [...tasks],
+    getTaskById: async (id: string) => tasks.find((t) => t.id === id) || null,
     getInterventions: async () => [...interventions],
     getInterventionById: async (id: string) =>
       interventions.find((intervention) => intervention.id === id) ?? null,
@@ -223,6 +224,19 @@ export const createMockClarusRepository = (): ClarusRepository => {
               ? undefined
               : tasks[index]?.completedAt,
       } as Task
+      tasks = [...tasks.slice(0, index), updatedTask, ...tasks.slice(index + 1)]
+      return updatedTask
+    },
+    updateTask: async (id: string, input: Partial<Task>) => {
+      const index = tasks.findIndex((t) => t.id === id)
+      if (index === -1) throw new Error('Task not found')
+      const updatedTask: Task = { ...tasks[index], ...input } as Task
+      // Ensure completion date consistency if status changes
+      if (input.status === 'done' && tasks[index].status !== 'done') {
+        updatedTask.completedAt = new Date().toISOString()
+      } else if (input.status && input.status !== 'done') {
+        updatedTask.completedAt = undefined
+      }
       tasks = [...tasks.slice(0, index), updatedTask, ...tasks.slice(index + 1)]
       return updatedTask
     },

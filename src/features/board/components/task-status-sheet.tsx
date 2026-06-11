@@ -1,4 +1,5 @@
-import { AlertTriangle, CheckCircle2, Clock, Inbox, ListTodo } from 'lucide-react'
+import { AlertTriangle, CheckCircle2, Clock, Edit2, Inbox, ListTodo } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { BottomSheet } from '@/components/ui'
 import type { Task, TaskStatus } from '@/lib/domain'
 import { cn } from '@/lib/utils/cn'
@@ -37,6 +38,8 @@ const STATUS_OPTIONS = [
 ]
 
 export function TaskStatusSheet({ task, isOpen, onClose, onStatusChange }: TaskStatusSheetProps) {
+  const router = useRouter()
+
   if (!task) return null
 
   return (
@@ -94,6 +97,20 @@ export function TaskStatusSheet({ task, isOpen, onClose, onStatusChange }: TaskS
               )
             })}
           </div>
+        </div>
+
+        <div className="pt-4 mt-2 border-t border-border">
+          <button
+            type="button"
+            onClick={() => {
+              onClose()
+              router.push(`/taches/${task.id}/editer`)
+            }}
+            className="w-full flex items-center justify-center gap-2 p-4 rounded-xl border border-border bg-surface hover:bg-surface-elevated transition-all font-bold text-base active:scale-[0.98]"
+          >
+            <Edit2 className="size-5 text-muted-foreground" />
+            Modifier la tâche
+          </button>
         </div>
       </div>
     </BottomSheet>
