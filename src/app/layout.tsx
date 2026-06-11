@@ -4,7 +4,6 @@ import type { ReactNode } from 'react'
 
 import { Toaster } from '@/components/ui/toaster'
 import { RoleProvider } from '@/lib/role-context'
-import { DemoRoleSwitcher } from '@/components/demo-role-switcher'
 import './globals.css'
 
 const geistSans = Geist({
@@ -41,7 +40,6 @@ export default function RootLayout({ children, modal }: RootLayoutProps) {
         <RoleProvider>
           {children}
           {modal}
-          <DemoRoleSwitcher />
           <Toaster />
         </RoleProvider>
       </body>

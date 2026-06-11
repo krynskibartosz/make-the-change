@@ -11,6 +11,7 @@ import {
   PlusCircle,
   Settings,
   Users,
+  Bell,
 } from 'lucide-react'
 import Link from 'next/link'
 import { useRole, type AppRole } from '@/lib/role-context'
@@ -159,10 +160,20 @@ export default function MenuPage() {
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col pb-32 text-foreground">
-      <header className="sticky top-0 z-30 flex items-center gap-4 pb-4 px-5 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/30">
+      <header className="sticky top-0 z-30 flex items-center justify-between pb-4 px-5 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/30">
         <div className="min-w-0">
           <h1 className="text-3xl font-semibold leading-tight">Menu</h1>
         </div>
+        <Link 
+          href="/notifications" 
+          className="relative flex items-center justify-center size-10 rounded-full hover:bg-surface-elevated transition-colors"
+        >
+          <Bell className="size-6" />
+          <span className="absolute top-2 right-2.5 flex size-2.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+            <span className="relative inline-flex rounded-full size-2.5 bg-primary border-2 border-background"></span>
+          </span>
+        </Link>
       </header>
 
       <div className="flex flex-col">
