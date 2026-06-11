@@ -2,8 +2,8 @@
 
 import { ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
-import { useRole } from '@/lib/role-context'
 import type { InterventionListItem, Person, Phase, Zone } from '@/lib/domain'
+import { useRole } from '@/lib/role-context'
 import { JournalClient } from './journal-client'
 
 export function HistoriqueView({
@@ -25,7 +25,9 @@ export function HistoriqueView({
 
   const isOuvrier = role === 'ouvrier'
   const title = isOuvrier ? 'Envoyés' : 'Historique'
-  const subtitle = isOuvrier ? 'Vos actions en attente de validation' : 'Toutes les interventions du chantier'
+  const subtitle = isOuvrier
+    ? 'Vos actions en attente de validation'
+    : 'Toutes les interventions du chantier'
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background pb-32 text-foreground">

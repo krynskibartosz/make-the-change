@@ -4,8 +4,8 @@ import { useRouter } from 'next/navigation'
 import { useReducer, useState } from 'react'
 import { CURRENT_PROJECT_ID } from '@/lib/constants'
 import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
-import { StepReceiptAndInfo } from './components/step-receipt-and-info'
 import { StepLinkToProject } from './components/step-link-to-project'
+import { StepReceiptAndInfo } from './components/step-receipt-and-info'
 import { StepResume } from './components/step-resume'
 import { expenseAddFlowReducer, initialExpenseAddFlowState } from './reducer'
 
@@ -32,7 +32,11 @@ export function ExpenseWizard() {
 
       await mockClarusRepository.createExpense({
         projectId: CURRENT_PROJECT_ID,
-        interventionId: finalState.linkToProject.linkType === 'intervention' && finalState.linkToProject.interventionId ? finalState.linkToProject.interventionId : undefined,
+        interventionId:
+          finalState.linkToProject.linkType === 'intervention' &&
+          finalState.linkToProject.interventionId
+            ? finalState.linkToProject.interventionId
+            : undefined,
         description: finalState.receiptAndInfo.titre,
         amount: Number.parseFloat(finalState.receiptAndInfo.montant),
         supplier: finalState.receiptAndInfo.fournisseur,

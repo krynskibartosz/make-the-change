@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { KanbanBoard } from '@/features/board/components/kanban-board'
-import { mockClarusRepository } from '@/lib/repositories'
-import type { Task, TaskStatus } from '@/lib/domain'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { KanbanBoard } from '@/features/board/components/kanban-board'
+import type { Task, TaskStatus } from '@/lib/domain'
+import { mockClarusRepository } from '@/lib/repositories'
 
 export default function BoardPage() {
   const [tasks, setTasks] = useState<Task[]>([])
@@ -35,7 +35,10 @@ export default function BoardPage() {
             <h1 className="text-2xl font-bold">Site Board</h1>
             <p className="text-sm text-muted-foreground">Kanban d'exécution</p>
           </div>
-          <Link href="/ajouter-tache" className="size-10 bg-primary/10 text-primary flex items-center justify-center rounded-full hover:bg-primary/20 transition-colors">
+          <Link
+            href="/ajouter-tache"
+            className="size-10 bg-primary/10 text-primary flex items-center justify-center rounded-full hover:bg-primary/20 transition-colors"
+          >
             <Plus className="size-5" />
           </Link>
         </div>

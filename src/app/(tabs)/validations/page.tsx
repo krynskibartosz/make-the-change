@@ -27,7 +27,9 @@ export default function ValidationsPage() {
             <div className="bg-orange-500/10 p-4 border-b border-orange-500/20 flex items-start gap-3">
               <AlertCircle className="size-5 text-orange-500 shrink-0 mt-0.5" />
               <div className="flex flex-col">
-                <span className="text-xs font-bold text-orange-600 uppercase tracking-wider mb-1">En attente de votre accord</span>
+                <span className="text-xs font-bold text-orange-600 uppercase tracking-wider mb-1">
+                  En attente de votre accord
+                </span>
                 <h2 className="font-semibold text-lg">Choix technique P1.7</h2>
               </div>
             </div>
@@ -36,37 +38,51 @@ export default function ValidationsPage() {
             <div className="p-5 flex flex-col gap-5">
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1">
-                  <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Situation</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
+                    Situation
+                  </h3>
                   <p className="text-sm leading-relaxed text-foreground">
-                    Lors de la démolition de la terrasse extérieure, nous avons constaté que la dalle de béton existante était plus épaisse que prévu.
+                    Lors de la démolition de la terrasse extérieure, nous avons constaté que la
+                    dalle de béton existante était plus épaisse que prévu.
                   </p>
                 </div>
                 <div className="flex flex-col gap-1">
-                  <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Pourquoi votre accord est nécessaire</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
+                    Pourquoi votre accord est nécessaire
+                  </h3>
                   <p className="text-sm leading-relaxed text-foreground">
-                    Avant de continuer la structure, nous devons confirmer cette option technique pour garantir la stabilité de la nouvelle dalle.
+                    Avant de continuer la structure, nous devons confirmer cette option technique
+                    pour garantir la stabilité de la nouvelle dalle.
                   </p>
                 </div>
               </div>
 
               {/* Preuves / Photos */}
               <div className="flex flex-col gap-2">
-                <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Preuves du terrain</h3>
+                <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
+                  Preuves du terrain
+                </h3>
                 <div className="flex gap-3 overflow-x-auto pb-2 snap-x">
                   <div className="h-24 w-32 shrink-0 bg-surface-elevated rounded-xl border border-border/50 flex flex-col items-center justify-center gap-2 snap-center">
                     <ImageIcon className="size-6 text-muted-foreground/50" />
-                    <span className="text-[10px] text-muted-foreground font-medium text-center px-1">Épaisseur de la dalle</span>
+                    <span className="text-[10px] text-muted-foreground font-medium text-center px-1">
+                      Épaisseur de la dalle
+                    </span>
                   </div>
                   <div className="h-24 w-32 shrink-0 bg-surface-elevated rounded-xl border border-border/50 flex flex-col items-center justify-center gap-2 snap-center">
                     <ImageIcon className="size-6 text-muted-foreground/50" />
-                    <span className="text-[10px] text-muted-foreground font-medium text-center px-1">Option technique P1.7</span>
+                    <span className="text-[10px] text-muted-foreground font-medium text-center px-1">
+                      Option technique P1.7
+                    </span>
                   </div>
                 </div>
               </div>
 
               {/* Impacts */}
               <div className="flex flex-col gap-3">
-                <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Impact estimé</h3>
+                <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
+                  Impact estimé
+                </h3>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="flex items-center gap-3 p-3 rounded-xl bg-surface-elevated border border-border/50">
                     <Clock className="size-5 text-blue-500" />
@@ -121,7 +137,6 @@ export default function ValidationsPage() {
             </div>
           </div>
         </section>
-
       </main>
     </div>
   )

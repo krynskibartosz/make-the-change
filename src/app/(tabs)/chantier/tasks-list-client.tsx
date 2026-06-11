@@ -1,14 +1,12 @@
 'use client'
 
-import { CheckCircle2, Circle } from 'lucide-react'
+import { CheckCircle2, Circle, Kanban, List } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { Badge, Card } from '@/components/ui'
-import type { Task } from '@/lib/domain'
-import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
-import { KanbanBoard } from '@/features/board/components/kanban-board'
 import { SegmentedControl } from '@/components/ui/segmented-control'
-import { Kanban, List } from 'lucide-react'
-import type { TaskStatus } from '@/lib/domain'
+import { KanbanBoard } from '@/features/board/components/kanban-board'
+import type { Task, TaskStatus } from '@/lib/domain'
+import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
 
 export function TasksListClient() {
   const [tasks, setTasks] = useState<Task[]>([])

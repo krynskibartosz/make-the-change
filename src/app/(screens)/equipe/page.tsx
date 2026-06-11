@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronRight, Plus, Users, Phone, Building2, Wrench } from 'lucide-react'
+import { Building2, ChevronRight, Phone, Plus, Users, Wrench } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -65,7 +65,7 @@ export default function EquipePage() {
 
                 <div className="flex flex-col items-end justify-between h-14">
                   {person.phone ? (
-                    <button 
+                    <button
                       type="button"
                       onClick={(e) => {
                         e.preventDefault()
@@ -84,8 +84,11 @@ export default function EquipePage() {
 
               {person.skills && person.skills.length > 0 && (
                 <div className="flex gap-1.5 flex-wrap ml-[4.25rem]">
-                  {person.skills.map(skill => (
-                    <span key={skill} className="text-[10px] font-bold uppercase tracking-wider bg-surface-elevated px-2 py-0.5 rounded-md text-muted-foreground border border-border flex items-center gap-1">
+                  {person.skills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="text-[10px] font-bold uppercase tracking-wider bg-surface-elevated px-2 py-0.5 rounded-md text-muted-foreground border border-border flex items-center gap-1"
+                    >
                       {skill}
                     </span>
                   ))}

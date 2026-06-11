@@ -29,7 +29,12 @@ export default function AjouterMembreEquipePage() {
       phone: phone || undefined,
       email: email || undefined,
       company: company || undefined,
-      skills: skillsStr ? skillsStr.split(',').map(s => s.trim()).filter(Boolean) : undefined,
+      skills: skillsStr
+        ? skillsStr
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean)
+        : undefined,
     })
 
     router.back()

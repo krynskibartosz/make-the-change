@@ -1,4 +1,4 @@
-import type { Project, Client } from '@/lib/domain'
+import type { Client, Project } from '@/lib/domain'
 
 export const DUPONT_CLIENT_ID = 'client-dupont'
 export const MARTIN_CLIENT_ID = 'client-martin'

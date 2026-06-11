@@ -5,9 +5,8 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import type { Photo } from '@/lib/domain'
 import { mockClarusRepository } from '@/lib/repositories'
-import { FullScreenSlideModal } from '../../@modal/_components/full-screen-slide-modal'
-
 import { useRole } from '@/lib/role-context'
+import { FullScreenSlideModal } from '../../@modal/_components/full-screen-slide-modal'
 
 type FilterType = 'all' | 'before' | 'during' | 'after'
 
@@ -69,7 +68,11 @@ export default function PhotosPage() {
 
   return (
     <>
-      <FullScreenSlideModal asPage headerMode="back" title={role === 'client' ? "Photos validées" : "Photos"}>
+      <FullScreenSlideModal
+        asPage
+        headerMode="back"
+        title={role === 'client' ? 'Photos validées' : 'Photos'}
+      >
         <div className="flex-1 overflow-y-auto pb-[calc(env(safe-area-inset-bottom)+100px)]">
           {/* Segmented Control / Filters */}
           <div className="sticky top-0 z-20 bg-background/90 backdrop-blur-md border-b border-border p-4 pb-3 flex gap-2 overflow-x-auto no-scrollbar">

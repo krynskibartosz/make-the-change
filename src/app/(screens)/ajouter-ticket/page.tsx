@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { Camera, CheckCircle2, ChevronLeft, Loader2, Receipt } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { Camera, ChevronLeft, Loader2, Receipt, CheckCircle2 } from 'lucide-react'
+import { useState } from 'react'
 import { Button, StickyActionBar } from '@/components/ui'
 
 type Status = 'idle' | 'scanning' | 'success'
@@ -27,7 +27,7 @@ export default function AjouterTicketPage() {
     <main className="flex min-h-dvh flex-col bg-background text-foreground">
       {/* Header */}
       <header className="sticky top-0 z-30 flex items-center justify-between pb-4 px-5 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/30">
-        <button 
+        <button
           onClick={() => router.back()}
           className="p-2 -ml-2 rounded-full hover:bg-surface-elevated transition-colors"
         >
@@ -41,7 +41,8 @@ export default function AjouterTicketPage() {
         {status === 'idle' && (
           <div className="flex-1 flex flex-col gap-8">
             <p className="text-muted-foreground text-center text-sm">
-              Prenez en photo votre ticket de caisse. L'IA en extraira le montant et le fournisseur automatiquement.
+              Prenez en photo votre ticket de caisse. L'IA en extraira le montant et le fournisseur
+              automatiquement.
             </p>
 
             {/* Fausse zone caméra */}
@@ -51,10 +52,10 @@ export default function AjouterTicketPage() {
               <span className="text-primary font-medium">Cadrez le ticket ici</span>
             </div>
 
-            <StickyActionBar 
+            <StickyActionBar
               primaryAction={
-                <Button 
-                  size="primary" 
+                <Button
+                  size="primary"
                   className="w-full h-16 text-lg rounded-2xl flex items-center justify-center gap-3"
                   onClick={handleScan}
                 >
@@ -73,10 +74,13 @@ export default function AjouterTicketPage() {
               <div className="bg-surface border-4 border-primary rounded-3xl p-6 relative">
                 <Receipt className="size-16 text-primary animate-pulse" />
                 {/* Ligne de scan animée */}
-                <div className="absolute left-0 right-0 h-1 bg-primary shadow-[0_0_8px_2px_hsl(var(--primary))] animate-scan" style={{ top: '50%' }} />
+                <div
+                  className="absolute left-0 right-0 h-1 bg-primary shadow-[0_0_8px_2px_hsl(var(--primary))] animate-scan"
+                  style={{ top: '50%' }}
+                />
               </div>
             </div>
-            
+
             <div className="text-center">
               <h2 className="text-xl font-bold mb-2">Analyse en cours...</h2>
               <p className="text-muted-foreground flex items-center justify-center gap-2">
@@ -92,11 +96,14 @@ export default function AjouterTicketPage() {
             <div className="size-24 bg-emerald-500/10 rounded-full flex items-center justify-center">
               <CheckCircle2 className="size-12 text-emerald-500" />
             </div>
-            
+
             <div className="text-center">
               <h2 className="text-2xl font-bold mb-2">Ticket lu par l'IA !</h2>
-              <p className="text-muted-foreground mb-6">Vérifiez les informations ci-dessous. Elles seront envoyées à Christophe pour validation.</p>
-              
+              <p className="text-muted-foreground mb-6">
+                Vérifiez les informations ci-dessous. Elles seront envoyées à Christophe pour
+                validation.
+              </p>
+
               <div className="bg-surface border border-border rounded-2xl p-5 text-left flex flex-col gap-3 shadow-sm mb-8 w-full max-w-[280px]">
                 <div className="flex justify-between items-center border-b border-border/50 pb-3">
                   <span className="text-muted-foreground text-sm">Type</span>
@@ -113,14 +120,10 @@ export default function AjouterTicketPage() {
               </div>
 
               <div className="flex flex-col gap-3 mt-4 w-full px-5">
-                <Button 
-                  size="primary" 
-                  className="w-full rounded-xl"
-                  onClick={handleFinish}
-                >
+                <Button size="primary" className="w-full rounded-xl" onClick={handleFinish}>
                   Envoyer à Christophe
                 </Button>
-                <Button 
+                <Button
                   size="primary"
                   variant="secondary"
                   className="w-full rounded-xl border-border bg-surface text-foreground"
@@ -135,7 +138,9 @@ export default function AjouterTicketPage() {
       </div>
 
       {/* Animation CSS injectée pour le scanner */}
-      <style dangerouslySetInnerHTML={{__html: `
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         @keyframes scan {
           0% { top: 10%; opacity: 0; }
           10% { opacity: 1; }
@@ -145,7 +150,9 @@ export default function AjouterTicketPage() {
         .animate-scan {
           animation: scan 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
-      `}} />
+      `,
+        }}
+      />
     </main>
   )
 }

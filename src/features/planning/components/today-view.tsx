@@ -1,9 +1,18 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { AlertTriangle, Camera, CheckCircle2, Circle, Clock, Euro, ListTodo, Package } from 'lucide-react'
+import {
+  AlertTriangle,
+  Camera,
+  CheckCircle2,
+  Circle,
+  Clock,
+  Euro,
+  ListTodo,
+  Package,
+} from 'lucide-react'
 import Link from 'next/link'
-import type { Task, TodaySummary, InterventionListItem } from '@/lib/domain'
+import { useEffect, useState } from 'react'
+import type { InterventionListItem, Task, TodaySummary } from '@/lib/domain'
 import { mockClarusRepository } from '@/lib/repositories'
 
 function PriorityIcon({ priority }: { priority: Task['priority'] }) {
@@ -18,9 +27,9 @@ function StatusBadge({ status }: { status: Task['status'] }) {
     in_progress: 'En cours',
     done: 'Terminé',
     to_check: 'À vérifier',
-    blocked: 'Bloquant'
+    blocked: 'Bloquant',
   }
-  
+
   const colors: Record<Task['status'], string> = {
     to_do: 'bg-primary/10 text-primary',
     in_progress: 'bg-blue-500/15 text-blue-700 dark:text-blue-400',
@@ -30,7 +39,9 @@ function StatusBadge({ status }: { status: Task['status'] }) {
   }
 
   return (
-    <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${colors[status]}`}>
+    <span
+      className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${colors[status]}`}
+    >
       {labels[status]}
     </span>
   )
@@ -42,19 +53,17 @@ export function TodayView({ summary }: { summary: TodaySummary }) {
 
   useEffect(() => {
     mockClarusRepository.getTasks().then((allTasks) => {
-      const pending = allTasks.filter(
-        (t) => t.status === 'to_do' || t.status === 'to_check',
-      )
+      const pending = allTasks.filter((t) => t.status === 'to_do' || t.status === 'to_check')
       setTasks(pending)
     })
-    
+
     // Simulate fetching items to verify
     mockClarusRepository.getInterventions().then((allInterventions) => {
       // In a real app we'd fetch actual AI review items or to_check items
       // We map Intervention to InterventionListItem for the UI
       const toCheck = allInterventions
-        .filter(i => i.status === 'to_check')
-        .map(i => ({
+        .filter((i) => i.status === 'to_check')
+        .map((i) => ({
           id: i.id,
           title: i.title,
           date: i.date,
@@ -66,7 +75,7 @@ export function TodayView({ summary }: { summary: TodaySummary }) {
           phaseName: 'Phase inconnue',
           hours: 0,
           amount: 0,
-          updatedAt: i.updatedAt || new Date().toISOString()
+          updatedAt: i.updatedAt || new Date().toISOString(),
         }))
       setToCheckItems(toCheck)
     })
@@ -88,7 +97,7 @@ export function TodayView({ summary }: { summary: TodaySummary }) {
             </span>
           )}
         </div>
-        
+
         {toCheckItems.length === 0 ? (
           <p className="rounded-[var(--radius-card)] border border-border bg-surface px-4 py-5 text-center text-sm text-muted-foreground">
             Rien à vérifier pour le moment.
@@ -96,18 +105,29 @@ export function TodayView({ summary }: { summary: TodaySummary }) {
         ) : (
           <div className="flex flex-col gap-2">
             {toCheckItems.slice(0, 2).map((item) => (
-              <div key={item.id} className="flex items-center justify-between rounded-[var(--radius-card)] border border-yellow-500/30 bg-yellow-500/10 p-3">
+              <div
+                key={item.id}
+                className="flex items-center justify-between rounded-[var(--radius-card)] border border-yellow-500/30 bg-yellow-500/10 p-3"
+              >
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold text-foreground">{item.title}</p>
-                  <p className="truncate text-xs text-muted-foreground">Note terrain ou IA à valider</p>
+                  <p className="truncate text-xs text-muted-foreground">
+                    Note terrain ou IA à valider
+                  </p>
                 </div>
-                <Link href="/a-verifier" className="shrink-0 rounded-full bg-surface px-3 py-1 text-xs font-semibold text-primary border border-border">
+                <Link
+                  href="/a-verifier"
+                  className="shrink-0 rounded-full bg-surface px-3 py-1 text-xs font-semibold text-primary border border-border"
+                >
                   Voir
                 </Link>
               </div>
             ))}
             {toCheckItems.length > 2 && (
-              <Link href="/a-verifier" className="text-center text-xs font-semibold text-primary pt-1">
+              <Link
+                href="/a-verifier"
+                className="text-center text-xs font-semibold text-primary pt-1"
+              >
                 Voir les {toCheckItems.length} éléments à vérifier
               </Link>
             )}
@@ -154,7 +174,9 @@ export function TodayView({ summary }: { summary: TodaySummary }) {
         </div>
         <div className="h-8 w-px bg-border" />
         <div className="flex flex-col items-center gap-0.5">
-          <span className="text-sm font-semibold text-foreground">{estimatedAmount.toFixed(0)}€</span>
+          <span className="text-sm font-semibold text-foreground">
+            {estimatedAmount.toFixed(0)}€
+          </span>
           <span className="text-xs text-muted-foreground">Coût encodé du jour</span>
         </div>
       </section>
@@ -254,8 +276,11 @@ export function TodayView({ summary }: { summary: TodaySummary }) {
 
       {summary.latestInterventions.length === 0 && (
         <p className="rounded-[var(--radius-card)] border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
-          Aucun travail enregistré aujourd'hui.<br/>
-          <span className="mt-2 block text-xs">Ajoute un travail réalisé ou valide une note terrain.</span>
+          Aucun travail enregistré aujourd'hui.
+          <br />
+          <span className="mt-2 block text-xs">
+            Ajoute un travail réalisé ou valide une note terrain.
+          </span>
         </p>
       )}
     </div>

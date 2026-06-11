@@ -1,16 +1,26 @@
 'use client'
 
-import { useRole } from '@/lib/role-context'
-import { AlertTriangle, TrendingUp, Clock, Euro, Users, CheckCircle2, DollarSign, Briefcase, Activity } from 'lucide-react'
+import {
+  Activity,
+  AlertTriangle,
+  Briefcase,
+  CheckCircle2,
+  Clock,
+  DollarSign,
+  Euro,
+  TrendingUp,
+  Users,
+} from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { mockClarusRepository } from '@/lib/repositories'
 import type { DashboardKPIs } from '@/lib/domain'
+import { mockClarusRepository } from '@/lib/repositories'
+import { useRole } from '@/lib/role-context'
 
 export default function AdminDashboardPage() {
   const { role, isReady } = useRole()
   const [kpis, setKpis] = useState<DashboardKPIs | null>(null)
-  
+
   useEffect(() => {
     mockClarusRepository.getDashboardKPIs().then(setKpis)
   }, [])
@@ -55,10 +65,12 @@ export default function AdminDashboardPage() {
       </header>
 
       <main className="flex-1 flex flex-col gap-6 p-5 max-w-md mx-auto w-full">
-        
         {/* Main KPI */}
         <section className="grid grid-cols-2 gap-3">
-          <Link href="/facturation" className="col-span-2 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 p-5 flex flex-col gap-2 relative overflow-hidden group active:scale-[0.98] transition-all">
+          <Link
+            href="/facturation"
+            className="col-span-2 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 p-5 flex flex-col gap-2 relative overflow-hidden group active:scale-[0.98] transition-all"
+          >
             <div className="absolute -right-4 -top-4 size-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-colors" />
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-primary font-semibold text-sm">
@@ -69,7 +81,9 @@ export default function AdminDashboardPage() {
                 <span className="flex size-2.5 rounded-full bg-red-500 animate-pulse" />
               )}
             </div>
-            <div className="text-3xl font-black text-primary mt-1">{kpis.toInvoiceAmount.toLocaleString('fr-FR')} €</div>
+            <div className="text-3xl font-black text-primary mt-1">
+              {kpis.toInvoiceAmount.toLocaleString('fr-FR')} €
+            </div>
             <p className="text-xs text-muted-foreground mt-1">Interventions et extras en attente</p>
           </Link>
 
@@ -95,23 +109,28 @@ export default function AdminDashboardPage() {
           <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
             Santé du projet (Sparrenlaan)
           </h2>
-          
+
           <div className="rounded-2xl border border-border bg-surface p-5 flex flex-col gap-5 shadow-sm">
             {/* Jauge Budget */}
             <div className="flex flex-col gap-2">
               <div className="flex justify-between items-end">
                 <span className="font-semibold text-sm">Budget Consommé</span>
-                <span className={`text-xs font-bold px-2 py-1 rounded-md ${isBudgetWarning ? 'bg-orange-500/10 text-orange-600' : 'bg-emerald-500/10 text-emerald-600'}`}>
+                <span
+                  className={`text-xs font-bold px-2 py-1 rounded-md ${isBudgetWarning ? 'bg-orange-500/10 text-orange-600' : 'bg-emerald-500/10 text-emerald-600'}`}
+                >
                   {costPercentage}%
                 </span>
               </div>
               <div className="h-2.5 w-full bg-surface-elevated rounded-full overflow-hidden">
-                <div 
-                  className={`h-full rounded-full transition-all duration-1000 ease-out ${isBudgetWarning ? 'bg-orange-500' : 'bg-emerald-500'}`} 
-                  style={{ width: `${costPercentage}%` }} 
+                <div
+                  className={`h-full rounded-full transition-all duration-1000 ease-out ${isBudgetWarning ? 'bg-orange-500' : 'bg-emerald-500'}`}
+                  style={{ width: `${costPercentage}%` }}
                 />
               </div>
-              <p className="text-xs text-muted-foreground mt-1">{kpis.totalCost.toLocaleString('fr-FR')} € sur {kpis.budgetCost.toLocaleString('fr-FR')} €</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                {kpis.totalCost.toLocaleString('fr-FR')} € sur{' '}
+                {kpis.budgetCost.toLocaleString('fr-FR')} €
+              </p>
             </div>
 
             {/* Jauge Heures */}
@@ -121,12 +140,14 @@ export default function AdminDashboardPage() {
                 <span className="text-xs font-bold text-foreground">{hoursPercentage}%</span>
               </div>
               <div className="h-2.5 w-full bg-surface-elevated rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-blue-500 rounded-full transition-all duration-1000 ease-out" 
-                  style={{ width: `${hoursPercentage}%` }} 
+                <div
+                  className="h-full bg-blue-500 rounded-full transition-all duration-1000 ease-out"
+                  style={{ width: `${hoursPercentage}%` }}
                 />
               </div>
-              <p className="text-xs text-muted-foreground mt-1">{kpis.totalHours}h sur {kpis.budgetHours}h</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                {kpis.totalHours}h sur {kpis.budgetHours}h
+              </p>
             </div>
           </div>
         </section>
@@ -144,7 +165,8 @@ export default function AdminDashboardPage() {
               <div className="flex flex-col gap-1">
                 <span className="font-semibold text-foreground">Interventions bloquées</span>
                 <p className="text-sm text-muted-foreground">
-                  Il y a {kpis.blockedTasksCount} tâche(s) avec le statut "bloqué". Veuillez consulter le chef de chantier pour débloquer la situation.
+                  Il y a {kpis.blockedTasksCount} tâche(s) avec le statut "bloqué". Veuillez
+                  consulter le chef de chantier pour débloquer la situation.
                 </p>
               </div>
             </div>
@@ -157,18 +179,23 @@ export default function AdminDashboardPage() {
             Administration
           </h2>
           <div className="grid grid-cols-2 gap-3">
-            <Link href="/facturation" className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-border bg-surface p-5 hover:bg-surface-elevated active:scale-95 transition-all text-center group shadow-sm">
+            <Link
+              href="/facturation"
+              className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-border bg-surface p-5 hover:bg-surface-elevated active:scale-95 transition-all text-center group shadow-sm"
+            >
               <DollarSign className="size-6 text-foreground group-hover:scale-110 transition-transform" />
               <span className="text-sm font-semibold">Gérer facturation</span>
             </Link>
-            
-            <Link href="/equipe" className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-border bg-surface p-5 hover:bg-surface-elevated active:scale-95 transition-all text-center group shadow-sm">
+
+            <Link
+              href="/equipe"
+              className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-border bg-surface p-5 hover:bg-surface-elevated active:scale-95 transition-all text-center group shadow-sm"
+            >
               <Users className="size-6 text-foreground group-hover:scale-110 transition-transform" />
               <span className="text-sm font-semibold">Gérer l'équipe</span>
             </Link>
           </div>
         </section>
-        
       </main>
     </div>
   )

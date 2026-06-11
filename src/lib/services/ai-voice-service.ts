@@ -9,7 +9,7 @@ export type ConstructionData = {
 }
 
 // Fonction utilitaire pour simuler un délai réseau
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 export async function transcribeAudio(audioBlob: Blob): Promise<string> {
   const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY
@@ -27,7 +27,7 @@ export async function transcribeAudio(audioBlob: Blob): Promise<string> {
   formData.append('language', 'fr')
   formData.append(
     'prompt',
-    'Contexte : note vocale de chantier en français. Noms possibles : Hubert, Christophe, Chris, Bartosz, Grégory. Zones possibles : garage, sol béton, extérieur, sous-sol, terrasse, escalier, structure haut RDC. Termes techniques possibles : P1.7, IPE360, UPN350, HEA140, conteneur, gravats.'
+    'Contexte : note vocale de chantier en français. Noms possibles : Hubert, Christophe, Chris, Bartosz, Grégory. Zones possibles : garage, sol béton, extérieur, sous-sol, terrasse, escalier, structure haut RDC. Termes techniques possibles : P1.7, IPE360, UPN350, HEA140, conteneur, gravats.',
   )
 
   const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
@@ -53,16 +53,16 @@ export async function extractConstructionData(transcript: string): Promise<Const
 
   // Si aucune clé n'est fournie, on utilise le mode MOCK
   if (!apiKey) {
-    console.log('Mode MOCK: Simulation de l\'extraction IA (aucune clé API fournie)')
+    console.log("Mode MOCK: Simulation de l'extraction IA (aucune clé API fournie)")
     await delay(1500) // Simule l'analyse LLM
     return {
-      summary: "Coulage de la dalle et manque de bâche",
-      workType: "Maçonnerie / Dalle",
-      zone: "Sol béton",
-      workers: ["Hubert", "Chris"],
-      time: "8h - 12h",
-      materials: ["4 sacs de ciment"],
-      alerts: ["Il manque une bâche pour protéger"]
+      summary: 'Coulage de la dalle et manque de bâche',
+      workType: 'Maçonnerie / Dalle',
+      zone: 'Sol béton',
+      workers: ['Hubert', 'Chris'],
+      time: '8h - 12h',
+      materials: ['4 sacs de ciment'],
+      alerts: ['Il manque une bâche pour protéger'],
     }
   }
 
@@ -103,7 +103,7 @@ Si une information manque, laisse un tableau vide [] ou la chaîne "Non précis�
   if (!response.ok) {
     const error = await response.json()
     console.error('Erreur GPT:', error)
-    throw new Error('Erreur lors de l\'analyse du texte.')
+    throw new Error("Erreur lors de l'analyse du texte.")
   }
 
   const data = await response.json()
@@ -114,6 +114,6 @@ Si une information manque, laisse un tableau vide [] ou la chaîne "Non précis�
     return parsed
   } catch (e) {
     console.error('Erreur de parsing JSON:', e)
-    throw new Error('L\'IA a renvoyé un format invalide.')
+    throw new Error("L'IA a renvoyé un format invalide.")
   }
 }

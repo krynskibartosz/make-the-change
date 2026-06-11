@@ -42,12 +42,14 @@ export function WeekView({ plan }: { plan: WeeklyPlan | null }) {
       <div className="flex flex-col items-center justify-center p-8 text-center gap-2 border border-dashed border-border rounded-[var(--radius-card)] mt-4">
         <Target className="size-8 text-muted-foreground opacity-50" />
         <p className="font-semibold text-foreground">Aucun objectif défini</p>
-        <p className="text-sm text-muted-foreground">Crée une priorité de semaine pour suivre l'avancement.</p>
+        <p className="text-sm text-muted-foreground">
+          Crée une priorité de semaine pour suivre l'avancement.
+        </p>
       </div>
     )
   }
 
-  const completedGoals = plan.goals?.filter(g => g.status === 'completed').length || 0
+  const completedGoals = plan.goals?.filter((g) => g.status === 'completed').length || 0
   const totalGoals = plan.goals?.length || 0
   const progressPercent = totalGoals > 0 ? (completedGoals / totalGoals) * 100 : 0
 
@@ -64,16 +66,29 @@ export function WeekView({ plan }: { plan: WeeklyPlan | null }) {
 
       {/* Header Sprint */}
       <section className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-sm">
-        <h2 className="text-lg font-bold">Semaine du {format(new Date(plan.weekStart), 'd MMM', { locale: fr })}</h2>
-        
+        <h2 className="text-lg font-bold">
+          Semaine du {format(new Date(plan.weekStart), 'd MMM', { locale: fr })}
+        </h2>
+
         {/* Progress Ring / Bar */}
         <div className="mt-2 flex items-center gap-4">
           <div className="relative size-14 shrink-0">
-            <svg className="size-full -rotate-90" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              className="size-full -rotate-90"
+              viewBox="0 0 36 36"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <circle cx="18" cy="18" r="16" fill="none" className="stroke-muted" strokeWidth="3" />
-              <circle 
-                cx="18" cy="18" r="16" fill="none" className="stroke-primary" strokeWidth="3" 
-                strokeDasharray="100" strokeDashoffset={100 - progressPercent} strokeLinecap="round" 
+              <circle
+                cx="18"
+                cy="18"
+                r="16"
+                fill="none"
+                className="stroke-primary"
+                strokeWidth="3"
+                strokeDasharray="100"
+                strokeDashoffset={100 - progressPercent}
+                strokeLinecap="round"
               />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center text-sm font-bold">
@@ -82,7 +97,9 @@ export function WeekView({ plan }: { plan: WeeklyPlan | null }) {
           </div>
           <div className="flex-1">
             <p className="text-sm font-semibold">Objectifs atteints</p>
-            <p className="text-xs text-muted-foreground">Encore {totalGoals - completedGoals} à terminer</p>
+            <p className="text-xs text-muted-foreground">
+              Encore {totalGoals - completedGoals} à terminer
+            </p>
             <div className="mt-2 text-[10px] font-bold uppercase text-orange-600 dark:text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded w-fit">
               Rythme : léger retard
             </div>
@@ -94,7 +111,9 @@ export function WeekView({ plan }: { plan: WeeklyPlan | null }) {
       <section className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-orange-500/20 bg-orange-500/5 p-4">
         <div className="flex items-center gap-2 text-orange-600 dark:text-orange-400">
           <AlertTriangle className="size-4" />
-          <span className="text-xs font-bold uppercase tracking-wider">À surveiller cette semaine</span>
+          <span className="text-xs font-bold uppercase tracking-wider">
+            À surveiller cette semaine
+          </span>
         </div>
         <ul className="list-disc list-inside text-sm font-medium text-foreground space-y-1">
           <li>Conteneur presque plein</li>
@@ -107,7 +126,7 @@ export function WeekView({ plan }: { plan: WeeklyPlan | null }) {
       <section className="flex flex-col gap-3">
         <h3 className="text-sm font-semibold text-muted-foreground">Objectifs</h3>
         <div className="flex flex-col divide-y divide-border rounded-[var(--radius-card)] border bg-surface">
-          {plan.goals?.map(goal => (
+          {plan.goals?.map((goal) => (
             <div key={goal.id} className="flex items-center gap-3 p-4">
               {goal.status === 'completed' ? (
                 <CheckCircle2 className="size-5 shrink-0 text-green-500" />
@@ -119,7 +138,9 @@ export function WeekView({ plan }: { plan: WeeklyPlan | null }) {
                 <Circle className="size-5 shrink-0 text-muted-foreground" />
               )}
               <div className="flex-1 min-w-0">
-                <p className={`text-sm font-medium ${goal.status === 'completed' ? 'text-muted-foreground line-through' : 'text-foreground'}`}>
+                <p
+                  className={`text-sm font-medium ${goal.status === 'completed' ? 'text-muted-foreground line-through' : 'text-foreground'}`}
+                >
                   {goal.title}
                 </p>
                 {goal.progress > 0 && goal.status !== 'completed' && (

@@ -1,7 +1,7 @@
 'use client'
 
+import { AlertTriangle, Bot, Check, Clock, Mic, Package, User } from 'lucide-react'
 import { useState } from 'react'
-import { Bot, Check, Clock, Package, Mic, AlertTriangle, User } from 'lucide-react'
 import { useRole } from '@/lib/role-context'
 
 type Draft = {
@@ -24,34 +24,35 @@ const mockDrafts: Draft[] = [
     id: 'draft-1',
     author: 'Hubert (Ouvrier)',
     time: "Aujourd'hui à 16:30",
-    rawText: "J'ai fini de casser la terrasse extérieure. On a mis 12 sacs de gravats dans la benne. Ça m'a pris la journée de 8h à 16h30.",
+    rawText:
+      "J'ai fini de casser la terrasse extérieure. On a mis 12 sacs de gravats dans la benne. Ça m'a pris la journée de 8h à 16h30.",
     extracted: {
       task: 'Démolition terrasse extérieure',
       status: 'Terminé',
       hours: '08:00 - 16:30',
       materials: ['12x Sacs de gravats'],
-      confidence: 'Élevée'
-    }
+      confidence: 'Élevée',
+    },
   },
   {
     id: 'draft-2',
     author: 'Christophe (Chef)',
-    time: "Hier à 17:45",
-    rawText: "Le client veut changer la couleur de la P1.7, il faut le valider avant de couler.",
+    time: 'Hier à 17:45',
+    rawText: 'Le client veut changer la couleur de la P1.7, il faut le valider avant de couler.',
     extracted: {
       task: 'Choix technique P1.7',
       status: 'Problème',
       confidence: 'Moyenne',
-      missingFields: ['Zone à confirmer', 'Impact planning']
-    }
-  }
+      missingFields: ['Zone à confirmer', 'Impact planning'],
+    },
+  },
 ]
 
 export default function AVerifierPage() {
   const { role, isReady } = useRole()
   const [drafts, setDrafts] = useState<Draft[]>(mockDrafts)
   const [editingDraftId, setEditingDraftId] = useState<string | null>(null)
-  
+
   // State for edit form
   const [editTask, setEditTask] = useState('')
   const [editHours, setEditHours] = useState('')
@@ -66,14 +67,16 @@ export default function AVerifierPage() {
       <div className="flex flex-col items-center justify-center min-h-[50vh] p-5 text-center gap-4">
         <AlertTriangle className="size-12 text-orange-500 opacity-50" />
         <h1 className="text-xl font-bold">Accès restreint</h1>
-        <p className="text-muted-foreground">Cet écran est réservé à la modération par le Chef de Chantier.</p>
+        <p className="text-muted-foreground">
+          Cet écran est réservé à la modération par le Chef de Chantier.
+        </p>
       </div>
     )
   }
 
   const handleValidate = (id: string) => {
     // Animation/State update mock
-    setDrafts(prev => prev.filter(d => d.id !== id))
+    setDrafts((prev) => prev.filter((d) => d.id !== id))
   }
 
   const handleEditClick = (draft: Draft) => {
@@ -85,21 +88,23 @@ export default function AVerifierPage() {
   }
 
   const handleSaveEdit = (id: string) => {
-    setDrafts(prev => prev.map(d => {
-      if (d.id === id) {
-        return {
-          ...d,
-          extracted: {
-            ...d.extracted,
-            task: editTask,
-            hours: editHours,
-            status: editStatus,
-            materials: editMaterials ? editMaterials.split('\n').filter(Boolean) : []
+    setDrafts((prev) =>
+      prev.map((d) => {
+        if (d.id === id) {
+          return {
+            ...d,
+            extracted: {
+              ...d.extracted,
+              task: editTask,
+              hours: editHours,
+              status: editStatus,
+              materials: editMaterials ? editMaterials.split('\n').filter(Boolean) : [],
+            },
           }
         }
-      }
-      return d
-    }))
+        return d
+      }),
+    )
     setEditingDraftId(null)
   }
 
@@ -128,8 +133,10 @@ export default function AVerifierPage() {
         ) : (
           <div className="flex flex-col gap-6">
             {drafts.map((draft) => (
-              <div key={draft.id} className="flex flex-col rounded-2xl border border-border bg-surface overflow-hidden shadow-sm">
-                
+              <div
+                key={draft.id}
+                className="flex flex-col rounded-2xl border border-border bg-surface overflow-hidden shadow-sm"
+              >
                 {/* Source & Auteur */}
                 <div className="bg-surface-elevated px-4 py-3 border-b border-border/50 flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -159,8 +166,8 @@ export default function AVerifierPage() {
                       </div>
                       <label className="flex flex-col gap-1">
                         <span className="text-[10px] text-muted-foreground uppercase">Tâche</span>
-                        <input 
-                          type="text" 
+                        <input
+                          type="text"
                           value={editTask}
                           onChange={(e) => setEditTask(e.target.value)}
                           className="bg-background border border-border rounded-md px-3 py-1.5 text-sm"
@@ -168,9 +175,11 @@ export default function AVerifierPage() {
                       </label>
                       <div className="grid grid-cols-2 gap-3">
                         <label className="flex flex-col gap-1">
-                          <span className="text-[10px] text-muted-foreground uppercase">Heures</span>
-                          <input 
-                            type="text" 
+                          <span className="text-[10px] text-muted-foreground uppercase">
+                            Heures
+                          </span>
+                          <input
+                            type="text"
                             value={editHours}
                             onChange={(e) => setEditHours(e.target.value)}
                             className="bg-background border border-border rounded-md px-3 py-1.5 text-sm"
@@ -178,8 +187,10 @@ export default function AVerifierPage() {
                           />
                         </label>
                         <label className="flex flex-col gap-1">
-                          <span className="text-[10px] text-muted-foreground uppercase">Statut</span>
-                          <select 
+                          <span className="text-[10px] text-muted-foreground uppercase">
+                            Statut
+                          </span>
+                          <select
                             value={editStatus}
                             onChange={(e) => setEditStatus(e.target.value as any)}
                             className="bg-background border border-border rounded-md px-3 py-1.5 text-sm"
@@ -191,21 +202,23 @@ export default function AVerifierPage() {
                         </label>
                       </div>
                       <label className="flex flex-col gap-1">
-                        <span className="text-[10px] text-muted-foreground uppercase">Matériaux (un par ligne)</span>
-                        <textarea 
+                        <span className="text-[10px] text-muted-foreground uppercase">
+                          Matériaux (un par ligne)
+                        </span>
+                        <textarea
                           value={editMaterials}
                           onChange={(e) => setEditMaterials(e.target.value)}
                           className="bg-background border border-border rounded-md px-3 py-1.5 text-sm min-h-[60px]"
                         />
                       </label>
                       <div className="flex gap-2 mt-2">
-                        <button 
+                        <button
                           onClick={() => setEditingDraftId(null)}
                           className="flex-1 bg-surface-elevated hover:bg-border border border-border text-foreground text-sm font-medium py-2 rounded-xl transition-colors"
                         >
                           Annuler
                         </button>
-                        <button 
+                        <button
                           onClick={() => handleSaveEdit(draft.id)}
                           className="flex-1 bg-primary text-primary-foreground text-sm font-semibold py-2 rounded-xl transition-colors"
                         >
@@ -223,21 +236,37 @@ export default function AVerifierPage() {
                           Extraction IA
                         </div>
                         {draft.extracted.confidence === 'Élevée' ? (
-                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">Confiance Élevée</span>
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+                            Confiance Élevée
+                          </span>
                         ) : draft.extracted.confidence === 'Moyenne' ? (
-                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-yellow-500/15 text-yellow-600 dark:text-yellow-400">À compléter</span>
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-yellow-500/15 text-yellow-600 dark:text-yellow-400">
+                            À compléter
+                          </span>
                         ) : (
-                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-500/15 text-orange-600 dark:text-orange-400">Doute IA</span>
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-500/15 text-orange-600 dark:text-orange-400">
+                            Doute IA
+                          </span>
                         )}
                       </div>
 
-                      {draft.extracted.missingFields && draft.extracted.missingFields.length > 0 && (
-                        <div className="flex flex-col gap-1 mb-2 p-2 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
-                          <span className="text-[10px] font-bold uppercase text-yellow-700 dark:text-yellow-400">Points à vérifier :</span>
-                          {draft.extracted.missingFields.map((f, i) => <span key={i} className="text-xs font-medium text-yellow-700 dark:text-yellow-400">- {f}</span>)}
-                        </div>
-                      )}
-                      
+                      {draft.extracted.missingFields &&
+                        draft.extracted.missingFields.length > 0 && (
+                          <div className="flex flex-col gap-1 mb-2 p-2 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
+                            <span className="text-[10px] font-bold uppercase text-yellow-700 dark:text-yellow-400">
+                              Points à vérifier :
+                            </span>
+                            {draft.extracted.missingFields.map((f, i) => (
+                              <span
+                                key={i}
+                                className="text-xs font-medium text-yellow-700 dark:text-yellow-400"
+                              >
+                                - {f}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+
                       {draft.extracted.task && (
                         <div className="flex flex-col">
                           <span className="text-[10px] text-muted-foreground uppercase">Tâche</span>
@@ -254,7 +283,9 @@ export default function AVerifierPage() {
                         )}
                         {draft.extracted.status && (
                           <div className="flex items-center gap-2">
-                            <div className={`w-2 h-2 rounded-full ${draft.extracted.status === 'Terminé' ? 'bg-emerald-500' : draft.extracted.status === 'Problème' ? 'bg-orange-500' : 'bg-blue-500'}`} />
+                            <div
+                              className={`w-2 h-2 rounded-full ${draft.extracted.status === 'Terminé' ? 'bg-emerald-500' : draft.extracted.status === 'Problème' ? 'bg-orange-500' : 'bg-blue-500'}`}
+                            />
                             <span className="text-sm font-semibold">{draft.extracted.status}</span>
                           </div>
                         )}
@@ -264,10 +295,14 @@ export default function AVerifierPage() {
                         <div className="flex flex-col gap-1 mt-1">
                           <div className="flex items-center gap-2">
                             <Package className="size-4 text-emerald-500" />
-                            <span className="text-[10px] text-muted-foreground uppercase">Matériaux</span>
+                            <span className="text-[10px] text-muted-foreground uppercase">
+                              Matériaux
+                            </span>
                           </div>
                           {draft.extracted.materials.map((mat, i) => (
-                            <span key={i} className="text-sm font-medium pl-6">{mat}</span>
+                            <span key={i} className="text-sm font-medium pl-6">
+                              {mat}
+                            </span>
                           ))}
                         </div>
                       )}
@@ -277,14 +312,14 @@ export default function AVerifierPage() {
                   {/* Actions */}
                   {editingDraftId !== draft.id && (
                     <div className="flex gap-3 pt-2">
-                      <button 
+                      <button
                         onClick={() => handleValidate(draft.id)}
                         className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
                       >
                         <Check className="size-5" />
                         Valider
                       </button>
-                      <button 
+                      <button
                         onClick={() => handleEditClick(draft)}
                         className="flex-1 bg-surface-elevated hover:bg-border border border-border text-foreground font-medium py-3 rounded-xl transition-colors"
                       >

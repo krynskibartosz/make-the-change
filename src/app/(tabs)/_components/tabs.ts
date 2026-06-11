@@ -1,4 +1,17 @@
-import { CalendarDays, type LucideIcon, MapPinned, Menu, CheckSquare, ClipboardCheck, Receipt, PieChart, Send, ImageIcon, Kanban, Briefcase } from 'lucide-react'
+import {
+  Briefcase,
+  CalendarDays,
+  CheckSquare,
+  ClipboardCheck,
+  ImageIcon,
+  Kanban,
+  type LucideIcon,
+  MapPinned,
+  Menu,
+  PieChart,
+  Receipt,
+  Send,
+} from 'lucide-react'
 
 export type ClarusTab = Readonly<{
   href: string

@@ -2,6 +2,7 @@
 
 import {
   BarChart3,
+  Bell,
   ChevronRight,
   ClipboardList,
   Image as ImageIcon,
@@ -11,10 +12,9 @@ import {
   PlusCircle,
   Settings,
   Users,
-  Bell,
 } from 'lucide-react'
 import Link from 'next/link'
-import { useRole, type AppRole } from '@/lib/role-context'
+import { type AppRole, useRole } from '@/lib/role-context'
 
 type SettingsItem = {
   label: string
@@ -164,8 +164,8 @@ export default function MenuPage() {
         <div className="min-w-0">
           <h1 className="text-3xl font-semibold leading-tight">Menu</h1>
         </div>
-        <Link 
-          href="/notifications" 
+        <Link
+          href="/notifications"
           className="relative flex items-center justify-center size-10 rounded-full hover:bg-surface-elevated transition-colors"
         >
           <Bell className="size-6" />
@@ -192,7 +192,16 @@ export default function MenuPage() {
                     role === r ? 'text-primary font-bold bg-primary/5' : 'text-foreground'
                   }`}
                 >
-                  <span className="capitalize">Mode {r === 'ouvrier' ? 'Ouvrier (Hubert)' : r === 'chef' ? 'Superviseur (Christophe)' : r === 'admin' ? 'Admin / Chef de chantier (Martin)' : 'Client Final'}</span>
+                  <span className="capitalize">
+                    Mode{' '}
+                    {r === 'ouvrier'
+                      ? 'Ouvrier (Hubert)'
+                      : r === 'chef'
+                        ? 'Superviseur (Christophe)'
+                        : r === 'admin'
+                          ? 'Admin / Chef de chantier (Martin)'
+                          : 'Client Final'}
+                  </span>
                   {role === r && <span className="text-primary">✓</span>}
                 </button>
                 {i < 3 ? <div className="border-b border-border/50" /> : null}
@@ -201,7 +210,9 @@ export default function MenuPage() {
           </div>
         </section>
 
-        {role !== 'ouvrier' && role !== 'client' && <SettingsGroup title="Gestion financière" items={managementItems} />}
+        {role !== 'ouvrier' && role !== 'client' && (
+          <SettingsGroup title="Gestion financière" items={managementItems} />
+        )}
         {role !== 'client' && <SettingsGroup title="Suivi de chantier" items={projectItems} />}
         <SettingsGroup title="Application" items={appItems} />
       </div>

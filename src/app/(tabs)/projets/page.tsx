@@ -1,10 +1,10 @@
 'use client'
 
+import { Plus } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { PortfolioBoard } from '@/features/projects/components/portfolio-board'
-import { mockClarusRepository } from '@/lib/repositories'
 import type { DashboardKPIs, Project } from '@/lib/domain'
-import { Plus } from 'lucide-react'
+import { mockClarusRepository } from '@/lib/repositories'
 
 export default function ProjetsPage() {
   const [data, setData] = useState<{ project: Project; kpis: DashboardKPIs }[]>([])

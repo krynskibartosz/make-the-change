@@ -9,7 +9,8 @@ export const mockPeople: Person[] = [
     role: 'Chef chantier',
     defaultHourlyRate: 45,
     active: true,
-    avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop',
     phone: '06 12 34 56 78',
     email: 'hubert@clarus.com',
     company: 'Interne',
@@ -22,7 +23,8 @@ export const mockPeople: Person[] = [
     role: 'Ouvrier polyvalent',
     defaultHourlyRate: 45,
     active: true,
-    avatarUrl: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=200&auto=format&fit=crop',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=200&auto=format&fit=crop',
     phone: '06 98 76 54 32',
     company: 'Interne',
     skills: ['Électricité', 'Plomberie'],
@@ -34,7 +36,8 @@ export const mockPeople: Person[] = [
     role: 'Demolition',
     defaultHourlyRate: 45,
     active: true,
-    avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop',
     phone: '+32 471 12 34 56',
     company: 'Bati-Demo SARL',
     skills: ['Démolition', 'Évacuation'],
@@ -46,7 +49,8 @@ export const mockPeople: Person[] = [
     role: 'Suivi administratif',
     defaultHourlyRate: 45,
     active: true,
-    avatarUrl: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&auto=format&fit=crop',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&auto=format&fit=crop',
     email: 'gregory@clarus.com',
     company: 'Interne',
     skills: ['Facturation', 'Suivi de chantier'],
@@ -58,7 +62,8 @@ export const mockPeople: Person[] = [
     role: 'Ouvrier',
     defaultHourlyRate: 45,
     active: true,
-    avatarUrl: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=200&auto=format&fit=crop',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=200&auto=format&fit=crop',
     company: 'Indépendant',
   },
 ]

@@ -1,6 +1,7 @@
 'use client'
 
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import type React from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import type { Project } from '@/lib/domain'
 import { mockClarusRepository } from '@/lib/repositories'
 
@@ -36,7 +37,9 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
   const activeProject = projects.find((p) => p.id === activeProjectId) || null
 
   return (
-    <ProjectContext.Provider value={{ projects, activeProjectId, activeProject, setActiveProjectId, isReady }}>
+    <ProjectContext.Provider
+      value={{ projects, activeProjectId, activeProject, setActiveProjectId, isReady }}
+    >
       {children}
     </ProjectContext.Provider>
   )

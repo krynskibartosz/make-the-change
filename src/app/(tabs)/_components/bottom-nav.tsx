@@ -2,11 +2,9 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-
-import { cn } from '@/lib/utils/cn'
-
-import { clarusTabs } from './tabs'
 import { useRole } from '@/lib/role-context'
+import { cn } from '@/lib/utils/cn'
+import { clarusTabs } from './tabs'
 
 export function BottomNav() {
   const pathname = usePathname()
@@ -20,7 +18,12 @@ export function BottomNav() {
       return tab.href === '/chantier' || tab.href === '/historique' || tab.href === '/menu'
     }
     if (role === 'client') {
-      return tab.href === '/chantier' || tab.href === '/photos' || tab.href === '/validations' || tab.href === '/menu'
+      return (
+        tab.href === '/chantier' ||
+        tab.href === '/photos' ||
+        tab.href === '/validations' ||
+        tab.href === '/menu'
+      )
     }
     if (role === 'chef') {
       return tab.href === '/chantier' || tab.href === '/a-verifier' || tab.href === '/menu'
@@ -72,9 +75,11 @@ export function BottomNav() {
                   isActive ? 'font-bold' : 'font-medium',
                 )}
               >
-                {role === 'ouvrier' && tab.href === '/chantier' ? 'Accueil' : 
-                 role === 'client' && tab.href === '/chantier' ? 'Suivi' : 
-                 tab.label}
+                {role === 'ouvrier' && tab.href === '/chantier'
+                  ? 'Accueil'
+                  : role === 'client' && tab.href === '/chantier'
+                    ? 'Suivi'
+                    : tab.label}
               </span>
             </Link>
           )

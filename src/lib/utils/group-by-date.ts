@@ -8,10 +8,7 @@
  * @example
  * const groups = groupByDate(photos, (p) => formatDate(p.takenAt))
  */
-export function groupByDate<T>(
-  items: T[],
-  getDate: (item: T) => string,
-): Record<string, T[]> {
+export function groupByDate<T>(items: T[], getDate: (item: T) => string): Record<string, T[]> {
   return items.reduce(
     (acc, item) => {
       const key = getDate(item)

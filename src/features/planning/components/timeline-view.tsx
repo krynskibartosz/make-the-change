@@ -1,22 +1,22 @@
 import { format, isToday, isYesterday } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import {
-  CheckCircle2,
-  Clock,
   Camera,
-  Receipt,
+  CheckCircle2,
+  ChevronRight,
+  Clock,
+  FileText,
   Hammer,
+  Package,
+  Receipt,
+  Shield,
+  ShoppingCart,
   Trash2,
   Truck,
-  Shield,
   Wrench,
-  Package,
-  ShoppingCart,
-  FileText,
-  ChevronRight,
 } from 'lucide-react'
 import Link from 'next/link'
-import type { TimelineEvent, InterventionType } from '@/lib/domain'
+import type { InterventionType, TimelineEvent } from '@/lib/domain'
 import { groupByDate } from '@/lib/utils/group-by-date'
 
 // ─── Label mapping ─────────────────────────────────────────────────────────
@@ -41,16 +41,26 @@ const INTERVENTION_TYPE_LABEL: Record<InterventionType, string> = {
 
 function getInterventionTypeIcon(type: InterventionType) {
   switch (type) {
-    case 'work': return Hammer
-    case 'demolition': return Trash2
-    case 'evacuation': return Truck
-    case 'protection': return Shield
-    case 'dismantling': return Wrench
-    case 'structure': return Wrench
-    case 'preparation': return Wrench
-    case 'material_need': return ShoppingCart
-    case 'material_use': return Package
-    default: return FileText
+    case 'work':
+      return Hammer
+    case 'demolition':
+      return Trash2
+    case 'evacuation':
+      return Truck
+    case 'protection':
+      return Shield
+    case 'dismantling':
+      return Wrench
+    case 'structure':
+      return Wrench
+    case 'preparation':
+      return Wrench
+    case 'material_need':
+      return ShoppingCart
+    case 'material_use':
+      return Package
+    default:
+      return FileText
   }
 }
 
@@ -66,10 +76,10 @@ function getDateLabel(dateStr: string): string {
 // ─── Event type config ─────────────────────────────────────────────────────
 
 type EventConfig = {
-  color: string       // Tailwind text color
-  bgColor: string     // Tailwind bg color for dot
+  color: string // Tailwind text color
+  bgColor: string // Tailwind bg color for dot
   borderColor: string // left border accent on card
-  badgeColor: string  // pill badge
+  badgeColor: string // pill badge
 }
 
 const EVENT_CONFIG: Record<string, EventConfig> = {
@@ -122,13 +132,17 @@ function InterventionCard({ event }: { event: Extract<TimelineEvent, { type: 'in
       href={`/interventions/${data.id}`}
       className={`flex items-start gap-3 rounded-xl border border-border border-l-[3px] ${cfg.borderColor} bg-surface p-4 shadow-sm active:bg-surface-elevated transition-colors`}
     >
-      <div className={`mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg ${cfg.bgColor}`}>
+      <div
+        className={`mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg ${cfg.bgColor}`}
+      >
         <Icon className={`size-4 ${cfg.color}`} />
       </div>
       <div className="flex-1 min-w-0">
         <p className="font-semibold text-sm leading-snug truncate">{data.title}</p>
         <div className="flex items-center gap-2 mt-1 flex-wrap">
-          <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${cfg.badgeColor}`}>
+          <span
+            className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${cfg.badgeColor}`}
+          >
             {INTERVENTION_TYPE_LABEL[data.type]}
           </span>
           {data.status === 'done' && (
@@ -153,20 +167,30 @@ function TaskCard({ event }: { event: Extract<TimelineEvent, { type: 'task' }> }
   const isDone = data.status === 'done'
 
   return (
-    <div className={`flex items-start gap-3 rounded-xl border border-border border-l-[3px] ${cfg.borderColor} bg-surface p-4 shadow-sm`}>
-      <div className={`mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg ${cfg.bgColor}`}>
+    <div
+      className={`flex items-start gap-3 rounded-xl border border-border border-l-[3px] ${cfg.borderColor} bg-surface p-4 shadow-sm`}
+    >
+      <div
+        className={`mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg ${cfg.bgColor}`}
+      >
         <CheckCircle2 className={`size-4 ${cfg.color}`} />
       </div>
       <div className="flex-1 min-w-0">
-        <p className={`font-semibold text-sm leading-snug ${isDone ? 'line-through text-muted-foreground' : ''}`}>
+        <p
+          className={`font-semibold text-sm leading-snug ${isDone ? 'line-through text-muted-foreground' : ''}`}
+        >
           {data.title}
         </p>
         <div className="flex items-center gap-2 mt-1">
-          <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${cfg.badgeColor}`}>
+          <span
+            className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${cfg.badgeColor}`}
+          >
             Tâche
           </span>
           {data.priority === 'urgent' && (
-            <span className="text-[10px] font-bold text-red-400 uppercase tracking-wide">Urgent</span>
+            <span className="text-[10px] font-bold text-red-400 uppercase tracking-wide">
+              Urgent
+            </span>
           )}
         </div>
       </div>
@@ -179,14 +203,20 @@ function ExpenseCard({ event }: { event: Extract<TimelineEvent, { type: 'expense
   const cfg = getEventConfig('expense')
 
   return (
-    <div className={`flex items-start gap-3 rounded-xl border border-border border-l-[3px] ${cfg.borderColor} bg-surface p-4 shadow-sm`}>
-      <div className={`mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg ${cfg.bgColor}`}>
+    <div
+      className={`flex items-start gap-3 rounded-xl border border-border border-l-[3px] ${cfg.borderColor} bg-surface p-4 shadow-sm`}
+    >
+      <div
+        className={`mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg ${cfg.bgColor}`}
+      >
         <Receipt className={`size-4 ${cfg.color}`} />
       </div>
       <div className="flex-1 min-w-0">
         <p className="font-semibold text-sm leading-snug truncate">{data.description}</p>
         <div className="flex items-center gap-2 mt-1">
-          <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${cfg.badgeColor}`}>
+          <span
+            className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${cfg.badgeColor}`}
+          >
             Dépense
           </span>
           {data.supplier && (
@@ -227,10 +257,10 @@ function PhotoCard({ event }: { event: Extract<TimelineEvent, { type: 'photo' }>
         />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold line-clamp-1">
-          {data.comment ?? 'Photo ajoutée'}
-        </p>
-        <span className={`mt-1 inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${cfg.badgeColor}`}>
+        <p className="text-sm font-semibold line-clamp-1">{data.comment ?? 'Photo ajoutée'}</p>
+        <span
+          className={`mt-1 inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${cfg.badgeColor}`}
+        >
           {photoTypeLabel[data.type] ?? 'Photo'}
         </span>
       </div>
@@ -241,10 +271,14 @@ function PhotoCard({ event }: { event: Extract<TimelineEvent, { type: 'photo' }>
 
 function EventCard({ event }: { event: TimelineEvent }) {
   switch (event.type) {
-    case 'intervention': return <InterventionCard event={event} />
-    case 'task': return <TaskCard event={event} />
-    case 'expense': return <ExpenseCard event={event} />
-    case 'photo': return <PhotoCard event={event} />
+    case 'intervention':
+      return <InterventionCard event={event} />
+    case 'task':
+      return <TaskCard event={event} />
+    case 'expense':
+      return <ExpenseCard event={event} />
+    case 'photo':
+      return <PhotoCard event={event} />
   }
 }
 
@@ -262,7 +296,9 @@ function TimelineDot({ event }: { event: TimelineEvent }) {
   const Icon = iconMap[event.type]
 
   return (
-    <div className={`absolute left-0 top-3 flex size-8 items-center justify-center rounded-full border-2 border-background ${cfg.bgColor} z-10`}>
+    <div
+      className={`absolute left-0 top-3 flex size-8 items-center justify-center rounded-full border-2 border-background ${cfg.bgColor} z-10`}
+    >
       <Icon className={`size-3.5 ${cfg.color}`} />
     </div>
   )

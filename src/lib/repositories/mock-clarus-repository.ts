@@ -1,12 +1,12 @@
 import { selectTodaySummary } from '@/features/dashboard'
 import { calculateWorkEntryAmount, calculateWorkEntryDuration } from '@/lib/calculations'
 import type {
+  Client,
   CreateExpenseInput,
   CreateInterventionDraftInput,
   CreateMaterialMovementInput,
   CreatePersonInput,
   CreateTaskInput,
-  Client,
   Expense,
   Intervention,
   InterventionDraft,
@@ -22,6 +22,7 @@ import type {
   WorkEntry,
 } from '@/lib/domain'
 import {
+  mockClient,
   mockExpenses,
   mockInterventions,
   mockMaterialMovements,
@@ -34,7 +35,6 @@ import {
   mockPlanZones,
   mockProject,
   mockProjects,
-  mockClient,
   mockTasks,
   mockWorkEntries,
   mockZones,
@@ -60,9 +60,10 @@ export const createMockClarusRepository = (): ClarusRepository => {
     getClients: async () => [mockClient],
     getPeople: async () => people.map(clonePerson),
     getPhases: async () => [...mockPhases],
-    getProjectPhases: async (projectId: string) => mockPhases.filter(p => p.projectId === projectId),
+    getProjectPhases: async (projectId: string) =>
+      mockPhases.filter((p) => p.projectId === projectId),
     updatePhase: async (id: string, input: Partial<Phase>) => {
-      const idx = mockPhases.findIndex(p => p.id === id)
+      const idx = mockPhases.findIndex((p) => p.id === id)
       if (idx === -1) throw new Error('Phase not found')
       mockPhases[idx] = { ...mockPhases[idx], ...input } as Phase
       return { ...mockPhases[idx] } as Phase
@@ -167,7 +168,7 @@ export const createMockClarusRepository = (): ClarusRepository => {
             status: 'not_started',
             progress: 0,
           },
-        ]
+        ],
       } as import('../domain').WeeklyPlan
     },
     getPlans: async () => [...mockPlans],
@@ -263,25 +264,27 @@ export const createMockClarusRepository = (): ClarusRepository => {
       const budgetHours = 200
       const budgetCost = 15000
 
-      const totalHours = mockWorkEntries.reduce((acc, entry) => acc + (entry.durationMinutes / 60), 0)
-      const totalCost = mockWorkEntries.reduce((acc, entry) => acc + entry.amount, 0) +
-        expenses.filter(e => e.status !== 'to_check').reduce((acc, e) => acc + (e.amount || 0), 0)
+      const totalHours = mockWorkEntries.reduce((acc, entry) => acc + entry.durationMinutes / 60, 0)
+      const totalCost =
+        mockWorkEntries.reduce((acc, entry) => acc + entry.amount, 0) +
+        expenses.filter((e) => e.status !== 'to_check').reduce((acc, e) => acc + (e.amount || 0), 0)
 
       const billableInterventions = interventions.filter(
-        (i) => i.billingStatus === 'to_invoice' || i.isExtra === true
+        (i) => i.billingStatus === 'to_invoice' || i.isExtra === true,
       )
       const billableExpenses = expenses.filter(
-        (e) => e.isRebillable === true && e.status !== 'invoiced'
+        (e) => e.isRebillable === true && e.status !== 'invoiced',
       )
-      
-      const toInvoiceAmount = 
-        billableInterventions.reduce((acc, i) => {
-          const entrySum = mockWorkEntries.filter(we => we.interventionId === i.id).reduce((sum, we) => sum + we.amount, 0)
-          return acc + entrySum
-        }, 0) +
-        billableExpenses.reduce((acc, e) => acc + (e.amount || 0), 0)
 
-      const blockedTasksCount = tasks.filter(t => t.status === 'blocked').length
+      const toInvoiceAmount =
+        billableInterventions.reduce((acc, i) => {
+          const entrySum = mockWorkEntries
+            .filter((we) => we.interventionId === i.id)
+            .reduce((sum, we) => sum + we.amount, 0)
+          return acc + entrySum
+        }, 0) + billableExpenses.reduce((acc, e) => acc + (e.amount || 0), 0)
+
+      const blockedTasksCount = tasks.filter((t) => t.status === 'blocked').length
 
       return {
         totalHours: Math.round(totalHours),
