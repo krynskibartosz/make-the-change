@@ -16,7 +16,11 @@ import {
   Wrench,
 } from 'lucide-react'
 import Link from 'next/link'
-import type { InterventionType, TimelineEvent } from '@/lib/domain'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { TaskStatusSheet } from '@/features/board/components/task-status-sheet'
+import type { InterventionType, Task, TaskStatus, TimelineEvent } from '@/lib/domain'
+import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
 import { groupByDate } from '@/lib/utils/group-by-date'
 
 // ─── Label mapping ─────────────────────────────────────────────────────────
@@ -161,13 +165,22 @@ function InterventionCard({ event }: { event: Extract<TimelineEvent, { type: 'in
   )
 }
 
-function TaskCard({ event }: { event: Extract<TimelineEvent, { type: 'task' }> }) {
+function TaskCard({
+  event,
+  onTaskClick,
+}: {
+  event: Extract<TimelineEvent, { type: 'task' }>
+  onTaskClick: (t: Task) => void
+}) {
   const { data } = event
   const cfg = getEventConfig('task')
   const isDone = data.status === 'done'
 
   return (
-    <div className="flex items-start gap-3 py-3 relative">
+    <div
+      className="flex items-start gap-3 py-3 relative cursor-pointer active:opacity-70 transition-opacity"
+      onClick={() => onTaskClick(data)}
+    >
       <div
         className={`mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg ${cfg.bgColor}`}
       >
@@ -265,12 +278,18 @@ function PhotoCard({ event }: { event: Extract<TimelineEvent, { type: 'photo' }>
   )
 }
 
-function EventCard({ event }: { event: TimelineEvent }) {
+function EventCard({
+  event,
+  onTaskClick,
+}: {
+  event: TimelineEvent
+  onTaskClick: (t: Task) => void
+}) {
   switch (event.type) {
     case 'intervention':
       return <InterventionCard event={event} />
     case 'task':
-      return <TaskCard event={event} />
+      return <TaskCard event={event} onTaskClick={onTaskClick} />
     case 'expense':
       return <ExpenseCard event={event} />
     case 'photo':
@@ -303,6 +322,18 @@ function TimelineDot({ event }: { event: TimelineEvent }) {
 // ─── Main timeline view ────────────────────────────────────────────────────
 
 export function TimelineView({ events }: { events: TimelineEvent[] }) {
+  const router = useRouter()
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null)
+
+  const handleStatusChange = async (taskId: string, newStatus: TaskStatus) => {
+    try {
+      await mockClarusRepository.updateTaskStatus(taskId, newStatus)
+      router.refresh()
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   if (events.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 gap-4 text-muted-foreground">
@@ -334,12 +365,19 @@ export function TimelineView({ events }: { events: TimelineEvent[] }) {
             {groupedEvents[date]?.map((event, idx) => (
               <div key={idx} className="relative group">
                 <TimelineDot event={event} />
-                <EventCard event={event} />
+                <EventCard event={event} onTaskClick={setSelectedTask} />
               </div>
             ))}
           </div>
         </div>
       ))}
+
+      <TaskStatusSheet
+        task={selectedTask}
+        isOpen={!!selectedTask}
+        onClose={() => setSelectedTask(null)}
+        onStatusChange={handleStatusChange}
+      />
     </div>
   )
 }
