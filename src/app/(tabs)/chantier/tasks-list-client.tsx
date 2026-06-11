@@ -75,8 +75,7 @@ export function TasksListClient() {
         <div className="-mx-4">
           <KanbanBoard initialTasks={tasks} onStatusChange={updateTaskStatus} />
         </div>
-      ) : (
-      {tasks.length === 0 ? (
+      ) : tasks.length === 0 ? (
         <p className="text-sm text-muted-foreground">Aucune tâche.</p>
       ) : (
         tasks.map((task) => {
@@ -120,7 +119,6 @@ export function TasksListClient() {
             </Card>
           )
         })
-      )}
       )}
     </div>
   )
