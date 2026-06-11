@@ -202,7 +202,7 @@ export default function MenuPage() {
         </section>
 
         {role !== 'ouvrier' && role !== 'client' && <SettingsGroup title="Gestion financière" items={managementItems} />}
-        {role !== 'ouvrier' && role !== 'client' && <SettingsGroup title="Suivi de chantier" items={projectItems} />}
+        {role !== 'client' && <SettingsGroup title="Suivi de chantier" items={projectItems} />}
         <SettingsGroup title="Application" items={appItems} />
       </div>
     </main>
