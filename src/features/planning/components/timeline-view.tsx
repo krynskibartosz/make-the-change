@@ -348,6 +348,38 @@ export function TimelineView({ events }: { events: TimelineEvent[] }) {
 
   return (
     <div className="flex flex-col gap-6 pb-24">
+      {/* Quick Add Timeline */}
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault()
+          const input = e.currentTarget.elements.namedItem('title') as HTMLInputElement
+          if (input.value.trim()) {
+            const val = input.value.trim()
+            input.value = ''
+            try {
+              await mockClarusRepository.createTask({
+                projectId: 'proj-1', // Mock project
+                title: val,
+                status: 'done', // In a timeline, we often log things we just did, or tasks. Let's make it 'to_do' by default, or maybe 'done'?
+                // Let's use 'to_do' to match Kanban/List, but it's arguable. Let's stick to 'to_do'
+                priority: 'normal',
+              })
+              router.refresh()
+            } catch (err) {
+              console.error(err)
+            }
+          }
+        }}
+        className="mb-2"
+      >
+        <input
+          name="title"
+          type="text"
+          placeholder="Créer une tâche rapide..."
+          className="w-full bg-surface/50 border border-border/50 rounded-xl px-4 py-3 text-sm font-medium placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all shadow-sm"
+        />
+      </form>
+
       {sortedDates.map((date) => (
         <div key={date}>
           {/* Day header */}

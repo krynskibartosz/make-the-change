@@ -205,6 +205,7 @@ export const createMockClarusRepository = (): ClarusRepository => {
         priority: input.priority ?? 'normal',
         assignedTo: input.assignedTo,
         dueDate: input.dueDate,
+        completedAt: input.status === 'done' ? now : undefined,
         createdAt: now,
       }
       tasks = [...tasks, task]
@@ -213,7 +214,17 @@ export const createMockClarusRepository = (): ClarusRepository => {
     updateTaskStatus: async (id: string, status: TaskStatus) => {
       const index = tasks.findIndex((t) => t.id === id)
       if (index === -1) throw new Error('Task not found')
-      const updatedTask: Task = { ...tasks[index], status } as Task
+      const now = new Date().toISOString()
+      const updatedTask: Task = {
+        ...tasks[index],
+        status,
+        completedAt:
+          status === 'done'
+            ? now
+            : status === 'to_do' || status === 'in_progress'
+              ? undefined
+              : tasks[index]?.completedAt,
+      } as Task
       tasks = [...tasks.slice(0, index), updatedTask, ...tasks.slice(index + 1)]
       return updatedTask
     },
