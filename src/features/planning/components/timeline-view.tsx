@@ -130,7 +130,7 @@ function InterventionCard({ event }: { event: Extract<TimelineEvent, { type: 'in
   return (
     <Link
       href={`/interventions/${data.id}`}
-      className={`flex items-start gap-3 rounded-xl border border-border border-l-[3px] ${cfg.borderColor} bg-surface p-4 shadow-sm active:bg-surface-elevated transition-colors`}
+      className="flex items-start gap-3 py-3 relative active:opacity-70 transition-opacity"
     >
       <div
         className={`mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg ${cfg.bgColor}`}
@@ -167,9 +167,7 @@ function TaskCard({ event }: { event: Extract<TimelineEvent, { type: 'task' }> }
   const isDone = data.status === 'done'
 
   return (
-    <div
-      className={`flex items-start gap-3 rounded-xl border border-border border-l-[3px] ${cfg.borderColor} bg-surface p-4 shadow-sm`}
-    >
+    <div className="flex items-start gap-3 py-3 relative">
       <div
         className={`mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg ${cfg.bgColor}`}
       >
@@ -203,9 +201,7 @@ function ExpenseCard({ event }: { event: Extract<TimelineEvent, { type: 'expense
   const cfg = getEventConfig('expense')
 
   return (
-    <div
-      className={`flex items-start gap-3 rounded-xl border border-border border-l-[3px] ${cfg.borderColor} bg-surface p-4 shadow-sm`}
-    >
+    <div className="flex items-start gap-3 py-3 relative">
       <div
         className={`mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg ${cfg.bgColor}`}
       >
@@ -243,7 +239,7 @@ function PhotoCard({ event }: { event: Extract<TimelineEvent, { type: 'photo' }>
   return (
     <Link
       href="/photos"
-      className={`flex items-start gap-3 rounded-xl border border-border border-l-[3px] ${cfg.borderColor} bg-surface p-3 shadow-sm active:bg-surface-elevated transition-colors overflow-hidden`}
+      className="flex items-start gap-3 py-3 relative active:opacity-70 transition-opacity overflow-hidden"
     >
       {/* Thumbnail */}
       <div className="relative size-14 shrink-0 rounded-lg overflow-hidden border border-border bg-surface-elevated">
@@ -297,7 +293,7 @@ function TimelineDot({ event }: { event: TimelineEvent }) {
 
   return (
     <div
-      className={`absolute left-0 top-3 flex size-8 items-center justify-center rounded-full border-2 border-background ${cfg.bgColor} z-10`}
+      className={`absolute left-0 top-3.5 flex size-[26px] items-center justify-center rounded-full border-[3px] border-background ${cfg.bgColor} z-10`}
     >
       <Icon className={`size-3.5 ${cfg.color}`} />
     </div>
@@ -333,10 +329,10 @@ export function TimelineView({ events }: { events: TimelineEvent[] }) {
           {/* Events with vertical line */}
           <div className="relative flex flex-col gap-3 pl-10">
             {/* Vertical line */}
-            <div className="absolute left-[15px] top-0 bottom-0 w-px bg-border" />
+            <div className="absolute left-[12px] top-2 bottom-0 w-[2px] bg-border/50" />
 
             {groupedEvents[date]?.map((event, idx) => (
-              <div key={idx} className="relative">
+              <div key={idx} className="relative group">
                 <TimelineDot event={event} />
                 <EventCard event={event} />
               </div>
