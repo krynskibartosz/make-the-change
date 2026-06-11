@@ -192,7 +192,7 @@ export default function MenuPage() {
                     role === r ? 'text-primary font-bold bg-primary/5' : 'text-foreground'
                   }`}
                 >
-                  <span className="capitalize">Mode {r === 'ouvrier' ? 'Ouvrier (Hubert)' : r === 'chef' ? 'Chef de chantier (Christophe)' : r === 'client' ? 'Client (Martin)' : 'Admin (Grégory)'}</span>
+                  <span className="capitalize">Mode {r === 'ouvrier' ? 'Ouvrier (Hubert)' : r === 'chef' ? 'Superviseur (Christophe)' : r === 'admin' ? 'Admin / Chef de chantier (Martin)' : 'Client Final'}</span>
                   {role === r && <span className="text-primary">✓</span>}
                 </button>
                 {i < 3 ? <div className="border-b border-border/50" /> : null}
