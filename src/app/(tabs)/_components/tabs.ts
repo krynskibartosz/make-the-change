@@ -1,9 +1,11 @@
 import {
   Briefcase,
+  Calendar,
   CheckSquare,
   ClipboardCheck,
   Home,
   ImageIcon,
+  KanbanSquare,
   type LucideIcon,
   MapPinned,
   Menu,
@@ -25,6 +27,8 @@ const tabsByRole = {
     { href: '/menu', label: 'Menu', icon: Menu },
   ],
   chef: [
+    { href: '/planning', label: 'Planning', icon: Calendar },
+    { href: '/board', label: 'Kanban', icon: KanbanSquare },
     { href: '/chantier', label: 'Chantier', icon: MapPinned },
     { href: '/a-verifier', label: 'À vérifier', icon: ClipboardCheck },
     { href: '/menu', label: 'Menu', icon: Menu },
