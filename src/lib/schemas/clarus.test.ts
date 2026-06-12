@@ -30,6 +30,9 @@ describe('clarus schemas', () => {
       photos: mockPhotos,
     })
 
+    if (!result.success) {
+      console.log(result.error.errors)
+    }
     expect(result.success).toBe(true)
   })
 

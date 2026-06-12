@@ -9,7 +9,7 @@ describe('validateAddInterventionState', () => {
 
     const result = validateAddInterventionState({
       ...state,
-      when: { ...state.when, date: '' },
+      form: { ...state.form, date: '' },
     })
 
     expect(result.canSave).toBe(false)
@@ -25,14 +25,20 @@ describe('validateAddInterventionState', () => {
 
     const result = validateAddInterventionState({
       ...state,
-      what: { ...state.what, type: 'demolition', title: 'Demolition garage' },
-      where: { phaseId: null, zoneId: null, locationToDefine: false },
-      who: { personIds: [] },
+      form: {
+        ...state.form,
+        type: 'demolition',
+        title: 'Demolition garage',
+        phaseId: null,
+        zoneId: null,
+        locationToDefine: false,
+        personIds: [],
+      },
     })
 
     expect(result.canSave).toBe(true)
     expect(result.shouldMarkToCheck).toBe(true)
-    expect(result.warningMessages).toEqual(['Zone ou phase a verifier.', 'Personnes a verifier.'])
+    expect(result.warningMessages).toEqual(['Zone ou phase à vérifier.', 'Personnes à vérifier.'])
   })
 
   it('blocks when time range is invalid', () => {
@@ -40,12 +46,17 @@ describe('validateAddInterventionState', () => {
 
     const result = validateAddInterventionState({
       ...state,
-      what: { ...state.what, type: 'demolition', title: 'Demolition garage' },
-      when: { ...state.when, startTime: '18:00', endTime: '08:00' },
+      form: {
+        ...state.form,
+        type: 'demolition',
+        title: 'Demolition garage',
+        startTime: '18:00',
+        endTime: '08:00',
+      },
     })
 
     expect(result.canSave).toBe(false)
-    expect(result.blockingMessages).toContain('Verifie les horaires.')
+    expect(result.blockingMessages).toContain('Vérifie les horaires.')
   })
 
   it('marks location to define as zone or phase to verify', () => {
@@ -53,18 +64,20 @@ describe('validateAddInterventionState', () => {
 
     const result = validateAddInterventionState({
       ...state,
-      what: { ...state.what, type: 'demolition', title: 'Demolition garage' },
-      where: {
+      form: {
+        ...state.form,
+        type: 'demolition',
+        title: 'Demolition garage',
         phaseId: 'phase-demolition',
         zoneId: 'zone-garage',
         locationToDefine: true,
+        personIds: ['person-hubert'],
       },
-      who: { personIds: ['person-hubert'] },
     })
 
     expect(result.canSave).toBe(true)
     expect(result.shouldMarkToCheck).toBe(true)
-    expect(result.warningMessages).toEqual(['Zone ou phase a verifier.'])
+    expect(result.warningMessages).toEqual(['Zone ou phase à vérifier.'])
   })
 
   it('marks extra status to_check as a warning', () => {
@@ -72,22 +85,22 @@ describe('validateAddInterventionState', () => {
 
     const result = validateAddInterventionState({
       ...state,
-      what: { ...state.what, type: 'demolition', title: 'Demolition garage' },
-      where: {
+      form: {
+        ...state.form,
+        type: 'demolition',
+        title: 'Demolition garage',
         phaseId: 'phase-demolition',
         zoneId: 'zone-garage',
         locationToDefine: false,
+        personIds: ['person-hubert'],
       },
-      who: { personIds: ['person-hubert'] },
       status: {
-        isExtra: 'to_check',
-        billingStatus: 'to_check',
-        paymentStatus: 'to_check',
+        simplified: 'to_check',
       },
     })
 
     expect(result.canSave).toBe(true)
     expect(result.shouldMarkToCheck).toBe(true)
-    expect(result.warningMessages).toEqual(['Statut supplement a verifier.'])
+    expect(result.warningMessages).toEqual(['Statut à vérifier.'])
   })
 })

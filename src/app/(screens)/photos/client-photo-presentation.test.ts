@@ -46,7 +46,7 @@ describe('client photo presentation', () => {
   })
 
   it('uses client-facing business captions and zone names', () => {
-    expect(getClientPhotoPresentation(photos[0])).toEqual({
+    expect(getClientPhotoPresentation(photos[0]!)).toEqual({
       assetKey: 'existing-survey',
       caption: "Relevé de l'existant avant intervention",
       phaseLabel: 'Avant les travaux',

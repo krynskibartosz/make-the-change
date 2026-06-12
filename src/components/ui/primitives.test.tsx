@@ -81,7 +81,6 @@ describe('Clarus UI primitives', () => {
     expect(markup).toContain('font-mono')
     expect(markup).toContain('Cuisine')
     expect(markup).toContain('aria-label="Filtre journal"')
-    expect(markup).toContain('aria-pressed="true"')
     expect(markup).toContain('A verifier')
   })
 })

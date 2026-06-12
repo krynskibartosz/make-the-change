@@ -113,7 +113,7 @@ export const mockInterventions: Intervention[] = [
     title: 'Demander confirmation a Martin pour P1.7',
     type: 'decision',
     date: '2026-06-08',
-    phaseId: 'phase-validation',
+    phaseId: 'phase-preparation',
     zoneId: 'zone-structure',
     status: 'to_check',
     isExtra: false,
@@ -129,7 +129,7 @@ export const mockInterventions: Intervention[] = [
     title: 'Lovemat - protection sols',
     type: 'expense',
     date: '2026-06-08',
-    phaseId: 'phase-admin',
+    phaseId: 'phase-preparation',
     zoneId: 'zone-escalier-etage',
     status: 'done',
     isExtra: false,
@@ -159,7 +159,7 @@ export const mockInterventions: Intervention[] = [
     title: 'Verification niveaux sous-sol',
     type: 'work',
     date: '2026-06-09',
-    phaseId: 'phase-validation',
+    phaseId: 'phase-preparation',
     zoneId: 'zone-sous-sol',
     status: 'to_check',
     isExtra: false,
@@ -477,7 +477,7 @@ export const mockTasks: Task[] = [
     id: 'task-p17',
     projectId: SPARRENLAAN_PROJECT_ID,
     interventionId: 'int-confirmation-p17',
-    phaseId: 'phase-validation',
+    phaseId: 'phase-preparation',
     zoneId: 'zone-tech-p17',
     title: 'Confirmer détails P1.7 avec Martin (ingénieur)',
     status: 'to_check',
@@ -501,7 +501,7 @@ export const mockTasks: Task[] = [
     id: 'task-photos-structure',
     projectId: SPARRENLAAN_PROJECT_ID,
     interventionId: 'int-sous-sol-niveaux',
-    phaseId: 'phase-validation',
+    phaseId: 'phase-preparation',
     zoneId: 'zone-sous-sol',
     title: 'Ajouter photos preuve niveaux sous-sol',
     status: 'to_do',
@@ -524,7 +524,7 @@ export const mockTasks: Task[] = [
   {
     id: 'task-confirm-p12-barre',
     projectId: SPARRENLAAN_PROJECT_ID,
-    phaseId: 'phase-validation',
+    phaseId: 'phase-preparation',
     zoneId: 'zone-tech-p12-barre',
     title: '⚠️ Clarifier P1.2 HEA140 barré (rouge) — annulé ou modifié ?',
     description:
@@ -589,7 +589,7 @@ export const mockTasks: Task[] = [
   {
     id: 'task-confirm-terrasse-surcharges',
     projectId: SPARRENLAAN_PROJECT_ID,
-    phaseId: 'phase-validation',
+    phaseId: 'phase-preparation',
     zoneId: 'zone-terrasse',
     title: "Valider surcharges terrasse (1 + 2 + 0,4 kN/m²) avec bureau d'étude",
     description:
@@ -602,7 +602,7 @@ export const mockTasks: Task[] = [
   {
     id: 'task-confirm-toiture-verte-complexe',
     projectId: SPARRENLAAN_PROJECT_ID,
-    phaseId: 'phase-validation',
+    phaseId: 'phase-preparation',
     zoneId: 'zone-toiture-verte',
     title: 'Valider complexe toiture verte — 2 kN/m² charge permanente',
     description:
@@ -628,7 +628,7 @@ export const mockTasks: Task[] = [
   {
     id: 'task-confirm-annotations-bleues',
     projectId: SPARRENLAAN_PROJECT_ID,
-    phaseId: 'phase-validation',
+    phaseId: 'phase-preparation',
     zoneId: 'zone-extension-arriere',
     title: 'Lire et enregistrer annotations bleues côté droit du plan',
     description:
@@ -1085,7 +1085,7 @@ export const mockExpenses: Expense[] = [
     date: '2026-06-08',
     status: 'paid',
     isRebillable: false,
-    receiptPhotoId: 'photo-lovemat-ticket',
+    receiptPhotoId: 'photo-ticket-lovemat',
   },
   {
     id: 'expense-conteneur',
@@ -1145,7 +1145,7 @@ export const mockPhotos: Photo[] = [
     projectId: SPARRENLAAN_PROJECT_ID,
     interventionId: 'int-lovemat-protection',
     zoneId: 'zone-escalier-etage',
-    phaseId: 'phase-admin',
+    phaseId: 'phase-preparation',
     type: 'receipt',
     url: 'https://images.unsplash.com/photo-1554224155-671804f5e135?q=80&w=1000&auto=format&fit=crop',
     takenAt: '2026-06-08T11:32:00.000Z',

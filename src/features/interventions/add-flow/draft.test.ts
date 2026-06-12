@@ -14,14 +14,17 @@ describe('createDraftInputFromState', () => {
       people: mockPeople,
       state: {
         ...base,
-        what: { type: 'demolition', title: '  Demolition garage  ', note: '  Mur retire.  ' },
-        where: {
+        form: {
+          ...base.form,
+          type: 'demolition',
+          title: '  Demolition garage  ',
+          note: '  Mur retire.  ',
           phaseId: 'phase-demolition',
           zoneId: 'zone-garage',
           locationToDefine: false,
+          personIds: ['person-hubert', 'person-chris'],
+          date: '  2026-06-09  ',
         },
-        who: { personIds: ['person-hubert', 'person-chris'] },
-        when: { ...base.when, date: '  2026-06-09  ' },
       },
     })
 
@@ -53,17 +56,18 @@ describe('createDraftInputFromState', () => {
       people: mockPeople,
       state: {
         ...base,
-        what: { type: 'expense', title: 'Achat materiaux', note: '' },
-        where: {
+        form: {
+          ...base.form,
+          type: 'expense',
+          title: 'Achat materiaux',
+          note: '',
           phaseId: 'phase-finitions',
           zoneId: 'zone-stockage',
           locationToDefine: false,
+          personIds: ['person-hubert'],
         },
-        who: { personIds: ['person-hubert'] },
         status: {
-          isExtra: true,
-          billingStatus: 'to_check',
-          paymentStatus: 'not_applicable',
+          simplified: 'extra',
         },
       },
     })
@@ -81,13 +85,16 @@ describe('createDraftInputFromState', () => {
       people: mockPeople,
       state: {
         ...base,
-        what: { type: 'demolition', title: 'Demolition garage', note: '' },
-        where: {
+        form: {
+          ...base.form,
+          type: 'demolition',
+          title: 'Demolition garage',
+          note: '',
           phaseId: 'phase-demolition',
           zoneId: 'zone-garage',
           locationToDefine: true,
+          personIds: ['person-hubert'],
         },
-        who: { personIds: ['person-hubert'] },
       },
     })
 
@@ -106,14 +113,17 @@ describe('createDraftInputFromState', () => {
       people: mockPeople,
       state: {
         ...base,
-        what: { type: 'task', title: 'Controle', note: '' },
-        where: {
+        form: {
+          ...base.form,
+          type: 'task',
+          title: 'Controle',
+          note: '',
           phaseId: null,
           zoneId: null,
           locationToDefine: false,
+          personIds: [],
         },
-        who: { personIds: [] },
-        status: { isExtra: true, billingStatus: 'to_check', paymentStatus: 'not_applicable' },
+        status: { simplified: 'extra' },
       },
     })
 
@@ -128,17 +138,18 @@ describe('createDraftInputFromState', () => {
       people: mockPeople,
       state: {
         ...base,
-        what: { type: 'task', title: 'Controle', note: '' },
-        where: {
+        form: {
+          ...base.form,
+          type: 'task',
+          title: 'Controle',
+          note: '',
           phaseId: 'phase-demolition',
           zoneId: 'zone-garage',
           locationToDefine: false,
+          personIds: ['person-hubert'],
         },
-        who: { personIds: ['person-hubert'] },
         status: {
-          isExtra: 'to_check' as AddInterventionStatusState['isExtra'],
-          billingStatus: 'to_check',
-          paymentStatus: 'to_check',
+          simplified: 'to_check',
         },
       },
     })
@@ -160,13 +171,16 @@ describe('createDraftInputFromState', () => {
       people: peopleWithDistinctRates,
       state: {
         ...base,
-        what: { type: 'task', title: 'Controle', note: '  ' },
-        where: {
+        form: {
+          ...base.form,
+          type: 'task',
+          title: 'Controle',
+          note: '  ',
           phaseId: null,
           zoneId: null,
           locationToDefine: false,
+          personIds: [],
         },
-        who: { personIds: [] },
       },
     })
 
@@ -181,14 +195,15 @@ describe('createDraftInputFromState', () => {
       people: mockPeople.map((person) => ({ ...person, active: false })),
       state: {
         ...base,
-        what: { type: 'task', title: 'Controle', note: '  ' },
-        where: {
+        form: {
+          ...base.form,
+          type: 'task',
+          title: 'Controle',
+          note: '  ',
           phaseId: null,
           zoneId: null,
           locationToDefine: false,
-        },
-        who: { personIds: [] },
-        when: {
+          personIds: [],
           date: '2026-06-10',
           startTime: '09:15',
           endTime: '11:45',
@@ -221,6 +236,6 @@ describe('createDraftInputFromState', () => {
         people: mockPeople,
         state: base,
       }),
-    ).toThrow('Choisis un type d intervention. Ajoute un titre court.')
+    ).toThrow('Choisis un type de travail. Ajoute un titre court.')
   })
 })

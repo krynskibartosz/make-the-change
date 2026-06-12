@@ -6,10 +6,10 @@ describe('mock Clarus repository', () => {
   it('exposes Sparrenlaan data through the repository contract', async () => {
     const repository = createMockClarusRepository()
 
-    await expect(repository.getProject()).resolves.toMatchObject({ name: 'Sparrenlaan' })
-    await expect(repository.getPeople()).resolves.toHaveLength(5)
-    await expect(repository.getPhases()).resolves.toHaveLength(9)
-    await expect(repository.getZones()).resolves.toHaveLength(17)
+    await expect(repository.getProject()).resolves.toMatchObject({ name: 'Villa Sparrenlaan' })
+    await expect(repository.getPeople()).resolves.toHaveLength(4)
+    await expect(repository.getPhases()).resolves.toHaveLength(7)
+    await expect(repository.getZones()).resolves.toHaveLength(31)
     await expect(repository.getInterventions()).resolves.toHaveLength(12)
     await expect(repository.getWorkEntries()).resolves.toHaveLength(24)
   })
