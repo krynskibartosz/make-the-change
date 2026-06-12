@@ -28,7 +28,7 @@ export function BottomNav() {
             <Link
               aria-current={isActive ? 'page' : undefined}
               className={cn(
-                'relative flex flex-col items-center justify-center gap-1.5 rounded-[var(--radius-control)] px-4 transition-colors',
+                'relative flex flex-1 flex-col items-center justify-center gap-1.5 rounded-[var(--radius-control)] px-1 transition-colors',
                 isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground',
               )}
               href={tab.href}
