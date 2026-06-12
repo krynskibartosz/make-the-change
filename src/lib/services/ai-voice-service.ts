@@ -1,5 +1,7 @@
 'use server'
 
+import { z } from 'zod'
+
 export type ConstructionData = {
   summary: string
   workType: string
@@ -45,7 +47,8 @@ export async function transcribeAudio(formData: FormData): Promise<string> {
   }
 
   const data = await response.json()
-  return data.text
+  const parsedData = z.object({ text: z.string() }).parse(data)
+  return parsedData.text
 }
 
 export async function extractConstructionData(transcript: string): Promise<ConstructionData> {
@@ -107,7 +110,12 @@ Si une information manque, laisse un tableau vide [] ou la chaîne "Non précis�
   }
 
   const data = await response.json()
-  const content = data.choices[0].message.content
+  const parsedData = z.object({ choices: z.array(z.object({ message: z.object({ content: z.string() }) })) }).parse(data)
+  const content = parsedData.choices[0]?.message.content
+
+  if (!content) {
+    throw new Error("L'IA n'a pas renvoyé de contenu.")
+  }
 
   try {
     const parsed = JSON.parse(content) as ConstructionData

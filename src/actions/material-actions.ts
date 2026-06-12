@@ -3,30 +3,47 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { after } from 'next/server'
+import { z } from 'zod'
 import { mockClarusRepository } from '@/lib/repositories'
+import { materialMovementStatusSchema, materialMovementTypeSchema } from '@/lib/schemas/clarus'
 
-export async function createMaterialMovementAction(prevState: any, formData: FormData) {
+const materialMovementFormSchema = z.object({
+  projectId: z.string().default('project-1'),
+  materialId: z.string(),
+  type: materialMovementTypeSchema,
+  quantity: z.coerce.number(),
+  unit: z.string(),
+  estimatedCost: z.coerce.number().nullable().optional(),
+  realCost: z.coerce.number().nullable().optional(),
+  supplier: z.string().nullable().optional(),
+  status: materialMovementStatusSchema,
+  zoneId: z.string().nullable().optional(),
+  phaseId: z.string().nullable().optional(),
+  interventionId: z.string().nullable().optional(),
+})
+
+export async function createMaterialMovementAction(_prevState: unknown, formData: FormData) {
   try {
-    const input: any = {
-      projectId: (formData.get('projectId') as string) || 'project-1',
-      materialId: formData.get('materialId') as string,
-      type: formData.get('type') as any,
-      quantity: Number(formData.get('quantity')) || 0,
-      unit: formData.get('unit') as string,
+    const rawInput = {
+      projectId: formData.get('projectId') || 'project-1',
+      materialId: formData.get('materialId'),
+      type: formData.get('type'),
+      quantity: formData.get('quantity'),
+      unit: formData.get('unit'),
       estimatedCost:
         formData.has('estimatedCost') && formData.get('estimatedCost')
-          ? Number(formData.get('estimatedCost'))
+          ? formData.get('estimatedCost')
           : null,
       realCost:
-        formData.has('realCost') && formData.get('realCost')
-          ? Number(formData.get('realCost'))
-          : null,
-      supplier: formData.get('supplier') as string | null,
-      status: formData.get('status') as any,
-      zoneId: formData.get('zoneId') as string | null,
-      phaseId: formData.get('phaseId') as string | null,
-      interventionId: formData.get('interventionId') as string | null,
+        formData.has('realCost') && formData.get('realCost') ? formData.get('realCost') : null,
+      supplier: formData.get('supplier'),
+      status: formData.get('status'),
+      zoneId: formData.get('zoneId'),
+      phaseId: formData.get('phaseId'),
+      interventionId: formData.get('interventionId'),
     }
+
+    const input = materialMovementFormSchema.parse(rawInput)
 
     await mockClarusRepository.createMaterialMovement(input)
     after(async () => {
@@ -34,8 +51,11 @@ export async function createMaterialMovementAction(prevState: any, formData: For
     })
 
     revalidatePath('/inventaire')
-  } catch (error: any) {
-    return { error: error.message || 'Failed to create material movement', success: false }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return { error: error.message, success: false }
+    }
+    return { error: 'Failed to create material movement', success: false }
   }
 
   redirect('/inventaire')
