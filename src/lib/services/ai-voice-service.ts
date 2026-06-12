@@ -1,3 +1,5 @@
+'use server'
+
 export type ConstructionData = {
   summary: string
   workType: string
@@ -11,8 +13,8 @@ export type ConstructionData = {
 // Fonction utilitaire pour simuler un délai réseau
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
-export async function transcribeAudio(audioBlob: Blob): Promise<string> {
-  const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY
+export async function transcribeAudio(formData: FormData): Promise<string> {
+  const apiKey = process.env.OPENAI_API_KEY || process.env.NEXT_PUBLIC_OPENAI_API_KEY
 
   // Si aucune clé n'est fournie, on utilise le mode MOCK
   if (!apiKey) {
@@ -21,8 +23,6 @@ export async function transcribeAudio(audioBlob: Blob): Promise<string> {
     return "J'ai bossé de 8h à 12h sur la dalle en béton avec Chris, on a utilisé 4 sacs de ciment. Il manque une bâche pour protéger."
   }
 
-  const formData = new FormData()
-  formData.append('file', audioBlob, 'voice-note.webm')
   formData.append('model', 'whisper-1')
   formData.append('language', 'fr')
   formData.append(
@@ -49,7 +49,7 @@ export async function transcribeAudio(audioBlob: Blob): Promise<string> {
 }
 
 export async function extractConstructionData(transcript: string): Promise<ConstructionData> {
-  const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY
+  const apiKey = process.env.OPENAI_API_KEY || process.env.NEXT_PUBLIC_OPENAI_API_KEY
 
   // Si aucune clé n'est fournie, on utilise le mode MOCK
   if (!apiKey) {

@@ -1,5 +1,6 @@
 'use client'
 
+import { Button as BaseUIButton } from '@base-ui/react'
 import { type ComponentPropsWithoutRef, forwardRef, type ReactNode } from 'react'
 
 import { cn } from '@/lib/utils/cn'
@@ -45,7 +46,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   ref,
 ) {
   return (
-    <button
+    <BaseUIButton
       className={cn(
         'inline-flex items-center justify-center gap-2 rounded-[var(--radius-control)] border font-semibold transition-colors disabled:opacity-50',
         buttonVariants[variant],
@@ -64,7 +65,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       {rightIcon ? (
         <span className="flex size-5 items-center justify-center">{rightIcon}</span>
       ) : null}
-    </button>
+    </BaseUIButton>
   )
 })
 
@@ -79,7 +80,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
   ref,
 ) {
   return (
-    <button
+    <BaseUIButton
       className={cn(
         'inline-flex size-[var(--size-icon-button)] shrink-0 items-center justify-center rounded-[var(--radius-control)] border transition-colors disabled:opacity-50',
         buttonVariants[variant],
@@ -90,6 +91,6 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
       {...props}
     >
       {children}
-    </button>
+    </BaseUIButton>
   )
 })

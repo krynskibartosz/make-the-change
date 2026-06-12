@@ -6,6 +6,8 @@ import type {
   CreateMaterialMovementInput,
   CreatePersonInput,
   CreateTaskInput,
+  CreateZoneInput,
+  DashboardKPIs,
   Expense,
   Intervention,
   InterventionDraft,
@@ -17,7 +19,9 @@ import type {
   Task,
   TaskStatus,
   UpdatePersonInput,
+  WeeklyPlan,
   WorkEntry,
+  Zone,
 } from '@/lib/domain'
 import {
   mockClient,
@@ -47,9 +51,10 @@ export const createMockClarusRepository = (): ClarusRepository => {
   let interventions: Intervention[] = [...mockInterventions]
   let tasks: Task[] = [...mockTasks] as Task[]
   let expenses: Expense[] = [...mockExpenses] as Expense[]
+  let zones: Zone[] = [...mockZones]
   let materialMovements: MaterialMovement[] = [...mockMaterialMovements] as MaterialMovement[]
   const materials: Material[] = [...mockMaterials]
-  const people = mockPeople.map(clonePerson)
+  let people = mockPeople.map(clonePerson)
 
   return {
     getProject: async () => mockProject,
@@ -57,7 +62,7 @@ export const createMockClarusRepository = (): ClarusRepository => {
     getClient: async (id: string) => (id === mockClient.id ? mockClient : null),
     getClients: async () => [mockClient],
     getPeople: async () => people.map(clonePerson),
-    getPersonById: async (id: string) => people.find((p) => p.id === id) || null,
+    getPersonById: async (id) => mockPeople.find((p) => p.id === id) || undefined,
     getPhases: async () => [...mockPhases],
     getProjectPhases: async (projectId: string) =>
       mockPhases.filter((p) => p.projectId === projectId),
@@ -98,7 +103,30 @@ export const createMockClarusRepository = (): ClarusRepository => {
       people[idx] = updated
       return clonePerson(updated)
     },
-    getZones: async () => [...mockZones],
+    deletePerson: async (id: string) => {
+      people = people.filter((p) => p.id !== id)
+    },
+    getZones: async () => [...zones],
+    getZoneById: async (id: string) => zones.find((z) => z.id === id),
+    createZone: async (input: CreateZoneInput) => {
+      const zone: Zone = {
+        ...input,
+        id: `zone-${crypto.randomUUID()}`,
+        projectId: mockProject.id,
+      } as Zone
+      zones = [...zones, zone]
+      return zone
+    },
+    updateZone: async (id: string, input: Partial<Zone>) => {
+      const idx = zones.findIndex((z) => z.id === id)
+      if (idx === -1) throw new Error('Zone not found')
+      const updated = { ...zones[idx], ...input, updatedAt: new Date().toISOString() } as Zone
+      zones = [...zones.slice(0, idx), updated, ...zones.slice(idx + 1)]
+      return updated
+    },
+    deleteZone: async (id: string) => {
+      zones = zones.filter((z) => z.id !== id)
+    },
     getMaterials: async () => [...materials],
     getMaterialById: async (id: string) => materials.find((m) => m.id === id) ?? null,
     updateMaterial: async (id: string, input: Partial<Material>) => {
@@ -233,7 +261,7 @@ export const createMockClarusRepository = (): ClarusRepository => {
       if (index === -1) throw new Error('Task not found')
       const updatedTask: Task = { ...tasks[index], ...input } as Task
       // Ensure completion date consistency if status changes
-      if (input.status === 'done' && tasks[index].status !== 'done') {
+      if (input.status === 'done' && tasks[index]?.status !== 'done') {
         updatedTask.completedAt = new Date().toISOString()
       } else if (input.status && input.status !== 'done') {
         updatedTask.completedAt = undefined
@@ -257,6 +285,17 @@ export const createMockClarusRepository = (): ClarusRepository => {
       }
       expenses = [...expenses, expense]
       return expense
+    },
+    getExpenseById: async (id: string) => expenses.find((e) => e.id === id),
+    updateExpense: async (id: string, input: Partial<Expense>) => {
+      const idx = expenses.findIndex((e) => e.id === id)
+      if (idx === -1) throw new Error('Expense not found')
+      const updated = { ...expenses[idx], ...input } as Expense
+      expenses = [...expenses.slice(0, idx), updated, ...expenses.slice(idx + 1)]
+      return updated
+    },
+    deleteExpense: async (id: string) => {
+      expenses = expenses.filter((e) => e.id !== id)
     },
     createMaterialMovement: async (input: CreateMaterialMovementInput) => {
       const movement: MaterialMovement = {

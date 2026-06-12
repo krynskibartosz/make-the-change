@@ -4,6 +4,7 @@ import type { ReactNode } from 'react'
 
 import { Toaster } from '@/components/ui/toaster'
 import { ProjectProvider } from '@/lib/project-context'
+import { mockClarusRepository } from '@/lib/repositories'
 import { RoleProvider } from '@/lib/role-context'
 import './globals.css'
 
@@ -34,12 +35,14 @@ type RootLayoutProps = Readonly<{
   modal?: ReactNode
 }>
 
-export default function RootLayout({ children, modal }: RootLayoutProps) {
+export default async function RootLayout({ children, modal }: RootLayoutProps) {
+  const projects = await mockClarusRepository.getProjects()
+
   return (
     <html lang="fr" data-theme="dark">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <RoleProvider>
-          <ProjectProvider>{children}</ProjectProvider>
+          <ProjectProvider initialProjects={projects}>{children}</ProjectProvider>
           {modal}
           <Toaster />
         </RoleProvider>

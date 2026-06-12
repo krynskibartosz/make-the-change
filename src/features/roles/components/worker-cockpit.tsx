@@ -75,7 +75,9 @@ export function WorkerCockpit() {
   const processAudio = async (audioBlob: Blob) => {
     setStatus('analyzing')
     try {
-      const transcript = await transcribeAudio(audioBlob)
+      const formData = new FormData()
+      formData.append('file', audioBlob, 'voice-note.webm')
+      const transcript = await transcribeAudio(formData)
       const extractedData = await extractConstructionData(transcript)
       setResult(extractedData)
       setStatus('success')

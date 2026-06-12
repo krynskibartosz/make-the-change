@@ -154,9 +154,10 @@ export default function CostsPage() {
           ) : (
             <div className="flex flex-col bg-surface rounded-[var(--radius-card)] border border-border">
               {dashboard.recentExpenses.map((expense) => (
-                <div
+                <Link
+                  href={`/depenses/${expense.id}/editer`}
                   key={expense.id}
-                  className="flex items-center justify-between p-4 border-b border-border last:border-0"
+                  className="flex items-center justify-between p-4 border-b border-border last:border-0 hover:bg-surface-elevated transition-colors"
                 >
                   <div className="flex flex-col min-w-0 flex-1">
                     <span className="font-medium truncate pr-4">{expense.description}</span>
@@ -182,7 +183,7 @@ export default function CostsPage() {
                       </span>
                     )}
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           )}
@@ -191,6 +192,7 @@ export default function CostsPage() {
 
       <FloatingCTA>
         <button
+          type="button"
           onClick={() => router.push('/ajouter-depense')}
           className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground py-3.5 font-semibold active:scale-[0.98] transition-all shadow-lg shadow-primary/20"
         >

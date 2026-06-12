@@ -1,6 +1,7 @@
 'use client'
 
-import { type ComponentPropsWithoutRef, forwardRef, useId } from 'react'
+import { Field } from '@base-ui/react'
+import { type ComponentPropsWithoutRef, forwardRef } from 'react'
 
 import { cn } from '@/lib/utils/cn'
 
@@ -16,37 +17,32 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   { className, error, help, id, label, ...props },
   ref,
 ) {
-  const generatedId = useId()
-  const inputId = id ?? generatedId
-  const helpId = help ? `${inputId}-help` : undefined
-  const errorId = error ? `${inputId}-error` : undefined
-  const describedBy = [helpId, errorId].filter(Boolean).join(' ') || undefined
-
   return (
-    <label className="grid gap-2 text-sm font-semibold text-foreground" htmlFor={inputId}>
-      <span>{label}</span>
-      <input
-        aria-describedby={describedBy}
-        aria-invalid={error ? true : undefined}
+    <Field.Root
+      className="grid gap-2 text-sm font-semibold text-foreground"
+      id={id}
+      invalid={!!error}
+    >
+      <Field.Label>{label}</Field.Label>
+      <Field.Control
         className={cn(
           'min-h-[var(--size-input)] w-full rounded-[var(--radius-control)] border border-border bg-surface px-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary disabled:opacity-50',
           error && 'border-danger focus:border-danger',
           className,
         )}
-        id={inputId}
         ref={ref}
         {...props}
       />
       {help ? (
-        <span className="text-xs font-medium leading-5 text-muted-foreground" id={helpId}>
+        <Field.Description className="text-xs font-medium leading-5 text-muted-foreground">
           {help}
-        </span>
+        </Field.Description>
       ) : null}
       {error ? (
-        <span className="text-xs font-semibold leading-5 text-danger" id={errorId}>
+        <Field.Error className="text-xs font-semibold leading-5 text-danger" forceMatch>
           {error}
-        </span>
+        </Field.Error>
       ) : null}
-    </label>
+    </Field.Root>
   )
 })

@@ -11,16 +11,15 @@ export default function ProjetsPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    async function loadData() {
+      const project = await mockClarusRepository.getProject()
+      const kpis = await mockClarusRepository.getDashboardKPIs()
+      // Mock multiple projects using the same project data for demo
+      setData([{ project, kpis }])
+      setLoading(false)
+    }
     loadData()
-  }, [loadData])
-
-  const loadData = async () => {
-    const project = await mockClarusRepository.getProject()
-    const kpis = await mockClarusRepository.getDashboardKPIs()
-    // Mock multiple projects using the same project data for demo
-    setData([{ project, kpis }])
-    setLoading(false)
-  }
+  }, [])
 
   return (
     <div className="flex flex-col min-h-dvh text-foreground bg-background">

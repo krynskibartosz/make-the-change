@@ -7,6 +7,7 @@ export type {
   CreateMaterialMovementInput,
   CreatePersonInput,
   CreateTaskInput,
+  CreateZoneInput,
   DashboardKPIs,
   Expense,
   ExpenseStatus,

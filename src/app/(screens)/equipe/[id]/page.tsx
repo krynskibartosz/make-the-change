@@ -8,6 +8,7 @@ import {
   Clock,
   Flame,
   Mail,
+  Pencil,
   Phone,
   UserCircle2,
   Wrench,
@@ -41,7 +42,7 @@ export default function PersonProfilePage({ params }: { params: { id: string } }
       mockClarusRepository.getWorkEntries(),
       mockClarusRepository.getInterventions(),
     ]).then(([p, allTasks, allWorkEntries, allInterventions]) => {
-      setPerson(p)
+      setPerson(p || null)
       if (!p) {
         setLoading(false)
         return
@@ -57,15 +58,15 @@ export default function PersonProfilePage({ params }: { params: { id: string } }
       })
 
       // Calculate stats
-      const totalHours = personWork.reduce((acc, w) => acc + w.hours, 0)
+      const totalMinutes = personWork.reduce((acc, w) => acc + (w.durationMinutes || 0), 0)
       const pendingTasks = personTasks.filter((t) => t.status !== 'done')
       const urgentTasks = pendingTasks.filter(
         (t) => t.priority === 'urgent' || t.priority === 'high',
       )
 
       setStats({
-        hours: totalHours,
-        cost: totalHours * p.defaultHourlyRate,
+        hours: totalMinutes / 60,
+        cost: (totalMinutes / 60) * p.defaultHourlyRate,
         pendingCount: pendingTasks.length,
         urgentCount: urgentTasks.length,
       })
@@ -82,7 +83,7 @@ export default function PersonProfilePage({ params }: { params: { id: string } }
             type: 'work_entry',
             date: new Date(we.date),
             title: intervention.title,
-            hours: we.hours,
+            hours: we.durationMinutes ? we.durationMinutes / 60 : 0,
           })
         }
       })
@@ -142,6 +143,7 @@ export default function PersonProfilePage({ params }: { params: { id: string } }
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
+              type="button"
               onClick={() => router.back()}
               className="p-2 -ml-2 rounded-full hover:bg-surface-elevated transition-colors"
             >
@@ -149,6 +151,13 @@ export default function PersonProfilePage({ params }: { params: { id: string } }
             </button>
             <h1 className="text-xl font-bold leading-tight">Profil Intelligent</h1>
           </div>
+          <button
+            type="button"
+            onClick={() => router.push(`/equipe/${params.id}/editer`)}
+            className="p-2 -mr-2 rounded-full hover:bg-surface-elevated transition-colors text-primary"
+          >
+            <Pencil className="size-5" />
+          </button>
         </div>
       </header>
 

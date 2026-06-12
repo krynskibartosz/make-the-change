@@ -3,6 +3,7 @@
 import {
   BarChart3,
   Bell,
+  Boxes,
   ChevronRight,
   ClipboardList,
   Image as ImageIcon,
@@ -110,9 +111,25 @@ export default function MenuPage() {
       iconWrapperClassName: 'bg-emerald-500',
       iconClassName: 'text-white',
     },
+    {
+      label: 'Inventaire des matériaux',
+      description: 'Gérer le stock de chaque matériau',
+      icon: Boxes,
+      href: '/inventaire',
+      iconWrapperClassName: 'bg-teal-500',
+      iconClassName: 'text-white',
+    },
   ]
 
   const projectItems: SettingsItem[] = [
+    {
+      label: 'Référentiel des zones',
+      description: 'Gérer les zones du chantier',
+      icon: Map,
+      href: '/zones',
+      iconWrapperClassName: 'bg-rose-500',
+      iconClassName: 'text-white',
+    },
     {
       label: 'Chantier — Zones & Plans',
       description: 'Zones, références techniques et suivi',

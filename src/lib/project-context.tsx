@@ -3,7 +3,6 @@
 import type React from 'react'
 import { createContext, useContext, useEffect, useState } from 'react'
 import type { Project } from '@/lib/domain'
-import { mockClarusRepository } from '@/lib/repositories'
 
 interface ProjectContextState {
   projects: Project[]
@@ -15,24 +14,18 @@ interface ProjectContextState {
 
 const ProjectContext = createContext<ProjectContextState | undefined>(undefined)
 
-export function ProjectProvider({ children }: { children: React.ReactNode }) {
-  const [projects, setProjects] = useState<Project[]>([])
-  const [activeProjectId, setActiveProjectId] = useState<string | null>(null)
-  const [isReady, setIsReady] = useState(false)
-
-  useEffect(() => {
-    async function loadProjects() {
-      const projs = await mockClarusRepository.getProjects()
-      setProjects(projs)
-      // Par défaut, on sélectionne le premier projet
-      const firstProj = projs[0]
-      if (firstProj && !activeProjectId) {
-        setActiveProjectId(firstProj.id)
-      }
-      setIsReady(true)
-    }
-    loadProjects()
-  }, [activeProjectId])
+export function ProjectProvider({
+  children,
+  initialProjects,
+}: {
+  children: React.ReactNode
+  initialProjects: Project[]
+}) {
+  const [projects, setProjects] = useState<Project[]>(initialProjects)
+  const [activeProjectId, setActiveProjectId] = useState<string | null>(
+    initialProjects.length > 0 ? initialProjects[0]?.id || null : null,
+  )
+  const [isReady, setIsReady] = useState(true)
 
   const activeProject = projects.find((p) => p.id === activeProjectId) || null
 

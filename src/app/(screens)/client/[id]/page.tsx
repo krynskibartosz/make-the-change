@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import type { Client, Project } from '@/lib/domain'
 import { mockClarusRepository } from '@/lib/repositories'
 
@@ -25,11 +25,7 @@ export default function ClientProfilePage() {
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    loadData()
-  }, [loadData])
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     const c = await mockClarusRepository.getClient(id)
     // In a real app we'd fetch projects by clientId. For the mock we just grab the only one if it matches.
     const p = await mockClarusRepository.getProject()
@@ -38,7 +34,11 @@ export default function ClientProfilePage() {
     setClient(c)
     setProjects(clientProjects)
     setLoading(false)
-  }
+  }, [id])
+
+  useEffect(() => {
+    loadData()
+  }, [loadData])
 
   if (loading) return <div className="p-8 text-center text-muted-foreground">Chargement...</div>
   if (!client)

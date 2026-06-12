@@ -12,14 +12,13 @@ export default function BoardPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    async function loadTasks() {
+      const data = await mockClarusRepository.getTasks()
+      setTasks(data)
+      setLoading(false)
+    }
     loadTasks()
-  }, [loadTasks])
-
-  const loadTasks = async () => {
-    const data = await mockClarusRepository.getTasks()
-    setTasks(data)
-    setLoading(false)
-  }
+  }, [])
 
   const handleStatusChange = async (taskId: string, newStatus: TaskStatus) => {
     await mockClarusRepository.updateTaskStatus(taskId, newStatus)

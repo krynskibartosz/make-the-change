@@ -15,21 +15,20 @@ export default function ProjetInfoPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    loadData()
-  }, [loadData])
-
-  const loadData = async () => {
-    const p = await mockClarusRepository.getProject()
-    const k = await mockClarusRepository.getDashboardKPIs()
-    let c: Client | null = null
-    if (p.clientId) {
-      c = await mockClarusRepository.getClient(p.clientId)
+    const loadData = async () => {
+      const p = await mockClarusRepository.getProject()
+      const k = await mockClarusRepository.getDashboardKPIs()
+      let c: Client | null = null
+      if (p.clientId) {
+        c = await mockClarusRepository.getClient(p.clientId)
+      }
+      setProject(p)
+      setKpis(k)
+      setClient(c)
+      setLoading(false)
     }
-    setProject(p)
-    setKpis(k)
-    setClient(c)
-    setLoading(false)
-  }
+    loadData()
+  }, [])
 
   if (loading) return <div className="p-8 text-center text-muted-foreground">Chargement...</div>
   if (!project) return null
