@@ -65,7 +65,7 @@ export function WeekView({ plan }: { plan: WeeklyPlan | null }) {
       </section>
 
       {/* Header Sprint */}
-      <section className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-sm">
+      <section className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-border bg-surface p-4 shadow-sm">
         <h2 className="text-lg font-bold">
           Semaine du {format(new Date(plan.weekStart), 'd MMM', { locale: fr })}
         </h2>

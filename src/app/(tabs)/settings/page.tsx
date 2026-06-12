@@ -8,7 +8,7 @@ import { SettingsGroup } from '../_components/settings-group'
 export default function SettingsPage() {
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col pb-32 text-foreground">
-      <header className="sticky top-0 z-30 flex items-center justify-between border-b border-border/30 bg-background/85 px-5 pb-4 pt-[max(env(safe-area-inset-top),1.25rem)] backdrop-blur-md">
+      <header className="sticky top-0 z-30 flex items-center justify-between border-b border-border/30 bg-background/85 px-4 pb-4 pt-[max(env(safe-area-inset-top),1.25rem)] backdrop-blur-md">
         <div>
           <h1 className="text-3xl font-semibold leading-tight">Réglages</h1>
           <p className="mt-1 text-xs text-muted-foreground">Pilotage (Martin)</p>

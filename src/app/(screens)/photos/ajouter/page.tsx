@@ -57,7 +57,7 @@ function AjouterPhotoForm() {
   return (
     <FullScreenSlideModal asPage headerMode="back" title="Prendre une photo">
       <div className="flex-1 overflow-y-auto pb-[calc(env(safe-area-inset-bottom)+100px)] bg-background">
-        <form id="add-photo-form" onSubmit={handleSubmit} className="p-5 flex flex-col gap-6">
+        <form id="add-photo-form" onSubmit={handleSubmit} className="p-4 flex flex-col gap-6">
           {/* Photo Preview / URL Input */}
           <div className="flex flex-col gap-3">
             <label className="text-sm font-semibold flex items-center gap-2">

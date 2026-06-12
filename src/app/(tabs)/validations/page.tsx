@@ -45,7 +45,7 @@ export default function ValidationsPage() {
 
   return (
     <div className="flex min-h-dvh flex-col pb-32 text-foreground">
-      <header className="sticky top-0 z-30 flex flex-col gap-1 border-b border-border/30 bg-background/90 px-5 pb-4 pt-[max(env(safe-area-inset-top),1.25rem)] backdrop-blur-md">
+      <header className="sticky top-0 z-30 flex flex-col gap-1 border-b border-border/30 bg-background/90 px-4 pb-4 pt-[max(env(safe-area-inset-top),1.25rem)] backdrop-blur-md">
         <h1 className="text-2xl font-semibold leading-tight">À valider</h1>
         {isClient ? (
           <p className="text-sm text-muted-foreground">
@@ -54,7 +54,7 @@ export default function ValidationsPage() {
         ) : null}
       </header>
 
-      <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-6 p-5">
+      <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-6 p-4">
         <section className="flex flex-col gap-4">
           <div className="overflow-hidden rounded-2xl border border-border bg-surface">
             <div
@@ -81,7 +81,7 @@ export default function ValidationsPage() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-5 p-5">
+            <div className="flex flex-col gap-5 p-4">
               <div className="flex flex-col gap-4">
                 <DetailBlock title="Situation">
                   Lors de la démolition de la terrasse extérieure, l'équipe a découvert une dalle de
@@ -244,7 +244,7 @@ export default function ValidationsPage() {
           aria-modal="true"
           aria-labelledby="confirmation-title"
         >
-          <div className="w-full max-w-md rounded-2xl bg-background p-5 shadow-2xl">
+          <div className="w-full max-w-md rounded-2xl bg-background p-4 shadow-2xl">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-bold uppercase tracking-wider text-emerald-700">

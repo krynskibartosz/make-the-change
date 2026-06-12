@@ -12,7 +12,7 @@ import Link from 'next/link'
 
 export function ClientPortal() {
   return (
-    <div className="flex flex-col gap-6 p-5 pb-32 max-w-md mx-auto">
+    <div className="flex flex-col gap-6 p-4 pb-32 max-w-md mx-auto">
       {/* Header Rassurant */}
       <section className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold">Bonjour Jean</h1>
@@ -97,7 +97,7 @@ export function ClientPortal() {
         <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
           Cette semaine
         </h2>
-        <div className="rounded-2xl border border-border bg-surface p-5 flex flex-col gap-4">
+        <div className="rounded-2xl border border-border bg-surface p-4 flex flex-col gap-4">
           <div className="flex items-start gap-3">
             <div className="mt-1 flex-shrink-0">
               <CheckCircle2 className="size-5 text-emerald-500" />

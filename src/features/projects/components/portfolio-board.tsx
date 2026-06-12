@@ -43,7 +43,7 @@ export function PortfolioBoard({ projects }: PortfolioBoardProps) {
   )
 
   return (
-    <div className="mx-auto flex h-full w-full max-w-lg flex-col gap-5 p-5 pb-32">
+    <div className="mx-auto flex h-full w-full max-w-lg flex-col gap-5 p-4 pb-32">
       <div className="flex flex-col gap-3">
         <label className="relative block">
           <span className="sr-only">Rechercher un chantier</span>

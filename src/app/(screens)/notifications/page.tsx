@@ -95,7 +95,7 @@ export default function NotificationsPage() {
 
   return (
     <main className="flex min-h-dvh flex-col bg-background text-foreground animate-in slide-in-from-right-8">
-      <header className="sticky top-0 z-30 flex items-center justify-between pb-4 px-5 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/30">
+      <header className="sticky top-0 z-30 flex items-center justify-between pb-4 px-4 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/30">
         <button
           onClick={() => router.back()}
           className="p-2 -ml-2 rounded-full hover:bg-surface-elevated transition-colors"

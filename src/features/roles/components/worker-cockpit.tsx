@@ -208,7 +208,7 @@ export function WorkerCockpit() {
         ) : null}
 
         {status === 'sent' && result ? (
-          <div className="flex w-full animate-in flex-col items-center rounded-xl border border-success/30 bg-success/10 p-5 text-center zoom-in-95">
+          <div className="flex w-full animate-in flex-col items-center rounded-xl border border-success/30 bg-success/10 p-4 text-center zoom-in-95">
             <CheckCircle2 className="mb-3 size-10 text-success" />
             <h3 className="text-lg font-bold text-foreground">Note envoyée à Christophe</h3>
             <p className="mt-1 text-sm text-muted-foreground">{result.summary}</p>

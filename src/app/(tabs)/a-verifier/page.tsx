@@ -118,7 +118,7 @@ export default function AVerifierPage() {
 
   if (role !== 'chef' && role !== 'admin') {
     return (
-      <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 p-5 text-center">
+      <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 p-4 text-center">
         <AlertTriangle className="size-12 text-orange-500 opacity-50" />
         <h1 className="text-xl font-bold">Accès restreint</h1>
         <p className="text-muted-foreground">

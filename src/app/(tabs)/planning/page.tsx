@@ -19,7 +19,7 @@ export default async function PlanningPage() {
   const formattedDate = format(now, 'EEEE d MMMM', { locale: fr })
 
   return (
-    <TabScreen eyebrow={formattedDate} title="Suivi Chantier" contentClassName="px-0 sm:px-5">
+    <TabScreen eyebrow={formattedDate} title="Suivi Chantier" contentClassName="px-0 sm:px-4">
       <div className="flex justify-end px-4 -mt-2 mb-4 relative z-20">
         <ProjectSwitcher />
       </div>

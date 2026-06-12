@@ -14,7 +14,7 @@ export default function PlansPage() {
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background pb-32 text-foreground">
-      <header className="sticky top-0 z-30 flex flex-col gap-4 pb-4 px-5 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/30">
+      <header className="sticky top-0 z-30 flex flex-col gap-4 pb-4 px-4 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/30">
         <div className="flex items-center gap-3">
           <Link
             href="/chantier"

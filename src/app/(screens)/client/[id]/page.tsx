@@ -49,7 +49,7 @@ export default function ClientProfilePage() {
 
   return (
     <div className="flex min-h-dvh flex-col bg-background pb-20 text-foreground">
-      <header className="sticky top-0 z-30 border-b border-border/30 bg-background/90 px-5 pb-4 pt-[max(env(safe-area-inset-top),1.25rem)] backdrop-blur-md">
+      <header className="sticky top-0 z-30 border-b border-border/30 bg-background/90 px-4 pb-4 pt-[max(env(safe-area-inset-top),1.25rem)] backdrop-blur-md">
         <div className="flex items-center gap-3">
           <button
             type="button"
@@ -66,7 +66,7 @@ export default function ClientProfilePage() {
         </div>
       </header>
 
-      <main className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-6 p-5">
+      <main className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-6 p-4">
         <section className="flex items-center gap-3">
           <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-info/10 text-info">
             <UserRound className="size-6" />

@@ -139,7 +139,7 @@ export default function PersonProfilePage({ params }: { params: { id: string } }
   return (
     <div className="flex flex-col min-h-dvh bg-background text-foreground pb-20 animate-in slide-in-from-right-8">
       {/* Header */}
-      <header className="sticky top-0 z-30 flex flex-col gap-4 p-5 pb-4 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/30">
+      <header className="sticky top-0 z-30 flex flex-col gap-4 p-4 pb-4 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/30">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
@@ -161,7 +161,7 @@ export default function PersonProfilePage({ params }: { params: { id: string } }
         </div>
       </header>
 
-      <main className="flex-1 p-5 flex flex-col gap-6">
+      <main className="flex-1 p-4 flex flex-col gap-6">
         {/* En-tête Profil */}
         <div className="flex flex-col items-center gap-3 py-4">
           <div className="relative">

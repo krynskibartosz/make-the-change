@@ -383,7 +383,7 @@ export function TimelineView({ events }: { events: TimelineEvent[] }) {
       {sortedDates.map((date) => (
         <div key={date}>
           {/* Day header */}
-          <div className="sticky top-0 z-20 -mx-5 px-5 py-2 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 mb-3">
+          <div className="sticky top-0 z-20 -mx-4 px-4 py-2 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 mb-3">
             <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground/70">
               {getDateLabel(date)}
             </span>

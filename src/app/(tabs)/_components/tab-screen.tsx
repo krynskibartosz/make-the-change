@@ -42,7 +42,7 @@ export function TabScreen({
         className,
       )}
     >
-      <header className="flex items-start justify-between gap-4 pb-4 px-5 pt-[max(env(safe-area-inset-top),1.25rem)] mb-5">
+      <header className="flex items-start justify-between gap-4 pb-4 px-4 pt-[max(env(safe-area-inset-top),1.25rem)] mb-5">
         <div className="min-w-0">
           <p className="text-sm font-medium text-muted-foreground">{displayEyebrow}</p>
           <h1 className="mt-1 text-3xl font-semibold leading-tight">{title}</h1>
@@ -53,7 +53,7 @@ export function TabScreen({
         {action ? <div className="shrink-0">{action}</div> : null}
       </header>
 
-      <div className={cn('flex flex-1 flex-col gap-4 px-5', contentClassName)}>{children}</div>
+      <div className={cn('flex flex-1 flex-col gap-4 px-4', contentClassName)}>{children}</div>
     </main>
   )
 }

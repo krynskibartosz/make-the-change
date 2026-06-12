@@ -56,7 +56,7 @@ export default function ProjetInfoPage() {
 
   return (
     <div className="flex min-h-dvh flex-col bg-background pb-20 text-foreground">
-      <header className="sticky top-0 z-30 border-b border-border/30 bg-background/90 px-5 pb-4 pt-[max(env(safe-area-inset-top),1.25rem)] backdrop-blur-md">
+      <header className="sticky top-0 z-30 border-b border-border/30 bg-background/90 px-4 pb-4 pt-[max(env(safe-area-inset-top),1.25rem)] backdrop-blur-md">
         <div className="flex items-center gap-3">
           <button
             type="button"
@@ -73,7 +73,7 @@ export default function ProjetInfoPage() {
         </div>
       </header>
 
-      <main className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-6 p-5">
+      <main className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-6 p-4">
         <section>
           <h2 className="text-2xl font-black">{project.name}</h2>
           <p className="mt-1 flex items-start gap-1.5 text-sm leading-5 text-muted-foreground">

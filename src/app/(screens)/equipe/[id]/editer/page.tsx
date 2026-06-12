@@ -62,7 +62,7 @@ export default function EditerMembreEquipePage() {
   return (
     <FullScreenSlideModal asPage headerMode="back" title="Éditer le membre">
       <div className="flex-1 overflow-y-auto pb-[calc(env(safe-area-inset-bottom)+80px)]">
-        <section className="p-5">
+        <section className="p-4">
           <Form id="edit-team-member-form" action={action} className="flex flex-col gap-5">
             <div className="flex flex-col gap-2">
               <label htmlFor="name" className="text-sm font-medium">

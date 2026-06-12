@@ -26,7 +26,7 @@ export default function AjouterTicketPage() {
   return (
     <main className="flex min-h-dvh flex-col bg-background text-foreground">
       {/* Header */}
-      <header className="sticky top-0 z-30 flex items-center justify-between pb-4 px-5 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/30">
+      <header className="sticky top-0 z-30 flex items-center justify-between pb-4 px-4 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/30">
         <button
           onClick={() => router.back()}
           className="p-2 -ml-2 rounded-full hover:bg-surface-elevated transition-colors"
@@ -37,7 +37,7 @@ export default function AjouterTicketPage() {
         <div className="w-10" /> {/* Spacer */}
       </header>
 
-      <div className="flex-1 flex flex-col p-5 max-w-md mx-auto w-full">
+      <div className="flex-1 flex flex-col p-4 max-w-md mx-auto w-full">
         {status === 'idle' && (
           <div className="flex-1 flex flex-col gap-8">
             <p className="text-muted-foreground text-center text-sm">
@@ -104,7 +104,7 @@ export default function AjouterTicketPage() {
                 validation.
               </p>
 
-              <div className="bg-surface border border-border rounded-2xl p-5 text-left flex flex-col gap-3 shadow-sm mb-8 w-full max-w-[280px]">
+              <div className="bg-surface border border-border rounded-2xl p-4 text-left flex flex-col gap-3 shadow-sm mb-8 w-full max-w-[280px]">
                 <div className="flex justify-between items-center border-b border-border/50 pb-3">
                   <span className="text-muted-foreground text-sm">Type</span>
                   <span className="font-semibold">Repas Midi</span>
@@ -119,7 +119,7 @@ export default function AjouterTicketPage() {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-3 mt-4 w-full px-5">
+              <div className="flex flex-col gap-3 mt-4 w-full px-4">
                 <Button size="primary" className="w-full rounded-xl" onClick={handleFinish}>
                   Envoyer à Christophe
                 </Button>

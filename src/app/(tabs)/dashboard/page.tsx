@@ -28,7 +28,7 @@ export default function AdminDashboardPage() {
 
   if (role !== 'admin') {
     return (
-      <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 p-5 text-center">
+      <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 p-4 text-center">
         <AlertTriangle className="size-12 text-warning opacity-60" />
         <h1 className="text-xl font-bold">Accès restreint</h1>
         <p className="text-muted-foreground">Cet écran est réservé à la direction.</p>
@@ -95,12 +95,12 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="flex min-h-dvh flex-col bg-background pb-32 text-foreground">
-      <header className="sticky top-0 z-30 border-b border-border/30 bg-background/90 px-5 pb-4 pt-[max(env(safe-area-inset-top),1.25rem)] backdrop-blur-xl">
+      <header className="sticky top-0 z-30 border-b border-border/30 bg-background/90 px-4 pb-4 pt-[max(env(safe-area-inset-top),1.25rem)] backdrop-blur-xl">
         <h1 className="text-2xl font-bold leading-tight">Tableau de bord</h1>
         <p className="text-sm text-muted-foreground">Les décisions qui font avancer le chantier</p>
       </header>
 
-      <main className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-7 p-5">
+      <main className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-7 p-4">
         <section className="flex flex-col gap-3">
           <div className="flex items-center justify-between gap-3">
             <div>

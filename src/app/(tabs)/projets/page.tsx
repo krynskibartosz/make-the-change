@@ -24,7 +24,7 @@ export default function ProjetsPage() {
   return (
     <div className="flex flex-col min-h-dvh text-foreground bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-30 flex flex-col gap-4 p-5 pb-4 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/30">
+      <header className="sticky top-0 z-30 flex flex-col gap-4 p-4 pb-4 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/30">
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
             <h1 className="text-2xl font-bold">Projets</h1>

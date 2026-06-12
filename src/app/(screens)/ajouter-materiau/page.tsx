@@ -38,7 +38,7 @@ export default function AjouterMateriauPage() {
   return (
     <FullScreenSlideModal asPage headerMode="back" title="Ajouter un matériau">
       <div className="flex-1 overflow-y-auto pb-[calc(env(safe-area-inset-bottom)+80px)]">
-        <section className="p-5">
+        <section className="p-4">
           <Form id="add-material-form" action={action} className="flex flex-col gap-5">
             <input type="hidden" name="type" value="used" />
             <input type="hidden" name="status" value="on_site" />

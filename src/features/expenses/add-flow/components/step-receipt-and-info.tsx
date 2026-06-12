@@ -52,14 +52,14 @@ export function StepReceiptAndInfo({ state, dispatch }: Props) {
           <div className="grid grid-cols-2 gap-3">
             <button
               onClick={handleSimulatePhoto}
-              className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-surface p-5 text-sm font-semibold text-foreground hover:bg-surface-elevated transition-colors active:scale-[0.97]"
+              className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-surface p-4 text-sm font-semibold text-foreground hover:bg-surface-elevated transition-colors active:scale-[0.97]"
             >
               <Camera className="size-6 text-primary" />
               Photo ticket
             </button>
             <button
               onClick={handleSimulatePhoto}
-              className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-surface p-5 text-sm font-semibold text-foreground hover:bg-surface-elevated transition-colors active:scale-[0.97]"
+              className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-surface p-4 text-sm font-semibold text-foreground hover:bg-surface-elevated transition-colors active:scale-[0.97]"
             >
               <ImageIcon className="size-6 text-primary" />
               Galerie

@@ -44,7 +44,7 @@ export default function InventairePage() {
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col pb-32 text-foreground bg-background">
-      <header className="sticky top-0 z-30 flex items-center gap-3 pb-4 px-5 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/30">
+      <header className="sticky top-0 z-30 flex items-center gap-3 pb-4 px-4 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/30">
         <Link
           href="/menu"
           className="flex size-10 items-center justify-center rounded-full bg-surface-elevated active:scale-95 transition-transform"
@@ -97,7 +97,7 @@ export default function InventairePage() {
       <FloatingCTA>
         <Link
           href="/ajouter-materiau"
-          className="inline-flex w-full min-h-[var(--size-primary-button)] items-center justify-center gap-2 rounded-[var(--radius-control)] border border-transparent bg-primary px-5 text-base font-semibold text-primary-foreground shadow-[var(--shadow-elevated)] transition-colors active:scale-95"
+          className="inline-flex w-full min-h-[var(--size-primary-button)] items-center justify-center gap-2 rounded-[var(--radius-control)] border border-transparent bg-primary px-4 text-base font-semibold text-primary-foreground shadow-[var(--shadow-elevated)] transition-colors active:scale-95"
         >
           <Plus className="size-5" />
           <span>Nouvelle entrée de stock</span>

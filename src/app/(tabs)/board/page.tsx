@@ -28,7 +28,7 @@ export default function BoardPage() {
   return (
     <div className="flex flex-col h-[calc(100dvh-4.5rem)] text-foreground bg-background overflow-hidden">
       {/* Header */}
-      <header className="flex-none flex flex-col gap-4 p-5 pb-2 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md">
+      <header className="flex-none flex flex-col gap-4 p-4 pb-2 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md">
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
             <h1 className="text-2xl font-bold">Site Board</h1>

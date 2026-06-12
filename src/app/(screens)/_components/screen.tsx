@@ -30,7 +30,7 @@ export function Screen({
   return (
     <main
       className={cn(
-        'mx-auto min-h-dvh w-full max-w-md px-5 pb-8 pt-[max(env(safe-area-inset-top),1.25rem)] text-foreground',
+        'mx-auto min-h-dvh w-full max-w-md px-4 pb-8 pt-[max(env(safe-area-inset-top),1.25rem)] text-foreground',
         className,
       )}
     >

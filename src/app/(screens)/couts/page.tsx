@@ -65,7 +65,7 @@ export default function CostsPage() {
 
         {/* Résumé Global */}
         <section>
-          <div className="bg-surface rounded-2xl border border-border p-5 shadow-sm mb-4">
+          <div className="bg-surface rounded-2xl border border-border p-4 shadow-sm mb-4">
             <h2 className="text-sm font-semibold text-muted-foreground mb-1">
               Coût total du chantier
             </h2>

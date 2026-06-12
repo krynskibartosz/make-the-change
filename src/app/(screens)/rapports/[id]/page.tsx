@@ -14,7 +14,7 @@ export default function RapportDetailPage({ params }: { params: { id: string } }
   return (
     <main className="flex min-h-dvh flex-col bg-background text-foreground pb-20">
       {/* Header */}
-      <header className="sticky top-0 z-30 flex items-center justify-between pb-4 px-5 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/30">
+      <header className="sticky top-0 z-30 flex items-center justify-between pb-4 px-4 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/30">
         <button
           onClick={() => router.back()}
           className="p-2 -ml-2 rounded-full hover:bg-surface-elevated transition-colors"
@@ -25,7 +25,7 @@ export default function RapportDetailPage({ params }: { params: { id: string } }
         <div className="w-10" />
       </header>
 
-      <div className="flex-1 flex flex-col p-5 max-w-md mx-auto w-full gap-8 mt-2">
+      <div className="flex-1 flex flex-col p-4 max-w-md mx-auto w-full gap-8 mt-2">
         {/* Intro */}
         <section className="flex flex-col gap-3">
           <div className="flex items-center gap-2 text-primary font-semibold">
@@ -117,7 +117,7 @@ export default function RapportDetailPage({ params }: { params: { id: string } }
         {/* Points d'attention */}
         {isCurrentWeek && (
           <section className="flex flex-col gap-4">
-            <div className="rounded-2xl border border-orange-500/30 bg-orange-500/5 p-5 flex flex-col gap-4">
+            <div className="rounded-2xl border border-orange-500/30 bg-orange-500/5 p-4 flex flex-col gap-4">
               <div className="flex items-center gap-2 text-orange-600 font-bold">
                 <AlertCircle className="size-5" />
                 <span>Point d'attention</span>

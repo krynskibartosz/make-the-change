@@ -170,7 +170,7 @@ export function ZoneDetailClient({
   return (
     <div className="flex flex-col pb-16">
       {/* Zone header info */}
-      <div className="px-5 pt-4 pb-5">
+      <div className="px-4 pt-4 pb-5">
         {zone.isSensitive && (
           <div className="mb-4 flex items-start gap-3 rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3">
             <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
