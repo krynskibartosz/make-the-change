@@ -6,11 +6,16 @@ import {
   Home,
   ImageIcon,
   KanbanSquare,
-  type LucideIcon,
   MapPinned,
-  Menu,
   PieChart,
   Send,
+  User,
+  Package,
+  Settings,
+  Receipt,
+  Users,
+  MessageCircle,
+  type LucideIcon,
 } from 'lucide-react'
 import type { AppRole } from '@/lib/role-context'
 
@@ -24,25 +29,27 @@ const tabsByRole = {
   ouvrier: [
     { href: '/chantier', label: 'Accueil', icon: Home },
     { href: '/historique', label: 'Envoyés', icon: Send },
-    { href: '/menu', label: 'Menu', icon: Menu },
+    { href: '/profil', label: 'Profil', icon: User },
   ],
   chef: [
-    { href: '/planning', label: 'Planning', icon: Calendar },
+    { href: '/planning', label: 'Aujourd\'hui', icon: Calendar },
     { href: '/board', label: 'Kanban', icon: KanbanSquare },
-    { href: '/chantier', label: 'Chantier', icon: MapPinned },
     { href: '/a-verifier', label: 'À vérifier', icon: ClipboardCheck },
-    { href: '/menu', label: 'Menu', icon: Menu },
+    { href: '/chantier', label: 'Chantier', icon: MapPinned },
+    { href: '/ressources', label: 'Ressources', icon: Package },
   ],
   admin: [
     { href: '/projets', label: 'Projets', icon: Briefcase },
-    { href: '/dashboard', label: 'Pilotage', icon: PieChart },
-    { href: '/menu', label: 'Menu', icon: Menu },
+    { href: '/dashboard', label: 'Dashboard', icon: PieChart },
+    { href: '/facturation', label: 'Facturation', icon: Receipt },
+    { href: '/equipe', label: 'Équipe', icon: Users },
+    { href: '/settings', label: 'Réglages', icon: Settings },
   ],
   client: [
     { href: '/chantier', label: 'Suivi', icon: Home },
     { href: '/validations', label: 'À valider', icon: CheckSquare },
     { href: '/photos', label: 'Photos', icon: ImageIcon },
-    { href: '/menu', label: 'Plus', icon: Menu },
+    { href: '/contact', label: 'Contact', icon: MessageCircle },
   ],
 } as const satisfies Record<AppRole, readonly ClarusTab[]>
 

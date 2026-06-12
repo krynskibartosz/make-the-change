@@ -7,23 +7,27 @@ describe('getTabsForRole', () => {
     expect(getTabsForRole('ouvrier').map((tab) => [tab.label, tab.href])).toEqual([
       ['Accueil', '/chantier'],
       ['Envoyés', '/historique'],
-      ['Menu', '/menu'],
+      ['Profil', '/profil'],
     ])
   })
 
   it('keeps Christophe focused on chantier supervision', () => {
     expect(getTabsForRole('chef').map((tab) => [tab.label, tab.href])).toEqual([
-      ['Chantier', '/chantier'],
+      ['Aujourd\'hui', '/planning'],
+      ['Kanban', '/board'],
       ['À vérifier', '/a-verifier'],
-      ['Menu', '/menu'],
+      ['Chantier', '/chantier'],
+      ['Ressources', '/ressources'],
     ])
   })
 
   it('keeps Martin focused on projects and decisions', () => {
     expect(getTabsForRole('admin').map((tab) => [tab.label, tab.href])).toEqual([
       ['Projets', '/projets'],
-      ['Pilotage', '/dashboard'],
-      ['Menu', '/menu'],
+      ['Dashboard', '/dashboard'],
+      ['Facturation', '/facturation'],
+      ['Équipe', '/equipe'],
+      ['Réglages', '/settings'],
     ])
   })
 
@@ -32,7 +36,7 @@ describe('getTabsForRole', () => {
       ['Suivi', '/chantier'],
       ['À valider', '/validations'],
       ['Photos', '/photos'],
-      ['Plus', '/menu'],
+      ['Contact', '/contact'],
     ])
   })
 })

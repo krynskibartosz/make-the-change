@@ -3,6 +3,7 @@
 import {
   AlertTriangle,
   Building2,
+  CalendarDays,
   CircleDollarSign,
   HardHat,
   Search,
@@ -155,8 +156,9 @@ export function PortfolioBoard({ projects }: PortfolioBoardProps) {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 border-t border-border bg-background/40">
+              <div className="grid grid-cols-4 border-t border-border bg-background/40">
                 <ActionLink href="/projet-info" icon={HardHat} label="Chantier" />
+                <ActionLink href="/roadmap-viewer" icon={CalendarDays} label="Planning" />
                 <ActionLink
                   href={project.clientId ? `/client/${project.clientId}` : '#'}
                   icon={UserRound}
