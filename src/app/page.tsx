@@ -12,7 +12,7 @@ export default function HomePage() {
   useEffect(() => {
     if (isReady && role) {
       const tabs = getTabsForRole(role)
-      if (tabs.length > 0) {
+      if (tabs.length > 0 && tabs[0]) {
         router.replace(tabs[0].href)
       } else {
         router.replace('/chantier')
