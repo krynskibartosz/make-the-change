@@ -24,6 +24,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
       invalid={!!error}
     >
       <Field.Label>{label}</Field.Label>
+      {/* @ts-expect-error Field.Control types are hardcoded to input element */}
       <Field.Control
         render={<textarea />}
         className={cn(
@@ -40,7 +41,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
         </Field.Description>
       ) : null}
       {error ? (
-        <Field.Error className="text-xs font-semibold leading-5 text-danger" forceMatch>
+        <Field.Error className="text-xs font-semibold leading-5 text-danger">
           {error}
         </Field.Error>
       ) : null}
