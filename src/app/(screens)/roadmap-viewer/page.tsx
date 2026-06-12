@@ -14,12 +14,12 @@ import { useCallback, useEffect, useState } from 'react'
 import { Badge, Card } from '@/components/ui'
 import { SegmentedControl } from '@/components/ui/segmented-control'
 import { TaskStatusSheet } from '@/features/board/components/task-status-sheet'
+import { KanbanBoard } from '@/features/board/components/kanban-board'
 import { ProjectRoadmap } from '@/features/projects/components/project-roadmap'
 import type { Phase, Task, TaskStatus } from '@/lib/domain'
 import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
-import { getPhaseStatusLabel, sortPhasesByOrder } from './phase-summary'
 
-type ViewMode = 'phases' | 'tasks' | 'roadmap'
+type ViewMode = 'kanban' | 'tasks' | 'roadmap'
 
 const phaseTone: Record<
   NonNullable<Phase['status']> | 'not_started',
@@ -51,7 +51,7 @@ export default function RoadmapViewerPage() {
   const [phases, setPhases] = useState<Phase[]>([])
   const [tasks, setTasks] = useState<Task[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [viewMode, setViewMode] = useState<ViewMode>('phases')
+  const [viewMode, setViewMode] = useState<ViewMode>('kanban')
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
 
   const loadData = useCallback(async () => {
@@ -91,12 +91,12 @@ export default function RoadmapViewerPage() {
     await updateTaskStatus(task.id, task.status === 'done' ? 'to_do' : 'done')
   }
 
-  const handleTaskCreate = async (title: string) => {
+  const handleTaskCreate = async (title: string, status: TaskStatus = 'to_do') => {
     try {
       await mockClarusRepository.createTask({
         projectId: 'proj-1',
         title,
-        status: 'to_do',
+        status,
         priority: 'normal',
       })
       await loadData()
@@ -104,8 +104,6 @@ export default function RoadmapViewerPage() {
       console.error(error)
     }
   }
-
-  const orderedPhases = sortPhasesByOrder(phases)
 
   return (
     <div className="flex min-h-dvh flex-col bg-background pb-20 text-foreground">
@@ -131,17 +129,17 @@ export default function RoadmapViewerPage() {
         </div>
 
         <div className="px-4 pb-3">
-          <SegmentedControl
-            ariaLabel="Vue de planification"
-            className="[&_[role=tab]]:flex-1 [&_[role=tab]]:px-3"
-            options={[
-              { label: 'Phases', value: 'phases' },
-              { label: 'Tâches', value: 'tasks' },
-              { label: 'Roadmap', value: 'roadmap' },
-            ]}
-            value={viewMode}
-            onValueChange={(value) => setViewMode(value as ViewMode)}
-          />
+            <SegmentedControl
+              ariaLabel="Vue de planification"
+              className="[&_[role=tab]]:flex-1 [&_[role=tab]]:px-3"
+              options={[
+                { label: 'Kanban', value: 'kanban' },
+                { label: 'Liste', value: 'tasks' },
+                { label: 'Timeline', value: 'roadmap' },
+              ]}
+              value={viewMode}
+              onValueChange={(value) => setViewMode(value as ViewMode)}
+            />
         </div>
       </header>
 
@@ -154,88 +152,22 @@ export default function RoadmapViewerPage() {
 
         {!isLoading || phases.length > 0 ? (
           <>
-            {viewMode === 'phases' ? (
-              <section className="flex flex-col gap-4 px-4 py-5">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h2 className="text-base font-bold">Résumé des phases</h2>
-                    <p className="mt-0.5 text-sm text-muted-foreground">
-                      L’avancement essentiel, dans l’ordre du chantier.
-                    </p>
-                  </div>
-                  <Badge tone="neutral">{orderedPhases.length} phases</Badge>
+            {viewMode === 'kanban' ? (
+              <section className="flex flex-col gap-4 py-5 w-full overflow-hidden">
+                <div className="px-4">
+                  <h2 className="text-base font-bold">Kanban d'exécution</h2>
+                  <p className="mt-0.5 text-sm text-muted-foreground">
+                    Une grille complète avec scroll horizontal et vertical.
+                  </p>
                 </div>
-
-                <div className="relative flex flex-col">
-                  {orderedPhases.map((phase, index) => {
-                    const status = phase.status ?? 'not_started'
-                    const isCurrent = status === 'in_progress' || status === 'delayed'
-                    const progress = phase.progress ?? 0
-
-                    return (
-                      <div key={phase.id} className="relative flex gap-3 pb-3 last:pb-0">
-                        {index < orderedPhases.length - 1 ? (
-                          <div className="absolute bottom-0 left-[17px] top-9 w-px bg-border" />
-                        ) : null}
-                        <div
-                          className={`z-10 mt-3 flex size-9 shrink-0 items-center justify-center rounded-full border ${
-                            status === 'completed'
-                              ? 'border-success/40 bg-success/10 text-success'
-                              : isCurrent
-                                ? 'border-primary/40 bg-primary/10 text-primary'
-                                : 'border-border bg-surface text-muted-foreground'
-                          }`}
-                        >
-                          {status === 'completed' ? (
-                            <CheckCircle2 className="size-5" />
-                          ) : isCurrent ? (
-                            <Clock3 className="size-5" />
-                          ) : (
-                            <Circle className="size-4" />
-                          )}
-                        </div>
-
-                        <Card
-                          className={`min-w-0 flex-1 p-3 ${
-                            isCurrent ? 'border-primary/30 bg-primary/5' : ''
-                          }`}
-                        >
-                          <div className="flex items-start justify-between gap-3">
-                            <div className="min-w-0">
-                              <p className="truncate text-sm font-bold">{phase.name}</p>
-                              {phase.startDate || phase.endDate ? (
-                                <p className="mt-1 text-xs text-muted-foreground">
-                                  {phase.startDate ?? 'Date à définir'} →{' '}
-                                  {phase.endDate ?? 'Date à définir'}
-                                </p>
-                              ) : null}
-                            </div>
-                            <Badge tone={phaseTone[status]} className="min-h-6 shrink-0 px-2">
-                              {getPhaseStatusLabel(status)}
-                            </Badge>
-                          </div>
-
-                          <div className="mt-3 flex items-center gap-3">
-                            <div className="h-2 flex-1 overflow-hidden rounded-full bg-border/70">
-                              <div
-                                className={`h-full rounded-full ${
-                                  status === 'completed'
-                                    ? 'bg-success'
-                                    : status === 'delayed'
-                                      ? 'bg-danger'
-                                      : 'bg-primary'
-                                }`}
-                                style={{ width: `${progress}%` }}
-                              />
-                            </div>
-                            <span className="w-9 text-right text-xs font-semibold">
-                              {progress}%
-                            </span>
-                          </div>
-                        </Card>
-                      </div>
-                    )
-                  })}
+                <div className="w-full">
+                  <KanbanBoard
+                    initialTasks={tasks}
+                    onStatusChange={updateTaskStatus}
+                    onTaskClick={setSelectedTask}
+                    onTaskCreate={handleTaskCreate}
+                    forceBoardView={true}
+                  />
                 </div>
               </section>
             ) : null}

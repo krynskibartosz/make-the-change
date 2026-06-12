@@ -19,6 +19,7 @@ type KanbanBoardProps = {
   onStatusChange: (taskId: string, newStatus: TaskStatus) => Promise<void>
   onTaskClick?: (task: Task) => void
   onTaskCreate?: (title: string, status: TaskStatus) => Promise<void>
+  forceBoardView?: boolean
 }
 
 type ColumnDef = {
@@ -173,6 +174,7 @@ export function KanbanBoard({
   onStatusChange,
   onTaskClick,
   onTaskCreate,
+  forceBoardView = false,
 }: KanbanBoardProps) {
   const [tasks, setTasks] = useState<Task[]>(initialTasks)
   const [activeStatus, setActiveStatus] = useState<TaskStatus>('to_check')
@@ -201,7 +203,7 @@ export function KanbanBoard({
 
   return (
     <div className="w-full">
-      <div className="flex flex-col gap-4 md:hidden">
+      <div className={cn("flex flex-col gap-4", forceBoardView ? "hidden" : "md:hidden")}>
         <div
           role="tablist"
           aria-label="Statut des tâches"
@@ -263,7 +265,7 @@ export function KanbanBoard({
         </section>
       </div>
 
-      <div className="hidden overflow-x-auto px-4 pb-8 md:block">
+      <div className={cn("overflow-x-auto px-4 pb-8", forceBoardView ? "block" : "hidden md:block")}>
         <div className="grid min-w-[1120px] grid-cols-5 gap-3">
           {COLUMNS.map((column) => {
             const Icon = column.icon
