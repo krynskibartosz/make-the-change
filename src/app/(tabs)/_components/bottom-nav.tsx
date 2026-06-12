@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useRole } from '@/lib/role-context'
 import { cn } from '@/lib/utils/cn'
-import { clarusTabs } from './tabs'
+import { getTabsForRole } from './tabs'
 
 export function BottomNav() {
   const pathname = usePathname()
@@ -12,27 +12,7 @@ export function BottomNav() {
 
   if (!isReady) return null
 
-  // Filtre les tabs selon le rôle
-  const visibleTabs = clarusTabs.filter((tab) => {
-    if (role === 'ouvrier') {
-      return tab.href === '/chantier' || tab.href === '/historique' || tab.href === '/menu'
-    }
-    if (role === 'client') {
-      return (
-        tab.href === '/chantier' ||
-        tab.href === '/photos' ||
-        tab.href === '/validations' ||
-        tab.href === '/menu'
-      )
-    }
-    if (role === 'chef') {
-      return tab.href === '/chantier' || tab.href === '/a-verifier' || tab.href === '/menu'
-    }
-    if (role === 'admin') {
-      return tab.href === '/projets' || tab.href === '/dashboard' || tab.href === '/menu'
-    }
-    return tab.href === '/menu'
-  })
+  const visibleTabs = getTabsForRole(role)
 
   return (
     <nav
@@ -75,11 +55,7 @@ export function BottomNav() {
                   isActive ? 'font-bold' : 'font-medium',
                 )}
               >
-                {role === 'ouvrier' && tab.href === '/chantier'
-                  ? 'Accueil'
-                  : role === 'client' && tab.href === '/chantier'
-                    ? 'Suivi'
-                    : tab.label}
+                {tab.label}
               </span>
             </Link>
           )

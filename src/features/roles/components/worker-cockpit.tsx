@@ -13,259 +13,306 @@ import {
   Send,
 } from 'lucide-react'
 import Link from 'next/link'
-import { useRef, useState } from 'react'
+import { useReducer, useRef } from 'react'
 import { Button } from '@/components/ui'
+import { appendDemoSubmission, createWorkerSubmission } from '@/features/demo/demo-submissions'
 import { ProjectSwitcher } from '@/features/projects/components/project-switcher'
 import {
-  type ConstructionData,
-  extractConstructionData,
-  transcribeAudio,
-} from '@/lib/services/ai-voice-service'
+  initialWorkerCockpitState,
+  workerCockpitReducer,
+  workerStatusLabels,
+} from '@/features/roles/worker-cockpit-state'
+import { extractConstructionData, transcribeAudio } from '@/lib/services/ai-voice-service'
 
-type Status = 'idle' | 'recording' | 'analyzing' | 'success' | 'error'
+const statusStyles = {
+  ready: 'border-primary/25 bg-primary/5 text-primary',
+  recording: 'border-red-500/30 bg-red-500/10 text-red-600',
+  analyzing: 'border-amber-500/30 bg-amber-500/10 text-amber-700',
+  ready_to_send: 'border-primary/25 bg-primary/5 text-primary',
+  sent: 'border-success/30 bg-success/10 text-success',
+  error: 'border-danger/30 bg-danger/10 text-danger',
+} as const
 
 export function WorkerCockpit() {
-  const [status, setStatus] = useState<Status>('idle')
-  const [errorMsg, setErrorMsg] = useState<string | null>(null)
-  const [result, setResult] = useState<ConstructionData | null>(null)
-
+  const [{ status, result, errorMessage }, dispatch] = useReducer(
+    workerCockpitReducer,
+    initialWorkerCockpitState,
+  )
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const chunksRef = useRef<Blob[]>([])
 
+  const processAudio = async (audioBlob: Blob) => {
+    try {
+      const formData = new FormData()
+      formData.append('file', audioBlob, 'note-vocale.webm')
+      const transcript = await transcribeAudio(formData)
+      const extractedData = await extractConstructionData(transcript)
+      dispatch({ type: 'analysis_succeeded', result: extractedData })
+    } catch (error) {
+      dispatch({
+        type: 'failed',
+        message:
+          error instanceof Error ? error.message : "Une erreur est survenue pendant l'analyse.",
+      })
+    }
+  }
+
   const handleRecordStart = async () => {
-    if (status === 'analyzing' || status === 'success') return
+    if (status !== 'ready' && status !== 'error') return
 
     try {
-      setErrorMsg(null)
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-
       const mediaRecorder = new MediaRecorder(stream)
       mediaRecorderRef.current = mediaRecorder
       chunksRef.current = []
 
       mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          chunksRef.current.push(event.data)
-        }
+        if (event.data.size > 0) chunksRef.current.push(event.data)
       }
 
       mediaRecorder.onstop = async () => {
         const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm' })
-
-        // Arrêter tous les tracks audio pour libérer le micro
-        stream.getTracks().forEach((track) => track.stop())
-
+        stream.getTracks().forEach((track) => {
+          track.stop()
+        })
         await processAudio(audioBlob)
       }
 
       mediaRecorder.start()
-      setStatus('recording')
-    } catch (err) {
-      console.error('Erreur accès micro:', err)
-      setErrorMsg('Le micro est bloqué')
-      setStatus('error')
+      dispatch({ type: 'record_started' })
+    } catch (error) {
+      console.error('Erreur accès micro :', error)
+      dispatch({ type: 'failed', message: 'Le micro est bloqué' })
     }
   }
 
   const handleRecordStop = () => {
     if (status !== 'recording' || !mediaRecorderRef.current) return
+    dispatch({ type: 'record_stopped' })
     mediaRecorderRef.current.stop()
   }
 
-  const processAudio = async (audioBlob: Blob) => {
-    setStatus('analyzing')
-    try {
-      const formData = new FormData()
-      formData.append('file', audioBlob, 'voice-note.webm')
-      const transcript = await transcribeAudio(formData)
-      const extractedData = await extractConstructionData(transcript)
-      setResult(extractedData)
-      setStatus('success')
-    } catch (err: any) {
-      setErrorMsg(err.message || "Une erreur est survenue pendant l'analyse IA.")
-      setStatus('error')
-    }
-  }
+  const resetState = () => dispatch({ type: 'reset' })
 
-  const resetState = () => {
-    setStatus('idle')
-    setResult(null)
-    setErrorMsg(null)
+  const sendToChristophe = () => {
+    if (!result) return
+    appendDemoSubmission(window.localStorage, createWorkerSubmission(result))
+    dispatch({ type: 'sent_locally' })
   }
 
   return (
     <div className="flex flex-col gap-6 p-4 animate-in fade-in slide-in-from-bottom-4">
-      {/* Profil ouvrier simplifié */}
-      <div className="flex items-center gap-3 mb-2">
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/20 text-primary font-bold">
+      <div className="mb-2 flex items-center gap-3">
+        <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/20 font-bold text-primary">
           H
         </div>
-        <div className="flex flex-col gap-1 items-start">
+        <div className="flex flex-col items-start gap-1">
           <h2 className="text-lg font-bold leading-none">Bonjour Hubert</h2>
           <ProjectSwitcher />
         </div>
       </div>
 
-      {/* Bouton principal Voice First */}
-      <div className="flex flex-col items-center justify-center py-8">
-        {status === 'analyzing' && (
-          <div className="flex flex-col items-center justify-center h-40">
-            <Loader2 className="size-12 animate-spin text-primary mb-4" />
-            <p className="text-sm font-semibold animate-pulse">Analyse de la note...</p>
-            <p className="text-xs text-muted-foreground mt-2 text-center">Extraction des infos</p>
+      <div className="flex flex-col items-center justify-center">
+        <div
+          aria-live="polite"
+          className={`mb-6 flex w-full items-center gap-3 rounded-xl border px-4 py-3 ${statusStyles[status]}`}
+          role="status"
+        >
+          {status === 'analyzing' ? (
+            <Loader2 className="size-5 shrink-0 animate-spin" />
+          ) : status === 'recording' ? (
+            <span className="size-3 shrink-0 animate-pulse rounded-full bg-current" />
+          ) : status === 'error' ? (
+            <AlertTriangle className="size-5 shrink-0" />
+          ) : status === 'sent' ? (
+            <CheckCircle2 className="size-5 shrink-0" />
+          ) : status === 'ready_to_send' ? (
+            <Send className="size-5 shrink-0" />
+          ) : (
+            <Mic className="size-5 shrink-0" />
+          )}
+          <div>
+            <p className="text-sm font-bold">{workerStatusLabels[status]}</p>
+            <p className="text-xs opacity-80">
+              {status === 'ready' && 'Maintiens le bouton pendant que tu parles.'}
+              {status === 'recording' && "Je t'écoute, relâche quand tu as fini."}
+              {status === 'analyzing' && 'Je prépare ta note.'}
+              {status === 'ready_to_send' && 'Vérifie rapidement avant l’envoi.'}
+              {status === 'sent' && 'La note est marquée comme envoyée sur cet appareil.'}
+              {status === 'error' && 'Tu peux réessayer ou écrire une note.'}
+            </p>
           </div>
-        )}
+        </div>
 
-        {status === 'success' && result && (
-          <div className="w-full bg-surface border border-primary/30 rounded-2xl p-4 shadow-sm relative overflow-hidden animate-in zoom-in-95">
-            <div className="absolute top-0 right-0 bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-bl-lg">
-              J'ai compris :
-            </div>
+        {status === 'analyzing' ? (
+          <div className="flex h-40 flex-col items-center justify-center">
+            <Loader2 className="mb-4 size-12 animate-spin text-primary" />
+            <p className="text-sm font-semibold">Analyse de la note...</p>
+            <p className="mt-2 text-center text-xs text-muted-foreground">
+              Les informations utiles sont en cours de préparation.
+            </p>
+          </div>
+        ) : null}
 
-            <h3 className="font-bold text-lg mb-1">
+        {status === 'ready_to_send' && result ? (
+          <div className="w-full animate-in overflow-hidden rounded-xl border border-primary/30 bg-surface p-4 shadow-sm zoom-in-95">
+            <p className="mb-3 text-xs font-bold text-primary">J’ai compris :</p>
+            <h3 className="mb-1 text-lg font-bold">
               {result.workType !== 'Non précisé' ? result.workType : 'Travail'}
             </h3>
-            <p className="text-sm text-muted-foreground mb-4">{result.summary}</p>
+            <p className="mb-4 text-sm text-muted-foreground">{result.summary}</p>
 
-            <div className="grid grid-cols-2 gap-y-2 text-sm mb-4">
-              <div className="text-muted-foreground text-xs">Zone</div>
-              <div className="font-medium text-right">{result.zone}</div>
-
-              <div className="text-muted-foreground text-xs">Avec</div>
-              <div className="font-medium text-right">
+            <div className="mb-4 grid grid-cols-2 gap-y-2 text-sm">
+              <span className="text-xs text-muted-foreground">Zone</span>
+              <span className="text-right font-medium">{result.zone}</span>
+              <span className="text-xs text-muted-foreground">Avec</span>
+              <span className="text-right font-medium">
                 {result.workers.join(', ') || 'Moi seul'}
-              </div>
-
-              <div className="text-muted-foreground text-xs">Durée</div>
-              <div className="font-medium text-right">{result.time}</div>
+              </span>
+              <span className="text-xs text-muted-foreground">Durée</span>
+              <span className="text-right font-medium">{result.time}</span>
             </div>
 
-            {(result.materials.length > 0 || result.alerts.length > 0) && (
-              <div className="border-t border-border pt-3 mb-4 flex flex-col gap-2">
-                {result.materials.length > 0 && (
-                  <div className="text-sm">
-                    <span className="text-xs text-muted-foreground">Matériaux:</span>{' '}
+            {result.materials.length > 0 || result.alerts.length > 0 ? (
+              <div className="mb-4 flex flex-col gap-2 border-t border-border pt-3">
+                {result.materials.length > 0 ? (
+                  <p className="text-sm">
+                    <span className="text-xs text-muted-foreground">Matériaux : </span>
                     <span className="font-medium">{result.materials.join(', ')}</span>
-                  </div>
-                )}
-                {result.alerts.length > 0 && (
-                  <div className="text-sm text-orange-500">
-                    <span className="text-xs font-semibold">Signalement:</span>{' '}
+                  </p>
+                ) : null}
+                {result.alerts.length > 0 ? (
+                  <p className="text-sm text-orange-600">
+                    <span className="text-xs font-semibold">Signalement : </span>
                     <span className="font-medium">{result.alerts.join(', ')}</span>
-                  </div>
-                )}
+                  </p>
+                ) : null}
               </div>
-            )}
+            ) : null}
 
-            <div className="flex gap-2">
+            <div className="flex flex-col gap-2">
               <Button
-                size="secondary"
-                className="flex-1"
-                variant="primary"
+                fullWidth
                 leftIcon={<Send className="size-4" />}
+                onClick={sendToChristophe}
+                size="secondary"
+                variant="primary"
               >
                 Envoyer à Christophe
               </Button>
-              <Button size="secondary" variant="secondary" className="flex-1" onClick={resetState}>
+              <Button fullWidth onClick={resetState} size="secondary" variant="secondary">
                 Corriger
               </Button>
             </div>
           </div>
-        )}
+        ) : null}
 
-        {(status === 'idle' || status === 'recording' || status === 'error') && (
+        {status === 'sent' && result ? (
+          <div className="flex w-full animate-in flex-col items-center rounded-xl border border-success/30 bg-success/10 p-5 text-center zoom-in-95">
+            <CheckCircle2 className="mb-3 size-10 text-success" />
+            <h3 className="text-lg font-bold text-foreground">Note envoyée à Christophe</h3>
+            <p className="mt-1 text-sm text-muted-foreground">{result.summary}</p>
+            <p className="mt-3 text-xs text-muted-foreground">
+              Simulation locale : aucun envoi réseau n’a été effectué.
+            </p>
+            <Button className="mt-5" onClick={resetState} size="secondary" variant="secondary">
+              Dicter une autre note
+            </Button>
+          </div>
+        ) : null}
+
+        {status === 'ready' || status === 'recording' ? (
           <>
             <button
-              className={`flex size-40 flex-col items-center justify-center rounded-full border-4 shadow-xl transition-all duration-300 select-none ${
+              aria-label={
                 status === 'recording'
-                  ? 'border-red-500 bg-red-500/20 text-red-500 scale-95 shadow-red-500/20'
-                  : 'border-primary bg-primary/10 text-primary hover:bg-primary/20 hover:scale-105'
+                  ? "Relâcher pour terminer l'enregistrement"
+                  : "Maintenir pour démarrer l'enregistrement"
+              }
+              className={`flex size-40 select-none flex-col items-center justify-center rounded-full border-4 shadow-xl transition-all duration-300 ${
+                status === 'recording'
+                  ? 'scale-95 border-red-500 bg-red-500/20 text-red-600 shadow-red-500/20'
+                  : 'border-primary bg-primary/10 text-primary hover:bg-primary/20'
               }`}
-              onPointerDown={(e) => {
-                e.preventDefault()
-                handleRecordStart()
+              onContextMenu={(event) => event.preventDefault()}
+              onPointerDown={(event) => {
+                event.preventDefault()
+                void handleRecordStart()
               }}
-              onPointerUp={(e) => {
-                e.preventDefault()
+              onPointerLeave={() => {
+                if (status === 'recording') handleRecordStop()
+              }}
+              onPointerUp={(event) => {
+                event.preventDefault()
                 handleRecordStop()
               }}
-              onPointerLeave={(_e) => {
-                if (status === 'recording') {
-                  handleRecordStop()
-                }
-              }}
-              onContextMenu={(e) => e.preventDefault()}
+              type="button"
             >
-              <Mic className={`size-12 mb-2 ${status === 'recording' ? 'animate-pulse' : ''}`} />
-              <span className="text-sm font-bold text-center px-4">
+              <Mic className={`mb-2 size-12 ${status === 'recording' ? 'animate-pulse' : ''}`} />
+              <span className="px-4 text-center text-sm font-bold">
                 {status === 'recording' ? "Je t'écoute..." : 'Maintiens pour dicter'}
               </span>
             </button>
-            <p className="text-center text-xs text-muted-foreground mt-6 max-w-[250px]">
-              "J'ai bossé de 8h à 12h sur la dalle avec Chris, on a utilisé 4 sacs de ciment."
+            <p className="mt-6 max-w-[280px] text-center text-xs text-muted-foreground">
+              Exemple : « J’ai travaillé de 8 h à 12 h sur la dalle avec Chris. »
             </p>
           </>
-        )}
+        ) : null}
 
-        {status === 'error' && (
-          <div className="mt-4 text-center text-sm text-danger bg-danger/10 border border-danger/20 p-4 rounded-xl max-w-xs animate-in zoom-in-95 w-full">
-            <p className="font-bold mb-1 text-base">{errorMsg}</p>
-            <p className="text-xs text-danger/80 mb-4">
-              Pour dicter, autorisez le micro dans votre navigateur ou les réglages du téléphone.
+        {status === 'error' ? (
+          <div className="w-full max-w-sm animate-in rounded-xl border border-danger/20 bg-danger/10 p-4 text-center text-sm text-danger zoom-in-95">
+            <p className="mb-1 text-base font-bold">{errorMessage}</p>
+            <p className="mb-4 text-xs text-danger/80">
+              Autorise le micro dans le navigateur ou dans les réglages du téléphone.
             </p>
             <div className="flex flex-col gap-2">
               <Button
+                fullWidth
+                onClick={() => void handleRecordStart()}
                 size="secondary"
-                variant="primary"
-                className="w-full bg-danger text-danger-foreground hover:bg-danger/90"
-                onClick={handleRecordStart}
+                variant="danger"
               >
                 Réessayer
               </Button>
-              <Link href="/ajouter-tache" className="w-full">
-                <Button
-                  size="secondary"
-                  variant="secondary"
-                  className="w-full border-danger/30 text-danger hover:bg-danger/10"
-                >
+              <Link href="/ajouter-tache">
+                <Button fullWidth size="secondary" variant="secondary">
                   Écrire une note
                 </Button>
               </Link>
             </div>
           </div>
-        )}
+        ) : null}
       </div>
 
-      {/* Actions secondaires rapides */}
       <div>
-        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+        <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           Actions rapides
         </h3>
         <div className="grid grid-cols-2 gap-3">
           <Link
+            className="flex flex-col items-center justify-center gap-2 rounded-xl border border-border bg-surface p-4 active:bg-surface-elevated"
             href="/photos/ajouter"
-            className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-surface p-4 active:bg-surface-elevated"
           >
             <Camera className="size-6 text-foreground" />
             <span className="text-xs font-semibold">Prendre une photo</span>
           </Link>
           <Link
+            className="flex flex-col items-center justify-center gap-2 rounded-xl border border-border bg-surface p-4 active:bg-surface-elevated"
             href="/ajouter-tache"
-            className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-surface p-4 active:bg-surface-elevated"
           >
-            <AlertTriangle className="size-6 text-orange-500" />
-            <span className="text-xs font-semibold text-orange-500">Signaler problème</span>
+            <AlertTriangle className="size-6 text-orange-600" />
+            <span className="text-xs font-semibold text-orange-600">Signaler un problème</span>
           </Link>
           <Link
+            className="flex flex-col items-center justify-center gap-2 rounded-xl border border-border bg-surface p-4 active:bg-surface-elevated"
             href="/ajouter-heures"
-            className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-surface p-4 active:bg-surface-elevated"
           >
             <Clock className="size-6 text-foreground" />
             <span className="text-xs font-semibold">Noter mes heures</span>
           </Link>
           <Link
+            className="flex flex-col items-center justify-center gap-2 rounded-xl border border-border bg-surface p-4 active:bg-surface-elevated"
             href="/ajouter-ticket"
-            className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-surface p-4 active:bg-surface-elevated"
           >
             <Receipt className="size-6 text-foreground" />
             <span className="text-xs font-semibold">Scanner un ticket</span>
@@ -273,37 +320,35 @@ export function WorkerCockpit() {
         </div>
       </div>
 
-      {/* Historique du jour */}
-      <div className="mt-4 pb-12">
-        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
-          Envoyé aujourd'hui
+      <div className="mt-4 pb-4">
+        <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          Envoyé aujourd’hui
         </h3>
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-3 rounded-xl border border-border bg-surface p-3">
-            <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-success/20 text-success">
-              <CheckCircle2 className="size-4" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate">Démolition extérieur</p>
-              <p className="text-xs text-success">Validé par Christophe</p>
-            </div>
+        <div className="flex items-center gap-3 rounded-xl border border-border bg-surface p-3">
+          <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-success/20 text-success">
+            <CheckCircle2 className="size-4" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-medium">Démolition extérieure</p>
+            <p className="text-xs text-success">Validé par Christophe</p>
           </div>
         </div>
       </div>
 
-      {/* Accès Roadmap Secondaire */}
-      <div className="mt-2 pb-12">
+      <div className="pb-12">
         <Link
+          className="flex items-center justify-between gap-3 rounded-xl border border-primary/20 bg-primary/5 p-4 transition-colors active:bg-primary/10"
           href="/roadmap-viewer"
-          className="flex items-center justify-between gap-3 rounded-2xl border border-primary/20 bg-primary/5 p-4 active:bg-primary/10 transition-colors"
         >
           <div className="flex items-center gap-3">
             <div className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
               <CalendarDays className="size-5" />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-bold text-foreground">Planning global</span>
-              <span className="text-xs text-muted-foreground">Voir le diagramme du chantier</span>
+              <span className="text-sm font-bold text-foreground">Consignes du jour</span>
+              <span className="text-xs text-muted-foreground">
+                Voir ce qui est prévu aujourd’hui
+              </span>
             </div>
           </div>
           <ChevronRight className="size-5 text-muted-foreground" />

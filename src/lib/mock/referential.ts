@@ -6,7 +6,7 @@ export const mockPeople: Person[] = [
     id: 'person-hubert',
     projectId: SPARRENLAAN_PROJECT_ID,
     name: 'Hubert',
-    role: 'Chef chantier',
+    role: 'Ouvrier terrain',
     defaultHourlyRate: 45,
     active: true,
     avatarUrl:
@@ -19,8 +19,8 @@ export const mockPeople: Person[] = [
   {
     id: 'person-chris',
     projectId: SPARRENLAAN_PROJECT_ID,
-    name: 'Chris',
-    role: 'Ouvrier polyvalent',
+    name: 'Christophe',
+    role: 'Superviseur / coordinateur chantier',
     defaultHourlyRate: 45,
     active: true,
     avatarUrl:
@@ -33,7 +33,7 @@ export const mockPeople: Person[] = [
     id: 'person-bartosz',
     projectId: SPARRENLAAN_PROJECT_ID,
     name: 'Bartosz',
-    role: 'Demolition',
+    role: 'Sous-traitant démolition',
     defaultHourlyRate: 40,
     active: true,
     avatarUrl:
@@ -46,7 +46,7 @@ export const mockPeople: Person[] = [
     id: 'person-martin',
     projectId: SPARRENLAAN_PROJECT_ID,
     name: 'Martin',
-    role: 'Chef de projet / Ingénieur',
+    role: 'Responsable chantier / relation client',
     defaultHourlyRate: 80,
     active: true,
     avatarUrl:

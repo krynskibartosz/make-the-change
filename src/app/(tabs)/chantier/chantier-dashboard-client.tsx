@@ -5,7 +5,7 @@ import {
   CalendarDays,
   ChevronRight,
   HardHat,
-  Map,
+  Map as MapIcon,
   ShieldAlert,
   Wrench,
 } from 'lucide-react'
@@ -26,7 +26,7 @@ export function ChantierDashboardClient() {
   const [tasks, setTasks] = useState<Task[]>([])
   const [interventions, setInterventions] = useState<Intervention[]>([])
   const [plans, setPlans] = useState<Plan[]>([])
-  const [_phases, setPhases] = useState<Phase[]>([])
+  const [phases, setPhases] = useState<Phase[]>([])
   useEffect(() => {
     async function loadData() {
       setIsLoading(true)
@@ -124,15 +124,18 @@ export function ChantierDashboardClient() {
 
       {/* Quick Access to Planning Hub */}
       <Link href="/roadmap-viewer" className="mt-2 block">
-        <Card className="flex items-center gap-4 p-4 bg-primary/5 hover:bg-primary/10 transition-colors border-primary/20 active:scale-[0.98]">
-          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/20 text-primary">
+        <Card className="flex items-center gap-3 border-primary/20 bg-primary/5 p-4 transition-colors hover:bg-primary/10 active:scale-[0.99]">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/20 text-primary">
             <CalendarDays className="size-5" />
           </div>
-          <div className="flex flex-col flex-1">
-            <span className="text-base font-bold text-primary leading-tight">
-              Planning & Tâches
+          <div className="flex min-w-0 flex-1 flex-col">
+            <span className="text-base font-bold leading-tight text-primary">
+              Planning et tâches
             </span>
-            <span className="text-sm text-muted-foreground mt-0.5">Roadmap, Kanban, Liste</span>
+            <span className="mt-0.5 text-sm text-muted-foreground">
+              {phases.filter((phase) => phase.status === 'in_progress').length} phases en cours ·
+              résumé d’abord
+            </span>
           </div>
           <ChevronRight className="size-5 text-primary/50" />
         </Card>
@@ -151,7 +154,7 @@ export function ChantierDashboardClient() {
         {currentFilter === 'plans' && (
           <section className="flex flex-col gap-4">
             <div className="flex items-center gap-2 mb-1 text-sm font-bold tracking-wider text-muted-foreground uppercase">
-              <Map className="size-4 text-primary" />
+              <MapIcon className="size-4 text-primary" />
               Plans du projet
             </div>
             <div className="grid gap-3">

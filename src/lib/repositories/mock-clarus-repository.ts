@@ -7,7 +7,6 @@ import type {
   CreatePersonInput,
   CreateTaskInput,
   CreateZoneInput,
-  DashboardKPIs,
   Expense,
   Intervention,
   InterventionDraft,
@@ -19,7 +18,6 @@ import type {
   Task,
   TaskStatus,
   UpdatePersonInput,
-  WeeklyPlan,
   WorkEntry,
   Zone,
 } from '@/lib/domain'

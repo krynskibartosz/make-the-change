@@ -1,21 +1,39 @@
 'use client'
 
-import { AlertTriangle, Bot, Check, Clock, Mic, Package, User } from 'lucide-react'
+import {
+  AlertTriangle,
+  Bot,
+  Check,
+  ChevronRight,
+  Clock,
+  ListChecks,
+  Mic,
+  Package,
+  Pencil,
+  Sparkles,
+  User,
+} from 'lucide-react'
 import { useState } from 'react'
+import { Badge, BottomSheet } from '@/components/ui'
 import { useRole } from '@/lib/role-context'
+import { cn } from '@/lib/utils/cn'
+import {
+  getReviewPriority,
+  groupReviewDrafts,
+  type ReviewDraftSignal,
+  type ReviewPriority,
+} from './review-queue'
 
-type Draft = {
-  id: string
+type DraftStatus = 'Terminé' | 'En cours' | 'Problème'
+
+type Draft = ReviewDraftSignal & {
   author: string
   time: string
   rawText: string
-  extracted: {
+  extracted: ReviewDraftSignal['extracted'] & {
     hours?: string
     materials?: string[]
     task?: string
-    status?: 'Terminé' | 'En cours' | 'Problème'
-    confidence: 'Élevée' | 'Moyenne' | 'Faible'
-    missingFields?: string[]
   }
 }
 
@@ -46,293 +64,390 @@ const mockDrafts: Draft[] = [
       missingFields: ['Zone à confirmer', 'Impact planning'],
     },
   },
+  {
+    id: 'draft-3',
+    author: 'Nicolas (Ouvrier)',
+    time: 'Hier à 15:10',
+    rawText: "La livraison d'isolant est arrivée, mais je n'ai pas compté tous les paquets.",
+    extracted: {
+      task: "Réception de l'isolant",
+      status: 'En cours',
+      confidence: 'Faible',
+      materials: ["Paquets d'isolant"],
+      missingFields: ['Quantité reçue'],
+    },
+  },
 ]
+
+const priorityStyles: Record<
+  ReviewPriority,
+  {
+    badgeTone: 'danger' | 'warning' | 'primary'
+    iconClass: string
+    rowClass: string
+  }
+> = {
+  blocking: {
+    badgeTone: 'danger',
+    iconClass: 'text-danger',
+    rowClass: 'border-l-danger',
+  },
+  validate: {
+    badgeTone: 'warning',
+    iconClass: 'text-warning',
+    rowClass: 'border-l-warning',
+  },
+  process: {
+    badgeTone: 'primary',
+    iconClass: 'text-primary',
+    rowClass: 'border-l-primary',
+  },
+}
 
 export default function AVerifierPage() {
   const { role, isReady } = useRole()
   const [drafts, setDrafts] = useState<Draft[]>(mockDrafts)
+  const [selectedDraftId, setSelectedDraftId] = useState<string | null>(null)
   const [editingDraftId, setEditingDraftId] = useState<string | null>(null)
-
-  // State for edit form
   const [editTask, setEditTask] = useState('')
   const [editHours, setEditHours] = useState('')
-  const [editStatus, setEditStatus] = useState<'Terminé' | 'En cours' | 'Problème'>('Terminé')
+  const [editStatus, setEditStatus] = useState<DraftStatus>('Terminé')
   const [editMaterials, setEditMaterials] = useState('')
 
   if (!isReady) return null
 
-  // Redirection ou message si on n'est pas chef
   if (role !== 'chef' && role !== 'admin') {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] p-5 text-center gap-4">
+      <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 p-5 text-center">
         <AlertTriangle className="size-12 text-orange-500 opacity-50" />
         <h1 className="text-xl font-bold">Accès restreint</h1>
         <p className="text-muted-foreground">
-          Cet écran est réservé à la modération par le Chef de Chantier.
+          Cet écran est réservé à la modération par le chef de chantier.
         </p>
       </div>
     )
   }
 
-  const handleValidate = (id: string) => {
-    // Animation/State update mock
-    setDrafts((prev) => prev.filter((d) => d.id !== id))
+  const selectedDraft = drafts.find((draft) => draft.id === selectedDraftId) ?? null
+  const groups = groupReviewDrafts(drafts)
+
+  const closeDetail = () => {
+    setSelectedDraftId(null)
+    setEditingDraftId(null)
+  }
+
+  const completeDraft = (id: string) => {
+    setDrafts((current) => current.filter((draft) => draft.id !== id))
+    closeDetail()
   }
 
   const handleEditClick = (draft: Draft) => {
-    setEditTask(draft.extracted.task || '')
-    setEditHours(draft.extracted.hours || '')
-    setEditStatus(draft.extracted.status || 'Terminé')
-    setEditMaterials(draft.extracted.materials ? draft.extracted.materials.join('\n') : '')
+    setEditTask(draft.extracted.task ?? '')
+    setEditHours(draft.extracted.hours ?? '')
+    setEditStatus(draft.extracted.status ?? 'Terminé')
+    setEditMaterials(draft.extracted.materials?.join('\n') ?? '')
     setEditingDraftId(draft.id)
   }
 
   const handleSaveEdit = (id: string) => {
-    setDrafts((prev) =>
-      prev.map((d) => {
-        if (d.id === id) {
-          return {
-            ...d,
-            extracted: {
-              ...d.extracted,
-              task: editTask,
-              hours: editHours,
-              status: editStatus,
-              materials: editMaterials ? editMaterials.split('\n').filter(Boolean) : [],
-            },
-          }
-        }
-        return d
-      }),
+    setDrafts((current) =>
+      current.map((draft) =>
+        draft.id === id
+          ? {
+              ...draft,
+              extracted: {
+                ...draft.extracted,
+                task: editTask,
+                hours: editHours,
+                status: editStatus,
+                materials: editMaterials
+                  .split('\n')
+                  .map((material) => material.trim())
+                  .filter(Boolean),
+              },
+            }
+          : draft,
+      ),
     )
     setEditingDraftId(null)
   }
 
   return (
-    <div className="flex flex-col min-h-dvh pb-32 text-foreground">
-      <header className="sticky top-0 z-30 flex flex-col gap-4 pb-4 px-5 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/30">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold leading-tight">À Vérifier</h1>
-          <span className="bg-primary/10 text-primary text-xs font-bold px-2.5 py-1 rounded-full">
-            {drafts.length} en attente
-          </span>
+    <div className="flex min-h-dvh flex-col bg-background pb-28 text-foreground">
+      <header className="sticky top-0 z-30 border-b border-border/40 bg-background/90 px-4 pb-4 pt-[max(env(safe-area-inset-top),1rem)] backdrop-blur-xl">
+        <div className="mx-auto flex w-full max-w-xl items-center justify-between">
+          <div>
+            <h1 className="text-xl font-bold leading-tight">À vérifier</h1>
+            <p className="mt-0.5 text-xs text-muted-foreground">Cockpit de supervision</p>
+          </div>
+          <Badge tone={drafts.length > 0 ? 'warning' : 'success'}>{drafts.length} en attente</Badge>
         </div>
       </header>
 
-      <main className="flex-1 flex flex-col gap-6 p-5 max-w-md mx-auto w-full">
+      <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-5 px-4 py-5">
         {drafts.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-64 text-center gap-3">
-            <div className="p-4 bg-emerald-500/10 rounded-full mb-2">
-              <Check className="size-10 text-emerald-500" />
+          <div className="flex min-h-64 flex-col items-center justify-center gap-3 text-center">
+            <div className="flex size-16 items-center justify-center rounded-full bg-success/10">
+              <Check className="size-8 text-success" />
             </div>
-            <p className="font-semibold text-lg text-foreground">Rien à vérifier</p>
-            <p className="text-sm text-muted-foreground px-4">
+            <p className="text-lg font-semibold">Rien à vérifier</p>
+            <p className="max-w-xs text-sm text-muted-foreground">
               Les notes terrain, tickets et photos à valider apparaîtront ici.
             </p>
           </div>
         ) : (
-          <div className="flex flex-col gap-6">
-            {drafts.map((draft) => (
-              <div
-                key={draft.id}
-                className="flex flex-col rounded-2xl border border-border bg-surface overflow-hidden shadow-sm"
-              >
-                {/* Source & Auteur */}
-                <div className="bg-surface-elevated px-4 py-3 border-b border-border/50 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <User className="size-4 text-muted-foreground" />
-                    <span className="text-sm font-semibold">{draft.author}</span>
+          groups.map((group) => {
+            if (group.items.length === 0) return null
+            const styles = priorityStyles[group.priority]
+
+            return (
+              <section key={group.priority} className="flex flex-col gap-2">
+                <div className="flex items-end justify-between gap-3 px-1">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h2 className="text-sm font-bold">{group.label}</h2>
+                      <Badge tone={styles.badgeTone} className="min-h-6 px-2">
+                        {group.items.length}
+                      </Badge>
+                    </div>
+                    <p className="mt-0.5 text-xs text-muted-foreground">{group.description}</p>
                   </div>
-                  <span className="text-xs text-muted-foreground">{draft.time}</span>
                 </div>
 
-                <div className="p-4 flex flex-col gap-5">
-                  {/* Note vocale brute */}
-                  <div className="flex flex-col gap-2">
-                    <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                      <Mic className="size-3.5" />
-                      Note brute
-                    </div>
-                    <p className="text-sm italic text-muted-foreground border-l-2 border-primary/30 pl-3">
-                      "{draft.rawText}"
-                    </p>
-                  </div>
-
-                  {/* Extraction IA ou Mode Édition */}
-                  {editingDraftId === draft.id ? (
-                    <div className="flex flex-col gap-3 p-4 bg-primary/5 rounded-xl border border-primary/20">
-                      <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-wider mb-1">
-                        Modification
-                      </div>
-                      <label className="flex flex-col gap-1">
-                        <span className="text-[10px] text-muted-foreground uppercase">Tâche</span>
-                        <input
-                          type="text"
-                          value={editTask}
-                          onChange={(e) => setEditTask(e.target.value)}
-                          className="bg-background border border-border rounded-md px-3 py-1.5 text-sm"
-                        />
-                      </label>
-                      <div className="grid grid-cols-2 gap-3">
-                        <label className="flex flex-col gap-1">
-                          <span className="text-[10px] text-muted-foreground uppercase">
-                            Heures
-                          </span>
-                          <input
-                            type="text"
-                            value={editHours}
-                            onChange={(e) => setEditHours(e.target.value)}
-                            className="bg-background border border-border rounded-md px-3 py-1.5 text-sm"
-                            placeholder="ex: 08:00 - 16:30"
-                          />
-                        </label>
-                        <label className="flex flex-col gap-1">
-                          <span className="text-[10px] text-muted-foreground uppercase">
-                            Statut
-                          </span>
-                          <select
-                            value={editStatus}
-                            onChange={(e) => setEditStatus(e.target.value as any)}
-                            className="bg-background border border-border rounded-md px-3 py-1.5 text-sm"
-                          >
-                            <option value="Terminé">Terminé</option>
-                            <option value="En cours">En cours</option>
-                            <option value="Problème">Problème</option>
-                          </select>
-                        </label>
-                      </div>
-                      <label className="flex flex-col gap-1">
-                        <span className="text-[10px] text-muted-foreground uppercase">
-                          Matériaux (un par ligne)
-                        </span>
-                        <textarea
-                          value={editMaterials}
-                          onChange={(e) => setEditMaterials(e.target.value)}
-                          className="bg-background border border-border rounded-md px-3 py-1.5 text-sm min-h-[60px]"
-                        />
-                      </label>
-                      <div className="flex gap-2 mt-2">
-                        <button
-                          onClick={() => setEditingDraftId(null)}
-                          className="flex-1 bg-surface-elevated hover:bg-border border border-border text-foreground text-sm font-medium py-2 rounded-xl transition-colors"
-                        >
-                          Annuler
-                        </button>
-                        <button
-                          onClick={() => handleSaveEdit(draft.id)}
-                          className="flex-1 bg-primary text-primary-foreground text-sm font-semibold py-2 rounded-xl transition-colors"
-                        >
-                          Sauvegarder
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col gap-3 p-4 bg-primary/5 rounded-xl border border-primary/10 relative">
-                      <div className="absolute top-3 right-3">
-                        <Bot className="size-5 text-primary opacity-50" />
-                      </div>
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-wider">
-                          Extraction IA
-                        </div>
-                        {draft.extracted.confidence === 'Élevée' ? (
-                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
-                            Confiance Élevée
-                          </span>
-                        ) : draft.extracted.confidence === 'Moyenne' ? (
-                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-yellow-500/15 text-yellow-600 dark:text-yellow-400">
-                            À compléter
-                          </span>
+                <div className="overflow-hidden rounded-[var(--radius-card)] border border-border bg-surface divide-y divide-border">
+                  {group.items.map((draft) => (
+                    <button
+                      type="button"
+                      key={draft.id}
+                      onClick={() => setSelectedDraftId(draft.id)}
+                      className={cn(
+                        'flex min-h-20 w-full items-center gap-3 border-l-4 px-3 py-3 text-left transition-colors active:bg-surface-elevated',
+                        styles.rowClass,
+                      )}
+                    >
+                      <div className={cn('shrink-0', styles.iconClass)}>
+                        {group.priority === 'blocking' ? (
+                          <AlertTriangle className="size-5" />
+                        ) : group.priority === 'validate' ? (
+                          <Bot className="size-5" />
                         ) : (
-                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-500/15 text-orange-600 dark:text-orange-400">
-                            Doute IA
-                          </span>
+                          <ListChecks className="size-5" />
                         )}
                       </div>
-
-                      {draft.extracted.missingFields &&
-                        draft.extracted.missingFields.length > 0 && (
-                          <div className="flex flex-col gap-1 mb-2 p-2 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
-                            <span className="text-[10px] font-bold uppercase text-yellow-700 dark:text-yellow-400">
-                              Points à vérifier :
-                            </span>
-                            {draft.extracted.missingFields.map((f, i) => (
-                              <span
-                                key={i}
-                                className="text-xs font-medium text-yellow-700 dark:text-yellow-400"
-                              >
-                                - {f}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-
-                      {draft.extracted.task && (
-                        <div className="flex flex-col">
-                          <span className="text-[10px] text-muted-foreground uppercase">Tâche</span>
-                          <span className="text-sm font-medium">{draft.extracted.task}</span>
-                        </div>
-                      )}
-
-                      <div className="grid grid-cols-2 gap-3 mt-1">
-                        {draft.extracted.hours && (
-                          <div className="flex items-center gap-2">
-                            <Clock className="size-4 text-blue-500" />
-                            <span className="text-sm font-semibold">{draft.extracted.hours}</span>
-                          </div>
-                        )}
-                        {draft.extracted.status && (
-                          <div className="flex items-center gap-2">
-                            <div
-                              className={`w-2 h-2 rounded-full ${draft.extracted.status === 'Terminé' ? 'bg-emerald-500' : draft.extracted.status === 'Problème' ? 'bg-orange-500' : 'bg-blue-500'}`}
-                            />
-                            <span className="text-sm font-semibold">{draft.extracted.status}</span>
-                          </div>
-                        )}
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-semibold">
+                          {draft.extracted.task ?? 'Note terrain sans titre'}
+                        </p>
+                        <p className="mt-1 truncate text-xs text-muted-foreground">
+                          {draft.author} · {draft.time}
+                        </p>
                       </div>
-
-                      {draft.extracted.materials && draft.extracted.materials.length > 0 && (
-                        <div className="flex flex-col gap-1 mt-1">
-                          <div className="flex items-center gap-2">
-                            <Package className="size-4 text-emerald-500" />
-                            <span className="text-[10px] text-muted-foreground uppercase">
-                              Matériaux
-                            </span>
-                          </div>
-                          {draft.extracted.materials.map((mat, i) => (
-                            <span key={i} className="text-sm font-medium pl-6">
-                              {mat}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Actions */}
-                  {editingDraftId !== draft.id && (
-                    <div className="flex gap-3 pt-2">
-                      <button
-                        onClick={() => handleValidate(draft.id)}
-                        className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
-                      >
-                        <Check className="size-5" />
-                        Valider
-                      </button>
-                      <button
-                        onClick={() => handleEditClick(draft)}
-                        className="flex-1 bg-surface-elevated hover:bg-border border border-border text-foreground font-medium py-3 rounded-xl transition-colors"
-                      >
-                        Corriger
-                      </button>
-                    </div>
-                  )}
+                      <div className="flex shrink-0 items-center gap-1.5">
+                        <span className="hidden text-xs font-medium text-muted-foreground min-[390px]:inline">
+                          IA {draft.extracted.confidence.toLowerCase()}
+                        </span>
+                        <ChevronRight className="size-5 text-muted-foreground" />
+                      </div>
+                    </button>
+                  ))}
                 </div>
-              </div>
-            ))}
-          </div>
+              </section>
+            )
+          })
         )}
       </main>
+
+      <BottomSheet isOpen={selectedDraft !== null} onClose={closeDetail} title="Détail à vérifier">
+        {selectedDraft ? (
+          <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge tone={priorityStyles[getReviewPriority(selectedDraft)].badgeTone}>
+                  {groups.find((group) => group.priority === getReviewPriority(selectedDraft))
+                    ?.label ?? 'À traiter'}
+                </Badge>
+                <span className="text-xs text-muted-foreground">{selectedDraft.time}</span>
+              </div>
+              <h2 className="text-lg font-bold leading-snug">
+                {selectedDraft.extracted.task ?? 'Note terrain sans titre'}
+              </h2>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <User className="size-4" />
+                {selectedDraft.author}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between rounded-lg border border-border bg-surface-elevated px-3 py-2.5">
+              <div className="flex items-center gap-2 text-sm font-semibold">
+                <Bot className="size-4 text-primary" />
+                Confiance IA
+              </div>
+              <Badge
+                tone={
+                  selectedDraft.extracted.confidence === 'Élevée'
+                    ? 'success'
+                    : selectedDraft.extracted.confidence === 'Moyenne'
+                      ? 'warning'
+                      : 'danger'
+                }
+              >
+                {selectedDraft.extracted.confidence}
+              </Badge>
+            </div>
+
+            {editingDraftId !== selectedDraft.id ? (
+              <div className="grid grid-cols-3 gap-2">
+                <button
+                  type="button"
+                  onClick={() => completeDraft(selectedDraft.id)}
+                  className="flex min-h-11 items-center justify-center gap-1.5 rounded-lg bg-success px-2 text-xs font-bold text-white"
+                >
+                  <Check className="size-4" />
+                  Valider
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleEditClick(selectedDraft)}
+                  className="flex min-h-11 items-center justify-center gap-1.5 rounded-lg border border-border bg-surface px-2 text-xs font-bold"
+                >
+                  <Pencil className="size-4" />
+                  Corriger
+                </button>
+                <button
+                  type="button"
+                  onClick={() => completeDraft(selectedDraft.id)}
+                  className="flex min-h-11 items-center justify-center gap-1.5 rounded-lg bg-primary px-2 text-xs font-bold text-primary-foreground"
+                >
+                  <ListChecks className="size-4" />
+                  Organiser
+                </button>
+              </div>
+            ) : null}
+
+            <section className="flex flex-col gap-2">
+              <div className="flex items-center gap-2 text-xs font-bold uppercase text-muted-foreground">
+                <Mic className="size-4" />
+                Note brute
+              </div>
+              <p className="border-l-2 border-primary/40 pl-3 text-sm italic leading-relaxed text-muted-foreground">
+                « {selectedDraft.rawText} »
+              </p>
+            </section>
+
+            {editingDraftId === selectedDraft.id ? (
+              <div className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-primary/30 bg-primary/5 p-4">
+                <div className="flex items-center gap-2 text-xs font-bold uppercase text-primary">
+                  <Pencil className="size-4" />
+                  Correction
+                </div>
+                <label className="flex flex-col gap-1.5 text-xs font-semibold">
+                  Tâche
+                  <input
+                    type="text"
+                    value={editTask}
+                    onChange={(event) => setEditTask(event.target.value)}
+                    className="min-h-11 rounded-lg border border-border bg-background px-3 text-sm font-normal"
+                  />
+                </label>
+                <label className="flex flex-col gap-1.5 text-xs font-semibold">
+                  Heures
+                  <input
+                    type="text"
+                    value={editHours}
+                    onChange={(event) => setEditHours(event.target.value)}
+                    placeholder="08:00 - 16:30"
+                    className="min-h-11 rounded-lg border border-border bg-background px-3 text-sm font-normal"
+                  />
+                </label>
+                <label className="flex flex-col gap-1.5 text-xs font-semibold">
+                  Statut
+                  <select
+                    value={editStatus}
+                    onChange={(event) => setEditStatus(event.target.value as DraftStatus)}
+                    className="min-h-11 rounded-lg border border-border bg-background px-3 text-sm font-normal"
+                  >
+                    <option value="Terminé">Terminé</option>
+                    <option value="En cours">En cours</option>
+                    <option value="Problème">Problème</option>
+                  </select>
+                </label>
+                <label className="flex flex-col gap-1.5 text-xs font-semibold">
+                  Matériaux, un par ligne
+                  <textarea
+                    value={editMaterials}
+                    onChange={(event) => setEditMaterials(event.target.value)}
+                    className="min-h-20 rounded-lg border border-border bg-background p-3 text-sm font-normal"
+                  />
+                </label>
+                <div className="grid grid-cols-2 gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => setEditingDraftId(null)}
+                    className="min-h-11 rounded-lg border border-border bg-surface text-sm font-semibold"
+                  >
+                    Annuler
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleSaveEdit(selectedDraft.id)}
+                    className="min-h-11 rounded-lg bg-primary text-sm font-semibold text-primary-foreground"
+                  >
+                    Enregistrer
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <section className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-border bg-surface-elevated p-4">
+                <div className="flex items-center gap-2 text-xs font-bold uppercase text-primary">
+                  <Sparkles className="size-4" />
+                  Lecture proposée
+                </div>
+
+                {selectedDraft.extracted.missingFields?.length ? (
+                  <div className="rounded-lg border border-warning/30 bg-warning/10 p-3">
+                    <p className="text-xs font-bold text-warning">À confirmer</p>
+                    <ul className="mt-1.5 flex flex-col gap-1 text-sm">
+                      {selectedDraft.extracted.missingFields.map((field) => (
+                        <li key={field}>• {field}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+
+                <div className="grid grid-cols-2 gap-3">
+                  {selectedDraft.extracted.hours ? (
+                    <div>
+                      <p className="text-xs text-muted-foreground">Heures</p>
+                      <p className="mt-1 flex items-center gap-1.5 text-sm font-semibold">
+                        <Clock className="size-4 text-info" />
+                        {selectedDraft.extracted.hours}
+                      </p>
+                    </div>
+                  ) : null}
+                  {selectedDraft.extracted.status ? (
+                    <div>
+                      <p className="text-xs text-muted-foreground">Statut</p>
+                      <p className="mt-1 text-sm font-semibold">{selectedDraft.extracted.status}</p>
+                    </div>
+                  ) : null}
+                </div>
+
+                {selectedDraft.extracted.materials?.length ? (
+                  <div>
+                    <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <Package className="size-4 text-success" />
+                      Matériaux
+                    </p>
+                    <p className="mt-1 text-sm font-semibold">
+                      {selectedDraft.extracted.materials.join(', ')}
+                    </p>
+                  </div>
+                ) : null}
+              </section>
+            )}
+          </div>
+        ) : null}
+      </BottomSheet>
     </div>
   )
 }

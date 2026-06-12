@@ -15,7 +15,7 @@ import {
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import type { Intervention, Person, Task, WorkEntry } from '@/lib/domain'
+import type { Intervention, Person } from '@/lib/domain'
 import { mockClarusRepository } from '@/lib/repositories'
 
 type TimelineEvent = {
@@ -255,7 +255,7 @@ export default function PersonProfilePage({ params }: { params: { id: string } }
 
           <div className="flex flex-col relative before:absolute before:inset-y-0 before:left-6 before:w-px before:bg-border/50 gap-6">
             {timeline.length > 0 ? (
-              timeline.map((event, index) => {
+              timeline.map((event, _index) => {
                 // Déterminer l'icône et la couleur selon le type d'événement
                 let Icon = Wrench
                 let iconColor = 'text-primary'

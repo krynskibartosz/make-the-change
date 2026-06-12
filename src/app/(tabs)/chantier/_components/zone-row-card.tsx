@@ -1,5 +1,6 @@
 import { AlertTriangle, ChevronRight, ClipboardList, Clock } from 'lucide-react'
 import { Badge, Card } from '@/components/ui'
+import { getZoneStatus } from './zone-status'
 
 export type ZoneRowProps = {
   id: string
@@ -21,30 +22,23 @@ export function ZoneRowCard({
   planReference,
   isSensible,
 }: ZoneRowProps) {
-  // Determine dot color
-  let dotColor = 'bg-success'
-  if (tasksCount > 0 || interventionsCount > 0) dotColor = 'bg-warning'
-  if (isSensible || tasksCount > 2) dotColor = 'bg-danger' // Just a heuristic for the red dot
-
+  const status = getZoneStatus({ tasksCount, interventionsCount, isSensible })
   const hasActivity = tasksCount > 0 || interventionsCount > 0
 
   return (
-    <Card className="group relative overflow-hidden flex flex-col p-5 bg-surface hover:bg-surface-elevated transition-colors mb-3 cursor-pointer border-border/50">
+    <Card className="group relative mb-3 flex cursor-pointer flex-col overflow-hidden border-border/50 bg-surface p-4 transition-colors hover:bg-surface-elevated">
       <div className="flex items-start justify-between w-full">
-        <div className="flex items-start gap-4">
-          {/* Dot Status */}
-          <div className="mt-1.5 flex h-3 w-3 shrink-0 items-center justify-center rounded-full">
-            <span
-              className={`h-2.5 w-2.5 rounded-full ${dotColor} shadow-[0_0_8px_rgba(var(--color-${dotColor.split('-')[1]}),0.5)]`}
-            />
-          </div>
-
+        <div className="min-w-0 flex-1">
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-base font-bold text-foreground">
                 {isTechnical && technicalCode ? `${technicalCode} — ` : ''}
                 {name}
               </span>
+              <Badge tone={status.tone} className="min-h-6 gap-1.5 px-2">
+                <span className={`size-2 rounded-full ${status.dotClass}`} aria-hidden="true" />
+                {status.label}
+              </Badge>
               {isSensible && (
                 <Badge tone="danger" className="h-6 px-2 text-xs uppercase gap-1">
                   <AlertTriangle className="size-3.5" />
@@ -88,7 +82,7 @@ export function ZoneRowCard({
         </div>
 
         {/* Right Arrow */}
-        <div className="flex items-center h-full text-muted-foreground/50 group-hover:text-foreground transition-colors">
+        <div className="ml-2 flex items-center self-center text-muted-foreground/50 transition-colors group-hover:text-foreground">
           <ChevronRight className="size-5" />
         </div>
       </div>

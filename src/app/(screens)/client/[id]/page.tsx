@@ -1,14 +1,17 @@
 'use client'
 
 import {
+  AlertCircle,
+  ArrowRight,
   Building2,
+  CalendarCheck2,
   ChevronLeft,
-  ChevronRight,
-  Euro,
+  CircleDollarSign,
+  Clock3,
   FileText,
   Mail,
   Phone,
-  User,
+  UserRound,
 } from 'lucide-react'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
@@ -26,13 +29,13 @@ export default function ClientProfilePage() {
   const [loading, setLoading] = useState(true)
 
   const loadData = useCallback(async () => {
-    const c = await mockClarusRepository.getClient(id)
-    // In a real app we'd fetch projects by clientId. For the mock we just grab the only one if it matches.
-    const p = await mockClarusRepository.getProject()
-    const clientProjects = p.clientId === id ? [p] : []
+    const [loadedClient, project] = await Promise.all([
+      mockClarusRepository.getClient(id),
+      mockClarusRepository.getProject(),
+    ])
 
-    setClient(c)
-    setProjects(clientProjects)
+    setClient(loadedClient)
+    setProjects(project.clientId === id ? [project] : [])
     setLoading(false)
   }, [id])
 
@@ -45,108 +48,172 @@ export default function ClientProfilePage() {
     return <div className="p-8 text-center text-muted-foreground">Client non trouvé.</div>
 
   return (
-    <div className="flex flex-col min-h-dvh bg-background text-foreground pb-20">
-      {/* Header */}
-      <header className="sticky top-0 z-30 flex flex-col gap-4 p-5 pb-4 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/30">
+    <div className="flex min-h-dvh flex-col bg-background pb-20 text-foreground">
+      <header className="sticky top-0 z-30 border-b border-border/30 bg-background/90 px-5 pb-4 pt-[max(env(safe-area-inset-top),1.25rem)] backdrop-blur-md">
         <div className="flex items-center gap-3">
           <button
+            type="button"
             onClick={() => router.back()}
-            className="p-2 -ml-2 rounded-full hover:bg-surface-elevated transition-colors"
+            aria-label="Revenir à l’écran précédent"
+            className="-ml-2 flex size-10 items-center justify-center rounded-full active:bg-surface-elevated"
           >
             <ChevronLeft className="size-5" />
           </button>
-          <div className="flex flex-col">
-            <h1 className="text-xl font-bold leading-tight">Profil Client</h1>
-            <p className="text-xs text-muted-foreground">CRM Central</p>
+          <div>
+            <p className="text-xs font-semibold uppercase text-muted-foreground">Relation client</p>
+            <h1 className="text-xl font-bold">Profil client</h1>
           </div>
         </div>
       </header>
 
-      <main className="flex-1 p-5 flex flex-col gap-6">
-        {/* En-tête Client */}
-        <div className="flex flex-col items-center gap-3 py-4">
-          <div className="size-24 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-500">
-            <User className="size-12" />
-          </div>
-          <div className="text-center">
-            <h2 className="text-3xl font-bold">{client.name}</h2>
-            <p className="text-muted-foreground mt-1 text-sm font-medium">
-              {client.company || 'Client Particulier'}
+      <main className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-6 p-5">
+        <section className="flex items-center gap-3">
+          <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-info/10 text-info">
+            <UserRound className="size-6" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <h2 className="truncate text-2xl font-black">{client.name}</h2>
+            <p className="text-sm text-muted-foreground">
+              {client.company || 'Client particulier'}
             </p>
           </div>
+        </section>
 
-          <div className="flex gap-2 mt-4 w-full">
-            <a
-              href={`tel:${client.phone}`}
-              className="flex-1 flex items-center justify-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90 py-3 rounded-xl text-sm font-bold transition-colors shadow-sm"
-            >
-              <Phone className="size-4" /> Appeler
-            </a>
-            <a
-              href={`mailto:${client.email}`}
-              className="flex-1 flex items-center justify-center gap-2 bg-surface border border-border hover:bg-surface-elevated py-3 rounded-xl text-sm font-bold transition-colors"
-            >
-              <Mail className="size-4" /> Email
-            </a>
-          </div>
+        <div className="grid grid-cols-2 gap-2">
+          <a
+            href={`tel:${client.phone}`}
+            className="flex min-h-12 items-center justify-center gap-2 rounded-[var(--radius-control)] bg-primary text-sm font-bold text-primary-foreground"
+          >
+            <Phone className="size-4" />
+            Appeler
+          </a>
+          <a
+            href={`mailto:${client.email}`}
+            className="flex min-h-12 items-center justify-center gap-2 rounded-[var(--radius-control)] border border-border bg-surface text-sm font-bold"
+          >
+            <Mail className="size-4" />
+            Écrire
+          </a>
         </div>
 
-        {/* Chantiers associés */}
-        <div className="flex flex-col gap-3">
-          <h3 className="font-bold text-sm uppercase tracking-wider text-muted-foreground ml-1">
+        <section className="flex flex-col gap-3">
+          <h3 className="text-sm font-bold uppercase text-muted-foreground">Suivi client</h3>
+          <div className="overflow-hidden rounded-[var(--radius-card)] border border-border bg-surface">
+            <ClientFollowUpRow
+              icon={Clock3}
+              label="Dernier contact"
+              value="Appel du 10 juin"
+              detail="Compte-rendu envoyé au client"
+            />
+            <ClientFollowUpRow
+              icon={CalendarCheck2}
+              label="Prochaine action"
+              value="Relancer le 12 juin avant 16 h"
+              detail="Obtenir une réponse sur l’option terrasse"
+              tone="text-info"
+            />
+            <Link
+              href="/validations"
+              className="flex min-h-24 items-start gap-3 border-t border-border p-4 active:bg-surface-elevated"
+            >
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-warning/10 text-warning">
+                <AlertCircle className="size-4" />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-xs font-semibold text-muted-foreground">
+                  Validation en attente
+                </span>
+                <span className="mt-0.5 block font-bold">Option technique terrasse</span>
+                <span className="mt-1 block text-xs text-muted-foreground">
+                  Accord client demandé pour +540 € et +1 jour
+                </span>
+              </span>
+              <ArrowRight className="mt-2 size-4 shrink-0 text-warning" />
+            </Link>
+          </div>
+        </section>
+
+        <section className="flex flex-col gap-3">
+          <h3 className="text-sm font-bold uppercase text-muted-foreground">
             Chantiers ({projects.length})
           </h3>
           {projects.length === 0 ? (
-            <div className="bg-surface border border-border rounded-2xl p-6 text-center text-sm text-muted-foreground">
+            <div className="rounded-[var(--radius-card)] border border-border bg-surface p-6 text-center text-sm text-muted-foreground">
               Aucun chantier actif.
             </div>
           ) : (
             projects.map((project) => (
               <Link
                 key={project.id}
-                href={`/projet-info`}
-                className="bg-surface border border-border rounded-2xl p-4 flex items-center justify-between hover:border-primary/50 transition-colors"
+                href="/projet-info"
+                className="flex min-h-20 items-center gap-3 rounded-[var(--radius-card)] border border-border bg-surface p-4 active:bg-surface-elevated"
               >
-                <div className="flex items-center gap-4">
-                  <div className="size-10 bg-primary/10 rounded-xl text-primary flex items-center justify-center">
-                    <Building2 className="size-5" />
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="font-bold text-base leading-tight">{project.name}</span>
-                    <span className="text-xs text-muted-foreground mt-0.5">{project.address}</span>
-                  </div>
-                </div>
-                <ChevronRight className="size-5 text-muted-foreground" />
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <Building2 className="size-5" />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate font-bold">{project.name}</span>
+                  <span className="mt-0.5 block text-xs leading-4 text-muted-foreground">
+                    {project.address}
+                  </span>
+                </span>
+                <ArrowRight className="size-4 shrink-0 text-primary" />
               </Link>
             ))
           )}
-        </div>
+        </section>
 
-        {/* Historique Financier (Mock) */}
-        <div className="flex flex-col gap-3">
-          <h3 className="font-bold text-sm uppercase tracking-wider text-muted-foreground ml-1">
-            Finances
+        <section className="flex flex-col gap-3">
+          <h3 className="text-sm font-bold uppercase text-muted-foreground">
+            Situation financière
           </h3>
-          <div className="bg-surface border border-border rounded-2xl overflow-hidden flex flex-col">
-            <div className="p-4 border-b border-border/50 flex justify-between items-center bg-surface-elevated/30">
-              <span className="text-sm font-semibold">Chiffre d'Affaires</span>
-              <span className="font-bold text-base">45 200 €</span>
-            </div>
-            <div className="p-4 border-b border-border/50 flex justify-between items-center bg-surface-elevated/30">
-              <span className="text-sm font-semibold text-blue-500 flex items-center gap-1.5">
-                <Euro className="size-4" /> À facturer
+          <div className="overflow-hidden rounded-[var(--radius-card)] border border-border bg-surface">
+            <div className="flex items-center justify-between gap-4 p-4">
+              <span className="flex items-center gap-2 text-sm font-semibold">
+                <CircleDollarSign className="size-4 text-muted-foreground" />
+                Chiffre d’affaires
               </span>
-              <span className="font-bold text-base text-blue-500">1 420 €</span>
+              <span className="font-black">45 200 €</span>
+            </div>
+            <div className="flex items-center justify-between gap-4 border-t border-border p-4">
+              <span className="flex items-center gap-2 text-sm font-semibold text-billable">
+                <FileText className="size-4" />À facturer
+              </span>
+              <span className="font-black text-billable">1 420 €</span>
             </div>
             <Link
               href="/facturation"
-              className="p-3 flex justify-center items-center gap-2 text-xs font-bold text-muted-foreground hover:text-foreground transition-colors bg-background/50"
+              className="flex min-h-12 items-center justify-between border-t border-border px-4 text-sm font-bold active:bg-surface-elevated"
             >
-              Voir les factures <FileText className="size-4" />
+              Préparer la facture
+              <ArrowRight className="size-4 text-primary" />
             </Link>
           </div>
-        </div>
+        </section>
       </main>
+    </div>
+  )
+}
+
+type ClientFollowUpRowProps = {
+  icon: typeof Clock3
+  label: string
+  value: string
+  detail: string
+  tone?: string
+}
+
+function ClientFollowUpRow({ icon: Icon, label, value, detail, tone }: ClientFollowUpRowProps) {
+  return (
+    <div className="flex min-h-24 items-start gap-3 border-t border-border p-4 first:border-t-0">
+      <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-surface-elevated text-muted-foreground">
+        <Icon className="size-4" />
+      </span>
+      <div>
+        <p className="text-xs font-semibold text-muted-foreground">{label}</p>
+        <p className={`mt-0.5 font-bold ${tone ?? ''}`}>{value}</p>
+        <p className="mt-1 text-xs text-muted-foreground">{detail}</p>
+      </div>
     </div>
   )
 }

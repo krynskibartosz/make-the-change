@@ -110,7 +110,9 @@ Si une information manque, laisse un tableau vide [] ou la chaîne "Non précis�
   }
 
   const data = await response.json()
-  const parsedData = z.object({ choices: z.array(z.object({ message: z.object({ content: z.string() }) })) }).parse(data)
+  const parsedData = z
+    .object({ choices: z.array(z.object({ message: z.object({ content: z.string() }) })) })
+    .parse(data)
   const content = parsedData.choices[0]?.message.content
 
   if (!content) {

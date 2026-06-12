@@ -1,5 +1,5 @@
-const fs = require('fs')
-const path = require('path')
+const fs = require('node:fs')
+const path = require('node:path')
 
 const files = [
   'src/app/(screens)/ajouter-heures/page.tsx',
@@ -21,6 +21,6 @@ files.forEach((f) => {
     content = content.replace(/<\/Form>/g, '</form>')
     content = content.replace(/import Form from 'next\/form'\r?\n/, '')
     fs.writeFileSync(fullPath, content, 'utf8')
-    console.log('Reverted ' + f)
+    console.log(`Reverted ${f}`)
   }
 })

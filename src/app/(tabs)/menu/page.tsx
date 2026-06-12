@@ -3,14 +3,20 @@
 import {
   BarChart3,
   Bell,
-  Boxes,
+  BriefcaseBusiness,
   ChevronRight,
+  CircleHelp,
+  ClipboardCheck,
   ClipboardList,
+  FileText,
   Image as ImageIcon,
-  type LucideIcon,
-  Map,
+  Mail,
+  Map as MapIcon,
   Package,
+  Receipt,
   Settings,
+  Timer,
+  UserRound,
   Users,
 } from 'lucide-react'
 import Link from 'next/link'
@@ -20,44 +26,289 @@ type SettingsItem = {
   label: string
   description?: string
   href?: string
-  icon: LucideIcon
+  icon: typeof Settings
   iconWrapperClassName: string
-  iconClassName?: string
 }
 
-function SettingsGroup({ title, items }: { title: string; items: SettingsItem[] }) {
+type SettingsSection = {
+  title: string
+  items: SettingsItem[]
+}
+
+const roleLabels: Record<AppRole, string> = {
+  ouvrier: 'Ouvrier (Hubert)',
+  chef: 'Superviseur (Christophe)',
+  admin: 'Pilotage chantier (Martin)',
+  client: 'Client final (Jean)',
+}
+
+const roleSections: Record<AppRole, SettingsSection[]> = {
+  ouvrier: [
+    {
+      title: 'Mon chantier',
+      items: [
+        {
+          label: 'Villa Sparrenlaan',
+          description: 'Sparrenlaan 35, Overijse',
+          href: '/chantier',
+          icon: BriefcaseBusiness,
+          iconWrapperClassName: 'bg-primary',
+        },
+        {
+          label: 'Mes envoyés',
+          description: 'Voir ce que Christophe a reçu',
+          href: '/historique',
+          icon: ClipboardList,
+          iconWrapperClassName: 'bg-blue-500',
+        },
+        {
+          label: 'Noter mes heures',
+          description: 'Ajouter rapidement ma journée',
+          href: '/ajouter-heures',
+          icon: Timer,
+          iconWrapperClassName: 'bg-emerald-500',
+        },
+        {
+          label: 'Photos envoyées',
+          description: 'Retrouver mes preuves terrain',
+          href: '/photos',
+          icon: ImageIcon,
+          iconWrapperClassName: 'bg-orange-500',
+        },
+      ],
+    },
+    {
+      title: 'Aide',
+      items: [
+        {
+          label: 'Comment dicter',
+          description: 'Exemples de notes efficaces',
+          href: '/chantier',
+          icon: CircleHelp,
+          iconWrapperClassName: 'bg-violet-500',
+        },
+        {
+          label: 'Paramètres',
+          description: "Réglages de l'application",
+          icon: Settings,
+          iconWrapperClassName: 'bg-gray-500',
+        },
+      ],
+    },
+  ],
+  chef: [
+    {
+      title: 'Supervision',
+      items: [
+        {
+          label: 'À vérifier',
+          description: 'Valider les remontées du terrain',
+          href: '/a-verifier',
+          icon: ClipboardCheck,
+          iconWrapperClassName: 'bg-amber-500',
+        },
+        {
+          label: 'Planning & tâches',
+          description: 'Priorités, blocages et avancement',
+          href: '/roadmap-viewer',
+          icon: ClipboardList,
+          iconWrapperClassName: 'bg-blue-500',
+        },
+        {
+          label: 'Journal du chantier',
+          description: 'Historique complet des interventions',
+          href: '/historique',
+          icon: FileText,
+          iconWrapperClassName: 'bg-slate-500',
+        },
+      ],
+    },
+    {
+      title: 'Chantier',
+      items: [
+        {
+          label: 'Chantier — Plans & suivi',
+          description: 'Zones, tâches et points techniques',
+          href: '/plans',
+          icon: MapIcon,
+          iconWrapperClassName: 'bg-purple-500',
+        },
+        {
+          label: 'Configuration des zones',
+          description: 'Créer ou modifier les zones',
+          href: '/zones',
+          icon: MapIcon,
+          iconWrapperClassName: 'bg-rose-500',
+        },
+        {
+          label: 'Photos',
+          description: 'Preuves et avancement du chantier',
+          href: '/photos',
+          icon: ImageIcon,
+          iconWrapperClassName: 'bg-orange-500',
+        },
+        {
+          label: 'Équipe du chantier',
+          description: 'Rôles, compétences et contacts',
+          href: '/equipe',
+          icon: Users,
+          iconWrapperClassName: 'bg-indigo-500',
+        },
+      ],
+    },
+    {
+      title: 'Ressources',
+      items: [
+        {
+          label: 'Matériaux & stock',
+          description: 'Besoins, utilisations et inventaire',
+          href: '/materiaux',
+          icon: Package,
+          iconWrapperClassName: 'bg-emerald-500',
+        },
+        {
+          label: 'Dépenses terrain',
+          description: 'Tickets et achats à vérifier',
+          href: '/couts',
+          icon: Receipt,
+          iconWrapperClassName: 'bg-teal-500',
+        },
+      ],
+    },
+  ],
+  admin: [
+    {
+      title: 'Pilotage',
+      items: [
+        {
+          label: 'Vue globale',
+          description: 'Décisions, risques et finances',
+          href: '/dashboard',
+          icon: BarChart3,
+          iconWrapperClassName: 'bg-blue-500',
+        },
+        {
+          label: 'Projets',
+          description: 'Portefeuille de chantiers',
+          href: '/projets',
+          icon: BriefcaseBusiness,
+          iconWrapperClassName: 'bg-primary',
+        },
+        {
+          label: 'À facturer',
+          description: 'Préparer les éléments client',
+          href: '/facturation',
+          icon: Receipt,
+          iconWrapperClassName: 'bg-emerald-500',
+        },
+        {
+          label: 'Rapports',
+          description: 'Synthèses publiées du chantier',
+          href: '/rapports/semaine-24',
+          icon: FileText,
+          iconWrapperClassName: 'bg-violet-500',
+        },
+      ],
+    },
+    {
+      title: 'Clients & chantier',
+      items: [
+        {
+          label: 'Jean Dupont',
+          description: 'Relation client et prochaine action',
+          href: '/client/client-dupont',
+          icon: UserRound,
+          iconWrapperClassName: 'bg-indigo-500',
+        },
+        {
+          label: 'Photos validées',
+          description: 'Preuves partageables avec le client',
+          href: '/photos',
+          icon: ImageIcon,
+          iconWrapperClassName: 'bg-orange-500',
+        },
+        {
+          label: 'Équipe',
+          description: 'Responsabilités et disponibilité',
+          href: '/equipe',
+          icon: Users,
+          iconWrapperClassName: 'bg-slate-500',
+        },
+      ],
+    },
+  ],
+  client: [
+    {
+      title: 'Votre espace',
+      items: [
+        {
+          label: 'Votre suivi',
+          description: 'Avancement de Villa Sparrenlaan',
+          href: '/chantier',
+          icon: BriefcaseBusiness,
+          iconWrapperClassName: 'bg-primary',
+        },
+        {
+          label: 'Demandes à valider',
+          description: 'Décisions qui attendent votre avis',
+          href: '/validations',
+          icon: ClipboardCheck,
+          iconWrapperClassName: 'bg-amber-500',
+        },
+        {
+          label: 'Photos validées',
+          description: 'Preuves publiées par le chantier',
+          href: '/photos',
+          icon: ImageIcon,
+          iconWrapperClassName: 'bg-orange-500',
+        },
+        {
+          label: 'Contacter Martin',
+          description: 'Poser une question sur votre chantier',
+          href: 'mailto:martin@clarus.com',
+          icon: Mail,
+          iconWrapperClassName: 'bg-blue-500',
+        },
+        {
+          label: 'Paramètres',
+          description: 'Notifications et préférences',
+          icon: Settings,
+          iconWrapperClassName: 'bg-gray-500',
+        },
+      ],
+    },
+  ],
+}
+
+function SettingsGroup({ title, items }: SettingsSection) {
   return (
     <section>
-      <h3 className="ml-8 mb-2 mt-6 text-[11px] font-medium uppercase tracking-widest text-muted-foreground/70">
+      <h2 className="mb-2 ml-8 mt-6 text-[11px] font-medium uppercase tracking-widest text-muted-foreground/70">
         {title}
-      </h3>
-
-      <div className="mx-4 mb-8 overflow-hidden rounded-xl bg-surface border border-border/50">
+      </h2>
+      <div className="mx-4 mb-8 overflow-hidden rounded-lg border border-border/50 bg-surface">
         {items.map((item, index) => {
           const Icon = item.icon
-          const iconClassName = item.iconClassName ?? 'text-primary-foreground'
-          const row = (
+          const content = (
             <>
-              <div className="flex items-center gap-3">
+              <div className="flex min-w-0 items-center gap-3">
                 <div
-                  className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-md ${item.iconWrapperClassName}`}
+                  className={`flex size-8 shrink-0 items-center justify-center rounded-md text-white ${item.iconWrapperClassName}`}
                 >
-                  <Icon className={`h-4 w-4 ${iconClassName}`} />
+                  <Icon className="size-4" />
                 </div>
-
-                <div className="flex flex-col justify-center">
-                  <span className="text-sm font-medium text-foreground leading-tight">
+                <div className="min-w-0">
+                  <span className="block truncate text-sm font-medium text-foreground">
                     {item.label}
                   </span>
                   {item.description && (
-                    <span className="text-[11px] text-muted-foreground/80 mt-0.5 leading-none">
+                    <span className="mt-0.5 block text-[11px] leading-tight text-muted-foreground/80">
                       {item.description}
                     </span>
                   )}
                 </div>
               </div>
-
-              <ChevronRight className="h-4 w-4 text-muted-foreground/40 shrink-0" />
+              <ChevronRight className="size-4 shrink-0 text-muted-foreground/40" />
             </>
           )
 
@@ -66,23 +317,22 @@ function SettingsGroup({ title, items }: { title: string; items: SettingsItem[] 
               {item.href ? (
                 <Link
                   href={item.href}
-                  className="flex w-full items-center justify-between bg-transparent px-4 py-3 transition-colors active:bg-surface-elevated"
+                  className="flex min-h-14 w-full items-center justify-between gap-3 px-4 py-3 transition-colors active:bg-surface-elevated"
                 >
-                  {row}
+                  {content}
                 </Link>
               ) : (
                 <button
                   type="button"
                   disabled
-                  className="flex w-full items-center justify-between bg-transparent px-4 py-3 transition-colors opacity-50 cursor-not-allowed"
+                  className="flex min-h-14 w-full cursor-not-allowed items-center justify-between gap-3 px-4 py-3 opacity-50"
                 >
-                  {row}
+                  {content}
                 </button>
               )}
-
-              {index < items.length - 1 ? (
-                <div className="ml-[3.25rem] border-b border-border/50" />
-              ) : null}
+              {index < items.length - 1 && (
+                <div className="ml-[3.75rem] border-b border-border/50" />
+              )}
             </div>
           )
         })}
@@ -94,144 +344,56 @@ function SettingsGroup({ title, items }: { title: string; items: SettingsItem[] 
 export default function MenuPage() {
   const { role, setRole, isReady } = useRole()
 
-  const managementItems: SettingsItem[] = [
-    {
-      label: 'Coûts',
-      description: 'Gérer les dépenses et la facturation',
-      icon: BarChart3,
-      href: '/couts',
-      iconWrapperClassName: 'bg-blue-500',
-      iconClassName: 'text-white',
-    },
-    {
-      label: 'Matériaux',
-      description: 'Gérer les matériaux et le stock',
-      icon: Package,
-      href: '/materiaux',
-      iconWrapperClassName: 'bg-emerald-500',
-      iconClassName: 'text-white',
-    },
-    {
-      label: 'Inventaire des matériaux',
-      description: 'Gérer le stock de chaque matériau',
-      icon: Boxes,
-      href: '/inventaire',
-      iconWrapperClassName: 'bg-teal-500',
-      iconClassName: 'text-white',
-    },
-  ]
-
-  const projectItems: SettingsItem[] = [
-    {
-      label: 'Référentiel des zones',
-      description: 'Gérer les zones du chantier',
-      icon: Map,
-      href: '/zones',
-      iconWrapperClassName: 'bg-rose-500',
-      iconClassName: 'text-white',
-    },
-    {
-      label: 'Chantier — Zones & Plans',
-      description: 'Zones, références techniques et suivi',
-      icon: Map,
-      href: '/plans',
-      iconWrapperClassName: 'bg-purple-500',
-      iconClassName: 'text-white',
-    },
-    {
-      label: 'Historique',
-      description: 'Toutes les interventions du chantier',
-      icon: ClipboardList,
-      href: '/historique',
-      iconWrapperClassName: 'bg-slate-500',
-      iconClassName: 'text-white',
-    },
-    {
-      label: 'Photos',
-      description: 'Voir et ajouter des photos du chantier',
-      icon: ImageIcon,
-      href: '/photos',
-      iconWrapperClassName: 'bg-orange-500',
-      iconClassName: 'text-white',
-    },
-    {
-      label: 'Équipe du chantier',
-      description: "Gérer les membres de l'équipe",
-      icon: Users,
-      href: '/equipe',
-      iconWrapperClassName: 'bg-indigo-500',
-      iconClassName: 'text-white',
-    },
-  ]
-
-  const appItems: SettingsItem[] = [
-    {
-      label: 'Paramètres',
-      description: "Configuration de l'application",
-      icon: Settings,
-      iconWrapperClassName: 'bg-gray-500',
-      iconClassName: 'text-white',
-    },
-  ]
+  if (!isReady) return null
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col pb-32 text-foreground">
-      <header className="sticky top-0 z-30 flex items-center justify-between pb-4 px-5 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/30">
-        <div className="min-w-0">
-          <h1 className="text-3xl font-semibold leading-tight">Menu</h1>
+      <header className="sticky top-0 z-30 flex items-center justify-between border-b border-border/30 bg-background/85 px-5 pb-4 pt-[max(env(safe-area-inset-top),1.25rem)] backdrop-blur-md">
+        <div>
+          <h1 className="text-3xl font-semibold leading-tight">
+            {role === 'client' ? 'Plus' : 'Menu'}
+          </h1>
+          <p className="mt-1 text-xs text-muted-foreground">{roleLabels[role]}</p>
         </div>
         <Link
           href="/notifications"
-          className="relative flex items-center justify-center size-10 rounded-full hover:bg-surface-elevated transition-colors"
+          aria-label="Notifications"
+          className="relative flex size-11 items-center justify-center rounded-full transition-colors hover:bg-surface-elevated"
         >
           <Bell className="size-6" />
-          <span className="absolute top-2 right-2.5 flex size-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-            <span className="relative inline-flex rounded-full size-2.5 bg-primary border-2 border-background"></span>
-          </span>
+          <span className="absolute right-2 top-2 size-2.5 rounded-full border-2 border-background bg-primary" />
         </Link>
       </header>
 
-      <div className="flex flex-col">
-        {/* Role Switcher */}
-        <section>
-          <h3 className="ml-8 mb-2 mt-6 text-[11px] font-medium uppercase tracking-widest text-muted-foreground/70">
-            Mode Démonstration
-          </h3>
-          <div className="mx-4 mb-8 overflow-hidden rounded-xl bg-surface border border-border/50">
-            {(['ouvrier', 'chef', 'admin', 'client'] as AppRole[]).map((r, i) => (
-              <div key={r}>
-                <button
-                  type="button"
-                  onClick={() => setRole(r)}
-                  className={`flex w-full items-center justify-between bg-transparent px-4 py-3 transition-colors active:bg-surface-elevated ${
-                    role === r ? 'text-primary font-bold bg-primary/5' : 'text-foreground'
-                  }`}
-                >
-                  <span className="capitalize">
-                    Mode{' '}
-                    {r === 'ouvrier'
-                      ? 'Ouvrier (Hubert)'
-                      : r === 'chef'
-                        ? 'Superviseur (Christophe)'
-                        : r === 'admin'
-                          ? 'Admin / Chef de chantier (Martin)'
-                          : 'Client Final'}
-                  </span>
-                  {role === r && <span className="text-primary">✓</span>}
-                </button>
-                {i < 3 ? <div className="border-b border-border/50" /> : null}
-              </div>
-            ))}
-          </div>
-        </section>
+      <section>
+        <h2 className="mb-2 ml-8 mt-6 text-[11px] font-medium uppercase tracking-widest text-muted-foreground/70">
+          Mode démonstration
+        </h2>
+        <div className="mx-4 mb-3 overflow-hidden rounded-lg border border-border/50 bg-surface">
+          {(['ouvrier', 'chef', 'admin', 'client'] as AppRole[]).map((candidate, index) => (
+            <div key={candidate}>
+              <button
+                type="button"
+                onClick={() => setRole(candidate)}
+                className={`flex min-h-12 w-full items-center justify-between px-4 py-3 text-left transition-colors active:bg-surface-elevated ${
+                  role === candidate ? 'bg-primary/5 font-bold text-primary' : 'text-foreground'
+                }`}
+              >
+                <span>Mode {roleLabels[candidate]}</span>
+                {role === candidate && <span aria-hidden="true">✓</span>}
+              </button>
+              {index < 3 && <div className="border-b border-border/50" />}
+            </div>
+          ))}
+        </div>
+        <p className="mx-6 text-xs leading-relaxed text-muted-foreground">
+          Ce sélecteur est uniquement présent pour tester rapidement les quatre expériences.
+        </p>
+      </section>
 
-        {role !== 'ouvrier' && role !== 'client' && (
-          <SettingsGroup title="Gestion financière" items={managementItems} />
-        )}
-        {role !== 'client' && <SettingsGroup title="Suivi de chantier" items={projectItems} />}
-        <SettingsGroup title="Application" items={appItems} />
-      </div>
+      {roleSections[role].map((section) => (
+        <SettingsGroup key={section.title} {...section} />
+      ))}
     </main>
   )
 }

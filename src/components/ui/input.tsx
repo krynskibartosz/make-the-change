@@ -39,9 +39,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         </Field.Description>
       ) : null}
       {error ? (
-        <Field.Error className="text-xs font-semibold leading-5 text-danger">
-          {error}
-        </Field.Error>
+        <Field.Error className="text-xs font-semibold leading-5 text-danger">{error}</Field.Error>
       ) : null}
     </Field.Root>
   )

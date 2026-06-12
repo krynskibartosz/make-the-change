@@ -15,9 +15,9 @@ export function ClientPortal() {
     <div className="flex flex-col gap-6 p-5 pb-32 max-w-md mx-auto">
       {/* Header Rassurant */}
       <section className="flex flex-col gap-1">
-        <h1 className="text-2xl font-bold">Bonjour Martin</h1>
+        <h1 className="text-2xl font-bold">Bonjour Jean</h1>
         <p className="text-sm text-muted-foreground">
-          Votre chantier avance bien. Dernière mise à jour : aujourd'hui à 18h42
+          Votre chantier avance comme prévu. Dernière mise à jour aujourd'hui à 18h42.
         </p>
       </section>
 
@@ -29,7 +29,8 @@ export function ClientPortal() {
           </h2>
         </div>
         <p className="text-sm font-medium mb-1">
-          La démolition est presque terminée. L'évacuation des gravats est en cours.
+          Cette semaine, l'équipe termine la démolition et libère la zone pour préparer la
+          structure. Les gravats sont déjà en cours d'évacuation.
         </p>
         <div className="rounded-2xl border border-border bg-surface p-4 flex flex-col gap-4">
           <div className="flex flex-col gap-1">
@@ -64,7 +65,7 @@ export function ClientPortal() {
 
       {/* Action Requise (Validation) */}
       <section className="flex flex-col gap-3">
-        <div className="rounded-2xl border border-orange-500/30 bg-orange-500/5 p-4 flex flex-col gap-4 relative overflow-hidden">
+        <div className="rounded-2xl border border-orange-500/30 bg-orange-500/5 p-4 flex flex-col gap-4 relative">
           <div className="absolute top-0 right-0 p-3">
             <AlertCircle className="size-5 text-orange-500" />
           </div>
@@ -74,8 +75,8 @@ export function ClientPortal() {
             </span>
             <h3 className="font-semibold text-foreground">Choix technique P1.7</h3>
             <p className="text-sm text-muted-foreground mt-1">
-              Avant de continuer la structure, nous devons confirmer cette option pour garantir la
-              stabilité de la dalle.
+              La dalle découverte est plus épaisse que prévu. Votre accord permettra de poursuivre
+              la structure avec le renfort adapté.
             </p>
             <p className="text-sm font-semibold mt-2 text-foreground">
               Impact estimé : <span className="text-blue-500">+1 jour</span> ·{' '}
@@ -84,7 +85,7 @@ export function ClientPortal() {
           </div>
           <Link
             href="/validations"
-            className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold py-2.5 px-4 rounded-xl transition-colors w-full text-center"
+            className="relative z-10 flex min-h-11 w-full items-center justify-center rounded-xl bg-orange-500 px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-orange-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
           >
             Voir la demande
           </Link>

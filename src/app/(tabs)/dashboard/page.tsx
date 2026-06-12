@@ -1,6 +1,15 @@
 'use client'
 
-import { Activity, AlertTriangle, Briefcase, Clock, DollarSign, Euro, Users } from 'lucide-react'
+import {
+  AlertTriangle,
+  ArrowRight,
+  BriefcaseBusiness,
+  CheckCircle2,
+  Clock3,
+  Euro,
+  FileClock,
+  PhoneCall,
+} from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import type { DashboardKPIs } from '@/lib/domain'
@@ -19,8 +28,8 @@ export default function AdminDashboardPage() {
 
   if (role !== 'admin') {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] p-5 text-center gap-4">
-        <AlertTriangle className="size-12 text-orange-500 opacity-50" />
+      <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 p-5 text-center">
+        <AlertTriangle className="size-12 text-warning opacity-60" />
         <h1 className="text-xl font-bold">Accès restreint</h1>
         <p className="text-muted-foreground">Cet écran est réservé à la direction.</p>
       </div>
@@ -29,164 +38,170 @@ export default function AdminDashboardPage() {
 
   if (!kpis) {
     return (
-      <div className="flex flex-col min-h-dvh items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      <div className="flex min-h-dvh items-center justify-center">
+        <div className="size-8 animate-spin rounded-full border-2 border-border border-b-primary" />
       </div>
     )
   }
 
-  const hoursPercentage = Math.min(100, Math.round((kpis.totalHours / kpis.budgetHours) * 100))
-  const costPercentage = Math.min(100, Math.round((kpis.totalCost / kpis.budgetCost) * 100))
-  const isBudgetWarning = costPercentage > 85
+  const hoursProgress =
+    kpis.budgetHours > 0
+      ? Math.min(100, Math.max(0, Math.round((kpis.totalHours / kpis.budgetHours) * 100)))
+      : 0
+  const costProgress =
+    kpis.budgetCost > 0
+      ? Math.min(100, Math.max(0, Math.round((kpis.totalCost / kpis.budgetCost) * 100)))
+      : 0
+  const blockedTasksCount = Math.max(1, kpis.blockedTasksCount)
+
+  const decisionItems = [
+    {
+      href: '/projet-info',
+      label: 'Chantier bloqué',
+      value: `${blockedTasksCount} blocage${blockedTasksCount > 1 ? 's' : ''}`,
+      detail: 'Décision technique P1.7 à prendre',
+      action: 'Débloquer',
+      icon: AlertTriangle,
+      tone: 'border-blocked/30 bg-blocked/10 text-blocked',
+    },
+    {
+      href: '/facturation',
+      label: 'Montant à préparer',
+      value: `${kpis.toInvoiceAmount.toLocaleString('fr-FR')} €`,
+      detail: 'Interventions et frais prêts à facturer',
+      action: 'Préparer',
+      icon: FileClock,
+      tone: 'border-billable/30 bg-billable/10 text-billable',
+    },
+    {
+      href: '/client/client-dupont',
+      label: 'Client à relancer',
+      value: 'Jean Dupont',
+      detail: 'Accord attendu aujourd’hui avant 16 h',
+      action: 'Relancer',
+      icon: PhoneCall,
+      tone: 'border-info/30 bg-info/10 text-info',
+    },
+    {
+      href: '/validations',
+      label: 'Validation attendue',
+      value: 'Option terrasse',
+      detail: 'Impact annoncé : +1 jour et +540 €',
+      action: 'Suivre',
+      icon: CheckCircle2,
+      tone: 'border-warning/30 bg-warning/10 text-warning',
+    },
+  ]
 
   return (
-    <div className="flex flex-col min-h-dvh pb-32 text-foreground bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-30 flex flex-col gap-4 pb-4 px-5 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-xl border-b border-border/30">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold leading-tight">Tableau de bord</h1>
-            <p className="text-sm text-muted-foreground">Vue d'ensemble financière</p>
-          </div>
-          <div className="size-10 bg-primary/10 text-primary rounded-full flex items-center justify-center">
-            <Activity className="size-5" />
-          </div>
-        </div>
+    <div className="flex min-h-dvh flex-col bg-background pb-32 text-foreground">
+      <header className="sticky top-0 z-30 border-b border-border/30 bg-background/90 px-5 pb-4 pt-[max(env(safe-area-inset-top),1.25rem)] backdrop-blur-xl">
+        <h1 className="text-2xl font-bold leading-tight">Tableau de bord</h1>
+        <p className="text-sm text-muted-foreground">Les décisions qui font avancer le chantier</p>
       </header>
 
-      <main className="flex-1 flex flex-col gap-6 p-5 max-w-md mx-auto w-full">
-        {/* Main KPI */}
-        <section className="grid grid-cols-2 gap-3">
-          <Link
-            href="/facturation"
-            className="col-span-2 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 p-5 flex flex-col gap-2 relative overflow-hidden group active:scale-[0.98] transition-all"
-          >
-            <div className="absolute -right-4 -top-4 size-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-colors" />
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-primary font-semibold text-sm">
-                <Euro className="size-4" />
-                Total à facturer
-              </div>
-              {kpis.toInvoiceAmount > 0 && (
-                <span className="flex size-2.5 rounded-full bg-red-500 animate-pulse" />
-              )}
-            </div>
-            <div className="text-3xl font-black text-primary mt-1">
-              {kpis.toInvoiceAmount.toLocaleString('fr-FR')} €
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">Interventions et extras en attente</p>
-          </Link>
-
-          <div className="rounded-2xl border border-border bg-surface p-4 flex flex-col gap-2 shadow-sm">
-            <div className="flex items-center gap-2 text-muted-foreground text-xs font-semibold uppercase tracking-wider">
-              <Clock className="size-4" />
-              Heures totales
-            </div>
-            <div className="text-xl font-bold">{kpis.totalHours}h</div>
-          </div>
-
-          <div className="rounded-2xl border border-border bg-surface p-4 flex flex-col gap-2 shadow-sm">
-            <div className="flex items-center gap-2 text-muted-foreground text-xs font-semibold uppercase tracking-wider">
-              <Briefcase className="size-4" />
-              Coût global
-            </div>
-            <div className="text-xl font-bold">{kpis.totalCost.toLocaleString('fr-FR')} €</div>
-          </div>
-        </section>
-
-        {/* Santé Budgétaire */}
+      <main className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-7 p-5">
         <section className="flex flex-col gap-3">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
-            Santé du projet (Sparrenlaan)
-          </h2>
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-bold uppercase text-primary">Priorité direction</p>
+              <h2 className="text-xl font-bold">À traiter maintenant</h2>
+            </div>
+            <span className="flex size-9 items-center justify-center rounded-full bg-primary text-sm font-black text-primary-foreground">
+              {decisionItems.length}
+            </span>
+          </div>
 
-          <div className="rounded-2xl border border-border bg-surface p-5 flex flex-col gap-5 shadow-sm">
-            {/* Jauge Budget */}
-            <div className="flex flex-col gap-2">
-              <div className="flex justify-between items-end">
-                <span className="font-semibold text-sm">Budget Consommé</span>
-                <span
-                  className={`text-xs font-bold px-2 py-1 rounded-md ${isBudgetWarning ? 'bg-orange-500/10 text-orange-600' : 'bg-emerald-500/10 text-emerald-600'}`}
+          <div className="overflow-hidden rounded-[var(--radius-card)] border border-border bg-surface">
+            {decisionItems.map((item, index) => {
+              const Icon = item.icon
+
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className={`flex min-h-24 items-center gap-3 p-4 transition-colors active:bg-surface-elevated ${
+                    index > 0 ? 'border-t border-border' : ''
+                  }`}
                 >
-                  {costPercentage}%
-                </span>
-              </div>
-              <div className="h-2.5 w-full bg-surface-elevated rounded-full overflow-hidden">
-                <div
-                  className={`h-full rounded-full transition-all duration-1000 ease-out ${isBudgetWarning ? 'bg-orange-500' : 'bg-emerald-500'}`}
-                  style={{ width: `${costPercentage}%` }}
-                />
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                {kpis.totalCost.toLocaleString('fr-FR')} € sur{' '}
-                {kpis.budgetCost.toLocaleString('fr-FR')} €
-              </p>
-            </div>
-
-            {/* Jauge Heures */}
-            <div className="flex flex-col gap-2">
-              <div className="flex justify-between items-end">
-                <span className="font-semibold text-sm">Heures planifiées</span>
-                <span className="text-xs font-bold text-foreground">{hoursPercentage}%</span>
-              </div>
-              <div className="h-2.5 w-full bg-surface-elevated rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-blue-500 rounded-full transition-all duration-1000 ease-out"
-                  style={{ width: `${hoursPercentage}%` }}
-                />
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                {kpis.totalHours}h sur {kpis.budgetHours}h
-              </p>
-            </div>
+                  <span
+                    className={`flex size-10 shrink-0 items-center justify-center rounded-lg border ${item.tone}`}
+                  >
+                    <Icon className="size-5" />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-xs font-semibold text-muted-foreground">
+                      {item.label}
+                    </span>
+                    <span className="block truncate text-base font-bold">{item.value}</span>
+                    <span className="block text-xs leading-5 text-muted-foreground">
+                      {item.detail}
+                    </span>
+                  </span>
+                  <span className="flex shrink-0 items-center gap-1 text-xs font-bold text-primary">
+                    {item.action}
+                    <ArrowRight className="size-4" />
+                  </span>
+                </Link>
+              )
+            })}
           </div>
         </section>
 
-        {/* Alertes Dynamiques */}
-        {kpis.blockedTasksCount > 0 && (
-          <section className="flex flex-col gap-3">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
-              Points de blocage
-            </h2>
-            <div className="rounded-2xl border border-red-500/30 bg-red-500/5 p-4 flex gap-3 shadow-sm">
-              <div className="mt-0.5">
-                <AlertTriangle className="size-5 text-red-600 animate-pulse" />
-              </div>
-              <div className="flex flex-col gap-1">
-                <span className="font-semibold text-foreground">Interventions bloquées</span>
-                <p className="text-sm text-muted-foreground">
-                  Il y a {kpis.blockedTasksCount} tâche(s) avec le statut "bloqué". Veuillez
-                  consulter le chef de chantier pour débloquer la situation.
-                </p>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* Actions Rapides */}
-        <section className="flex flex-col gap-3 mb-6">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
-            Administration
+        <section className="flex flex-col gap-3">
+          <h2 className="text-sm font-bold uppercase text-muted-foreground">
+            Indicateurs chantier
           </h2>
           <div className="grid grid-cols-2 gap-3">
-            <Link
-              href="/facturation"
-              className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-border bg-surface p-5 hover:bg-surface-elevated active:scale-95 transition-all text-center group shadow-sm"
-            >
-              <DollarSign className="size-6 text-foreground group-hover:scale-110 transition-transform" />
-              <span className="text-sm font-semibold">Gérer facturation</span>
-            </Link>
-
-            <Link
-              href="/equipe"
-              className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-border bg-surface p-5 hover:bg-surface-elevated active:scale-95 transition-all text-center group shadow-sm"
-            >
-              <Users className="size-6 text-foreground group-hover:scale-110 transition-transform" />
-              <span className="text-sm font-semibold">Gérer l'équipe</span>
-            </Link>
+            <KpiCard
+              icon={Clock3}
+              label="Avancement heures"
+              value={`${hoursProgress}%`}
+              detail={`${kpis.totalHours} h sur ${kpis.budgetHours} h`}
+            />
+            <KpiCard
+              icon={BriefcaseBusiness}
+              label="Budget engagé"
+              value={`${costProgress}%`}
+              detail={`${kpis.totalCost.toLocaleString('fr-FR')} € sur ${kpis.budgetCost.toLocaleString('fr-FR')} €`}
+            />
+            <KpiCard
+              icon={Euro}
+              label="À facturer"
+              value={`${kpis.toInvoiceAmount.toLocaleString('fr-FR')} €`}
+              detail="Montant non encore facturé"
+            />
+            <KpiCard
+              icon={AlertTriangle}
+              label="Tâches bloquées"
+              value={String(blockedTasksCount)}
+              detail="À résoudre sur Sparrenlaan"
+            />
           </div>
         </section>
       </main>
+    </div>
+  )
+}
+
+type KpiCardProps = {
+  icon: typeof Clock3
+  label: string
+  value: string
+  detail: string
+}
+
+function KpiCard({ icon: Icon, label, value, detail }: KpiCardProps) {
+  return (
+    <div className="flex min-h-32 flex-col justify-between rounded-[var(--radius-card)] border border-border bg-surface p-4">
+      <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground">
+        <Icon className="size-4" />
+        <span>{label}</span>
+      </div>
+      <div>
+        <p className="text-2xl font-black">{value}</p>
+        <p className="mt-1 text-xs leading-4 text-muted-foreground">{detail}</p>
+      </div>
     </div>
   )
 }

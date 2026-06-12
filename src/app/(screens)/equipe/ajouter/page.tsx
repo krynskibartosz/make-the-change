@@ -6,7 +6,7 @@ import { createPersonAction } from '@/actions/team-actions'
 import { FullScreenSlideModal } from '../../../@modal/_components/full-screen-slide-modal'
 
 export default function AjouterMembreEquipePage() {
-  const [state, action, isPending] = useActionState(createPersonAction, null)
+  const [_state, action, isPending] = useActionState(createPersonAction, null)
 
   return (
     <FullScreenSlideModal asPage headerMode="back" title="Ajouter un membre">

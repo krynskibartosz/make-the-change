@@ -16,7 +16,7 @@ export default function EditerZonePage({ params }: { params: { id: string } }) {
   const [zone, setZone] = useState<Zone | null>(null)
 
   const updateActionWithId = updateZoneAction.bind(null, params.id)
-  const [state, action, isPending] = useActionState(updateActionWithId, null)
+  const [_state, action, isPending] = useActionState(updateActionWithId, null)
 
   const [type, setType] = useState<'simple' | 'technical'>('simple')
   const [isDeleting, setIsDeleting] = useState(false)
@@ -37,7 +37,7 @@ export default function EditerZonePage({ params }: { params: { id: string } }) {
       setIsDeleting(true)
       try {
         await deleteZoneAction(params.id)
-      } catch (err) {
+      } catch (_err) {
         setIsDeleting(false)
       }
     }

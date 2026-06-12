@@ -1,5 +1,5 @@
-const fs = require('fs')
-const path = require('path')
+const fs = require('node:fs')
+const path = require('node:path')
 
 function walk(dir) {
   let results = []
@@ -7,7 +7,7 @@ function walk(dir) {
   list.forEach((file) => {
     file = path.join(dir, file)
     const stat = fs.statSync(file)
-    if (stat && stat.isDirectory()) {
+    if (stat?.isDirectory()) {
       results = results.concat(walk(file))
     } else if (file.endsWith('.tsx') || file.endsWith('.jsx')) {
       results.push(file)
@@ -27,11 +27,11 @@ files.forEach((file) => {
   let content = fs.readFileSync(file, 'utf8')
   if (content.match(/<form\b/) || content.includes('</form>')) {
     if (!content.includes("import Form from 'next/form'")) {
-      content = "import Form from 'next/form'\n" + content
+      content = `import Form from 'next/form'\n${content}`
     }
     content = content.replace(/<form\b/g, '<Form').replace(/<\/form>/g, '</Form>')
     fs.writeFileSync(file, content, 'utf8')
-    console.log('Updated Form in ' + file)
+    console.log(`Updated Form in ${file}`)
   }
 })
 
@@ -59,6 +59,6 @@ Object.entries(actionFiles).forEach(([relPath, operations]) => {
       )
     })
     fs.writeFileSync(file, content, 'utf8')
-    console.log('Updated Actions in ' + file)
+    console.log(`Updated Actions in ${file}`)
   }
 })

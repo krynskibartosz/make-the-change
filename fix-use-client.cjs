@@ -1,5 +1,5 @@
-const fs = require('fs')
-const path = require('path')
+const fs = require('node:fs')
+const path = require('node:path')
 
 function walk(dir) {
   let results = []
@@ -7,7 +7,7 @@ function walk(dir) {
   list.forEach((file) => {
     file = path.join(dir, file)
     const stat = fs.statSync(file)
-    if (stat && stat.isDirectory()) {
+    if (stat?.isDirectory()) {
       results = results.concat(walk(file))
     } else if (file.endsWith('.tsx') || file.endsWith('.jsx') || file.endsWith('.ts')) {
       results.push(file)
@@ -25,9 +25,9 @@ files.forEach((file) => {
     if (!content.startsWith("'use client'") && !content.startsWith('"use client"')) {
       content = content.replace(/'use client';?\r?\n?/g, '')
       content = content.replace(/"use client";?\r?\n?/g, '')
-      content = "'use client'\n" + content
+      content = `'use client'\n${content}`
       fs.writeFileSync(file, content, 'utf8')
-      console.log('Fixed use client in: ' + file)
+      console.log(`Fixed use client in: ${file}`)
     }
   }
 })

@@ -42,6 +42,7 @@ body {
   text-rendering: geometricPrecision;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior-y: none;
 }
 
 button,
@@ -62,4 +63,20 @@ button:disabled {
 ::selection {
   background: color-mix(in srgb, var(--primary) 34%, transparent);
   color: var(--foreground);
+}
+
+.safe-page-bottom {
+  padding-bottom: calc(8rem + env(safe-area-inset-bottom));
+}
+
+.safe-fixed-bottom {
+  bottom: calc(5.5rem + env(safe-area-inset-bottom));
+}
+
+.safe-area-pb {
+  padding-bottom: max(env(safe-area-inset-bottom), 1rem);
+}
+
+.safe-area-pt {
+  padding-top: max(env(safe-area-inset-top), 1rem);
 }

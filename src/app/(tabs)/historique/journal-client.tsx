@@ -1,13 +1,22 @@
 'use client'
 
-import { useState } from 'react'
+import { AlertTriangle, CheckCircle2, ChevronRight, Clock3, Send } from 'lucide-react'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 import { SegmentedControl } from '@/components/ui'
+import { type DemoSubmission, readDemoSubmissions } from '@/features/demo/demo-submissions'
 import { InterventionCard } from '@/features/interventions/components'
 import type { InterventionListItem, Person, Phase, Zone } from '@/lib/domain'
+import {
+  buildWorkerHistoryGroups,
+  type WorkerHistoryItem,
+  workerHistoryStatusLabels,
+} from './worker-history'
 
 type JournalClientProps = Readonly<{
   interventions: InterventionListItem[]
+  isWorker?: boolean
   todayDate: string
   people: Person[]
   zones: Zone[]
@@ -16,25 +25,129 @@ type JournalClientProps = Readonly<{
 
 type FilterType = 'all' | 'today' | 'to_check' | 'extra'
 
-export function JournalClient({
+const workerStatusStyles = {
+  sent: 'bg-primary/10 text-primary',
+  pending: 'bg-amber-500/10 text-amber-700',
+  validated: 'bg-success/10 text-success',
+  correction: 'bg-danger/10 text-danger',
+} as const
+
+function WorkerStatusIcon({ status }: Pick<WorkerHistoryItem, 'status'>) {
+  if (status === 'validated') return <CheckCircle2 className="size-4" />
+  if (status === 'pending') return <Clock3 className="size-4" />
+  if (status === 'correction') return <AlertTriangle className="size-4" />
+  return <Send className="size-4" />
+}
+
+function WorkerJournal({
   interventions,
   todayDate,
-  people,
-  zones,
-  phases,
-}: JournalClientProps) {
+}: Pick<JournalClientProps, 'interventions' | 'todayDate'>) {
+  const groups = buildWorkerHistoryGroups(interventions, todayDate)
+  const [demoSubmissions, setDemoSubmissions] = useState<DemoSubmission[]>([])
+
+  useEffect(() => {
+    setDemoSubmissions(readDemoSubmissions(window.localStorage))
+  }, [])
+
+  const todayDemoSubmissions = demoSubmissions.filter(
+    (submission) => submission.createdAt.slice(0, 10) === todayDate,
+  )
+
+  if (groups.length === 0 && todayDemoSubmissions.length === 0) {
+    return (
+      <div className="mt-4 flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border p-8 text-center">
+        <Send className="size-8 text-muted-foreground" />
+        <p className="font-semibold text-foreground">Aucun envoi cette semaine</p>
+        <p className="text-sm text-muted-foreground">Les notes que tu envoies apparaîtront ici.</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex flex-col gap-7">
+      {todayDemoSubmissions.length > 0 && (
+        <section>
+          <h2 className="mb-3 text-sm font-bold text-foreground">Envoyé depuis ce téléphone</h2>
+          <div className="flex flex-col gap-2">
+            {todayDemoSubmissions.map((submission) => (
+              <div
+                className="flex items-center gap-3 rounded-xl border border-primary/30 bg-primary/5 p-3"
+                key={submission.id}
+              >
+                <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-amber-500/10 text-amber-700">
+                  <Clock3 className="size-4" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold">{submission.title}</p>
+                  <p className="truncate text-xs text-muted-foreground">{submission.summary}</p>
+                  <p className="mt-1 text-xs font-semibold text-amber-700">
+                    En attente de Christophe
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+      {groups.map((group) => (
+        <section key={group.label}>
+          <h2 className="mb-3 text-sm font-bold text-foreground">{group.label}</h2>
+          <div className="flex flex-col gap-2">
+            {group.items.map((item) => (
+              <Link
+                className="flex items-center gap-3 rounded-xl border border-border bg-surface p-3 active:bg-surface-elevated"
+                href={`/interventions/${item.id}`}
+                key={item.id}
+              >
+                <div
+                  className={`flex size-9 shrink-0 items-center justify-center rounded-full ${workerStatusStyles[item.status]}`}
+                >
+                  <WorkerStatusIcon status={item.status} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold text-foreground">{item.title}</p>
+                  <p className="truncate text-xs text-muted-foreground">
+                    {item.zoneName || 'Chantier'}
+                    {group.label === 'Cette semaine'
+                      ? ` · ${new Date(`${item.date}T00:00:00`).toLocaleDateString('fr-BE', {
+                          weekday: 'long',
+                        })}`
+                      : ''}
+                  </p>
+                  <p
+                    className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${workerStatusStyles[item.status]}`}
+                  >
+                    {workerHistoryStatusLabels[item.status]}
+                  </p>
+                </div>
+                <ChevronRight className="size-5 shrink-0 text-muted-foreground" />
+              </Link>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  )
+}
+
+function FullJournal({ interventions, todayDate, people, zones, phases }: JournalClientProps) {
   const [filter, setFilter] = useState<FilterType>('all')
   const [personFilter, setPersonFilter] = useState<string>('all')
   const [zoneFilter, setZoneFilter] = useState<string>('all')
   const [phaseFilter, setPhaseFilter] = useState<string>('all')
 
   const filteredInterventions = interventions.filter((item) => {
-    // Filter by zone and phase using the denormalized names on InterventionListItem
-    if (zoneFilter !== 'all' && item.zoneName !== zones.find((z) => z.id === zoneFilter)?.name)
+    if (
+      zoneFilter !== 'all' &&
+      item.zoneName !== zones.find((zone) => zone.id === zoneFilter)?.name
+    )
       return false
-    if (phaseFilter !== 'all' && item.phaseName !== phases.find((p) => p.id === phaseFilter)?.name)
+    if (
+      phaseFilter !== 'all' &&
+      item.phaseName !== phases.find((phase) => phase.id === phaseFilter)?.name
+    )
       return false
-    // Note: personFilter is not applicable on InterventionListItem (no personIds field)
 
     switch (filter) {
       case 'today':
@@ -48,67 +161,65 @@ export function JournalClient({
     }
   })
 
-  // Group by date
   const groupedByDate = filteredInterventions.reduce<Record<string, InterventionListItem[]>>(
-    (acc, item) => {
-      const group = acc[item.date] ?? []
+    (groups, item) => {
+      const group = groups[item.date] ?? []
       group.push(item)
-      acc[item.date] = group
-      return acc
+      groups[item.date] = group
+      return groups
     },
     {},
   )
-
   const sortedDates = Object.keys(groupedByDate).sort((a, b) => b.localeCompare(a))
 
   return (
     <div className="flex flex-col gap-5">
       <SegmentedControl
         ariaLabel="journal-filter"
+        onValueChange={(value: string) => setFilter(value as FilterType)}
         options={[
           { label: 'Tout', value: 'all' },
           { label: "Aujourd'hui", value: 'today' },
-          { label: 'A verifier', value: 'to_check' },
-          { label: 'Supplement', value: 'extra' },
+          { label: 'À vérifier', value: 'to_check' },
+          { label: 'Supplément', value: 'extra' },
         ]}
         value={filter}
-        onValueChange={(val: string) => setFilter(val as FilterType)}
       />
 
-      <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
+      <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 scrollbar-hide">
         <select
           className="h-9 min-w-32 rounded-[var(--radius-input)] border border-border bg-surface px-3 text-sm"
+          onChange={(event) => setPersonFilter(event.target.value)}
           value={personFilter}
-          onChange={(e) => setPersonFilter(e.target.value)}
         >
-          <option value="all">Personne (Toutes)</option>
-          {people.map((p) => (
-            <option key={p.id} value={p.id}>
-              {p.name}
+          <option value="all">Personne (toutes)</option>
+          {people.map((person) => (
+            <option key={person.id} value={person.id}>
+              {person.name}
             </option>
           ))}
         </select>
         <select
           className="h-9 min-w-32 rounded-[var(--radius-input)] border border-border bg-surface px-3 text-sm"
+          onChange={(event) => setZoneFilter(event.target.value)}
           value={zoneFilter}
-          onChange={(e) => setZoneFilter(e.target.value)}
         >
-          <option value="all">Zone (Toutes)</option>
-          {zones.map((z) => (
-            <option key={z.id} value={z.id}>
-              {z.name}
+          <option value="all">Zone (toutes)</option>
+          {zones.map((zone) => (
+            <option key={zone.id} value={zone.id}>
+              {zone.name}
             </option>
           ))}
         </select>
         <select
           className="h-9 min-w-32 rounded-[var(--radius-input)] border border-border bg-surface px-3 text-sm"
+          onChange={(event) => setPhaseFilter(event.target.value)}
           value={phaseFilter}
-          onChange={(e) => setPhaseFilter(e.target.value)}
         >
-          <option value="all">Phase (Toutes)</option>
-          {phases.map((p) => (
-            <option key={p.id} value={p.id}>
-              {p.name}
+          <option value="all">Phase (toutes)</option>
+          {phases.map((phase) => (
+            <option key={phase.id} value={phase.id}>
+              {phase.name}
             </option>
           ))}
         </select>
@@ -116,8 +227,8 @@ export function JournalClient({
 
       <div className="flex flex-col gap-6">
         {sortedDates.length === 0 ? (
-          <div className="flex flex-col items-center justify-center p-8 text-center gap-2 border border-dashed border-border rounded-[var(--radius-card)] mt-4">
-            <p className="font-semibold text-foreground">Aucune activité aujourd'hui</p>
+          <div className="mt-4 flex flex-col items-center justify-center gap-2 rounded-[var(--radius-card)] border border-dashed border-border p-8 text-center">
+            <p className="font-semibold text-foreground">Aucune activité aujourd’hui</p>
             <p className="text-sm text-muted-foreground">
               Ajoute un travail réalisé ou valide une note terrain pour alimenter le journal.
             </p>
@@ -132,9 +243,9 @@ export function JournalClient({
                   month: 'long',
                 })}
               </h2>
-              <div className="flex flex-col divide-y divide-border -mx-4 px-4 sm:mx-0 sm:px-0">
+              <div className="-mx-4 flex flex-col divide-y divide-border px-4 sm:mx-0 sm:px-0">
                 {groupedByDate[date]?.map((item) => (
-                  <InterventionCard key={item.id} intervention={item} />
+                  <InterventionCard intervention={item} key={item.id} />
                 ))}
               </div>
             </section>
@@ -142,5 +253,13 @@ export function JournalClient({
         )}
       </div>
     </div>
+  )
+}
+
+export function JournalClient(props: JournalClientProps) {
+  return props.isWorker ? (
+    <WorkerJournal interventions={props.interventions} todayDate={props.todayDate} />
+  ) : (
+    <FullJournal {...props} />
   )
 }

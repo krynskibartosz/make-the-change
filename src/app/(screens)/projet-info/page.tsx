@@ -1,6 +1,18 @@
 'use client'
 
-import { Building2, Calendar, ChevronLeft, FileText, Mail, MapPin, Phone, User } from 'lucide-react'
+import {
+  AlertTriangle,
+  ArrowRight,
+  CalendarDays,
+  ChevronLeft,
+  CircleDollarSign,
+  Clock3,
+  FileText,
+  Mail,
+  MapPin,
+  Phone,
+  UserRound,
+} from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -16,155 +28,203 @@ export default function ProjetInfoPage() {
 
   useEffect(() => {
     const loadData = async () => {
-      const p = await mockClarusRepository.getProject()
-      const k = await mockClarusRepository.getDashboardKPIs()
-      let c: Client | null = null
-      if (p.clientId) {
-        c = await mockClarusRepository.getClient(p.clientId)
-      }
-      setProject(p)
-      setKpis(k)
-      setClient(c)
+      const [loadedProject, loadedKpis] = await Promise.all([
+        mockClarusRepository.getProject(),
+        mockClarusRepository.getDashboardKPIs(),
+      ])
+      const loadedClient = loadedProject.clientId
+        ? await mockClarusRepository.getClient(loadedProject.clientId)
+        : null
+
+      setProject(loadedProject)
+      setKpis(loadedKpis)
+      setClient(loadedClient)
       setLoading(false)
     }
+
     loadData()
   }, [])
 
   if (loading) return <div className="p-8 text-center text-muted-foreground">Chargement...</div>
-  if (!project) return null
+  if (!project || !kpis) return null
+
+  const progress =
+    kpis.budgetHours > 0
+      ? Math.min(100, Math.max(0, Math.round((kpis.totalHours / kpis.budgetHours) * 100)))
+      : 0
+  const blockedTasksCount = Math.max(1, kpis.blockedTasksCount)
 
   return (
-    <div className="flex flex-col min-h-dvh bg-background text-foreground pb-20">
-      {/* Header */}
-      <header className="sticky top-0 z-30 flex flex-col gap-4 p-5 pb-4 pt-[max(env(safe-area-inset-top),1.25rem)] bg-background/80 backdrop-blur-md border-b border-border/30">
+    <div className="flex min-h-dvh flex-col bg-background pb-20 text-foreground">
+      <header className="sticky top-0 z-30 border-b border-border/30 bg-background/90 px-5 pb-4 pt-[max(env(safe-area-inset-top),1.25rem)] backdrop-blur-md">
         <div className="flex items-center gap-3">
           <button
+            type="button"
             onClick={() => router.back()}
-            className="p-2 -ml-2 rounded-full hover:bg-surface-elevated transition-colors"
+            aria-label="Revenir à l’écran précédent"
+            className="-ml-2 flex size-10 items-center justify-center rounded-full active:bg-surface-elevated"
           >
             <ChevronLeft className="size-5" />
           </button>
-          <div className="flex flex-col">
-            <h1 className="text-xl font-bold leading-tight">Fiche Chantier</h1>
-            <p className="text-xs text-muted-foreground uppercase tracking-wider">
-              {project.status === 'active' ? 'En cours' : project.status}
-            </p>
+          <div className="min-w-0">
+            <p className="text-xs font-semibold uppercase text-success">Chantier en cours</p>
+            <h1 className="truncate text-xl font-bold">Fiche chantier</h1>
           </div>
         </div>
       </header>
 
-      <main className="flex-1 p-5 flex flex-col gap-6">
-        {/* En-tête Projet */}
-        <div className="flex flex-col items-center gap-3 py-4">
-          <div className="size-20 bg-primary/10 rounded-3xl flex items-center justify-center text-primary rotate-3">
-            <Building2 className="size-10" />
-          </div>
-          <div className="text-center">
-            <h2 className="text-2xl font-bold">{project.name}</h2>
-            <p className="text-muted-foreground flex items-center justify-center gap-1.5 mt-1">
-              <MapPin className="size-4" />
-              {project.address}
-            </p>
-          </div>
-        </div>
+      <main className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-6 p-5">
+        <section>
+          <h2 className="text-2xl font-black">{project.name}</h2>
+          <p className="mt-1 flex items-start gap-1.5 text-sm leading-5 text-muted-foreground">
+            <MapPin className="mt-0.5 size-4 shrink-0" />
+            {project.address}
+          </p>
+        </section>
 
-        {/* Détails Techniques */}
-        <div className="bg-surface border border-border rounded-2xl p-5 flex flex-col gap-4">
-          <h3 className="font-bold text-sm uppercase tracking-wider text-muted-foreground">
-            Détails Techniques
-          </h3>
+        <section className="grid grid-cols-2 gap-3" aria-label="Indicateurs du chantier">
+          <ProjectKpi
+            icon={Clock3}
+            label="Avancement"
+            value={`${progress}%`}
+            detail={`${kpis.totalHours} h / ${kpis.budgetHours} h`}
+          />
+          <ProjectKpi
+            icon={CircleDollarSign}
+            label="À facturer"
+            value={`${kpis.toInvoiceAmount.toLocaleString('fr-FR')} €`}
+            detail="Montant prêt"
+            tone="text-billable"
+          />
+          <ProjectKpi
+            icon={AlertTriangle}
+            label="Blocages"
+            value={String(blockedTasksCount)}
+            detail="Décision P1.7"
+            tone="text-blocked"
+          />
+          <ProjectKpi
+            icon={CalendarDays}
+            label="Livraison estimée"
+            value="15 sept."
+            detail="2026"
+          />
+        </section>
 
-          <div className="flex gap-3">
-            <div className="size-10 rounded-full bg-surface-elevated flex items-center justify-center flex-none">
+        {blockedTasksCount > 0 && (
+          <section className="overflow-hidden rounded-[var(--radius-card)] border border-blocked/40 bg-blocked/10">
+            <div className="flex items-start gap-3 p-4">
+              <AlertTriangle className="mt-0.5 size-5 shrink-0 text-blocked" />
+              <div>
+                <p className="text-xs font-bold uppercase text-blocked">Décision requise</p>
+                <h3 className="mt-1 font-bold">Confirmer l’option technique P1.7</h3>
+                <p className="mt-1 text-sm leading-5 text-muted-foreground">
+                  La dalle terrasse est plus épaisse que prévu. Impact estimé : +1 jour et +540 €.
+                </p>
+              </div>
+            </div>
+            <Link
+              href="/validations"
+              className="flex min-h-12 items-center justify-between border-t border-blocked/30 px-4 text-sm font-bold text-blocked active:bg-blocked/10"
+            >
+              Voir la validation attendue
+              <ArrowRight className="size-4" />
+            </Link>
+          </section>
+        )}
+
+        <section className="rounded-[var(--radius-card)] border border-border bg-surface p-4">
+          <h3 className="text-sm font-bold uppercase text-muted-foreground">Résumé chantier</h3>
+          <div className="mt-4 flex gap-3">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-surface-elevated">
               <FileText className="size-5 text-muted-foreground" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-medium text-sm">Description</span>
-              <span className="text-muted-foreground text-sm leading-relaxed">
-                {project.description}
-              </span>
+            </span>
+            <div>
+              <p className="text-sm font-semibold">Périmètre</p>
+              <p className="mt-1 text-sm leading-5 text-muted-foreground">{project.description}</p>
             </div>
           </div>
-
-          <div className="flex gap-3">
-            <div className="size-10 rounded-full bg-surface-elevated flex items-center justify-center flex-none">
-              <Calendar className="size-5 text-muted-foreground" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-medium text-sm">Dates clés</span>
-              <span className="text-muted-foreground text-sm">Début: 01/05/2026</span>
-              <span className="text-muted-foreground text-sm">Livraison estimée: 15/09/2026</span>
+          <div className="mt-4 flex gap-3 border-t border-border pt-4">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-surface-elevated">
+              <CalendarDays className="size-5 text-muted-foreground" />
+            </span>
+            <div>
+              <p className="text-sm font-semibold">Planning</p>
+              <p className="mt-1 text-sm text-muted-foreground">Démarrage : 1 mai 2026</p>
+              <p className="text-sm text-muted-foreground">Livraison estimée : 15 septembre 2026</p>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Client Associé */}
         {client && (
-          <div className="bg-surface border border-border rounded-2xl p-5 flex flex-col gap-4">
-            <div className="flex items-center justify-between">
-              <h3 className="font-bold text-sm uppercase tracking-wider text-muted-foreground">
-                Client Associé
-              </h3>
+          <section className="rounded-[var(--radius-card)] border border-border bg-surface p-4">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-xs font-semibold text-muted-foreground">Client associé</p>
+                <h3 className="mt-0.5 font-bold">{client.name}</h3>
+              </div>
               <Link
                 href={`/client/${client.id}`}
-                className="text-xs text-primary font-semibold bg-primary/10 px-2 py-1 rounded-md"
+                className="flex min-h-10 items-center gap-1 rounded-lg bg-primary/10 px-3 text-xs font-bold text-primary"
               >
-                Voir profil complet
+                Profil
+                <ArrowRight className="size-4" />
               </Link>
             </div>
 
-            <div className="flex gap-3 items-center">
-              <div className="size-12 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center flex-none">
-                <User className="size-6" />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-bold text-base">{client.name}</span>
-                <span className="text-muted-foreground text-sm">
-                  {client.company || 'Particulier'}
-                </span>
-              </div>
-            </div>
-
-            <div className="flex gap-2 mt-2">
+            <div className="mt-4 grid grid-cols-2 gap-2">
               <a
                 href={`tel:${client.phone}`}
-                className="flex-1 flex items-center justify-center gap-2 bg-surface-elevated hover:bg-border/50 py-2 rounded-xl text-sm font-medium transition-colors"
+                className="flex min-h-11 items-center justify-center gap-2 rounded-lg bg-primary text-sm font-bold text-primary-foreground"
               >
-                <Phone className="size-4" /> Appeler
+                <Phone className="size-4" />
+                Appeler
               </a>
               <a
                 href={`mailto:${client.email}`}
-                className="flex-1 flex items-center justify-center gap-2 bg-surface-elevated hover:bg-border/50 py-2 rounded-xl text-sm font-medium transition-colors"
+                className="flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border text-sm font-bold"
               >
-                <Mail className="size-4" /> Email
+                <Mail className="size-4" />
+                Écrire
               </a>
             </div>
-          </div>
+          </section>
         )}
 
-        {/* Budget Macro (Admin/Chef) */}
-        {kpis && (
-          <div className="bg-surface border border-border rounded-2xl p-5 flex flex-col gap-4">
-            <h3 className="font-bold text-sm uppercase tracking-wider text-muted-foreground">
-              Budget & Temps
-            </h3>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1">
-                <span className="text-2xl font-bold">
-                  {Math.round((kpis.totalHours / kpis.budgetHours) * 100)}%
-                </span>
-                <span className="text-xs text-muted-foreground">Budget heures consommé</span>
-              </div>
-              <div className="flex flex-col gap-1">
-                <span className="text-2xl font-bold">
-                  {Math.round((kpis.totalCost / kpis.budgetCost) * 100)}%
-                </span>
-                <span className="text-xs text-muted-foreground">Budget financier consommé</span>
-              </div>
-            </div>
-          </div>
-        )}
+        <Link
+          href="/facturation"
+          className="flex min-h-14 items-center justify-between rounded-[var(--radius-card)] border border-border bg-surface px-4 text-sm font-bold active:bg-surface-elevated"
+        >
+          <span className="flex items-center gap-3">
+            <UserRound className="size-5 text-primary" />
+            Préparer la facturation du chantier
+          </span>
+          <ArrowRight className="size-4 text-primary" />
+        </Link>
       </main>
+    </div>
+  )
+}
+
+type ProjectKpiProps = {
+  icon: typeof Clock3
+  label: string
+  value: string
+  detail: string
+  tone?: string
+}
+
+function ProjectKpi({ icon: Icon, label, value, detail, tone }: ProjectKpiProps) {
+  return (
+    <div className="flex min-h-32 flex-col justify-between rounded-[var(--radius-card)] border border-border bg-surface p-4">
+      <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground">
+        <Icon className="size-4" />
+        <span>{label}</span>
+      </div>
+      <div>
+        <p className={`text-xl font-black ${tone ?? ''}`}>{value}</p>
+        <p className="mt-1 text-xs text-muted-foreground">{detail}</p>
+      </div>
     </div>
   )
 }

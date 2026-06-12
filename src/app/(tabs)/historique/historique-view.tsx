@@ -25,9 +25,7 @@ export function HistoriqueView({
 
   const isOuvrier = role === 'ouvrier'
   const title = isOuvrier ? 'Envoyés' : 'Historique'
-  const subtitle = isOuvrier
-    ? 'Vos actions en attente de validation'
-    : 'Toutes les interventions du chantier'
+  const subtitle = isOuvrier ? 'Tes notes et leur statut' : 'Toutes les interventions du chantier'
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background pb-32 text-foreground">
@@ -49,6 +47,7 @@ export function HistoriqueView({
       <section className="px-4 pt-5">
         <JournalClient
           interventions={interventions}
+          isWorker={isOuvrier}
           todayDate={todayDate}
           people={people}
           zones={zones}

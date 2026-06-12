@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
 export default function AjouterZonePage() {
-  const [state, action, isPending] = useActionState(createZoneAction, null)
+  const [_state, action, isPending] = useActionState(createZoneAction, null)
   const [type, setType] = useState<'simple' | 'technical'>('simple')
 
   return (

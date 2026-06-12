@@ -1,7 +1,7 @@
 'use client'
 
 import type React from 'react'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 import type { Project } from '@/lib/domain'
 
 interface ProjectContextState {
@@ -21,11 +21,11 @@ export function ProjectProvider({
   children: React.ReactNode
   initialProjects: Project[]
 }) {
-  const [projects, setProjects] = useState<Project[]>(initialProjects)
+  const [projects, _setProjects] = useState<Project[]>(initialProjects)
   const [activeProjectId, setActiveProjectId] = useState<string | null>(
     initialProjects.length > 0 ? initialProjects[0]?.id || null : null,
   )
-  const [isReady, setIsReady] = useState(true)
+  const [isReady, _setIsReady] = useState(true)
 
   const activeProject = projects.find((p) => p.id === activeProjectId) || null
 

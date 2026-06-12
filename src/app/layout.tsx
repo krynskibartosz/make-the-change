@@ -21,6 +21,12 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'Clarus',
   description: 'Prototype chantier mobile-first pour Sparrenlaan.',
+  manifest: '/manifest.webmanifest',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'Clarus',
+  },
 }
 
 export const viewport: Viewport = {

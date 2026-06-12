@@ -5,9 +5,9 @@ import { redirect } from 'next/navigation'
 import { after } from 'next/server'
 import { mockClarusRepository } from '@/lib/repositories'
 
-export async function createPersonAction(prevState: any, formData: FormData) {
+export async function createPersonAction(_prevState: unknown, formData: FormData) {
   try {
-    const input: any = {
+    const input = {
       projectId: (formData.get('projectId') as string) || 'project-1',
       name: formData.get('name') as string,
       role: formData.get('role') as string | undefined,
@@ -17,7 +17,7 @@ export async function createPersonAction(prevState: any, formData: FormData) {
       email: formData.get('email') as string | undefined,
       company: formData.get('company') as string | undefined,
       skills: formData.getAll('skills') as string[],
-    }
+    } as Parameters<typeof mockClarusRepository.createPerson>[0]
 
     await mockClarusRepository.createPerson(input)
     after(async () => {
@@ -25,16 +25,17 @@ export async function createPersonAction(prevState: any, formData: FormData) {
     })
 
     revalidatePath('/equipe')
-  } catch (error: any) {
-    return { error: error.message || 'Failed to create person', success: false }
+  } catch (error: unknown) {
+    const err = error as Error
+    return { error: err.message || 'Failed to create person', success: false }
   }
 
   redirect('/equipe')
 }
 
-export async function updatePersonAction(id: string, prevState: any, formData: FormData) {
+export async function updatePersonAction(id: string, _prevState: unknown, formData: FormData) {
   try {
-    const input: any = {}
+    const input: Parameters<typeof mockClarusRepository.updatePerson>[1] = {}
     if (formData.has('name')) input.name = formData.get('name') as string
     if (formData.has('role')) input.role = formData.get('role') as string
     if (formData.has('defaultHourlyRate'))
@@ -52,8 +53,9 @@ export async function updatePersonAction(id: string, prevState: any, formData: F
     })
 
     revalidatePath('/equipe')
-  } catch (error: any) {
-    return { error: error.message || 'Failed to update person', success: false }
+  } catch (error: unknown) {
+    const err = error as Error
+    return { error: err.message || 'Failed to update person', success: false }
   }
 
   redirect('/equipe')
@@ -66,8 +68,9 @@ export async function deletePersonAction(id: string) {
       console.log('[BACKGROUND AUDIT] Operation deletePerson completed.')
     })
     revalidatePath('/equipe')
-  } catch (error: any) {
-    return { error: error.message || 'Failed to delete person', success: false }
+  } catch (error: unknown) {
+    const err = error as Error
+    return { error: err.message || 'Failed to delete person', success: false }
   }
 
   redirect('/equipe')

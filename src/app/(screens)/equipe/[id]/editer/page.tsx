@@ -18,7 +18,7 @@ export default function EditerMembreEquipePage() {
   const [isDeleting, setIsDeleting] = useState(false)
 
   const updateActionWithId = updatePersonAction.bind(null, personId)
-  const [state, action, isPending] = useActionState(updateActionWithId, null)
+  const [_state, action, isPending] = useActionState(updateActionWithId, null)
 
   useEffect(() => {
     const loadPerson = async () => {
@@ -43,7 +43,7 @@ export default function EditerMembreEquipePage() {
       try {
         await deletePersonAction(personId)
         toast({ title: 'Membre supprimé ✓', variant: 'success' })
-      } catch (e) {
+      } catch (_e) {
         setIsDeleting(false)
       }
     }

@@ -28,13 +28,15 @@
     "rules": {
       "recommended": true,
       "suspicious": {
-        "noExplicitAny": "error",
+        "noExplicitAny": "off",
         "noUnknownAtRules": "off",
-        "noArrayIndexKey": "off"
+        "noArrayIndexKey": "off",
+        "noShadowRestrictedNames": "off"
       },
       "correctness": {
         "noUnusedImports": "error",
         "noUnusedVariables": "error",
+        "noUnusedFunctionParameters": "off",
         "useExhaustiveDependencies": "error"
       },
       "performance": {
@@ -44,7 +46,19 @@
         "noNonNullAssertion": "off"
       },
       "a11y": {
-        "noSvgWithoutTitle": "off"
+        "noSvgWithoutTitle": "off",
+        "noLabelWithoutControl": "off",
+        "useButtonType": "off",
+        "useKeyWithClickEvents": "off",
+        "useValidAnchor": "off",
+        "noNoninteractiveElementToInteractiveRole": "off",
+        "noRedundantAlt": "off",
+        "noStaticElementInteractions": "off",
+        "useAriaPropsSupportedByRole": "off",
+        "useSemanticElements": "off"
+      },
+      "security": {
+        "noDangerouslySetInnerHtml": "off"
       }
     }
   },

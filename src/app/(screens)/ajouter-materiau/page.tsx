@@ -7,12 +7,11 @@ import { createMaterialMovementAction } from '@/actions/material-actions'
 import { FloatingCTA } from '@/components/ui'
 import { CURRENT_PROJECT_ID } from '@/lib/constants'
 import type { Material, Zone } from '@/lib/domain'
-import { toast } from '@/lib/hooks/use-toast'
 import { mockClarusRepository } from '@/lib/repositories'
 import { FullScreenSlideModal } from '../../@modal/_components/full-screen-slide-modal'
 
 export default function AjouterMateriauPage() {
-  const router = useRouter()
+  const _router = useRouter()
   const [materials, setMaterials] = useState<Material[]>([])
   const [zones, setZones] = useState<Zone[]>([])
 
@@ -21,7 +20,7 @@ export default function AjouterMateriauPage() {
   const [unit, setUnit] = useState('')
   const [selectedZoneId, setSelectedZoneId] = useState('')
 
-  const [state, action, isPending] = useActionState(createMaterialMovementAction, null)
+  const [_state, action, isPending] = useActionState(createMaterialMovementAction, null)
 
   useEffect(() => {
     mockClarusRepository.getMaterials().then(setMaterials)
