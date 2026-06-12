@@ -2,8 +2,9 @@
 
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import { CheckCircle2, Image as ImageIcon, Mail, MessageCircle } from 'lucide-react'
+import { CheckCircle2, FileText, Image as ImageIcon, Mail, MessageCircle } from 'lucide-react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { Button, FloatingCTA, SegmentedControl } from '@/components/ui'
 import type { Expense, Intervention, Photo, WorkEntry } from '@/lib/domain'
@@ -11,6 +12,7 @@ import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
 import { Screen } from '../_components/screen'
 
 export default function FacturationPage() {
+  const router = useRouter()
   const [activeTab, setActiveTab] = useState<'pending' | 'history'>('pending')
 
   const [interventions, setInterventions] = useState<Intervention[]>([])
@@ -23,6 +25,10 @@ export default function FacturationPage() {
 
   const [showSuccessModal, setShowSuccessModal] = useState(false)
   const [lastInvoicedAmount, setLastInvoicedAmount] = useState(0)
+  const [lastInvoicedIds, setLastInvoicedIds] = useState<{ interventions: string[]; expenses: string[] }>({
+    interventions: [],
+    expenses: [],
+  })
 
   const loadData = useCallback(async () => {
     const [fetchedInterventions, fetchedWorkEntries, fetchedExpenses, fetchedPhotos] =
@@ -79,6 +85,10 @@ export default function FacturationPage() {
 
     // Save amount for success modal before clearing
     setLastInvoicedAmount(totalSelectedAmount)
+    setLastInvoicedIds({
+      interventions: selectedInterventionIds,
+      expenses: selectedExpenseIds,
+    })
 
     await mockClarusRepository.markAsInvoiced(selectedInterventionIds, selectedExpenseIds)
     setSelectedInterventionIds([])
@@ -319,10 +329,28 @@ export default function FacturationPage() {
               <div className="w-full h-px bg-border my-2" />
 
               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1 w-full text-left">
-                Informer le client
+                Générer & Informer
               </p>
 
-              <div className="flex w-full gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  const params = new URLSearchParams()
+                  if (lastInvoicedIds.interventions.length > 0) {
+                    params.set('i', lastInvoicedIds.interventions.join(','))
+                  }
+                  if (lastInvoicedIds.expenses.length > 0) {
+                    params.set('e', lastInvoicedIds.expenses.join(','))
+                  }
+                  router.push(`/facturation/export?${params.toString()}`)
+                }}
+                className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground p-4 rounded-2xl active:scale-95 transition-all"
+              >
+                <FileText className="size-5" />
+                <span className="font-bold">Générer la Facture PDF</span>
+              </button>
+
+              <div className="flex w-full gap-3 mt-1">
                 <button
                   type="button"
                   onClick={() => {
