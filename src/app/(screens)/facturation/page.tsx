@@ -2,7 +2,7 @@
 
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import { Image as ImageIcon } from 'lucide-react'
+import { CheckCircle2, Image as ImageIcon, Mail, MessageCircle } from 'lucide-react'
 import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
 import { Button, FloatingCTA, SegmentedControl } from '@/components/ui'
@@ -20,6 +20,9 @@ export default function FacturationPage() {
 
   const [selectedInterventionIds, setSelectedInterventionIds] = useState<string[]>([])
   const [selectedExpenseIds, setSelectedExpenseIds] = useState<string[]>([])
+
+  const [showSuccessModal, setShowSuccessModal] = useState(false)
+  const [lastInvoicedAmount, setLastInvoicedAmount] = useState(0)
 
   const loadData = useCallback(async () => {
     const [fetchedInterventions, fetchedWorkEntries, fetchedExpenses, fetchedPhotos] =
@@ -73,10 +76,15 @@ export default function FacturationPage() {
   // Invoice action
   const handleInvoice = async () => {
     if (selectedInterventionIds.length === 0 && selectedExpenseIds.length === 0) return
+
+    // Save amount for success modal before clearing
+    setLastInvoicedAmount(totalSelectedAmount)
+
     await mockClarusRepository.markAsInvoiced(selectedInterventionIds, selectedExpenseIds)
     setSelectedInterventionIds([])
     setSelectedExpenseIds([])
     await loadData()
+    setShowSuccessModal(true)
   }
 
   // Calculate totals for CTA
@@ -287,6 +295,72 @@ export default function FacturationPage() {
               : 'Marquer comme facturé'}
           </Button>
         </FloatingCTA>
+      )}
+
+      {/* Modal de Succès (Post-Facturation) */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-surface border border-border rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
+            <div className="p-6 flex flex-col items-center text-center gap-4">
+              <div className="size-16 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 mb-2">
+                <CheckCircle2 className="size-8" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-foreground">Éléments validés !</h2>
+                <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
+                  Un montant total de{' '}
+                  <strong className="text-foreground">
+                    {lastInvoicedAmount.toLocaleString('fr-FR')} €
+                  </strong>{' '}
+                  a été marqué comme facturé.
+                </p>
+              </div>
+
+              <div className="w-full h-px bg-border my-2" />
+
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1 w-full text-left">
+                Informer le client
+              </p>
+
+              <div className="flex w-full gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    window.open(
+                      `https://wa.me/?text=Bonjour,%20voici%20le%20récapitulatif%20des%20derniers%20suppléments%20du%20chantier%20(${lastInvoicedAmount}%20€).%20Merci%20!`,
+                    )
+                    setShowSuccessModal(false)
+                  }}
+                  className="flex-1 flex flex-col items-center justify-center gap-2 bg-[#25D366]/10 text-[#25D366] p-4 rounded-2xl active:scale-95 transition-all"
+                >
+                  <MessageCircle className="size-6" />
+                  <span className="text-xs font-bold">WhatsApp</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    window.open(
+                      `mailto:?subject=Facturation%20Chantier&body=Bonjour,%20voici%20le%20récapitulatif%20des%20derniers%20suppléments%20du%20chantier%20(${lastInvoicedAmount}%20€).%20Merci%20!`,
+                    )
+                    setShowSuccessModal(false)
+                  }}
+                  className="flex-1 flex flex-col items-center justify-center gap-2 bg-blue-500/10 text-blue-500 p-4 rounded-2xl active:scale-95 transition-all"
+                >
+                  <Mail className="size-6" />
+                  <span className="text-xs font-bold">Email</span>
+                </button>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setShowSuccessModal(false)}
+                className="mt-2 text-sm font-bold text-muted-foreground py-2 px-4 rounded-full hover:bg-surface-elevated transition-colors"
+              >
+                Fermer
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </Screen>
   )

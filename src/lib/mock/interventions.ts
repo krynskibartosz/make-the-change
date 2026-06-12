@@ -1096,7 +1096,7 @@ export const mockExpenses: Expense[] = [
     amount: null,
     date: '2026-06-08',
     status: 'to_check',
-    isRebillable: 'to_check',
+    isRebillable: true,
   },
   {
     id: 'expense-disques',
@@ -1108,7 +1108,7 @@ export const mockExpenses: Expense[] = [
     amount: null,
     date: '2026-06-09',
     status: 'to_pay',
-    isRebillable: 'to_check',
+    isRebillable: true,
   },
 ]
 
