@@ -32,11 +32,10 @@ const tabsByRole = {
     { href: '/profil', label: 'Profil', icon: User },
   ],
   chef: [
-    { href: '/planning', label: 'Aujourd\'hui', icon: Calendar },
-    { href: '/board', label: 'Kanban', icon: KanbanSquare },
-    { href: '/a-verifier', label: 'À vérifier', icon: ClipboardCheck },
-    { href: '/chantier', label: 'Chantier', icon: MapPinned },
-    { href: '/ressources', label: 'Ressources', icon: Package },
+    { href: '/cockpit', label: 'Cockpit', icon: Home },
+    { href: '/planning', label: 'Planning', icon: Calendar },
+    { href: '/terrain', label: 'Terrain', icon: MapPinned },
+    { href: '/gestion', label: 'Gestion', icon: Briefcase },
   ],
   admin: [
     { href: '/projets', label: 'Projets', icon: Briefcase },

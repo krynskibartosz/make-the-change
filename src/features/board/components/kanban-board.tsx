@@ -10,7 +10,7 @@ import {
   MapPin,
   RotateCcw,
 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { Task, TaskStatus } from '@/lib/domain'
 import { cn } from '@/lib/utils/cn'
 
@@ -179,6 +179,7 @@ export function KanbanBoard({
   const [tasks, setTasks] = useState<Task[]>(initialTasks)
   const [activeStatus, setActiveStatus] = useState<TaskStatus>('to_check')
   const [loadingId, setLoadingId] = useState<string | null>(null)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setTasks(initialTasks)
@@ -197,17 +198,51 @@ export function KanbanBoard({
     }
   }
 
-  const activeColumn = COLUMNS.find((column) => column.id === activeStatus) ?? COLUMNS[0]
-  const activeTasks = tasks.filter((task) => task.status === activeColumn.id)
-  const ActiveIcon = activeColumn.icon
+  const handleTabClick = (status: TaskStatus) => {
+    setActiveStatus(status)
+    const element = document.getElementById(`board-col-${status}`)
+    if (element && scrollContainerRef.current) {
+      const container = scrollContainerRef.current
+      const offset = element.offsetLeft - container.offsetLeft
+      const isMobile = window.innerWidth < 768
+      const scrollLeft = isMobile ? offset - (container.clientWidth - element.clientWidth) / 2 : offset
+      container.scrollTo({ left: scrollLeft, behavior: 'smooth' })
+    }
+  }
+
+  const handleScroll = () => {
+    if (!scrollContainerRef.current) return
+    const container = scrollContainerRef.current
+    const scrollCenter = container.scrollLeft + container.clientWidth / 2
+
+    let closestStatus = activeStatus
+    let minDistance = Infinity
+
+    COLUMNS.forEach((column) => {
+      const el = document.getElementById(`board-col-${column.id}`)
+      if (el) {
+        const elCenter = el.offsetLeft - container.offsetLeft + el.clientWidth / 2
+        const distance = Math.abs(scrollCenter - elCenter)
+        if (distance < minDistance) {
+          minDistance = distance
+          closestStatus = column.id
+        }
+      }
+    })
+
+    if (closestStatus !== activeStatus) {
+      setActiveStatus(closestStatus)
+    }
+  }
 
   return (
-    <div className="w-full">
-      <div className={cn("flex flex-col gap-4", forceBoardView ? "hidden" : "md:hidden")}>
+    <div className="flex h-full w-full flex-col overflow-hidden">
+      {/* Tablist pour la navigation rapide */}
+      <div className={cn("px-4 pb-4 shrink-0", forceBoardView ? "hidden" : "block")}>
         <div
           role="tablist"
           aria-label="Statut des tâches"
-          className="flex gap-1 overflow-x-auto rounded-[var(--radius-control)] border border-border bg-surface p-1"
+          className="flex gap-1 overflow-x-auto rounded-[var(--radius-control)] border border-border bg-surface/50 backdrop-blur-md p-1 hide-scrollbar"
         >
           {COLUMNS.map((column) => {
             const Icon = column.icon
@@ -220,10 +255,10 @@ export function KanbanBoard({
                 role="tab"
                 aria-selected={isActive}
                 key={column.id}
-                onClick={() => setActiveStatus(column.id)}
+                onClick={() => handleTabClick(column.id)}
                 className={cn(
                   'flex min-h-10 shrink-0 items-center gap-1.5 rounded-md px-3 text-xs font-semibold transition-colors',
-                  isActive ? 'bg-primary text-primary-foreground' : 'text-muted-foreground',
+                  isActive ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-surface-elevated',
                 )}
               >
                 <Icon className="size-4" />
@@ -235,78 +270,60 @@ export function KanbanBoard({
             )
           })}
         </div>
-
-        <section className="flex flex-col gap-3 px-4">
-          <div className={cn('flex items-center gap-2', activeColumn.colorClass)}>
-            <ActiveIcon className="size-4" />
-            <h2 className="text-sm font-bold">{activeColumn.label}</h2>
-            <span className="text-xs font-semibold opacity-70">{activeTasks.length}</span>
-          </div>
-
-          {activeTasks.length === 0 ? (
-            <div className="flex min-h-24 items-center justify-center rounded-[var(--radius-card)] border border-dashed border-border text-sm text-muted-foreground">
-              Aucune tâche dans ce statut
-            </div>
-          ) : (
-            <div className="flex flex-col gap-2">
-              {activeTasks.map((task) => (
-                <TaskCard
-                  key={task.id}
-                  task={task}
-                  isLoading={loadingId === task.id}
-                  onClick={onTaskClick}
-                  onToggle={handleToggle}
-                />
-              ))}
-            </div>
-          )}
-
-          <QuickAdd status={activeColumn.id} onTaskCreate={onTaskCreate} />
-        </section>
       </div>
 
-      <div className={cn("overflow-x-auto px-4 pb-8", forceBoardView ? "block" : "hidden md:block")}>
-        <div className="grid min-w-[1120px] grid-cols-5 gap-3">
-          {COLUMNS.map((column) => {
-            const Icon = column.icon
-            const columnTasks = tasks.filter((task) => task.status === column.id)
+      {/* Swipeable Columns Container */}
+      <div 
+        ref={scrollContainerRef}
+        onScroll={handleScroll}
+        className="flex-1 overflow-x-auto overflow-y-hidden snap-x snap-mandatory hide-scrollbar px-4 pb-8 flex gap-4 md:gap-6 items-stretch"
+      >
+        {COLUMNS.map((column) => {
+          const Icon = column.icon
+          const columnTasks = tasks.filter((task) => task.status === column.id)
 
-            return (
-              <section key={column.id} className="flex min-w-0 flex-col gap-3">
-                <div
-                  className={cn(
-                    'flex min-h-11 items-center gap-2 rounded-[var(--radius-control)] border border-border/60 px-3',
-                    column.bgClass,
-                    column.colorClass,
-                  )}
-                >
-                  <Icon className="size-4" />
-                  <h2 className="text-sm font-bold">{column.label}</h2>
-                  <span className="ml-auto text-xs font-semibold">{columnTasks.length}</span>
-                </div>
+          return (
+            <section 
+              id={`board-col-${column.id}`}
+              key={column.id} 
+              className={cn(
+                "flex flex-col gap-3 h-full overflow-y-auto hide-scrollbar pb-8 shrink-0 snap-center md:snap-start",
+                forceBoardView ? "w-[320px]" : "w-[85vw] md:w-[320px]"
+              )}
+            >
+              <div
+                className={cn(
+                  'sticky top-0 z-10 flex min-h-11 items-center gap-2 rounded-[var(--radius-control)] border border-border/40 backdrop-blur-md px-3 shadow-sm',
+                  column.bgClass,
+                  column.colorClass,
+                )}
+              >
+                <Icon className="size-4" />
+                <h2 className="text-sm font-bold">{column.label}</h2>
+                <span className="ml-auto text-xs font-semibold bg-background/50 px-1.5 py-0.5 rounded-sm">{columnTasks.length}</span>
+              </div>
 
-                <div className="flex flex-col gap-2">
-                  {columnTasks.length === 0 ? (
-                    <div className="flex min-h-24 items-center justify-center rounded-[var(--radius-card)] border border-dashed border-border text-xs text-muted-foreground">
-                      Vide
-                    </div>
-                  ) : (
-                    columnTasks.map((task) => (
-                      <TaskCard
-                        key={task.id}
-                        task={task}
-                        isLoading={loadingId === task.id}
-                        onClick={onTaskClick}
-                        onToggle={handleToggle}
-                      />
-                    ))
-                  )}
-                  <QuickAdd status={column.id} onTaskCreate={onTaskCreate} />
-                </div>
-              </section>
-            )
-          })}
-        </div>
+              <div className="flex flex-col gap-2">
+                {columnTasks.length === 0 ? (
+                  <div className="flex min-h-24 items-center justify-center rounded-[var(--radius-card)] border border-dashed border-border/50 bg-surface/30 text-xs text-muted-foreground">
+                    Vide
+                  </div>
+                ) : (
+                  columnTasks.map((task) => (
+                    <TaskCard
+                      key={task.id}
+                      task={task}
+                      isLoading={loadingId === task.id}
+                      onClick={onTaskClick}
+                      onToggle={handleToggle}
+                    />
+                  ))
+                )}
+                <QuickAdd status={column.id} onTaskCreate={onTaskCreate} />
+              </div>
+            </section>
+          )
+        })}
       </div>
     </div>
   )

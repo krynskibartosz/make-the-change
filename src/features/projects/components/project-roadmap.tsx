@@ -89,13 +89,13 @@ export function ProjectRoadmap({ phases: initialPhases }: { phases: Phase[] }) {
   const getStatusStyles = (status?: string) => {
     switch (status) {
       case 'completed':
-        return 'bg-gradient-to-r from-emerald-500/90 to-emerald-400 text-white border-white/20 shadow-[0_0_15px_rgba(16,185,129,0.3)]'
+        return 'bg-gradient-to-r from-emerald-500/80 to-emerald-400/80 backdrop-blur-md text-white border-white/30 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_0_15px_rgba(16,185,129,0.3)]'
       case 'in_progress':
-        return 'bg-gradient-to-r from-blue-600/90 to-indigo-500 text-white border-white/20 shadow-[0_0_20px_rgba(59,130,246,0.4)]'
+        return 'bg-gradient-to-r from-blue-600/80 to-indigo-500/80 backdrop-blur-md text-white border-white/30 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_0_20px_rgba(59,130,246,0.4)]'
       case 'delayed':
-        return 'bg-gradient-to-r from-rose-600/90 to-red-500 text-white border-white/20 shadow-[0_0_20px_rgba(244,63,94,0.4)]'
+        return 'bg-gradient-to-r from-rose-600/80 to-red-500/80 backdrop-blur-md text-white border-white/30 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_0_20px_rgba(244,63,94,0.4)]'
       default:
-        return 'bg-surface-elevated/90 text-muted-foreground border-border backdrop-blur-md'
+        return 'bg-surface-elevated/80 backdrop-blur-md text-muted-foreground border-border/50 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]'
     }
   }
 
@@ -179,10 +179,10 @@ export function ProjectRoadmap({ phases: initialPhases }: { phases: Phase[] }) {
       >
         <div
           style={{ width: `${TOTAL_WIDTH + 60}px` }}
-          className="pt-2 pb-16 px-4 relative min-h-full"
+          className="pb-16 px-4 relative min-h-full"
         >
           {/* Header des Mois */}
-          <div className="flex mb-4 relative z-0">
+          <div className="flex mb-4 relative z-30 sticky top-0 bg-[#0A0A0A]/80 backdrop-blur-md pt-2 pb-1 border-b border-white/5">
             {months.map((month, i) => {
               const daysInMonth =
                 differenceInDays(
@@ -204,7 +204,7 @@ export function ProjectRoadmap({ phases: initialPhases }: { phases: Phase[] }) {
           </div>
 
           {/* Grille verticale d'arrière-plan */}
-          <div className="absolute inset-0 pt-[40px] pointer-events-none flex z-0 opacity-20">
+          <div className="absolute inset-0 pt-[40px] pointer-events-none flex z-0 opacity-[0.08]">
             {months.map((month, i) => {
               const daysInMonth =
                 differenceInDays(
