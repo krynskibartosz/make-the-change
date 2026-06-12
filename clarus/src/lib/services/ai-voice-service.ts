@@ -1,14 +1,18 @@
 'use server'
 
-export type ConstructionData = {
-  summary: string
-  workType: string
-  zone: string
-  workers: string[]
-  time: string
-  materials: string[]
-  alerts: string[]
-}
+import { z } from 'zod'
+
+export const ConstructionDataSchema = z.object({
+  summary: z.string(),
+  workType: z.string(),
+  zone: z.string(),
+  workers: z.array(z.string()),
+  time: z.string(),
+  materials: z.array(z.string()),
+  alerts: z.array(z.string()),
+})
+
+export type ConstructionData = z.infer<typeof ConstructionDataSchema>
 
 // Fonction utilitaire pour simuler un délai réseau
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -110,7 +114,8 @@ Si une information manque, laisse un tableau vide [] ou la chaîne "Non précis�
   const content = data.choices[0].message.content
 
   try {
-    const parsed = JSON.parse(content) as ConstructionData
+    const rawParsed = JSON.parse(content)
+    const parsed = ConstructionDataSchema.parse(rawParsed)
     return parsed
   } catch (e) {
     console.error('Erreur de parsing JSON:', e)

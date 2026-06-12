@@ -41,15 +41,18 @@ export type ClarusRepository = {
   deletePerson: (id: string) => Promise<void>
   getPhases: () => Promise<Phase[]>
   getProjectPhases: (projectId: string) => Promise<Phase[]>
-  updatePhase: (id: string, input: Partial<Phase>) => Promise<Phase>
+  updatePhase: (id: string, input: Omit<Partial<Phase>, 'id' | 'projectId'>) => Promise<Phase>
   getZones: () => Promise<Zone[]>
   getZoneById: (id: string) => Promise<Zone | undefined>
   createZone: (input: CreateZoneInput) => Promise<Zone>
-  updateZone: (id: string, input: Partial<Zone>) => Promise<Zone>
+  updateZone: (id: string, input: Omit<Partial<Zone>, 'id' | 'projectId'>) => Promise<Zone>
   deleteZone: (id: string) => Promise<void>
   getMaterials: () => Promise<Material[]>
   getMaterialById: (id: string) => Promise<Material | null>
-  updateMaterial: (id: string, input: Partial<Material>) => Promise<Material>
+  updateMaterial: (
+    id: string,
+    input: Omit<Partial<Material>, 'id' | 'projectId'>,
+  ) => Promise<Material>
   getMaterialMovements: () => Promise<MaterialMovement[]>
   getPhotos: () => Promise<Photo[]>
   createPhoto: (input: Omit<Photo, 'id'>) => Promise<Photo>
@@ -67,9 +70,9 @@ export type ClarusRepository = {
   createInterventionDraft: (input: CreateInterventionDraftInput) => Promise<InterventionDraft>
   createTask: (input: CreateTaskInput) => Promise<Task>
   updateTaskStatus: (id: string, status: TaskStatus) => Promise<Task>
-  updateTask: (id: string, input: Partial<Task>) => Promise<Task>
+  updateTask: (id: string, input: Omit<Partial<Task>, 'id' | 'projectId'>) => Promise<Task>
   createExpense: (input: CreateExpenseInput) => Promise<Expense>
-  updateExpense: (id: string, input: Partial<Expense>) => Promise<Expense>
+  updateExpense: (id: string, input: Omit<Partial<Expense>, 'id' | 'projectId'>) => Promise<Expense>
   deleteExpense: (id: string) => Promise<void>
   createMaterialMovement: (input: CreateMaterialMovementInput) => Promise<MaterialMovement>
   markAsInvoiced: (interventionIds: string[], expenseIds: string[]) => Promise<void>

@@ -1,55 +1,97 @@
 'use server'
 
-import { after } from 'next/server'
-
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { after } from 'next/server'
+import { z } from 'zod'
 import { mockClarusRepository } from '@/lib/repositories'
 
-export async function createPersonAction(prevState: any, formData: FormData) {
+const createPersonSchema = z.object({
+  projectId: z.string().default('project-1'),
+  name: z.string().min(1),
+  role: z.string().optional(),
+  defaultHourlyRate: z.coerce.number().default(0),
+  avatarUrl: z.string().nullable().optional(),
+  phone: z.string().optional(),
+  email: z.string().optional(),
+  company: z.string().optional(),
+  skills: z.array(z.string()).default([]),
+})
+
+const updatePersonSchema = z.object({
+  name: z.string().min(1).optional(),
+  role: z.string().optional(),
+  defaultHourlyRate: z.coerce.number().optional(),
+  avatarUrl: z.string().nullable().optional(),
+  phone: z.string().optional(),
+  email: z.string().optional(),
+  company: z.string().optional(),
+  active: z.coerce
+    .string()
+    .transform((v) => v === 'true')
+    .optional(),
+  skills: z.array(z.string()).optional(),
+})
+
+export async function createPersonAction(_prevState: unknown, formData: FormData) {
   try {
-    const input: any = {
-      projectId: formData.get('projectId') as string || 'project-1',
-      name: formData.get('name') as string,
-      role: formData.get('role') as string | undefined,
-      defaultHourlyRate: Number(formData.get('defaultHourlyRate')) || 0,
-      avatarUrl: formData.get('avatarUrl') as string | null,
-      phone: formData.get('phone') as string | undefined,
-      email: formData.get('email') as string | undefined,
-      company: formData.get('company') as string | undefined,
-      skills: formData.getAll('skills') as string[],
+    const rawData = {
+      projectId: formData.get('projectId') || 'project-1',
+      name: formData.get('name'),
+      role: formData.get('role') || undefined,
+      defaultHourlyRate: formData.get('defaultHourlyRate') || 0,
+      avatarUrl: formData.get('avatarUrl') || null,
+      phone: formData.get('phone') || undefined,
+      email: formData.get('email') || undefined,
+      company: formData.get('company') || undefined,
+      skills: formData.getAll('skills'),
     }
 
+    const input = createPersonSchema.parse(rawData)
+
     await mockClarusRepository.createPerson(input)
-    after(async () => { console.log('[BACKGROUND AUDIT] Operation createPerson completed.') })
+    after(async () => {
+      console.log('[BACKGROUND AUDIT] Operation createPerson completed.')
+    })
 
     revalidatePath('/equipe')
-  } catch (error: any) {
-    return { error: error.message || 'Failed to create person', success: false }
+  } catch (error) {
+    return {
+      error: error instanceof Error ? error.message : 'Failed to create person',
+      success: false,
+    }
   }
 
   redirect('/equipe')
 }
 
-export async function updatePersonAction(id: string, prevState: any, formData: FormData) {
+export async function updatePersonAction(id: string, _prevState: unknown, formData: FormData) {
   try {
-    const input: any = {}
-    if (formData.has('name')) input.name = formData.get('name') as string
-    if (formData.has('role')) input.role = formData.get('role') as string
-    if (formData.has('defaultHourlyRate')) input.defaultHourlyRate = Number(formData.get('defaultHourlyRate'))
-    if (formData.has('avatarUrl')) input.avatarUrl = formData.get('avatarUrl') as string | null
-    if (formData.has('phone')) input.phone = formData.get('phone') as string
-    if (formData.has('email')) input.email = formData.get('email') as string
-    if (formData.has('company')) input.company = formData.get('company') as string
-    if (formData.has('active')) input.active = formData.get('active') === 'true'
-    if (formData.getAll('skills').length > 0) input.skills = formData.getAll('skills') as string[]
+    const rawData: Record<string, unknown> = {}
+    if (formData.has('name')) rawData.name = formData.get('name')
+    if (formData.has('role')) rawData.role = formData.get('role')
+    if (formData.has('defaultHourlyRate'))
+      rawData.defaultHourlyRate = formData.get('defaultHourlyRate')
+    if (formData.has('avatarUrl')) rawData.avatarUrl = formData.get('avatarUrl') || null
+    if (formData.has('phone')) rawData.phone = formData.get('phone')
+    if (formData.has('email')) rawData.email = formData.get('email')
+    if (formData.has('company')) rawData.company = formData.get('company')
+    if (formData.has('active')) rawData.active = formData.get('active')
+    if (formData.getAll('skills').length > 0) rawData.skills = formData.getAll('skills')
+
+    const input = updatePersonSchema.parse(rawData)
 
     await mockClarusRepository.updatePerson(id, input)
-    after(async () => { console.log('[BACKGROUND AUDIT] Operation updatePerson completed.') })
+    after(async () => {
+      console.log('[BACKGROUND AUDIT] Operation updatePerson completed.')
+    })
 
     revalidatePath('/equipe')
-  } catch (error: any) {
-    return { error: error.message || 'Failed to update person', success: false }
+  } catch (error) {
+    return {
+      error: error instanceof Error ? error.message : 'Failed to update person',
+      success: false,
+    }
   }
 
   redirect('/equipe')
@@ -58,10 +100,15 @@ export async function updatePersonAction(id: string, prevState: any, formData: F
 export async function deletePersonAction(id: string) {
   try {
     await mockClarusRepository.deletePerson(id)
-    after(async () => { console.log('[BACKGROUND AUDIT] Operation deletePerson completed.') })
+    after(async () => {
+      console.log('[BACKGROUND AUDIT] Operation deletePerson completed.')
+    })
     revalidatePath('/equipe')
-  } catch (error: any) {
-    return { error: error.message || 'Failed to delete person', success: false }
+  } catch (error) {
+    return {
+      error: error instanceof Error ? error.message : 'Failed to delete person',
+      success: false,
+    }
   }
 
   redirect('/equipe')

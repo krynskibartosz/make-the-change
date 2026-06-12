@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { ArrowLeft, Package, Plus } from 'lucide-react'
 import Link from 'next/link'
-import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
+import { useEffect, useState } from 'react'
 import { FloatingCTA } from '@/components/ui/floating-cta'
 import type { Material, MaterialMovement } from '@/lib/domain'
+import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
 
 export default function InventairePage() {
   const [materials, setMaterials] = useState<Material[]>([])
@@ -30,10 +30,14 @@ export default function InventairePage() {
     load()
   }, [])
 
-  const materialsWithStock = materials.map(material => {
-    const materialMovements = movements.filter(m => m.materialId === material.id)
-    const inQty = materialMovements.filter(m => (m as any).type === 'in').reduce((sum, m) => sum + m.quantity, 0)
-    const outQty = materialMovements.filter(m => (m as any).type === 'out' || (m as any).type === 'used').reduce((sum, m) => sum + m.quantity, 0)
+  const materialsWithStock = materials.map((material) => {
+    const materialMovements = movements.filter((m) => m.materialId === material.id)
+    const inQty = materialMovements
+      .filter((m) => m.type === 'purchased' || m.type === 'on_site')
+      .reduce((sum, m) => sum + m.quantity, 0)
+    const outQty = materialMovements
+      .filter((m) => m.type === 'used')
+      .reduce((sum, m) => sum + m.quantity, 0)
     const stock = inQty - outQty
     return { ...material, stock }
   })
@@ -57,15 +61,20 @@ export default function InventairePage() {
           <div className="flex justify-center p-8 text-muted-foreground text-sm">Chargement...</div>
         ) : (
           <div className="flex flex-col gap-3">
-            {materialsWithStock.map(material => (
-              <div key={material.id} className="flex items-center justify-between p-4 rounded-xl bg-surface border border-border/50">
+            {materialsWithStock.map((material) => (
+              <div
+                key={material.id}
+                className="flex items-center justify-between p-4 rounded-xl bg-surface border border-border/50"
+              >
                 <div className="flex items-center gap-4">
                   <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-500">
                     <Package className="size-5" />
                   </div>
                   <div className="flex flex-col">
                     <span className="font-medium text-foreground">{material.name}</span>
-                    <span className="text-sm text-muted-foreground">{material.category || 'Standard'}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {material.category || 'Standard'}
+                    </span>
                   </div>
                 </div>
                 <div className="flex flex-col items-end shrink-0 pl-4">

@@ -10,7 +10,7 @@ import { Screen } from '../../../_components/screen'
 export default function EditExpensePage({ params }: { params: { id: string } }) {
   const router = useRouter()
   const { id } = params
-  
+
   const [isLoading, setIsLoading] = useState(true)
   const [description, setDescription] = useState('')
   const [supplier, setSupplier] = useState('')
@@ -44,7 +44,7 @@ export default function EditExpensePage({ params }: { params: { id: string } }) 
         description,
         supplier,
         amount: parseFloat(amount) || 0,
-        isRebillable
+        isRebillable,
       })
       router.back()
     } finally {
@@ -117,9 +117,7 @@ export default function EditExpensePage({ params }: { params: { id: string } }) 
           >
             <span
               className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 ${
-                isRebillable
-                  ? 'border-warning bg-warning'
-                  : 'border-border bg-background'
+                isRebillable ? 'border-warning bg-warning' : 'border-border bg-background'
               }`}
             >
               {isRebillable && (
@@ -147,10 +145,10 @@ export default function EditExpensePage({ params }: { params: { id: string } }) 
           <Button type="submit" fullWidth disabled={isSubmitting}>
             Enregistrer
           </Button>
-          <Button 
-            type="button" 
-            variant="danger" 
-            fullWidth 
+          <Button
+            type="button"
+            variant="danger"
+            fullWidth
             onClick={handleDelete}
             disabled={isSubmitting}
           >

@@ -2,10 +2,10 @@
 import Form from 'next/form'
 
 import { useParams, useRouter } from 'next/navigation'
-import { useEffect, useState, useActionState } from 'react'
+import { useActionState, useEffect, useState } from 'react'
+import { deletePersonAction, updatePersonAction } from '@/actions/team-actions'
 import { toast } from '@/lib/hooks/use-toast'
 import { mockClarusRepository } from '@/lib/repositories'
-import { updatePersonAction, deletePersonAction } from '@/actions/team-actions'
 import { FullScreenSlideModal } from '../../../../@modal/_components/full-screen-slide-modal'
 
 export default function EditerMembreEquipePage() {

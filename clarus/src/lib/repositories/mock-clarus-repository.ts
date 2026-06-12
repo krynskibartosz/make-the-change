@@ -80,6 +80,10 @@ export const createMockClarusRepository = (): ClarusRepository => {
         role: input.role,
         defaultHourlyRate: input.defaultHourlyRate,
         avatarUrl: input.avatarUrl,
+        phone: input.phone,
+        email: input.email,
+        company: input.company,
+        skills: input.skills ?? [],
         active: true,
       }
       people.push(person)
@@ -104,7 +108,7 @@ export const createMockClarusRepository = (): ClarusRepository => {
       return clonePerson(updated)
     },
     deletePerson: async (id: string) => {
-      people = people.filter(p => p.id !== id)
+      people = people.filter((p) => p.id !== id)
     },
     getZones: async () => [...zones],
     getZoneById: async (id: string) => zones.find((z) => z.id === id),
@@ -286,7 +290,7 @@ export const createMockClarusRepository = (): ClarusRepository => {
       expenses = [...expenses, expense]
       return expense
     },
-    getExpenseById: async (id: string) => expenses.find(e => e.id === id),
+    getExpenseById: async (id: string) => expenses.find((e) => e.id === id),
     updateExpense: async (id: string, input: Partial<Expense>) => {
       const idx = expenses.findIndex((e) => e.id === id)
       if (idx === -1) throw new Error('Expense not found')
@@ -295,7 +299,7 @@ export const createMockClarusRepository = (): ClarusRepository => {
       return updated
     },
     deleteExpense: async (id: string) => {
-      expenses = expenses.filter(e => e.id !== id)
+      expenses = expenses.filter((e) => e.id !== id)
     },
     createMaterialMovement: async (input: CreateMaterialMovementInput) => {
       const movement: MaterialMovement = {

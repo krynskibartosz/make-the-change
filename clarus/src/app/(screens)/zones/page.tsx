@@ -1,14 +1,14 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { ChevronRight, Plus } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { Screen } from '@/app/(screens)/_components/screen'
+import { Button } from '@/components/ui/button'
+import { FloatingCTA } from '@/components/ui/floating-cta'
 import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
 import type { Zone } from '@/lib/schemas/clarus'
-import { Screen } from '@/app/(screens)/_components/screen'
-import { FloatingCTA } from '@/components/ui/floating-cta'
-import { Button } from '@/components/ui/button'
-import { ChevronRight, Plus } from 'lucide-react'
 
 export default function ZonesPage() {
   const router = useRouter()

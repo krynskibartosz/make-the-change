@@ -3,6 +3,7 @@
 import {
   BarChart3,
   Bell,
+  Boxes,
   ChevronRight,
   ClipboardList,
   Image as ImageIcon,
@@ -11,7 +12,6 @@ import {
   Package,
   Settings,
   Users,
-  Boxes,
 } from 'lucide-react'
 import Link from 'next/link'
 import { type AppRole, useRole } from '@/lib/role-context'
