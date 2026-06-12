@@ -1,6 +1,6 @@
 'use client'
 
-import { AlertCircle, CheckCircle2, ChevronRight, Clock, HelpCircle, Inbox, ListTodo, MapPin, AlertTriangle } from 'lucide-react'
+import { AlertTriangle, CheckCircle2, Clock, Inbox, ListTodo, MapPin } from 'lucide-react'
 import { useState } from 'react'
 import type { Task, TaskStatus } from '@/lib/domain'
 import { cn } from '@/lib/utils/cn'
@@ -8,6 +8,8 @@ import { cn } from '@/lib/utils/cn'
 type KanbanBoardProps = {
   initialTasks: Task[]
   onStatusChange: (taskId: string, newStatus: TaskStatus) => Promise<void>
+  onTaskClick?: (task: Task) => void
+  onTaskCreate?: (title: string, status: TaskStatus) => Promise<void>
 }
 
 type ColumnDef = {
@@ -19,18 +21,53 @@ type ColumnDef = {
 }
 
 const COLUMNS: ColumnDef[] = [
-  { id: 'to_check', label: 'Inbox', icon: <Inbox className="size-4" />, colorClass: 'text-purple-500', bgClass: 'bg-purple-500/10' },
-  { id: 'to_do', label: 'À faire', icon: <ListTodo className="size-4" />, colorClass: 'text-slate-500', bgClass: 'bg-slate-500/10' },
-  { id: 'in_progress', label: 'En cours', icon: <Clock className="size-4" />, colorClass: 'text-blue-500', bgClass: 'bg-blue-500/10' },
-  { id: 'blocked', label: 'Bloquant', icon: <AlertTriangle className="size-4" />, colorClass: 'text-red-500', bgClass: 'bg-red-500/10' },
-  { id: 'done', label: 'Terminé', icon: <CheckCircle2 className="size-4" />, colorClass: 'text-emerald-500', bgClass: 'bg-emerald-500/10' },
+  {
+    id: 'to_check',
+    label: 'Inbox',
+    icon: <Inbox className="size-4" />,
+    colorClass: 'text-purple-500',
+    bgClass: 'bg-purple-500/10',
+  },
+  {
+    id: 'to_do',
+    label: 'À faire',
+    icon: <ListTodo className="size-4" />,
+    colorClass: 'text-slate-500',
+    bgClass: 'bg-slate-500/10',
+  },
+  {
+    id: 'in_progress',
+    label: 'En cours',
+    icon: <Clock className="size-4" />,
+    colorClass: 'text-blue-500',
+    bgClass: 'bg-blue-500/10',
+  },
+  {
+    id: 'blocked',
+    label: 'Bloquant',
+    icon: <AlertTriangle className="size-4" />,
+    colorClass: 'text-red-500',
+    bgClass: 'bg-red-500/10',
+  },
+  {
+    id: 'done',
+    label: 'Terminé',
+    icon: <CheckCircle2 className="size-4" />,
+    colorClass: 'text-emerald-500',
+    bgClass: 'bg-emerald-500/10',
+  },
 ]
 
-export function KanbanBoard({ initialTasks, onStatusChange }: KanbanBoardProps) {
+export function KanbanBoard({
+  initialTasks,
+  onStatusChange,
+  onTaskClick,
+  onTaskCreate,
+}: KanbanBoardProps) {
   const [tasks, setTasks] = useState<Task[]>(initialTasks)
   const [loadingId, setLoadingId] = useState<string | null>(null)
 
-  const handleStatusChange = async (taskId: string, newStatus: TaskStatus) => {
+  const _handleStatusChange = async (taskId: string, newStatus: TaskStatus) => {
     setLoadingId(taskId)
     try {
       await onStatusChange(taskId, newStatus)
@@ -40,25 +77,23 @@ export function KanbanBoard({ initialTasks, onStatusChange }: KanbanBoardProps) 
     }
   }
 
-  // Quick next status logic for simple mobile interaction
-  const getNextStatus = (current: TaskStatus): TaskStatus | null => {
-    switch (current) {
-      case 'to_check': return 'to_do'
-      case 'to_do': return 'in_progress'
-      case 'in_progress': return 'done'
-      default: return null
-    }
-  }
-
   return (
     <div className="flex h-full w-full overflow-x-auto snap-x snap-mandatory pb-8 pt-2 hide-scrollbar">
       {COLUMNS.map((col) => {
         const columnTasks = tasks.filter((t) => t.status === col.id)
 
         return (
-          <div key={col.id} className="flex-none w-[85vw] max-w-[320px] snap-center shrink-0 px-3 flex flex-col gap-4 h-full">
+          <div
+            key={col.id}
+            className="flex-none w-[85vw] max-w-[320px] snap-center shrink-0 px-3 flex flex-col gap-4 h-full"
+          >
             {/* Column Header */}
-            <div className={cn('flex items-center gap-2 p-3 rounded-xl border border-border/50', col.bgClass)}>
+            <div
+              className={cn(
+                'flex items-center gap-2 p-3 rounded-xl border border-border/50',
+                col.bgClass,
+              )}
+            >
               <span className={cn(col.colorClass)}>{col.icon}</span>
               <h2 className={cn('font-bold text-sm tracking-wide', col.colorClass)}>{col.label}</h2>
               <div className="ml-auto bg-background/50 text-xs font-semibold px-2 py-0.5 rounded-full">
@@ -75,15 +110,14 @@ export function KanbanBoard({ initialTasks, onStatusChange }: KanbanBoardProps) 
               ) : (
                 columnTasks.map((task) => {
                   const isBlocked = task.status === 'blocked'
-                  const nextStatus = getNextStatus(task.status)
-
                   return (
-                    <div 
-                      key={task.id} 
+                    <div
+                      key={task.id}
+                      onClick={() => onTaskClick?.(task)}
                       className={cn(
-                        "relative bg-surface border border-border rounded-xl p-4 flex flex-col gap-3 shadow-sm transition-all",
-                        loadingId === task.id ? "opacity-50 scale-95" : "hover:border-border/80",
-                        isBlocked && "border-red-500/30 bg-red-500/5"
+                        'relative bg-surface border border-border rounded-xl p-4 flex flex-col gap-3 shadow-sm transition-all cursor-pointer active:scale-[0.98]',
+                        loadingId === task.id ? 'opacity-50 scale-95' : 'hover:border-border/80',
+                        isBlocked && 'border-red-500/30 bg-red-500/5',
                       )}
                     >
                       {/* Priority Tag */}
@@ -92,11 +126,9 @@ export function KanbanBoard({ initialTasks, onStatusChange }: KanbanBoardProps) 
                           Urgent
                         </div>
                       )}
-                      
-                      <h3 className="font-semibold text-sm pr-4 leading-tight">
-                        {task.title}
-                      </h3>
-                      
+
+                      <h3 className="font-semibold text-sm pr-4 leading-tight">{task.title}</h3>
+
                       {task.description && (
                         <p className="text-xs text-muted-foreground line-clamp-2">
                           {task.description}
@@ -109,47 +141,32 @@ export function KanbanBoard({ initialTasks, onStatusChange }: KanbanBoardProps) 
                           <span>Zone {task.zoneId?.slice(0, 4) || 'Générale'}</span>
                         </div>
                       </div>
-
-                      {/* Actions */}
-                      <div className="flex items-center gap-2 mt-2 pt-3 border-t border-border/50">
-                        {/* Dropdown-like statuts for mobile prototype */}
-                        <select 
-                          className="flex-1 bg-surface-elevated text-xs font-medium border-none rounded-lg p-2 focus:ring-0 appearance-none"
-                          value={task.status}
-                          onChange={(e) => handleStatusChange(task.id, e.target.value as TaskStatus)}
-                          disabled={loadingId === task.id}
-                        >
-                          <option value="to_check">Inbox</option>
-                          <option value="to_do">À faire</option>
-                          <option value="in_progress">En cours</option>
-                          <option value="blocked">Bloquant</option>
-                          <option value="done">Terminé</option>
-                        </select>
-                        
-                        {nextStatus && (
-                          <button 
-                            onClick={() => handleStatusChange(task.id, nextStatus)}
-                            disabled={loadingId === task.id}
-                            className="bg-primary/10 text-primary hover:bg-primary/20 p-2 rounded-lg transition-colors"
-                            aria-label="Avancer"
-                          >
-                            <ChevronRight className="size-4" />
-                          </button>
-                        )}
-                        {!isBlocked && task.status !== 'done' && (
-                           <button 
-                            onClick={() => handleStatusChange(task.id, 'blocked')}
-                            disabled={loadingId === task.id}
-                            className="bg-red-500/10 text-red-500 hover:bg-red-500/20 p-2 rounded-lg transition-colors"
-                            aria-label="Signaler un blocage"
-                          >
-                            <AlertTriangle className="size-4" />
-                          </button>
-                        )}
-                      </div>
                     </div>
                   )
                 })
+              )}
+
+              {/* Quick Add Input */}
+              {onTaskCreate && (
+                <form
+                  onSubmit={async (e) => {
+                    e.preventDefault()
+                    const input = e.currentTarget.elements.namedItem('title') as HTMLInputElement
+                    if (input.value.trim()) {
+                      const val = input.value.trim()
+                      input.value = ''
+                      await onTaskCreate(val, col.id)
+                    }
+                  }}
+                  className="mt-1"
+                >
+                  <input
+                    name="title"
+                    type="text"
+                    placeholder="Nouvelle tâche..."
+                    className="w-full bg-surface/50 border border-border/50 rounded-xl px-4 py-3 text-sm font-medium placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all"
+                  />
+                </form>
               )}
             </div>
           </div>

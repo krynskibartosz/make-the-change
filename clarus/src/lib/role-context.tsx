@@ -1,6 +1,7 @@
 'use client'
 
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import type React from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 
 export type AppRole = 'ouvrier' | 'chef' | 'admin' | 'client'
 
@@ -29,11 +30,7 @@ export function RoleProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('clarus_app_role', newRole)
   }
 
-  return (
-    <RoleContext.Provider value={{ role, setRole, isReady }}>
-      {children}
-    </RoleContext.Provider>
-  )
+  return <RoleContext.Provider value={{ role, setRole, isReady }}>{children}</RoleContext.Provider>
 }
 
 export function useRole() {

@@ -1,10 +1,10 @@
 'use client'
 
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import type React from 'react'
 import { useState } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button, StickyActionBar } from '@/components/ui'
-import { mockZones, mockInterventions } from '@/lib/mock'
+import { mockInterventions, mockZones } from '@/lib/mock'
 import type { ExpenseAddFlowAction, ExpenseAddFlowState } from '../types'
 import { validateStepLinkToProject } from '../validation'
 
@@ -13,10 +13,18 @@ type Props = {
   dispatch: React.Dispatch<ExpenseAddFlowAction>
 }
 
-const LINK_OPTIONS: { value: 'project' | 'zone' | 'intervention'; label: string; description: string }[] = [
+const LINK_OPTIONS: {
+  value: 'project' | 'zone' | 'intervention'
+  label: string
+  description: string
+}[] = [
   { value: 'project', label: 'Tout le chantier', description: 'Frais généraux non attribuables' },
   { value: 'zone', label: 'Une zone spécifique', description: 'Matériaux ou outils pour une zone' },
-  { value: 'intervention', label: 'Un travail spécifique', description: 'Lié à une journée de travail' },
+  {
+    value: 'intervention',
+    label: 'Un travail spécifique',
+    description: 'Lié à une journée de travail',
+  },
 ]
 
 export function StepLinkToProject({ state, dispatch }: Props) {
@@ -39,10 +47,11 @@ export function StepLinkToProject({ state, dispatch }: Props) {
 
   return (
     <div className="flex flex-col gap-6 pb-28">
-
       {/* Lien au projet */}
       <section className="grid gap-3">
-        <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Cet achat concerne :</p>
+        <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+          Cet achat concerne :
+        </p>
         <div className="grid gap-2">
           {LINK_OPTIONS.map((option) => (
             <button
@@ -57,7 +66,9 @@ export function StepLinkToProject({ state, dispatch }: Props) {
               }`}
             >
               <span className="text-sm font-bold">{option.label}</span>
-              <span className="text-xs font-normal text-muted-foreground">{option.description}</span>
+              <span className="text-xs font-normal text-muted-foreground">
+                {option.description}
+              </span>
             </button>
           ))}
         </div>
@@ -66,7 +77,9 @@ export function StepLinkToProject({ state, dispatch }: Props) {
       {/* Zone selector */}
       {linkToProject.linkType === 'zone' && (
         <section className="grid gap-2">
-          <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Quelle zone ?</p>
+          <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+            Quelle zone ?
+          </p>
           <div className="grid gap-1.5 max-h-48 overflow-y-auto">
             {mockZones
               .filter((z) => z.type === 'simple')
@@ -84,7 +97,9 @@ export function StepLinkToProject({ state, dispatch }: Props) {
                 >
                   {zone.name}
                   {zone.description && (
-                    <span className="ml-2 text-xs font-normal text-muted-foreground">{zone.description}</span>
+                    <span className="ml-2 text-xs font-normal text-muted-foreground">
+                      {zone.description}
+                    </span>
                   )}
                 </button>
               ))}
@@ -95,13 +110,18 @@ export function StepLinkToProject({ state, dispatch }: Props) {
       {/* Intervention selector */}
       {linkToProject.linkType === 'intervention' && (
         <section className="grid gap-2">
-          <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Quel travail ?</p>
+          <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+            Quel travail ?
+          </p>
           <div className="grid gap-1.5 max-h-48 overflow-y-auto">
             {mockInterventions.slice(0, 5).map((intervention) => (
               <button
                 key={intervention.id}
                 onClick={() =>
-                  dispatch({ type: 'SET_LINK_TO_PROJECT', payload: { interventionId: intervention.id } })
+                  dispatch({
+                    type: 'SET_LINK_TO_PROJECT',
+                    payload: { interventionId: intervention.id },
+                  })
                 }
                 className={`rounded-xl border px-4 py-2.5 text-left text-sm font-semibold transition-colors ${
                   linkToProject.interventionId === intervention.id
@@ -110,7 +130,9 @@ export function StepLinkToProject({ state, dispatch }: Props) {
                 }`}
               >
                 {intervention.title}
-                <span className="ml-2 text-xs font-normal text-muted-foreground">{intervention.date}</span>
+                <span className="ml-2 text-xs font-normal text-muted-foreground">
+                  {intervention.date}
+                </span>
               </button>
             ))}
           </div>
@@ -122,7 +144,10 @@ export function StepLinkToProject({ state, dispatch }: Props) {
         <p className="text-sm font-semibold text-foreground">Options</p>
         <button
           onClick={() =>
-            dispatch({ type: 'SET_LINK_TO_PROJECT', payload: { isRebillable: !linkToProject.isRebillable } })
+            dispatch({
+              type: 'SET_LINK_TO_PROJECT',
+              payload: { isRebillable: !linkToProject.isRebillable },
+            })
           }
           className={`flex items-start gap-3 rounded-xl border p-3 text-left transition-colors ${
             linkToProject.isRebillable
@@ -132,24 +157,37 @@ export function StepLinkToProject({ state, dispatch }: Props) {
         >
           <span
             className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 ${
-              linkToProject.isRebillable ? 'border-warning bg-warning' : 'border-border bg-background'
+              linkToProject.isRebillable
+                ? 'border-warning bg-warning'
+                : 'border-border bg-background'
             }`}
           >
             {linkToProject.isRebillable && (
-              <svg className="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+              <svg
+                className="h-3 w-3 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={3}
+              >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
             )}
           </span>
           <div>
             <p className="text-sm font-bold text-foreground">Supplément à refacturer</p>
-            <p className="text-xs text-muted-foreground">Cette dépense sera facturée au client en plus du devis</p>
+            <p className="text-xs text-muted-foreground">
+              Cette dépense sera facturée au client en plus du devis
+            </p>
           </div>
         </button>
 
         <button
           onClick={() =>
-            dispatch({ type: 'SET_LINK_TO_PROJECT', payload: { isToCheck: !linkToProject.isToCheck } })
+            dispatch({
+              type: 'SET_LINK_TO_PROJECT',
+              payload: { isToCheck: !linkToProject.isToCheck },
+            })
           }
           className={`flex items-start gap-3 rounded-xl border p-3 text-left transition-colors ${
             linkToProject.isToCheck
@@ -163,7 +201,13 @@ export function StepLinkToProject({ state, dispatch }: Props) {
             }`}
           >
             {linkToProject.isToCheck && (
-              <svg className="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+              <svg
+                className="h-3 w-3 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={3}
+              >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
             )}
@@ -188,7 +232,11 @@ export function StepLinkToProject({ state, dispatch }: Props) {
           </Button>
         }
         secondaryAction={
-          <Button variant="secondary" onClick={handlePrev} leftIcon={<ChevronLeft className="size-4" />}>
+          <Button
+            variant="secondary"
+            onClick={handlePrev}
+            leftIcon={<ChevronLeft className="size-4" />}
+          >
             Retour
           </Button>
         }

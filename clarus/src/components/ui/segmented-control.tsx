@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils/cn'
 
 type SegmentedControlOption = Readonly<{
   disabled?: boolean
-  label: string
+  label: React.ReactNode
   value: string
 }>
 

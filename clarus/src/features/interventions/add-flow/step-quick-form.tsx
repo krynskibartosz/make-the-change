@@ -1,9 +1,9 @@
 'use client'
 
-import type { Dispatch } from 'react'
 import { User2 } from 'lucide-react'
+import type { Dispatch } from 'react'
 
-import { Badge, Button, Input, NumberStepper, SelectableCard, Textarea } from '@/components/ui'
+import { Input, NumberStepper, Textarea } from '@/components/ui'
 import { calculateWorkEntryAmount, calculateWorkEntryDuration } from '@/lib/calculations'
 import type { Person, Phase, Zone } from '@/lib/domain'
 
@@ -66,10 +66,11 @@ export function StepQuickForm({ dispatch, people, phases, state, zones }: StepQu
 
   return (
     <div className="grid gap-6 pb-2">
-
       {/* 1. Type de travail */}
       <section className="grid gap-3">
-        <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Type de travail</p>
+        <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+          Type de travail
+        </p>
         <div className="grid grid-cols-2 gap-2">
           {INTERVENTION_TYPE_OPTIONS.map((option) => (
             <button
@@ -99,7 +100,9 @@ export function StepQuickForm({ dispatch, people, phases, state, zones }: StepQu
       <section>
         <Input
           label="Titre court"
-          onChange={(e) => dispatch({ type: 'updateForm', payload: { title: e.currentTarget.value } })}
+          onChange={(e) =>
+            dispatch({ type: 'updateForm', payload: { title: e.currentTarget.value } })
+          }
           placeholder="Ex: Démolition garage nord"
           value={form.title}
         />
@@ -115,7 +118,10 @@ export function StepQuickForm({ dispatch, people, phases, state, zones }: StepQu
               <button
                 key={zone.id}
                 onClick={() =>
-                  dispatch({ type: 'updateForm', payload: { zoneId: zone.id, locationToDefine: false } })
+                  dispatch({
+                    type: 'updateForm',
+                    payload: { zoneId: zone.id, locationToDefine: false },
+                  })
                 }
                 className={`flex items-center rounded-xl border px-3 py-2.5 text-left text-sm font-semibold transition-colors ${
                   form.zoneId === zone.id && !form.locationToDefine
@@ -125,7 +131,9 @@ export function StepQuickForm({ dispatch, people, phases, state, zones }: StepQu
               >
                 {zone.name}
                 {zone.description && (
-                  <span className="ml-2 text-xs font-normal text-muted-foreground truncate">{zone.description}</span>
+                  <span className="ml-2 text-xs font-normal text-muted-foreground truncate">
+                    {zone.description}
+                  </span>
                 )}
               </button>
             ))}
@@ -147,13 +155,18 @@ export function StepQuickForm({ dispatch, people, phases, state, zones }: StepQu
       {/* 4. Phase (optionnel, compact) */}
       {!form.locationToDefine && (
         <section className="grid gap-2">
-          <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Phase (optionnel)</p>
+          <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+            Phase (optionnel)
+          </p>
           <div className="flex flex-wrap gap-2">
             {phases.map((phase) => (
               <button
                 key={phase.id}
                 onClick={() =>
-                  dispatch({ type: 'updateForm', payload: { phaseId: form.phaseId === phase.id ? null : phase.id } })
+                  dispatch({
+                    type: 'updateForm',
+                    payload: { phaseId: form.phaseId === phase.id ? null : phase.id },
+                  })
                 }
                 className={`rounded-full border px-3 py-1 text-xs font-semibold transition-colors ${
                   form.phaseId === phase.id
@@ -170,7 +183,9 @@ export function StepQuickForm({ dispatch, people, phases, state, zones }: StepQu
 
       {/* 5. Qui */}
       <section className="grid gap-3">
-        <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Qui a travaillé ?</p>
+        <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+          Qui a travaillé ?
+        </p>
         <div className="grid gap-1.5">
           {activePeople.map((person) => {
             const isSelected = form.personIds.includes(person.id)
@@ -190,15 +205,26 @@ export function StepQuickForm({ dispatch, people, phases, state, zones }: StepQu
                   }`}
                 >
                   {isSelected && (
-                    <svg className="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                    <svg
+                      className="h-3 w-3 text-white"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={3}
+                    >
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
                   )}
                 </span>
                 <span className="flex-1">{person.name}</span>
-                <span className="text-xs font-normal text-muted-foreground">{person.role ?? ''}</span>
+                <span className="text-xs font-normal text-muted-foreground">
+                  {person.role ?? ''}
+                </span>
                 <button
-                  onClick={(e) => { e.stopPropagation(); setOnlyMe(person.id) }}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setOnlyMe(person.id)
+                  }}
                   className="ml-auto flex items-center gap-1 rounded-lg border border-border bg-background px-2 py-0.5 text-xs text-muted-foreground hover:text-foreground"
                 >
                   <User2 className="size-3" />
@@ -212,10 +238,14 @@ export function StepQuickForm({ dispatch, people, phases, state, zones }: StepQu
 
       {/* 6. Durée */}
       <section className="grid gap-3">
-        <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Quand & durée</p>
+        <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+          Quand & durée
+        </p>
         <Input
           label="Date"
-          onChange={(e) => dispatch({ type: 'updateForm', payload: { date: e.currentTarget.value } })}
+          onChange={(e) =>
+            dispatch({ type: 'updateForm', payload: { date: e.currentTarget.value } })
+          }
           type="date"
           value={form.date}
         />
@@ -248,13 +278,17 @@ export function StepQuickForm({ dispatch, people, phases, state, zones }: StepQu
         <div className="grid grid-cols-2 gap-3">
           <Input
             label="Début"
-            onChange={(e) => dispatch({ type: 'updateForm', payload: { startTime: e.currentTarget.value } })}
+            onChange={(e) =>
+              dispatch({ type: 'updateForm', payload: { startTime: e.currentTarget.value } })
+            }
             type="time"
             value={form.startTime}
           />
           <Input
             label="Fin"
-            onChange={(e) => dispatch({ type: 'updateForm', payload: { endTime: e.currentTarget.value } })}
+            onChange={(e) =>
+              dispatch({ type: 'updateForm', payload: { endTime: e.currentTarget.value } })
+            }
             type="time"
             value={form.endTime}
           />
@@ -275,7 +309,9 @@ export function StepQuickForm({ dispatch, people, phases, state, zones }: StepQu
         {/* Cost preview */}
         {previewText && (
           <div className="flex items-center justify-between rounded-xl border border-primary/20 bg-primary/5 px-4 py-3">
-            <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Coût estimé</span>
+            <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Coût estimé
+            </span>
             <span className="text-base font-bold text-primary">{previewText}</span>
           </div>
         )}
@@ -285,7 +321,9 @@ export function StepQuickForm({ dispatch, people, phases, state, zones }: StepQu
       <section>
         <Textarea
           label="Note (optionnelle)"
-          onChange={(e) => dispatch({ type: 'updateForm', payload: { note: e.currentTarget.value } })}
+          onChange={(e) =>
+            dispatch({ type: 'updateForm', payload: { note: e.currentTarget.value } })
+          }
           placeholder="Détails utiles, source WhatsApp, remarque chantier…"
           value={form.note}
         />

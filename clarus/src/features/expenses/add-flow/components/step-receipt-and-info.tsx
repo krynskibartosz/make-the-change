@@ -1,8 +1,8 @@
 'use client'
 
+import { Camera, CheckCircle2, ChevronRight, Image as ImageIcon } from 'lucide-react'
 import type React from 'react'
 import { useState } from 'react'
-import { Camera, Image as ImageIcon, CheckCircle2, ChevronRight } from 'lucide-react'
 import { Button, StickyActionBar } from '@/components/ui'
 import { Input } from '@/components/ui/input'
 import type { ExpenseAddFlowAction, ExpenseAddFlowState } from '../types'
@@ -43,10 +43,11 @@ export function StepReceiptAndInfo({ state, dispatch }: Props) {
 
   return (
     <div className="flex flex-col gap-6 pb-28">
-
       {/* Photo du reçu */}
       <section className="grid gap-3">
-        <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Preuve d'achat</p>
+        <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+          Preuve d'achat
+        </p>
         {!receiptAndInfo.photoUrl ? (
           <div className="grid grid-cols-2 gap-3">
             <button
@@ -70,7 +71,9 @@ export function StepReceiptAndInfo({ state, dispatch }: Props) {
               <CheckCircle2 className="size-5 shrink-0 text-success" />
               <div>
                 <p className="text-sm font-bold text-success">Reçu ajouté</p>
-                <p className="text-xs text-muted-foreground">La photo du ticket est bien enregistrée.</p>
+                <p className="text-xs text-muted-foreground">
+                  La photo du ticket est bien enregistrée.
+                </p>
               </div>
             </div>
             <div className="relative aspect-[3/4] w-full max-h-64 overflow-hidden rounded-xl border border-border bg-muted">
@@ -92,7 +95,9 @@ export function StepReceiptAndInfo({ state, dispatch }: Props) {
 
       {/* Infos ticket */}
       <section className="grid gap-4">
-        <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Infos de l'achat</p>
+        <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+          Infos de l'achat
+        </p>
         <div className="grid gap-4">
           <Input
             label="Qu'avez-vous acheté ?"

@@ -1,4 +1,4 @@
-import type { BillingStatus, InterventionType, PaymentStatus } from '@/lib/domain'
+import type { InterventionType } from '@/lib/domain'
 
 export type AddInterventionStepId = 'quick_form' | 'summary'
 

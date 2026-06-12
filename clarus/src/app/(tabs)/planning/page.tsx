@@ -1,10 +1,9 @@
 import { format, startOfWeek } from 'date-fns'
 import { fr } from 'date-fns/locale'
-
-import { mockClarusRepository } from '@/lib/repositories'
-import { TabScreen } from '../_components/tab-screen'
 import { PlanningClient } from '@/features/planning/components/planning-client'
 import { ProjectSwitcher } from '@/features/projects/components/project-switcher'
+import { mockClarusRepository } from '@/lib/repositories'
+import { TabScreen } from '../_components/tab-screen'
 
 export default async function PlanningPage() {
   const now = new Date()
@@ -14,25 +13,17 @@ export default async function PlanningPage() {
   const [summary, timelineEvents, weeklyPlan] = await Promise.all([
     mockClarusRepository.getTodaySummary(todayStr),
     mockClarusRepository.getTimelineEvents(),
-    mockClarusRepository.getWeeklyPlan(weekStartStr)
+    mockClarusRepository.getWeeklyPlan(weekStartStr),
   ])
 
   const formattedDate = format(now, 'EEEE d MMMM', { locale: fr })
 
   return (
-    <TabScreen 
-      eyebrow={formattedDate} 
-      title="Suivi Chantier" 
-      contentClassName="px-0 sm:px-5"
-    >
+    <TabScreen eyebrow={formattedDate} title="Suivi Chantier" contentClassName="px-0 sm:px-5">
       <div className="flex justify-end px-4 -mt-2 mb-4 relative z-20">
         <ProjectSwitcher />
       </div>
-      <PlanningClient 
-        summary={summary}
-        timelineEvents={timelineEvents}
-        weeklyPlan={weeklyPlan}
-      />
+      <PlanningClient summary={summary} timelineEvents={timelineEvents} weeklyPlan={weeklyPlan} />
     </TabScreen>
   )
 }

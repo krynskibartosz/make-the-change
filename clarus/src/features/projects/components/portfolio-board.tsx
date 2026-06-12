@@ -16,9 +16,9 @@ export function PortfolioBoard({ projects }: PortfolioBoardProps) {
       <div className="flex gap-2">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-          <input 
-            type="text" 
-            placeholder="Rechercher un chantier..." 
+          <input
+            type="text"
+            placeholder="Rechercher un chantier..."
             className="w-full bg-surface border border-border rounded-xl py-2.5 pl-9 pr-4 text-sm focus:outline-none focus:border-primary/50"
           />
         </div>
@@ -31,8 +31,7 @@ export function PortfolioBoard({ projects }: PortfolioBoardProps) {
           Blocages (1)
         </button>
         <button className="flex-none bg-blue-500/10 border border-blue-500/20 text-blue-600 px-3 py-1.5 rounded-lg text-sm font-semibold flex items-center gap-1.5">
-          <Euro className="size-4" />
-          À facturer
+          <Euro className="size-4" />À facturer
         </button>
         <button className="flex-none bg-surface-elevated border border-border text-muted-foreground px-3 py-1.5 rounded-lg text-sm font-medium">
           Tous les projets
@@ -42,7 +41,13 @@ export function PortfolioBoard({ projects }: PortfolioBoardProps) {
       {/* Projects List */}
       <div className="flex flex-col gap-4">
         {projects.map(({ project, kpis }) => (
-          <div key={project.id} className={cn("bg-surface border border-border rounded-2xl overflow-hidden flex flex-col", kpis.blockedTasksCount > 0 && "border-red-500/30")}>
+          <div
+            key={project.id}
+            className={cn(
+              'bg-surface border border-border rounded-2xl overflow-hidden flex flex-col',
+              kpis.blockedTasksCount > 0 && 'border-red-500/30',
+            )}
+          >
             {/* Header */}
             <div className="p-4 flex items-start justify-between border-b border-border/50 bg-surface-elevated/50">
               <div className="flex items-start gap-3">
@@ -65,7 +70,9 @@ export function PortfolioBoard({ projects }: PortfolioBoardProps) {
             {/* Quick KPIs */}
             <div className="p-4 grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-1">
-                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Avancement</span>
+                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  Avancement
+                </span>
                 <div className="flex items-end gap-1.5">
                   <span className="text-lg font-bold text-foreground">
                     {Math.round((kpis.totalHours / kpis.budgetHours) * 100)}%
@@ -77,16 +84,26 @@ export function PortfolioBoard({ projects }: PortfolioBoardProps) {
               </div>
 
               <div className="flex flex-col gap-1">
-                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">À facturer</span>
+                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  À facturer
+                </span>
                 <div className="flex items-end gap-1.5">
-                  <span className={cn("text-lg font-bold", kpis.toInvoiceAmount > 0 ? "text-blue-500" : "text-muted-foreground")}>
+                  <span
+                    className={cn(
+                      'text-lg font-bold',
+                      kpis.toInvoiceAmount > 0 ? 'text-blue-500' : 'text-muted-foreground',
+                    )}
+                  >
                     {kpis.toInvoiceAmount} €
                   </span>
                 </div>
                 {kpis.toInvoiceAmount > 0 && (
-                   <Link href="/facturation" className="text-[10px] text-blue-500 font-semibold hover:underline mt-0.5">
-                     Voir les éléments
-                   </Link>
+                  <Link
+                    href="/facturation"
+                    className="text-[10px] text-blue-500 font-semibold hover:underline mt-0.5"
+                  >
+                    Voir les éléments
+                  </Link>
                 )}
               </div>
             </div>
@@ -94,12 +111,18 @@ export function PortfolioBoard({ projects }: PortfolioBoardProps) {
             {/* Action footer */}
             <div className="flex bg-background/50 border-t border-border/50">
               {project.clientId && (
-                <Link href={`/client/${project.clientId}`} className="flex-1 hover:bg-surface-elevated transition-colors p-3 flex justify-center items-center gap-2 text-xs font-bold text-muted-foreground border-r border-border/50">
+                <Link
+                  href={`/client/${project.clientId}`}
+                  className="flex-1 hover:bg-surface-elevated transition-colors p-3 flex justify-center items-center gap-2 text-xs font-bold text-muted-foreground border-r border-border/50"
+                >
                   <User className="size-4" />
                   Client
                 </Link>
               )}
-              <Link href="/projet-info" className="flex-[2] hover:bg-surface-elevated transition-colors p-3 flex justify-center items-center gap-2 text-sm font-semibold text-foreground">
+              <Link
+                href="/projet-info"
+                className="flex-[2] hover:bg-surface-elevated transition-colors p-3 flex justify-center items-center gap-2 text-sm font-semibold text-foreground"
+              >
                 Infos Chantier
                 <ChevronRight className="size-4" />
               </Link>

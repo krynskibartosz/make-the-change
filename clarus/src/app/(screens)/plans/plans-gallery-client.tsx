@@ -1,6 +1,6 @@
 'use client'
 
-import { Map, X } from 'lucide-react'
+import { Map } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { FullScreenSlideModal } from '@/app/@modal/_components/full-screen-slide-modal'
 import type { Plan } from '@/lib/domain'

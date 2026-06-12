@@ -307,7 +307,7 @@ export const mockWorkEntries: WorkEntry[] = [
   createWorkEntry({
     id: 'we-sol-j2-autre',
     interventionId: 'int-sol-beton-j2',
-    personId: 'person-autre',
+    personId: 'person-bartosz',
     date: '2026-06-07',
     startTime: '09:00',
     endTime: '16:00',
@@ -325,7 +325,7 @@ export const mockWorkEntries: WorkEntry[] = [
   createWorkEntry({
     id: 'we-protection-gregory',
     interventionId: 'int-protection-escalier',
-    personId: 'person-gregory',
+    personId: 'person-martin',
     date: '2026-06-08',
     startTime: '08:00',
     endTime: '10:00',
@@ -361,7 +361,7 @@ export const mockWorkEntries: WorkEntry[] = [
   createWorkEntry({
     id: 'we-conteneur-gregory',
     interventionId: 'int-conteneur-presque-plein',
-    personId: 'person-gregory',
+    personId: 'person-martin',
     date: '2026-06-08',
     startTime: '16:45',
     endTime: '17:00',
@@ -370,7 +370,7 @@ export const mockWorkEntries: WorkEntry[] = [
   createWorkEntry({
     id: 'we-confirmation-gregory',
     interventionId: 'int-confirmation-p17',
-    personId: 'person-gregory',
+    personId: 'person-martin',
     date: '2026-06-08',
     startTime: '15:15',
     endTime: '15:45',
@@ -379,7 +379,7 @@ export const mockWorkEntries: WorkEntry[] = [
   createWorkEntry({
     id: 'we-lovemat-gregory',
     interventionId: 'int-lovemat-protection',
-    personId: 'person-gregory',
+    personId: 'person-martin',
     date: '2026-06-08',
     startTime: '11:30',
     endTime: '12:00',
@@ -415,7 +415,7 @@ export const mockWorkEntries: WorkEntry[] = [
   createWorkEntry({
     id: 'we-stockage-autre',
     interventionId: 'int-stockage-livraison',
-    personId: 'person-autre',
+    personId: 'person-bartosz',
     date: '2026-06-10',
     startTime: '09:00',
     endTime: '12:00',
@@ -451,7 +451,7 @@ export const mockWorkEntries: WorkEntry[] = [
   createWorkEntry({
     id: 'we-terrasse-autre',
     interventionId: 'int-terrasse-controle',
-    personId: 'person-autre',
+    personId: 'person-bartosz',
     date: '2026-06-10',
     startTime: '14:00',
     endTime: '16:00',
@@ -470,7 +470,7 @@ export const mockTasks: Task[] = [
     title: 'Prévoir enlèvement ou remplacement conteneur',
     status: 'to_check',
     priority: 'high',
-    assignedTo: 'person-gregory',
+    assignedTo: 'person-martin',
     createdAt: '2026-06-08T16:56:00.000Z',
   },
   {
@@ -596,7 +596,7 @@ export const mockTasks: Task[] = [
       'Zone A = Terrasse praticable. Surcharges distinctes de la toiture verte. Confirmer que la structure peut supporter ces charges.',
     status: 'to_do',
     priority: 'high',
-    assignedTo: 'person-gregory',
+    assignedTo: 'person-martin',
     createdAt: '2026-06-10T19:00:00.000Z',
   },
   {
@@ -609,7 +609,7 @@ export const mockTasks: Task[] = [
       'Zone B = Toiture verte. 2 kN/m² pour le complexe vert seul. Confirmer composition du complexe et impact sur structure.',
     status: 'to_do',
     priority: 'high',
-    assignedTo: 'person-gregory',
+    assignedTo: 'person-martin',
     createdAt: '2026-06-10T19:00:00.000Z',
   },
   {
@@ -635,7 +635,7 @@ export const mockTasks: Task[] = [
       "Notes manuscrites bleues visibles à droite du plan haut RDC (zone extension arrière). À lire, interpréter et enregistrer comme décisions / annotations dans l'app.",
     status: 'to_do',
     priority: 'normal',
-    assignedTo: 'person-gregory',
+    assignedTo: 'person-martin',
     createdAt: '2026-06-10T19:00:00.000Z',
   },
 ]
@@ -1096,7 +1096,7 @@ export const mockExpenses: Expense[] = [
     amount: null,
     date: '2026-06-08',
     status: 'to_check',
-    isRebillable: 'to_check',
+    isRebillable: true,
   },
   {
     id: 'expense-disques',
@@ -1108,7 +1108,7 @@ export const mockExpenses: Expense[] = [
     amount: null,
     date: '2026-06-09',
     status: 'to_pay',
-    isRebillable: 'to_check',
+    isRebillable: true,
   },
 ]
 

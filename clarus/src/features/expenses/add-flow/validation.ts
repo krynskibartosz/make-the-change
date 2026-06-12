@@ -5,7 +5,9 @@ export type ValidationResult = {
   errors: string[]
 }
 
-export function validateStepReceiptAndInfo(state: ExpenseAddFlowState['receiptAndInfo']): ValidationResult {
+export function validateStepReceiptAndInfo(
+  state: ExpenseAddFlowState['receiptAndInfo'],
+): ValidationResult {
   const errors: string[] = []
   if (!state.titre.trim()) errors.push('Le titre est requis.')
   if (!state.montant.trim()) errors.push('Le montant est requis.')
@@ -19,7 +21,9 @@ export function validateStepReceiptAndInfo(state: ExpenseAddFlowState['receiptAn
   }
 }
 
-export function validateStepLinkToProject(state: ExpenseAddFlowState['linkToProject']): ValidationResult {
+export function validateStepLinkToProject(
+  state: ExpenseAddFlowState['linkToProject'],
+): ValidationResult {
   const errors: string[] = []
   if (state.linkType === 'zone' && !state.zoneId) {
     errors.push('Veuillez sélectionner une zone.')

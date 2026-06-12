@@ -1,10 +1,10 @@
 'use client'
 
+import { ClientPortal } from '@/features/roles/components/client-portal'
+import { WorkerCockpit } from '@/features/roles/components/worker-cockpit'
+import { useRole } from '@/lib/role-context'
 import { TabScreen } from '../_components/tab-screen'
 import { ChantierDashboardClient } from './chantier-dashboard-client'
-import { WorkerCockpit } from '@/features/roles/components/worker-cockpit'
-import { ClientPortal } from '@/features/roles/components/client-portal'
-import { useRole } from '@/lib/role-context'
 
 export default function ProjectPage() {
   const { role, isReady } = useRole()

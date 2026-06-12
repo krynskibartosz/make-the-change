@@ -5,14 +5,13 @@ import {
   eachMonthOfInterval,
   endOfMonth,
   format,
-  isToday,
   max,
   min,
   parseISO,
   startOfDay,
 } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import { Save, X, ZoomIn, ZoomOut } from 'lucide-react'
+import { Save, ZoomIn, ZoomOut } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { BottomSheet, Button, SegmentedControl } from '@/components/ui'
 import type { Phase } from '@/lib/domain'
@@ -67,7 +66,7 @@ export function ProjectRoadmap({ phases: initialPhases }: { phases: Phase[] }) {
         behavior: 'smooth',
       })
     }
-  }, [todayPos, zoomLevel])
+  }, [todayPos])
 
   const getPhasePosition = (phase: Phase) => {
     if (!phase.startDate || !phase.endDate) return { left: 0, width: 0 }
@@ -95,7 +94,6 @@ export function ProjectRoadmap({ phases: initialPhases }: { phases: Phase[] }) {
         return 'bg-gradient-to-r from-blue-600/90 to-indigo-500 text-white border-white/20 shadow-[0_0_20px_rgba(59,130,246,0.4)]'
       case 'delayed':
         return 'bg-gradient-to-r from-rose-600/90 to-red-500 text-white border-white/20 shadow-[0_0_20px_rgba(244,63,94,0.4)]'
-      case 'not_started':
       default:
         return 'bg-surface-elevated/90 text-muted-foreground border-border backdrop-blur-md'
     }
@@ -357,7 +355,7 @@ export function ProjectRoadmap({ phases: initialPhases }: { phases: Phase[] }) {
                 max="100"
                 step="5"
                 value={editProgress}
-                onChange={(e) => setEditProgress(parseInt(e.target.value))}
+                onChange={(e) => setEditProgress(parseInt(e.target.value, 10))}
                 className="w-full h-2 bg-surface-elevated rounded-lg appearance-none cursor-pointer accent-primary"
               />
               <div className="flex justify-between text-[10px] text-muted-foreground font-bold px-1">

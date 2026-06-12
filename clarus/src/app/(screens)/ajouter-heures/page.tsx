@@ -54,8 +54,8 @@ function AjouterHeuresForm() {
 
       toast({ title: 'Heures enregistrées ✓', variant: 'success' })
       router.back()
-    } catch (error) {
-      toast({ title: 'Erreur lors de l\'enregistrement', variant: 'error' })
+    } catch (_error) {
+      toast({ title: "Erreur lors de l'enregistrement", variant: 'error' })
     } finally {
       setIsSubmitting(false)
     }
@@ -65,7 +65,6 @@ function AjouterHeuresForm() {
     <FullScreenSlideModal asPage headerMode="back" title="Noter mes heures">
       <div className="flex-1 overflow-y-auto pb-[calc(env(safe-area-inset-bottom)+100px)] bg-background">
         <form id="add-hours-form" onSubmit={handleSubmit} className="p-5 flex flex-col gap-6">
-          
           <div className="flex items-center gap-4">
             <div className="flex flex-col gap-2 flex-1">
               <label className="text-sm font-semibold">Heure d'arrivée</label>
@@ -134,7 +133,9 @@ function AjouterHeuresForm() {
               <p className="font-bold text-lg leading-none">{totalString}</p>
             </div>
             <div className="text-right">
-              <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider mb-1">Envoi à Christophe</p>
+              <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider mb-1">
+                Envoi à Christophe
+              </p>
               <p className="text-xs text-primary font-medium">Pour validation</p>
             </div>
           </div>

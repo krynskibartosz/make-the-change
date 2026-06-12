@@ -1,22 +1,26 @@
 import { format, isToday, isYesterday } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import {
-  CheckCircle2,
-  Clock,
   Camera,
-  Receipt,
+  CheckCircle2,
+  ChevronRight,
+  Clock,
+  FileText,
   Hammer,
+  Package,
+  Receipt,
+  Shield,
+  ShoppingCart,
   Trash2,
   Truck,
-  Shield,
   Wrench,
-  Package,
-  ShoppingCart,
-  FileText,
-  ChevronRight,
 } from 'lucide-react'
 import Link from 'next/link'
-import type { TimelineEvent, InterventionType } from '@/lib/domain'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { TaskStatusSheet } from '@/features/board/components/task-status-sheet'
+import type { InterventionType, Task, TaskStatus, TimelineEvent } from '@/lib/domain'
+import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
 import { groupByDate } from '@/lib/utils/group-by-date'
 
 // ─── Label mapping ─────────────────────────────────────────────────────────
@@ -41,16 +45,26 @@ const INTERVENTION_TYPE_LABEL: Record<InterventionType, string> = {
 
 function getInterventionTypeIcon(type: InterventionType) {
   switch (type) {
-    case 'work': return Hammer
-    case 'demolition': return Trash2
-    case 'evacuation': return Truck
-    case 'protection': return Shield
-    case 'dismantling': return Wrench
-    case 'structure': return Wrench
-    case 'preparation': return Wrench
-    case 'material_need': return ShoppingCart
-    case 'material_use': return Package
-    default: return FileText
+    case 'work':
+      return Hammer
+    case 'demolition':
+      return Trash2
+    case 'evacuation':
+      return Truck
+    case 'protection':
+      return Shield
+    case 'dismantling':
+      return Wrench
+    case 'structure':
+      return Wrench
+    case 'preparation':
+      return Wrench
+    case 'material_need':
+      return ShoppingCart
+    case 'material_use':
+      return Package
+    default:
+      return FileText
   }
 }
 
@@ -66,10 +80,10 @@ function getDateLabel(dateStr: string): string {
 // ─── Event type config ─────────────────────────────────────────────────────
 
 type EventConfig = {
-  color: string       // Tailwind text color
-  bgColor: string     // Tailwind bg color for dot
+  color: string // Tailwind text color
+  bgColor: string // Tailwind bg color for dot
   borderColor: string // left border accent on card
-  badgeColor: string  // pill badge
+  badgeColor: string // pill badge
 }
 
 const EVENT_CONFIG: Record<string, EventConfig> = {
@@ -120,15 +134,19 @@ function InterventionCard({ event }: { event: Extract<TimelineEvent, { type: 'in
   return (
     <Link
       href={`/interventions/${data.id}`}
-      className={`flex items-start gap-3 rounded-xl border border-border border-l-[3px] ${cfg.borderColor} bg-surface p-4 shadow-sm active:bg-surface-elevated transition-colors`}
+      className="flex items-start gap-3 py-3 relative active:opacity-70 transition-opacity"
     >
-      <div className={`mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg ${cfg.bgColor}`}>
+      <div
+        className={`mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg ${cfg.bgColor}`}
+      >
         <Icon className={`size-4 ${cfg.color}`} />
       </div>
       <div className="flex-1 min-w-0">
         <p className="font-semibold text-sm leading-snug truncate">{data.title}</p>
         <div className="flex items-center gap-2 mt-1 flex-wrap">
-          <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${cfg.badgeColor}`}>
+          <span
+            className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${cfg.badgeColor}`}
+          >
             {INTERVENTION_TYPE_LABEL[data.type]}
           </span>
           {data.status === 'done' && (
@@ -147,26 +165,43 @@ function InterventionCard({ event }: { event: Extract<TimelineEvent, { type: 'in
   )
 }
 
-function TaskCard({ event }: { event: Extract<TimelineEvent, { type: 'task' }> }) {
+function TaskCard({
+  event,
+  onTaskClick,
+}: {
+  event: Extract<TimelineEvent, { type: 'task' }>
+  onTaskClick: (t: Task) => void
+}) {
   const { data } = event
   const cfg = getEventConfig('task')
   const isDone = data.status === 'done'
 
   return (
-    <div className={`flex items-start gap-3 rounded-xl border border-border border-l-[3px] ${cfg.borderColor} bg-surface p-4 shadow-sm`}>
-      <div className={`mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg ${cfg.bgColor}`}>
+    <div
+      className="flex items-start gap-3 py-3 relative cursor-pointer active:opacity-70 transition-opacity"
+      onClick={() => onTaskClick(data)}
+    >
+      <div
+        className={`mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg ${cfg.bgColor}`}
+      >
         <CheckCircle2 className={`size-4 ${cfg.color}`} />
       </div>
       <div className="flex-1 min-w-0">
-        <p className={`font-semibold text-sm leading-snug ${isDone ? 'line-through text-muted-foreground' : ''}`}>
+        <p
+          className={`font-semibold text-sm leading-snug ${isDone ? 'line-through text-muted-foreground' : ''}`}
+        >
           {data.title}
         </p>
         <div className="flex items-center gap-2 mt-1">
-          <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${cfg.badgeColor}`}>
+          <span
+            className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${cfg.badgeColor}`}
+          >
             Tâche
           </span>
           {data.priority === 'urgent' && (
-            <span className="text-[10px] font-bold text-red-400 uppercase tracking-wide">Urgent</span>
+            <span className="text-[10px] font-bold text-red-400 uppercase tracking-wide">
+              Urgent
+            </span>
           )}
         </div>
       </div>
@@ -179,14 +214,18 @@ function ExpenseCard({ event }: { event: Extract<TimelineEvent, { type: 'expense
   const cfg = getEventConfig('expense')
 
   return (
-    <div className={`flex items-start gap-3 rounded-xl border border-border border-l-[3px] ${cfg.borderColor} bg-surface p-4 shadow-sm`}>
-      <div className={`mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg ${cfg.bgColor}`}>
+    <div className="flex items-start gap-3 py-3 relative">
+      <div
+        className={`mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg ${cfg.bgColor}`}
+      >
         <Receipt className={`size-4 ${cfg.color}`} />
       </div>
       <div className="flex-1 min-w-0">
         <p className="font-semibold text-sm leading-snug truncate">{data.description}</p>
         <div className="flex items-center gap-2 mt-1">
-          <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${cfg.badgeColor}`}>
+          <span
+            className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${cfg.badgeColor}`}
+          >
             Dépense
           </span>
           {data.supplier && (
@@ -213,7 +252,7 @@ function PhotoCard({ event }: { event: Extract<TimelineEvent, { type: 'photo' }>
   return (
     <Link
       href="/photos"
-      className={`flex items-start gap-3 rounded-xl border border-border border-l-[3px] ${cfg.borderColor} bg-surface p-3 shadow-sm active:bg-surface-elevated transition-colors overflow-hidden`}
+      className="flex items-start gap-3 py-3 relative active:opacity-70 transition-opacity overflow-hidden"
     >
       {/* Thumbnail */}
       <div className="relative size-14 shrink-0 rounded-lg overflow-hidden border border-border bg-surface-elevated">
@@ -227,10 +266,10 @@ function PhotoCard({ event }: { event: Extract<TimelineEvent, { type: 'photo' }>
         />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold line-clamp-1">
-          {data.comment ?? 'Photo ajoutée'}
-        </p>
-        <span className={`mt-1 inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${cfg.badgeColor}`}>
+        <p className="text-sm font-semibold line-clamp-1">{data.comment ?? 'Photo ajoutée'}</p>
+        <span
+          className={`mt-1 inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${cfg.badgeColor}`}
+        >
           {photoTypeLabel[data.type] ?? 'Photo'}
         </span>
       </div>
@@ -239,12 +278,22 @@ function PhotoCard({ event }: { event: Extract<TimelineEvent, { type: 'photo' }>
   )
 }
 
-function EventCard({ event }: { event: TimelineEvent }) {
+function EventCard({
+  event,
+  onTaskClick,
+}: {
+  event: TimelineEvent
+  onTaskClick: (t: Task) => void
+}) {
   switch (event.type) {
-    case 'intervention': return <InterventionCard event={event} />
-    case 'task': return <TaskCard event={event} />
-    case 'expense': return <ExpenseCard event={event} />
-    case 'photo': return <PhotoCard event={event} />
+    case 'intervention':
+      return <InterventionCard event={event} />
+    case 'task':
+      return <TaskCard event={event} onTaskClick={onTaskClick} />
+    case 'expense':
+      return <ExpenseCard event={event} />
+    case 'photo':
+      return <PhotoCard event={event} />
   }
 }
 
@@ -262,7 +311,9 @@ function TimelineDot({ event }: { event: TimelineEvent }) {
   const Icon = iconMap[event.type]
 
   return (
-    <div className={`absolute left-0 top-3 flex size-8 items-center justify-center rounded-full border-2 border-background ${cfg.bgColor} z-10`}>
+    <div
+      className={`absolute left-0 top-3.5 flex size-[26px] items-center justify-center rounded-full border-[3px] border-background ${cfg.bgColor} z-10`}
+    >
       <Icon className={`size-3.5 ${cfg.color}`} />
     </div>
   )
@@ -271,6 +322,18 @@ function TimelineDot({ event }: { event: TimelineEvent }) {
 // ─── Main timeline view ────────────────────────────────────────────────────
 
 export function TimelineView({ events }: { events: TimelineEvent[] }) {
+  const router = useRouter()
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null)
+
+  const handleStatusChange = async (taskId: string, newStatus: TaskStatus) => {
+    try {
+      await mockClarusRepository.updateTaskStatus(taskId, newStatus)
+      router.refresh()
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   if (events.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 gap-4 text-muted-foreground">
@@ -285,6 +348,38 @@ export function TimelineView({ events }: { events: TimelineEvent[] }) {
 
   return (
     <div className="flex flex-col gap-6 pb-24">
+      {/* Quick Add Timeline */}
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault()
+          const input = e.currentTarget.elements.namedItem('title') as HTMLInputElement
+          if (input.value.trim()) {
+            const val = input.value.trim()
+            input.value = ''
+            try {
+              await mockClarusRepository.createTask({
+                projectId: 'proj-1', // Mock project
+                title: val,
+                status: 'done', // In a timeline, we often log things we just did, or tasks. Let's make it 'to_do' by default, or maybe 'done'?
+                // Let's use 'to_do' to match Kanban/List, but it's arguable. Let's stick to 'to_do'
+                priority: 'normal',
+              })
+              router.refresh()
+            } catch (err) {
+              console.error(err)
+            }
+          }
+        }}
+        className="mb-2"
+      >
+        <input
+          name="title"
+          type="text"
+          placeholder="Créer une tâche rapide..."
+          className="w-full bg-surface/50 border border-border/50 rounded-xl px-4 py-3 text-sm font-medium placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all shadow-sm"
+        />
+      </form>
+
       {sortedDates.map((date) => (
         <div key={date}>
           {/* Day header */}
@@ -297,17 +392,24 @@ export function TimelineView({ events }: { events: TimelineEvent[] }) {
           {/* Events with vertical line */}
           <div className="relative flex flex-col gap-3 pl-10">
             {/* Vertical line */}
-            <div className="absolute left-[15px] top-0 bottom-0 w-px bg-border" />
+            <div className="absolute left-[12px] top-2 bottom-0 w-[2px] bg-border/50" />
 
             {groupedEvents[date]?.map((event, idx) => (
-              <div key={idx} className="relative">
+              <div key={idx} className="relative group">
                 <TimelineDot event={event} />
-                <EventCard event={event} />
+                <EventCard event={event} onTaskClick={setSelectedTask} />
               </div>
             ))}
           </div>
         </div>
       ))}
+
+      <TaskStatusSheet
+        task={selectedTask}
+        isOpen={!!selectedTask}
+        onClose={() => setSelectedTask(null)}
+        onStatusChange={handleStatusChange}
+      />
     </div>
   )
 }

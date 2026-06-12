@@ -1,20 +1,20 @@
 'use client'
 
-import { useState } from 'react'
-import type { TimelineEvent, TodaySummary, WeeklyPlan } from '@/lib/domain'
-import { TodayView } from './today-view'
-import { WeekView } from './week-view'
-import { TimelineView } from './timeline-view'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
+import { useState } from 'react'
+import type { TimelineEvent, TodaySummary, WeeklyPlan } from '@/lib/domain'
+import { TimelineView } from './timeline-view'
+import { TodayView } from './today-view'
+import { WeekView } from './week-view'
 
 type TabValue = 'today' | 'week' | 'timeline'
 
-export function PlanningClient({ 
-  summary, 
-  timelineEvents, 
-  weeklyPlan 
-}: { 
+export function PlanningClient({
+  summary,
+  timelineEvents,
+  weeklyPlan,
+}: {
   summary: TodaySummary
   timelineEvents: TimelineEvent[]
   weeklyPlan: WeeklyPlan | null
@@ -29,7 +29,9 @@ export function PlanningClient({
           <button
             onClick={() => setActiveTab('today')}
             className={`flex-1 py-1.5 text-sm font-semibold rounded-lg transition-colors ${
-              activeTab === 'today' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
+              activeTab === 'today'
+                ? 'bg-background shadow-sm text-foreground'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             Aujourd'hui
@@ -37,7 +39,9 @@ export function PlanningClient({
           <button
             onClick={() => setActiveTab('week')}
             className={`flex-1 py-1.5 text-sm font-semibold rounded-lg transition-colors ${
-              activeTab === 'week' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
+              activeTab === 'week'
+                ? 'bg-background shadow-sm text-foreground'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             Semaine
@@ -45,7 +49,9 @@ export function PlanningClient({
           <button
             onClick={() => setActiveTab('timeline')}
             className={`flex-1 py-1.5 text-sm font-semibold rounded-lg transition-colors ${
-              activeTab === 'timeline' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
+              activeTab === 'timeline'
+                ? 'bg-background shadow-sm text-foreground'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             Journal

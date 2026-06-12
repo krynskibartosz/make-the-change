@@ -47,7 +47,7 @@ function AjouterPhotoForm() {
       })
       toast({ title: 'Photo ajoutée ✓', variant: 'success' })
       router.back()
-    } catch (error) {
+    } catch (_error) {
       toast({ title: "Erreur lors de l'ajout", variant: 'error' })
     } finally {
       setIsSubmitting(false)

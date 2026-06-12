@@ -1,17 +1,22 @@
 'use client'
 
-import { AlertTriangle, Map, HardHat, ShieldAlert, Wrench, ChevronRight } from 'lucide-react'
+import {
+  AlertTriangle,
+  CalendarDays,
+  ChevronRight,
+  HardHat,
+  Map,
+  ShieldAlert,
+  Wrench,
+} from 'lucide-react'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { SegmentedControl } from '@/components/ui/segmented-control'
 import { Card } from '@/components/ui'
-import type { Intervention, Task, Zone, Plan } from '@/lib/domain'
+import { SegmentedControl } from '@/components/ui/segmented-control'
+import { ProjectSwitcher } from '@/features/projects/components/project-switcher'
+import type { Intervention, Phase, Plan, Task, Zone } from '@/lib/domain'
 import { mockClarusRepository } from '@/lib/repositories/mock-clarus-repository'
 import { ZoneRowCard } from './_components/zone-row-card'
-import { ProjectSwitcher } from '@/features/projects/components/project-switcher'
-import { ProjectRoadmap } from '@/features/projects/components/project-roadmap'
-import { TasksListClient } from './tasks-list-client'
-import type { Phase } from '@/lib/domain'
-import Link from 'next/link'
 
 export function ChantierDashboardClient() {
   const [filter, setFilter] = useState('all')
@@ -21,9 +26,7 @@ export function ChantierDashboardClient() {
   const [tasks, setTasks] = useState<Task[]>([])
   const [interventions, setInterventions] = useState<Intervention[]>([])
   const [plans, setPlans] = useState<Plan[]>([])
-  const [phases, setPhases] = useState<Phase[]>([])
-  const [mainView, setMainView] = useState('structure')
-
+  const [_phases, setPhases] = useState<Phase[]>([])
   useEffect(() => {
     async function loadData() {
       setIsLoading(true)
@@ -119,44 +122,32 @@ export function ChantierDashboardClient() {
         </div>
       )}
 
-      {/* Main View Segmented Control */}
-      <div className="sticky top-0 z-20 -mx-4 px-4 py-2 bg-background/95 backdrop-blur-md">
-        <SegmentedControl
-          ariaLabel="Vue du chantier"
-          options={[
-            { label: 'Structure', value: 'structure' },
-            { label: 'Roadmap', value: 'roadmap' },
-            { label: 'Tâches', value: 'tasks' },
-          ]}
-          value={mainView}
-          onValueChange={setMainView}
-        />
-      </div>
+      {/* Quick Access to Planning Hub */}
+      <Link href="/roadmap-viewer" className="mt-2 block">
+        <Card className="flex items-center gap-4 p-4 bg-primary/5 hover:bg-primary/10 transition-colors border-primary/20 active:scale-[0.98]">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/20 text-primary">
+            <CalendarDays className="size-5" />
+          </div>
+          <div className="flex flex-col flex-1">
+            <span className="text-base font-bold text-primary leading-tight">
+              Planning & Tâches
+            </span>
+            <span className="text-sm text-muted-foreground mt-0.5">Roadmap, Kanban, Liste</span>
+          </div>
+          <ChevronRight className="size-5 text-primary/50" />
+        </Card>
+      </Link>
 
       <div className="flex flex-col gap-8 pb-10">
-        
-        {mainView === 'roadmap' && (
-          <div className="-mx-4">
-            <ProjectRoadmap phases={phases} />
-          </div>
-        )}
-
-        {mainView === 'tasks' && (
-          <TasksListClient />
-        )}
-
-        {/* Structure View (Plans/Zones) */}
-        {mainView === 'structure' && (
-          <>
-            {/* Secondary Filter for Structure */}
-            <div className="mb-2">
-              <SegmentedControl
-                ariaLabel="Filtre de structure"
-                options={filterOptions}
-                value={currentFilter}
-                onValueChange={setFilter}
-              />
-            </div>
+        {/* Filter for Structure */}
+        <div className="mb-2">
+          <SegmentedControl
+            ariaLabel="Filtre de structure"
+            options={filterOptions}
+            value={currentFilter}
+            onValueChange={setFilter}
+          />
+        </div>
         {currentFilter === 'plans' && (
           <section className="flex flex-col gap-4">
             <div className="flex items-center gap-2 mb-1 text-sm font-bold tracking-wider text-muted-foreground uppercase">
@@ -168,12 +159,13 @@ export function ChantierDashboardClient() {
                 <Link key={plan.id} href={`/chantier/plans/${plan.id}`}>
                   <Card className="flex flex-col overflow-hidden bg-surface hover:bg-surface-elevated transition-colors border-border/50 group cursor-pointer active:scale-[0.98]">
                     <div className="relative h-32 w-full bg-muted border-b border-border/50">
-                      <img 
-                        src={plan.url} 
-                        alt={plan.title} 
-                        className="object-cover w-full h-full opacity-80 group-hover:opacity-100 transition-opacity" 
+                      <img
+                        src={plan.url}
+                        alt={plan.title}
+                        className="object-cover w-full h-full opacity-80 group-hover:opacity-100 transition-opacity"
                         onError={(e) => {
-                          ;(e.target as HTMLImageElement).src = 'https://placehold.co/400x200/1e293b/475569?text=Plan'
+                          ;(e.target as HTMLImageElement).src =
+                            'https://placehold.co/400x200/1e293b/475569?text=Plan'
                         }}
                       />
                       <div className="absolute top-2 right-2 rounded-full bg-background/80 backdrop-blur-sm px-2 py-0.5 text-xs font-bold text-foreground shadow-sm">
@@ -181,9 +173,13 @@ export function ChantierDashboardClient() {
                       </div>
                     </div>
                     <div className="p-3">
-                      <h3 className="text-base font-bold text-foreground line-clamp-1">{plan.title}</h3>
+                      <h3 className="text-base font-bold text-foreground line-clamp-1">
+                        {plan.title}
+                      </h3>
                       {plan.description && (
-                        <p className="text-sm text-muted-foreground mt-0.5 line-clamp-2">{plan.description}</p>
+                        <p className="text-sm text-muted-foreground mt-0.5 line-clamp-2">
+                          {plan.description}
+                        </p>
                       )}
                       <div className="mt-3 flex flex-wrap items-center gap-2">
                         {plan.id === 'plan-1' ? (
@@ -250,7 +246,8 @@ export function ChantierDashboardClient() {
                 Structure & Techniques
               </div>
               <p className="text-sm text-muted-foreground mb-4">
-                Éléments structurels nécessitant une attention particulière ou une validation avant fermeture.
+                Éléments structurels nécessitant une attention particulière ou une validation avant
+                fermeture.
               </p>
               <div>
                 {technicalZones
@@ -295,8 +292,6 @@ export function ChantierDashboardClient() {
               </div>
             </div>
           </section>
-        )}
-          </>
         )}
       </div>
     </div>

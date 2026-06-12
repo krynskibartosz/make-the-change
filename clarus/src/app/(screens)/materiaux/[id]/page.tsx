@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowDownRight, ArrowUpRight, Clock, History, Package, Pencil, Plus } from 'lucide-react'
+import { ArrowDownRight, ArrowUpRight, Clock, History, Package, Pencil } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { IconButton } from '@/components/ui/button'

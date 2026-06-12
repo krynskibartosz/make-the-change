@@ -118,7 +118,9 @@ export function JournalClient({
         {sortedDates.length === 0 ? (
           <div className="flex flex-col items-center justify-center p-8 text-center gap-2 border border-dashed border-border rounded-[var(--radius-card)] mt-4">
             <p className="font-semibold text-foreground">Aucune activité aujourd'hui</p>
-            <p className="text-sm text-muted-foreground">Ajoute un travail réalisé ou valide une note terrain pour alimenter le journal.</p>
+            <p className="text-sm text-muted-foreground">
+              Ajoute un travail réalisé ou valide une note terrain pour alimenter le journal.
+            </p>
           </div>
         ) : (
           sortedDates.map((date) => (

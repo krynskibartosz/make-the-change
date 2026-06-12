@@ -6,7 +6,8 @@ import type {
   CreateMaterialMovementInput,
   CreatePersonInput,
   CreateTaskInput,
-  Client,
+  CreateZoneInput,
+  DashboardKPIs,
   Expense,
   Intervention,
   InterventionDraft,
@@ -15,13 +16,15 @@ import type {
   Person,
   Phase,
   Photo,
-  Project,
   Task,
   TaskStatus,
   UpdatePersonInput,
+  WeeklyPlan,
   WorkEntry,
+  Zone,
 } from '@/lib/domain'
 import {
+  mockClient,
   mockExpenses,
   mockInterventions,
   mockMaterialMovements,
@@ -34,7 +37,6 @@ import {
   mockPlanZones,
   mockProject,
   mockProjects,
-  mockClient,
   mockTasks,
   mockWorkEntries,
   mockZones,
@@ -49,9 +51,10 @@ export const createMockClarusRepository = (): ClarusRepository => {
   let interventions: Intervention[] = [...mockInterventions]
   let tasks: Task[] = [...mockTasks] as Task[]
   let expenses: Expense[] = [...mockExpenses] as Expense[]
+  let zones: Zone[] = [...mockZones]
   let materialMovements: MaterialMovement[] = [...mockMaterialMovements] as MaterialMovement[]
   const materials: Material[] = [...mockMaterials]
-  const people = mockPeople.map(clonePerson)
+  let people = mockPeople.map(clonePerson)
 
   return {
     getProject: async () => mockProject,
@@ -59,10 +62,12 @@ export const createMockClarusRepository = (): ClarusRepository => {
     getClient: async (id: string) => (id === mockClient.id ? mockClient : null),
     getClients: async () => [mockClient],
     getPeople: async () => people.map(clonePerson),
+    getPersonById: async (id) => mockPeople.find((p) => p.id === id) || undefined,
     getPhases: async () => [...mockPhases],
-    getProjectPhases: async (projectId: string) => mockPhases.filter(p => p.projectId === projectId),
+    getProjectPhases: async (projectId: string) =>
+      mockPhases.filter((p) => p.projectId === projectId),
     updatePhase: async (id: string, input: Partial<Phase>) => {
-      const idx = mockPhases.findIndex(p => p.id === id)
+      const idx = mockPhases.findIndex((p) => p.id === id)
       if (idx === -1) throw new Error('Phase not found')
       mockPhases[idx] = { ...mockPhases[idx], ...input } as Phase
       return { ...mockPhases[idx] } as Phase
@@ -98,7 +103,30 @@ export const createMockClarusRepository = (): ClarusRepository => {
       people[idx] = updated
       return clonePerson(updated)
     },
-    getZones: async () => [...mockZones],
+    deletePerson: async (id: string) => {
+      people = people.filter(p => p.id !== id)
+    },
+    getZones: async () => [...zones],
+    getZoneById: async (id: string) => zones.find((z) => z.id === id),
+    createZone: async (input: CreateZoneInput) => {
+      const zone: Zone = {
+        ...input,
+        id: `zone-${crypto.randomUUID()}`,
+        projectId: mockProject.id,
+      } as Zone
+      zones = [...zones, zone]
+      return zone
+    },
+    updateZone: async (id: string, input: Partial<Zone>) => {
+      const idx = zones.findIndex((z) => z.id === id)
+      if (idx === -1) throw new Error('Zone not found')
+      const updated = { ...zones[idx], ...input, updatedAt: new Date().toISOString() } as Zone
+      zones = [...zones.slice(0, idx), updated, ...zones.slice(idx + 1)]
+      return updated
+    },
+    deleteZone: async (id: string) => {
+      zones = zones.filter((z) => z.id !== id)
+    },
     getMaterials: async () => [...materials],
     getMaterialById: async (id: string) => materials.find((m) => m.id === id) ?? null,
     updateMaterial: async (id: string, input: Partial<Material>) => {
@@ -167,13 +195,14 @@ export const createMockClarusRepository = (): ClarusRepository => {
             status: 'not_started',
             progress: 0,
           },
-        ]
+        ],
       } as import('../domain').WeeklyPlan
     },
     getPlans: async () => [...mockPlans],
     getPlanZones: async (planId: string) => mockPlanZones.filter((z) => z.planId === planId),
     getPlanPins: async (planId: string) => mockPlanPins.filter((p) => p.planId === planId),
     getTasks: async () => [...tasks],
+    getTaskById: async (id: string) => tasks.find((t) => t.id === id) || null,
     getInterventions: async () => [...interventions],
     getInterventionById: async (id: string) =>
       interventions.find((intervention) => intervention.id === id) ?? null,
@@ -200,10 +229,11 @@ export const createMockClarusRepository = (): ClarusRepository => {
         zoneId: input.zoneId,
         title: input.title,
         description: input.description,
-        status: 'to_do',
+        status: input.status,
         priority: input.priority ?? 'normal',
         assignedTo: input.assignedTo,
         dueDate: input.dueDate,
+        completedAt: input.status === 'done' ? now : undefined,
         createdAt: now,
       }
       tasks = [...tasks, task]
@@ -212,7 +242,30 @@ export const createMockClarusRepository = (): ClarusRepository => {
     updateTaskStatus: async (id: string, status: TaskStatus) => {
       const index = tasks.findIndex((t) => t.id === id)
       if (index === -1) throw new Error('Task not found')
-      const updatedTask: Task = { ...tasks[index], status } as Task
+      const now = new Date().toISOString()
+      const updatedTask: Task = {
+        ...tasks[index],
+        status,
+        completedAt:
+          status === 'done'
+            ? now
+            : status === 'to_do' || status === 'in_progress'
+              ? undefined
+              : tasks[index]?.completedAt,
+      } as Task
+      tasks = [...tasks.slice(0, index), updatedTask, ...tasks.slice(index + 1)]
+      return updatedTask
+    },
+    updateTask: async (id: string, input: Partial<Task>) => {
+      const index = tasks.findIndex((t) => t.id === id)
+      if (index === -1) throw new Error('Task not found')
+      const updatedTask: Task = { ...tasks[index], ...input } as Task
+      // Ensure completion date consistency if status changes
+      if (input.status === 'done' && tasks[index]?.status !== 'done') {
+        updatedTask.completedAt = new Date().toISOString()
+      } else if (input.status && input.status !== 'done') {
+        updatedTask.completedAt = undefined
+      }
       tasks = [...tasks.slice(0, index), updatedTask, ...tasks.slice(index + 1)]
       return updatedTask
     },
@@ -232,6 +285,17 @@ export const createMockClarusRepository = (): ClarusRepository => {
       }
       expenses = [...expenses, expense]
       return expense
+    },
+    getExpenseById: async (id: string) => expenses.find(e => e.id === id),
+    updateExpense: async (id: string, input: Partial<Expense>) => {
+      const idx = expenses.findIndex((e) => e.id === id)
+      if (idx === -1) throw new Error('Expense not found')
+      const updated = { ...expenses[idx], ...input } as Expense
+      expenses = [...expenses.slice(0, idx), updated, ...expenses.slice(idx + 1)]
+      return updated
+    },
+    deleteExpense: async (id: string) => {
+      expenses = expenses.filter(e => e.id !== id)
     },
     createMaterialMovement: async (input: CreateMaterialMovementInput) => {
       const movement: MaterialMovement = {
@@ -263,25 +327,27 @@ export const createMockClarusRepository = (): ClarusRepository => {
       const budgetHours = 200
       const budgetCost = 15000
 
-      const totalHours = mockWorkEntries.reduce((acc, entry) => acc + (entry.durationMinutes / 60), 0)
-      const totalCost = mockWorkEntries.reduce((acc, entry) => acc + entry.amount, 0) +
-        expenses.filter(e => e.status !== 'to_check').reduce((acc, e) => acc + (e.amount || 0), 0)
+      const totalHours = mockWorkEntries.reduce((acc, entry) => acc + entry.durationMinutes / 60, 0)
+      const totalCost =
+        mockWorkEntries.reduce((acc, entry) => acc + entry.amount, 0) +
+        expenses.filter((e) => e.status !== 'to_check').reduce((acc, e) => acc + (e.amount || 0), 0)
 
       const billableInterventions = interventions.filter(
-        (i) => i.billingStatus === 'to_invoice' || i.isExtra === true
+        (i) => i.billingStatus === 'to_invoice' || i.isExtra === true,
       )
       const billableExpenses = expenses.filter(
-        (e) => e.isRebillable === true && e.status !== 'invoiced'
+        (e) => e.isRebillable === true && e.status !== 'invoiced',
       )
-      
-      const toInvoiceAmount = 
-        billableInterventions.reduce((acc, i) => {
-          const entrySum = mockWorkEntries.filter(we => we.interventionId === i.id).reduce((sum, we) => sum + we.amount, 0)
-          return acc + entrySum
-        }, 0) +
-        billableExpenses.reduce((acc, e) => acc + (e.amount || 0), 0)
 
-      const blockedTasksCount = tasks.filter(t => t.status === 'blocked').length
+      const toInvoiceAmount =
+        billableInterventions.reduce((acc, i) => {
+          const entrySum = mockWorkEntries
+            .filter((we) => we.interventionId === i.id)
+            .reduce((sum, we) => sum + we.amount, 0)
+          return acc + entrySum
+        }, 0) + billableExpenses.reduce((acc, e) => acc + (e.amount || 0), 0)
+
+      const blockedTasksCount = tasks.filter((t) => t.status === 'blocked').length
 
       return {
         totalHours: Math.round(totalHours),
@@ -394,6 +460,6 @@ const slugify = (value: string): string =>
 function clonePerson(person: Person): Person {
   return { ...person }
 }
-function clonePhoto(photo: Photo): Photo {
+function _clonePhoto(photo: Photo): Photo {
   return { ...photo }
 }

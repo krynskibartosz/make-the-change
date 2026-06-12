@@ -2,19 +2,19 @@
 
 import {
   BarChart3,
+  Bell,
   ChevronRight,
   ClipboardList,
   Image as ImageIcon,
   type LucideIcon,
   Map,
   Package,
-  PlusCircle,
   Settings,
   Users,
-  Bell,
+  Boxes,
 } from 'lucide-react'
 import Link from 'next/link'
-import { useRole, type AppRole } from '@/lib/role-context'
+import { type AppRole, useRole } from '@/lib/role-context'
 
 type SettingsItem = {
   label: string
@@ -111,9 +111,25 @@ export default function MenuPage() {
       iconWrapperClassName: 'bg-emerald-500',
       iconClassName: 'text-white',
     },
+    {
+      label: 'Inventaire des matériaux',
+      description: 'Gérer le stock de chaque matériau',
+      icon: Boxes,
+      href: '/inventaire',
+      iconWrapperClassName: 'bg-teal-500',
+      iconClassName: 'text-white',
+    },
   ]
 
   const projectItems: SettingsItem[] = [
+    {
+      label: 'Référentiel des zones',
+      description: 'Gérer les zones du chantier',
+      icon: Map,
+      href: '/zones',
+      iconWrapperClassName: 'bg-rose-500',
+      iconClassName: 'text-white',
+    },
     {
       label: 'Chantier — Zones & Plans',
       description: 'Zones, références techniques et suivi',
@@ -164,8 +180,8 @@ export default function MenuPage() {
         <div className="min-w-0">
           <h1 className="text-3xl font-semibold leading-tight">Menu</h1>
         </div>
-        <Link 
-          href="/notifications" 
+        <Link
+          href="/notifications"
           className="relative flex items-center justify-center size-10 rounded-full hover:bg-surface-elevated transition-colors"
         >
           <Bell className="size-6" />
@@ -192,7 +208,16 @@ export default function MenuPage() {
                     role === r ? 'text-primary font-bold bg-primary/5' : 'text-foreground'
                   }`}
                 >
-                  <span className="capitalize">Mode {r === 'ouvrier' ? 'Ouvrier (Hubert)' : r === 'chef' ? 'Chef de chantier (Christophe)' : r === 'client' ? 'Client (Martin)' : 'Admin (Grégory)'}</span>
+                  <span className="capitalize">
+                    Mode{' '}
+                    {r === 'ouvrier'
+                      ? 'Ouvrier (Hubert)'
+                      : r === 'chef'
+                        ? 'Superviseur (Christophe)'
+                        : r === 'admin'
+                          ? 'Admin / Chef de chantier (Martin)'
+                          : 'Client Final'}
+                  </span>
                   {role === r && <span className="text-primary">✓</span>}
                 </button>
                 {i < 3 ? <div className="border-b border-border/50" /> : null}
@@ -201,7 +226,9 @@ export default function MenuPage() {
           </div>
         </section>
 
-        {role !== 'ouvrier' && role !== 'client' && <SettingsGroup title="Gestion financière" items={managementItems} />}
+        {role !== 'ouvrier' && role !== 'client' && (
+          <SettingsGroup title="Gestion financière" items={managementItems} />
+        )}
         {role !== 'client' && <SettingsGroup title="Suivi de chantier" items={projectItems} />}
         <SettingsGroup title="Application" items={appItems} />
       </div>

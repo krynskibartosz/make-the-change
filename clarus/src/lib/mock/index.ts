@@ -14,10 +14,10 @@ export {
   APPARTEMENT_LYON_PROJECT_ID,
   DUPONT_CLIENT_ID,
   MARTIN_CLIENT_ID,
-  SPARRENLAAN_PROJECT_ID,
   mockClient,
   mockProject,
   mockProject2,
   mockProjects,
+  SPARRENLAAN_PROJECT_ID,
 } from './project'
 export { mockPeople, mockPhases, mockZones } from './referential'

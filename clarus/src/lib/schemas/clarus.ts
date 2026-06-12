@@ -315,6 +315,7 @@ export type Project = z.infer<typeof projectSchema>
 export type Client = z.infer<typeof clientSchema>
 export type Phase = z.infer<typeof phaseSchema>
 export type Zone = z.infer<typeof zoneSchema>
+export type CreateZoneInput = Omit<Zone, 'id' | 'projectId' | 'createdAt' | 'updatedAt'>
 export type Person = z.infer<typeof personSchema>
 export type Intervention = z.infer<typeof interventionSchema>
 export type WorkEntry = z.infer<typeof workEntrySchema>

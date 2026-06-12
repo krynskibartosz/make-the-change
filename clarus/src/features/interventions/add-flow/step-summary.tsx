@@ -1,9 +1,9 @@
 'use client'
 
+import type { Dispatch } from 'react'
 import { Badge } from '@/components/ui'
 import { calculateWorkEntryAmount, calculateWorkEntryDuration } from '@/lib/calculations'
 import type { Person, Phase, Zone } from '@/lib/domain'
-import type { Dispatch } from 'react'
 import type { AddInterventionAction } from './reducer'
 import type { AddInterventionState, SimplifiedStatus } from './types'
 import type { AddInterventionValidation } from './validation'
@@ -24,7 +24,14 @@ const STATUS_OPTIONS: { value: SimplifiedStatus; label: string; description: str
   { value: 'blocked', label: 'Bloquant / Urgent', description: 'Point critique' },
 ]
 
-export function StepSummary({ dispatch, people, phases, state, validation, zones }: StepSummaryProps) {
+export function StepSummary({
+  dispatch,
+  people,
+  phases,
+  state,
+  validation,
+  zones,
+}: StepSummaryProps) {
   const selectedPeople = people.filter((p) => state.form.personIds.includes(p.id))
   const zone = zones.find((z) => z.id === state.form.zoneId)
   const phase = phases.find((p) => p.id === state.form.phaseId)
@@ -77,7 +84,9 @@ export function StepSummary({ dispatch, people, phases, state, validation, zones
         {phase && <SummaryRow label="Phase" value={phase.name} />}
         <SummaryRow
           label="Personnes"
-          value={selectedPeople.length > 0 ? selectedPeople.map((p) => p.name).join(', ') : 'À vérifier'}
+          value={
+            selectedPeople.length > 0 ? selectedPeople.map((p) => p.name).join(', ') : 'À vérifier'
+          }
         />
         <SummaryRow label="Date" value={state.form.date || 'À choisir'} />
         <SummaryRow label="Horaires" value={`${state.form.startTime} – ${state.form.endTime}`} />
@@ -86,13 +95,17 @@ export function StepSummary({ dispatch, people, phases, state, validation, zones
 
       {/* Cost highlight */}
       <div className="flex items-center justify-between rounded-xl border border-primary/20 bg-primary/5 px-4 py-3">
-        <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Coût estimé</span>
+        <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          Coût estimé
+        </span>
         <span className="text-base font-bold text-primary">{costText}</span>
       </div>
 
       {/* Status selection */}
       <section className="grid gap-3">
-        <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Statut</p>
+        <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+          Statut
+        </p>
         <div className="grid gap-2">
           {STATUS_OPTIONS.map((option) => (
             <button
@@ -103,13 +116,15 @@ export function StepSummary({ dispatch, people, phases, state, validation, zones
                   ? option.value === 'blocked'
                     ? 'border-danger/50 bg-danger/10 text-danger'
                     : option.value === 'extra'
-                    ? 'border-warning/50 bg-warning/10 text-warning'
-                    : 'border-primary bg-primary/10 text-primary'
+                      ? 'border-warning/50 bg-warning/10 text-warning'
+                      : 'border-primary bg-primary/10 text-primary'
                   : 'border-border bg-surface text-foreground hover:bg-surface-elevated'
               }`}
             >
               <span className="text-sm font-bold">{option.label}</span>
-              <span className="text-xs font-normal text-muted-foreground">{option.description}</span>
+              <span className="text-xs font-normal text-muted-foreground">
+                {option.description}
+              </span>
             </button>
           ))}
         </div>
@@ -118,7 +133,9 @@ export function StepSummary({ dispatch, people, phases, state, validation, zones
       {/* Warnings */}
       {warnings.length > 0 && (
         <div className="rounded-[var(--radius-card)] border border-warning/30 bg-warning/10 px-4 py-3">
-          <p className="mb-1.5 text-sm font-bold text-foreground">À compléter avant d'enregistrer :</p>
+          <p className="mb-1.5 text-sm font-bold text-foreground">
+            À compléter avant d'enregistrer :
+          </p>
           <ul className="grid gap-1 text-sm text-muted-foreground">
             {warnings.map((w) => (
               <li key={w}>• {w}</li>
@@ -132,8 +149,12 @@ export function StepSummary({ dispatch, people, phases, state, validation, zones
 
 function SummaryRow({ label, value, last }: { label: string; value: string; last?: boolean }) {
   return (
-    <div className={`flex items-start justify-between px-4 py-2.5 ${!last ? 'border-b border-border' : ''}`}>
-      <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</span>
+    <div
+      className={`flex items-start justify-between px-4 py-2.5 ${!last ? 'border-b border-border' : ''}`}
+    >
+      <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        {label}
+      </span>
       <span className="max-w-[60%] text-right text-sm font-semibold text-foreground">{value}</span>
     </div>
   )

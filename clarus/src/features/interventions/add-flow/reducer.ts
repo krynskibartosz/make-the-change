@@ -45,7 +45,7 @@ export const createEditInterventionState = (
   workEntries: WorkEntry[],
 ): AddInterventionState => {
   const firstWe = workEntries[0]
-  
+
   let simplifiedStatus: SimplifiedStatus = 'inclus'
   if (intervention.status === 'blocked') {
     simplifiedStatus = 'blocked'

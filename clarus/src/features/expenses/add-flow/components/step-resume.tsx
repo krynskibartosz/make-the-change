@@ -1,9 +1,9 @@
 'use client'
 
+import { CheckCircle2, ChevronLeft } from 'lucide-react'
 import type React from 'react'
-import { ChevronLeft, CheckCircle2 } from 'lucide-react'
 import { Button, StickyActionBar } from '@/components/ui'
-import { mockZones, mockInterventions } from '@/lib/mock'
+import { mockInterventions, mockZones } from '@/lib/mock'
 import type { ExpenseAddFlowAction, ExpenseAddFlowState } from '../types'
 
 type Props = {
@@ -55,9 +55,14 @@ export function StepResume({ state, dispatch, onSave }: Props) {
         <SummaryRow label="Article" value={receiptAndInfo.titre || '—'} />
         <SummaryRow label="Montant" value={montantFormatted} highlight />
         <SummaryRow label="Fournisseur" value={receiptAndInfo.fournisseur || '—'} />
-        <SummaryRow label="Preuve" value={receiptAndInfo.photoUrl ? 'Photo jointe ✓' : 'Aucune photo'} />
+        <SummaryRow
+          label="Preuve"
+          value={receiptAndInfo.photoUrl ? 'Photo jointe ✓' : 'Aucune photo'}
+        />
         <SummaryRow label="Concerne" value={getLinkText()} />
-        {linkToProject.isRebillable && <SummaryRow label="Supplément" value="À refacturer au client" />}
+        {linkToProject.isRebillable && (
+          <SummaryRow label="Supplément" value="À refacturer au client" />
+        )}
         {linkToProject.isToCheck && <SummaryRow label="Statut" value="À vérifier" last />}
         {!linkToProject.isRebillable && !linkToProject.isToCheck && (
           <SummaryRow label="Statut" value="Inclus chantier" last />
@@ -71,7 +76,11 @@ export function StepResume({ state, dispatch, onSave }: Props) {
           </Button>
         }
         secondaryAction={
-          <Button variant="secondary" onClick={handlePrev} leftIcon={<ChevronLeft className="size-4" />}>
+          <Button
+            variant="secondary"
+            onClick={handlePrev}
+            leftIcon={<ChevronLeft className="size-4" />}
+          >
             Retour
           </Button>
         }
@@ -80,11 +89,29 @@ export function StepResume({ state, dispatch, onSave }: Props) {
   )
 }
 
-function SummaryRow({ label, value, highlight, last }: { label: string; value: string; highlight?: boolean; last?: boolean }) {
+function SummaryRow({
+  label,
+  value,
+  highlight,
+  last,
+}: {
+  label: string
+  value: string
+  highlight?: boolean
+  last?: boolean
+}) {
   return (
-    <div className={`flex items-start justify-between px-4 py-2.5 ${!last ? 'border-b border-border' : ''}`}>
-      <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</span>
-      <span className={`max-w-[60%] text-right text-sm font-semibold ${highlight ? 'text-primary' : 'text-foreground'}`}>{value}</span>
+    <div
+      className={`flex items-start justify-between px-4 py-2.5 ${!last ? 'border-b border-border' : ''}`}
+    >
+      <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        {label}
+      </span>
+      <span
+        className={`max-w-[60%] text-right text-sm font-semibold ${highlight ? 'text-primary' : 'text-foreground'}`}
+      >
+        {value}
+      </span>
     </div>
   )
 }
