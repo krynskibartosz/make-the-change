@@ -4,6 +4,13 @@ on:
   pull_request:
     types: [opened, synchronize, edited]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
 jobs:
   lint-terms:
     runs-on: ubuntu-latest
@@ -15,7 +22,7 @@ jobs:
       - name: Scan forbidden terms
         run: |
           set -euo pipefail
-          echo "Scanning for forbidden terms per docs/GLOSSARY.md"
+          echo "Scanning for forbidden terms per docs/10-reference-content/GLOSSARY.md"
           forbid='investisseur|Investisseur|investisseurs|Investisseurs|abonné premium|crédits|boutique|\bshop\b|fournisseurs|actifs|Revenus mensuels|Paiement mensuel|paiement annuel|Next\.js 1[0-4]|TanStack Start'
 
           base_ref="origin/${GITHUB_BASE_REF:-main}"
@@ -23,7 +30,9 @@ jobs:
           echo "Diffing against $base_ref"
 
           # Use git diff-tree if it's a single commit or handle range
-          files=$(git diff --name-only "$base_ref...HEAD" || git diff --name-only HEAD~1 HEAD || echo "")
+          # Fichiers ajoutes/modifies seulement (un fichier supprime ferait echouer rg),
+          # et jamais ce workflow lui-meme : il contient la liste des termes interdits.
+          files=$( (git diff --name-only --diff-filter=ACMR "$base_ref...HEAD" || git diff --name-only --diff-filter=ACMR HEAD~1 HEAD || echo "") | grep -v '^\.github/workflows/lint-terms\.yml$' || true)
 
           if [ -z "$files" ]; then
             echo "No files changed."
@@ -31,7 +40,7 @@ jobs:
           fi
 
           if echo "$files" | xargs -r rg -n --pcre2 "$forbid"; then
-            echo "Forbidden terms detected. Please align with docs/GLOSSARY.md" >&2
+            echo "Forbidden terms detected. Please align with docs/10-reference-content/GLOSSARY.md" >&2
             exit 1
           else
             echo "OK: no forbidden terms"

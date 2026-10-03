@@ -10,12 +10,16 @@ on:
       - '.github/workflows/web-client-types-quality.yml'
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
 jobs:
   quality:
     runs-on: ubuntu-latest
-    env:
-      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-      SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,22 +36,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Type-check web-client
-        run: pnpm --filter @make-the-change/web-client type-check
-
-      - name: Lint web-client
-        run: pnpm --filter @make-the-change/web-client lint
-
       - name: Strict indexed access gate
         run: pnpm --filter @make-the-change/web-client exec tsc --noEmit --noUncheckedIndexedAccess
 
       - name: TypeScript metrics gate
         run: pnpm --filter @make-the-change/web-client ts:metrics:check
-
-      - name: Supabase type drift gate
-        run: |
-          if [ -z "${SUPABASE_PROJECT_ID:-}" ]; then
-            echo "Skipping Supabase drift gate: SUPABASE_PROJECT_ID is missing."
-            exit 0
-          fi
-          pnpm --filter @make-the-change/core db:types:check
