@@ -68,9 +68,13 @@ mais il interdit de rendre ces checks obligatoires tant qu'il n'est pas réglé.
   `outputDirectory: apps/web-client/.next` alors que `buildCommand` construit
   les deux apps ; `apps/web/vercel.json` ; `apps/web-client/vercel.json`). Les
   projets `make-the-change-web` et `make-the-change-web-client` qui déployaient
-  en juin 2026 **n'existent plus** dans l'équipe Vercel Pro
-  `bartek-krynskis-projects` (seul `virdel` y figure). Aucun déploiement en
-  cours ; rien à configurer tant qu'ils ne sont pas recréés.
+  en juin 2026 **ne sont pas dans l'équipe Vercel Pro**
+  `bartek-krynskis-projects` (seul `virdel` y figure) : la PR #5 a révélé
+  qu'ils vivent sur un autre compte Vercel, `krynskirafal8-7579s-projects`,
+  toujours connecté au dépôt (checks `Vercel – make-the-change-web` en échec,
+  `Vercel – make-the-change-web-client` en succès, previews à chaque PR).
+  Ce compte n'est pas accessible depuis ce poste : décider s'il faut les
+  rapatrier dans l'équipe Pro (§ 5) ou les déconnecter.
 - Tests : vitest dans `packages/core` et `apps/web-client` ; aucun Playwright
   actif.
 - Instructions agents : aucune (`AGENTS.md`, `CLAUDE.md`, `.cursorrules`
@@ -140,8 +144,9 @@ opt-in du modèle Virdel.
 
 ## 5. Vercel
 
-Aucun projet actif. Recette si les deux apps sont redéployées (deux projets,
-un par app, dans l'équipe Pro) :
+Les deux projets tournent sur le compte `krynskirafal8-7579s-projects`, hors
+équipe Pro et hors de portée de cet audit. Recette cible si on les rapatrie
+(deux projets, un par app, dans l'équipe Pro) :
 
 | Projet | Root Directory | Build Command | Framework |
 | --- | --- | --- | --- |
