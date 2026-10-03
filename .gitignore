@@ -210,3 +210,10 @@ pk_test_*
 .mcp.local.json
 C\xef\x80\xbaUsersutilisateurAppDataLocalTempreview_diff.txt
 *.txt
+
+# Secrets — aucun fichier .env* commite, sauf les exemples.
+# (.env, .env.local et .env*.local sont deja ignores plus haut.)
+.env.vercel*
+.env*.production
+!.env.example
+!**/.env.example
